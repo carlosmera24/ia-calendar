@@ -7,3 +7,4 @@ Desarrollo creado bajo la empresa [Infracounter](https://infracounter.com) por *
 2. 
 
 ## Base de datos:
+Nombre inicial local **ia_calendar_db**
