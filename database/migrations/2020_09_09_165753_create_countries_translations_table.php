@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Query\Expression;
 
-class CreatePersonsCellphonesTable extends Migration
+class CreateCountriesTranslationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,29 +14,30 @@ class CreatePersonsCellphonesTable extends Migration
      */
     public function up()
     {
-        Schema::create('persons_cellphones', function (Blueprint $table) {
+        Schema::create('countries_translations', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->integer('id');
-            $table->string('cellphone_number',45);
-            $table->integer('persons_id');
+            $table->integer('countries_id');
+            $table->string('language',2)->commment('ISO 639-1 Two-letter');
+            $table->string('name',100);
             $table->datetime('created_at')->default(new Expression('CURRENT_TIMESTAMP'));
             $table->datetime('updated_at')->default(new Expression('CURRENT_TIMESTAMP'));
 
             $table->primary([
                                 'id',
-                                'persons_id'
+                                'countries_id'
                             ]);
 
-            $table->foreign('persons_id')
-                    ->references('id')->on('persons')
+            $table->foreign('countries_id')
+                    ->references('id')->on('countries')
                     ->onUpdate('NO ACTION')
                     ->onDelete('NO ACTION');
 
-            $table->index('persons_id');
+            $table->index('countries_id');
         });
 
         //Add autoincrement to id
-        DB::statement("ALTER TABLE persons_emails MODIFY id INT AUTO_INCREMENT");
+        DB::statement("ALTER TABLE countries_translations MODIFY id INT AUTO_INCREMENT");
     }
 
     /**
@@ -46,6 +47,6 @@ class CreatePersonsCellphonesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('persons_cellphones');
+        Schema::dropIfExists('countries_translations');
     }
 }
