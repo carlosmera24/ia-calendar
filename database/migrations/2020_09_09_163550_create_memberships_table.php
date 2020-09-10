@@ -26,6 +26,7 @@ class CreateMembershipsTable extends Migration
             $table->integer('limit_cellphones')->default(null)->comment('NULL = Infinite, Not limit');
             $table->integer('limit_emails')->default(null)->comment('NULL = Infinite, Not limit');
             $table->tinyinteger('activated_annual_fiscal',false)->comment('0: Inactivate, 1:Active');
+            $table->tinyinteger('reminder_change_password',false)->comment('0: Inactivate, 1:Active');
             $table->integer('profiles_participants_id');
             $table->datetime('created_at')->default(new Expression('CURRENT_TIMESTAMP'));
             $table->datetime('updated_at')->default(new Expression('CURRENT_TIMESTAMP'));
