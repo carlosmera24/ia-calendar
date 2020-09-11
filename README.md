@@ -4,7 +4,13 @@ Desarrollo creado bajo la empresa [Infracounter](https://infracounter.com) por *
 
 ## Detalles técnicos:
 1. **Laravel Framework 7.27.0**
-2. 
+2. Vue
+3. Buefy
+4. **Dependencias Back (Composer):**
+    - laravel/ui
+
+5. **Dependencias Front (NPM):**
+    - @fortawesome/fontawesome-free **^5.14.0**
 
 ## Base de datos:
 1. Nombre inicial local **ia_calendar_db**

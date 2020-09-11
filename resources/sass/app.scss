@@ -1,1 +1,28 @@
-//
+//Google fonts
+@import "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap";
+
+//Variables
+$open-sans: 'Open Sans', sans-serif;
+$color-welcome-dark: #252526;
+body, h2 {
+  font-family: $open-sans !important;
+}
+.welcome{
+    background-color: $color-welcome-dark;
+    .header{
+        padding: 1rem 1.5rem;
+    }
+    .header-separator{
+        padding: 1rem 1.5rem;
+        background-color: cyan;
+    }
+    .banner{
+        border-bottom: 2px solid #CCC;
+        .title{
+            font-size: 41pt;
+        }
+        .subtitle{
+            font-size: 25pt;
+        }
+    }
+}

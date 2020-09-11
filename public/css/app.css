@@ -1,0 +1,41 @@
+@import url(https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;
+
+0,
+400;0,
+600;0,
+700;0,
+800;1,
+300;1,
+400;1,
+600;1,
+700;1,
+800&display=swap);body,
+h2 {
+  font-family: "Open Sans", sans-serif !important;
+}
+
+.welcome {
+  background-color: #252526;
+}
+
+.welcome .header {
+  padding: 1rem 1.5rem;
+}
+
+.welcome .header-separator {
+  padding: 1rem 1.5rem;
+  background-color: cyan;
+}
+
+.welcome .banner {
+  border-bottom: 2px solid #CCC;
+}
+
+.welcome .banner .title {
+  font-size: 41pt;
+}
+
+.welcome .banner .subtitle {
+  font-size: 25pt;
+}
+
