@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Query\Expression;
 
-class CreatePermisionsTable extends Migration
+class CreatePermissionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class CreatePermisionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('permisions', function (Blueprint $table) {
+        Schema::create('permissions', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->integer('id')->autoIncrement();
             $table->string('name',45);
