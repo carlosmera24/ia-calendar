@@ -19,8 +19,6 @@ Vue.use(Buefy, {
     defaultIconPack: 'fas',
 });
 
-import 'buefy/dist/buefy.css'
-
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
 const app = new Vue({
