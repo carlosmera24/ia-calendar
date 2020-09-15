@@ -19,7 +19,7 @@ Vue.use(Buefy, {
     defaultIconPack: 'fas',
 });
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('banner-info', require('./components/BannerInfoComponent.vue').default);
 
 const app = new Vue({
     el: '#app',

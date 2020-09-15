@@ -18960,7 +18960,27 @@ h2 {
   background-color: #fab800;
 }
 
+.welcome .banner-info .is-parent article.is-child {
+  background-color: #FFF;
+  margin-right: 2px !important;
+  margin-bottom: 15px !important;
+}
+
+.welcome .banner-info .is-parent article.is-child:nth-child(1) {
+  margin-right: 7.5px !important;
+}
+
+.welcome .banner-info .is-parent article.is-child:nth-child(2) {
+  margin-left: 7.5px !important;
+}
+
 .footer {
   background-color: #222;
+  color: #454545;
+}
+
+.footer a {
+  color: #454545;
+  text-decoration: underline;
 }
 

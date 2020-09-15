@@ -10,6 +10,7 @@
 //Variables
 $open-sans: 'Open Sans', sans-serif;
 $color-welcome-dark: #262626;
+$color-font-footer: #454545;
 body, h2 {
   font-family: $open-sans;
 }
@@ -38,7 +39,27 @@ body, h2 {
         padding: 1rem 1.5rem;
         background-color: #fab800;
     }
+    .banner-info{
+        .is-parent{
+            article.is-child{
+                background-color: #FFF;
+                margin-right: 2px !important;
+                margin-bottom: 15px !important;
+            }
+            article.is-child:nth-child(1){
+                margin-right: 7.5px !important;
+            }
+            article.is-child:nth-child(2){
+                margin-left: 7.5px !important;
+            }
+        }
+    }
 }
 .footer{
     background-color: #222;
+    color: $color-font-footer;
+    a{
+        color: $color-font-footer;
+        text-decoration: underline;
+    }
 }

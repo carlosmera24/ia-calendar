@@ -17,11 +17,15 @@
 
         </div>
         <footer class="footer">
-            Terminos y Condiciones
-            Políticas Privaciad
-            Soporte Técnico
-            Ir a Infracounter
-            Copyright 2020 Infracounter - Todos los derechos reservados
+            <div class="columns">
+                <div class="column columns">
+                    <div class="column"><a href="#">Terminos y Condiciones</a></div>
+                    <div class="column"><a href="#">Políticas Privaciad</a></div>
+                    <div class="column"><a href="#">Soporte Técnico</a></div>
+                    <div class="column"><a href="#">Ir a Infracounter</a></div>
+                </div>
+                <div class="column is-two-fifths">Copyright 2020 Infracounter - Todos los derechos reservados</div>
+            </div>
         </footer>
     </body>
     <script src="{{ asset('js/app.js') }}" defer></script>

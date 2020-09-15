@@ -36,14 +36,7 @@
             <p>desde $79,599 COP / Mes</p>
         </section>
         <section class="banner-info">
-            <div class="columns">
-                <div class="column is-6">1</div>
-                <div class="column is-6">2</div>
-            </div>
-            <div class="columns">
-                <div class="column is-6">3</div>
-                <div class="column is-6">4</div>
-            </div>
+            <banner-info></banner-info>
         </section>
     </div>
 @endsection
