@@ -40133,7 +40133,7 @@ var render = function() {
             _vm._l(obj, function(item, objIndex) {
               return _c(
                 "article",
-                { key: objIndex, staticClass: "tile is-child is-6 py-5 px-5 " },
+                { key: objIndex, staticClass: "tile is-child is-6 py-6 px-6" },
                 [
                   _c(
                     "div",

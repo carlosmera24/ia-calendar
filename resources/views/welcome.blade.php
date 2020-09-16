@@ -3,7 +3,7 @@
 @section('content')
     <div class="welcome">
         {{-- Header --}}
-        <div class="header level has-text-white is-size-7 mb-0">
+        <div class="header level is-mobile has-text-white is-size-7 mb-0">
             <div class="level-left">
                 <img class="image is-24x24" src="falta-image.png" alt="">
             </div>

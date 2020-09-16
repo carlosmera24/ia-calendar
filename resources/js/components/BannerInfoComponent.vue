@@ -6,7 +6,7 @@
                 <div class="tile is-parent mb-0 py-0 px-0">
                     <article v-for="(item, objIndex) in obj"
                         :key="objIndex"
-                        class="tile is-child is-6 py-5 px-5 ">
+                        class="tile is-child is-6 py-6 px-6">
                         <div class="container is-pulled-right has-text-black has-text-centered">
                             <p class="title has-text-black">{{ item.titulo }}</p>
                             <p class="subtitle has-text-black is-size-4">{{ item.subtitulo }}</p>
