@@ -16,15 +16,19 @@
             @yield('content')
 
         </div>
-        <footer class="footer">
-            <div class="columns">
-                <div class="column columns">
+        <footer class="footer py-2 px-6">
+            <div class="columns has-text-centered">
+                <div class="column columns my-0">
                     <div class="column"><a href="#">Terminos y Condiciones</a></div>
                     <div class="column"><a href="#">Políticas Privaciad</a></div>
                     <div class="column"><a href="#">Soporte Técnico</a></div>
                     <div class="column"><a href="#">Ir a Infracounter</a></div>
                 </div>
-                <div class="column is-two-fifths">Copyright 2020 Infracounter - Todos los derechos reservados</div>
+                <div class="column is-two-fifths">
+                    <div class="column">
+                        Copyright 2020 Infracounter - Todos los derechos reservados
+                    </div>
+                </div>
             </div>
         </footer>
     </body>

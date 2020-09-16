@@ -2124,6 +2124,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -40134,19 +40135,28 @@ var render = function() {
                 "article",
                 { key: objIndex, staticClass: "tile is-child is-6 py-5 px-5 " },
                 [
-                  _c("div", { staticClass: "container is-pulled-right" }, [
-                    _c("p", { staticClass: "title has-text-weight-bold" }, [
-                      _vm._v(_vm._s(item.titulo))
-                    ]),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "subtitle" }, [
-                      _vm._v(_vm._s(item.subtitulo))
-                    ]),
-                    _vm._v(" "),
-                    _c("p", [_vm._v("Explorar")]),
-                    _vm._v(" "),
-                    _c("p", [_vm._v("Más información")])
-                  ])
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "container is-pulled-right has-text-black has-text-centered"
+                    },
+                    [
+                      _c("p", { staticClass: "title has-text-black" }, [
+                        _vm._v(_vm._s(item.titulo))
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "p",
+                        { staticClass: "subtitle has-text-black is-size-4" },
+                        [_vm._v(_vm._s(item.subtitulo))]
+                      ),
+                      _vm._v(" "),
+                      _vm._m(0, true),
+                      _vm._v(" "),
+                      _vm._m(1, true)
+                    ]
+                  )
                 ]
               )
             }),
@@ -40158,7 +40168,28 @@ var render = function() {
     0
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "button-info" }, [
+      _c("a", { staticClass: "button-info-content", attrs: { href: "" } }, [
+        _vm._v("Explorar "),
+        _c("i", { staticClass: "fas fa-caret-right" })
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { staticClass: "more-info is-size-6" }, [
+      _vm._v("Más información "),
+      _c("i", { staticClass: "fas fa-caret-square-down is-size-7" })
+    ])
+  }
+]
 render._withStripped = true
 
 

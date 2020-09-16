@@ -7,11 +7,12 @@
                     <article v-for="(item, objIndex) in obj"
                         :key="objIndex"
                         class="tile is-child is-6 py-5 px-5 ">
-                        <div class="container is-pulled-right">
-                            <p class="title has-text-weight-bold">{{ item.titulo }}</p>
-                            <p class="subtitle">{{ item.subtitulo }}</p>
-                            <p>Explorar</p>
-                            <p>Más información</p>
+                        <div class="container is-pulled-right has-text-black has-text-centered">
+                            <p class="title has-text-black">{{ item.titulo }}</p>
+                            <p class="subtitle has-text-black is-size-4">{{ item.subtitulo }}</p>
+                            <div class="button-info">
+                                <a href="" class="button-info-content">Explorar <i class="fas fa-caret-right"></i></a></div>
+                            <p class="more-info is-size-6">Más información <i class="fas fa-caret-square-down is-size-7"></i></p>
                         </div>
                     </article>
                 </div>
