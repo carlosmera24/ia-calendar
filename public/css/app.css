@@ -19019,6 +19019,14 @@ h2 {
 }
 
 @media (max-width: 768px) {
+  .welcome .banner .title {
+    font-size: 28pt;
+  }
+
+  .welcome .banner .subtitle {
+    font-size: 19pt;
+  }
+
   .welcome .banner-info .is-parent article.is-child .container.is-pulled-right {
     float: none !important;
   }
@@ -19029,6 +19037,10 @@ h2 {
 
   .welcome .banner-info .is-parent article.is-child:nth-child(2) {
     margin-left: 0 !important;
+  }
+
+  .welcome .banner-donation h2 {
+    font-size: 20pt !important;
   }
 
   .footer .columns .column.is-two-fifths {
