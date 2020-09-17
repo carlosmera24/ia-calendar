@@ -14,6 +14,9 @@ Desarrollo creado bajo la empresa [Infracounter](https://infracounter.com) por *
 
 ## Base de datos:
 1. Nombre inicial local **ia_calendar_db**
+    ```
+    CREATE SCHEMA `ia_calendar_db` DEFAULT CHARACTER SET utf8 ;
+    ```
 2. Migraciones y Seeders:
     ```
     php artisan migrate:fresh --seed
