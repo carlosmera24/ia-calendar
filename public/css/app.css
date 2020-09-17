@@ -19018,6 +19018,21 @@ h2 {
   text-decoration: underline;
 }
 
+.footer.application {
+  border-top: 5px solid #fab800;
+}
+
+.application .header {
+  background-color: #005368;
+  border-bottom: 5px solid #fab800;
+}
+
+.application .header .content-icon-user {
+  padding: 8px 0px;
+  border: 5px solid #fab800;
+  border-radius: 50%;
+}
+
 @media (max-width: 768px) {
   .welcome .banner .title {
     font-size: 28pt;

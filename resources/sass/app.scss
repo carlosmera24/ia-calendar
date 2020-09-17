@@ -9,13 +9,20 @@
 
 //Variables
 $open-sans: 'Open Sans', sans-serif;
-$color-welcome-dark: #262626;
+$color-primary-dark: #262626;
 $color-font-footer: #454545;
+$yellow: #fab800;
+$blue-dark: #005368;
+
 body, h2 {
   font-family: $open-sans;
 }
+
+//-----------------------------------------------------------
+// Welcome seection
+//-----------------------------------------------------------
 .welcome{
-    background-color: $color-welcome-dark;
+    background-color: $color-primary-dark;
     .header{
         padding: 1rem 1.5rem;
         background-color: #222;
@@ -37,7 +44,7 @@ body, h2 {
     }
     .banner-service-separator{
         padding: 1rem 1.5rem;
-        background-color: #fab800;
+        background-color: $yellow;
     }
     .banner-info{
         .is-parent{
@@ -88,6 +95,9 @@ body, h2 {
         }
     }
 }
+//-----------------------------------------------------------
+// Footer seection
+//-----------------------------------------------------------
 .footer{
     background-color: #222;
     color: $color-font-footer;
@@ -96,8 +106,27 @@ body, h2 {
         text-decoration: underline;
     }
 }
+.footer.application{
+    border-top: 5px solid $yellow;
+}
 
-// Responsive
+//-----------------------------------------------------------
+// Application seection
+//-----------------------------------------------------------
+.application{
+    .header{
+        background-color: $blue-dark;
+        border-bottom: 5px solid $yellow;
+        .content-icon-user{
+            padding: 8px 0px;
+            border: 5px solid $yellow;
+            border-radius: 50%;
+        }
+    }
+}
+//-----------------------------------------------------------
+// Responsive seection
+//-----------------------------------------------------------
 @media(max-width: 768px)
 {
     .welcome{

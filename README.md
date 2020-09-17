@@ -3,7 +3,7 @@
 Desarrollo creado bajo la empresa [Infracounter](https://infracounter.com) por **Carlos Eduardo Mera Ruiz** *Desarrollador Full Stack*.
 
 ## Detalles técnicos:
-1. **Laravel Framework 7.27.0**
+1. **Laravel Framework 8.4.0**
 2. Vue
 3. Buefy
 4. **Dependencias Back (Composer):**

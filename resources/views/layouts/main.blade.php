@@ -16,7 +16,7 @@
             @yield('content')
 
         </div>
-        <footer class="footer py-2 px-6">
+        <footer class="footer py-2 px-6 @yield('class-footer')">
             <div class="columns has-text-centered">
                 <div class="column columns my-0">
                     <div class="column"><a href="#">Terminos y Condiciones</a></div>
