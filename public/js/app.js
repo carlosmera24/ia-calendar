@@ -52389,7 +52389,17 @@ Vue.use(buefy__WEBPACK_IMPORTED_MODULE_1__["default"], {
 });
 Vue.component('banner-info', __webpack_require__(/*! ./components/BannerInfoComponent.vue */ "./resources/js/components/BannerInfoComponent.vue")["default"]);
 var app = new Vue({
-  el: '#app'
+  el: '#app',
+  data: function data() {
+    return {
+      isActiveDropdown: false
+    };
+  },
+  methods: {
+    clickDropdown: function clickDropdown() {
+      this.isActiveDropdown = !this.isActiveDropdown;
+    }
+  }
 });
 
 /***/ }),

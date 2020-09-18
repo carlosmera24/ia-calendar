@@ -23,4 +23,14 @@ Vue.component('banner-info', require('./components/BannerInfoComponent.vue').def
 
 const app = new Vue({
     el: '#app',
+    data() {
+        return {
+            isActiveDropdown: false,
+        }
+    },
+    methods: {
+        clickDropdown(){
+            this.isActiveDropdown = !this.isActiveDropdown;
+        }
+    },
 });

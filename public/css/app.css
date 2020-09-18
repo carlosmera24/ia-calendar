@@ -19028,9 +19028,31 @@ h2 {
 }
 
 .application .header .content-icon-user {
-  padding: 8px 0px;
+  padding: 10px 30px;
   border: 5px solid #fab800;
   border-radius: 50%;
+}
+
+.application .header .content-icon-user .icon {
+  font-size: 3.5rem !important;
+  margin-left: -25px;
+}
+
+.application .header .level-right .dropdown .btn {
+  text-transform: uppercase;
+  font-family: "Open Sans", sans-serif;
+  background: none;
+  border: none;
+  color: #FFF;
+  padding: 0;
+}
+
+.application .header .level-right .dropdown .dropdown-menu {
+  margin-bottom: -25px;
+}
+
+.application .header .level-right .tools {
+  color: #00a4ac;
 }
 
 @media (max-width: 768px) {
