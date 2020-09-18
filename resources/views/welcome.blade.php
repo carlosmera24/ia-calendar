@@ -5,7 +5,7 @@
         {{-- Header --}}
         <div class="header level is-mobile has-text-white is-size-7 mb-0">
             <div class="level-left">
-                <img class="image is-24x24" src="falta-image.png" alt="">
+                <img class="image is-32x32" src="{{ asset('img/logo-128.png') }}" alt="IA-Calendar">
             </div>
             <div class="level-right">
                 <a href="#" class="has-text-white">

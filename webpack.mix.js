@@ -3,6 +3,9 @@ const mix = require('laravel-mix');
 mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css');
 
+//Copy images
+mix.copyDirectory('resources/img', 'public/img');
+
 //No reload page on development
 mix.browserSync({
     open: 'external',
