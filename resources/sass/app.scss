@@ -10,7 +10,7 @@
 //Variables
 $open-sans: 'Open Sans', sans-serif;
 $color-primary-dark: #262626;
-$color-font-footer: #454545;
+$color-font-footer: #999999;
 $yellow: #fab800;
 $blue-dark: #005368;
 $blue-cyan: #00b0b9;
@@ -25,15 +25,20 @@ body, h2 {
 .welcome{
     background-color: $color-primary-dark;
     .header{
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 100;
         padding: 1rem 1.5rem;
         background-color: #222;
     }
     .header-separator{
+        margin-top: 64px;
+        position: relative;
         padding: 1rem 1.5rem;
         background-color: $blue-cyan;
     }
     .banner{
-        border-bottom: 2px solid #565656;
         .title{
             font-size: 41pt;
             font-weight: 800;

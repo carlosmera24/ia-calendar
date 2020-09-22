@@ -12,7 +12,7 @@
                             <p class="subtitle has-text-black is-size-4">{{ item.subtitulo }}</p>
                             <div class="button-info">
                                 <a href="" class="button-info-content">Explorar <i class="fas fa-caret-right"></i></a></div>
-                            <p class="more-info is-size-6">Más información <i class="fas fa-caret-square-down is-size-7"></i></p>
+                            <p class="more-info is-size-6">Más información <span class="is-size-7">&#9688;</span></p>
                         </div>
                     </article>
                 </div>

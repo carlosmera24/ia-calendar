@@ -18932,17 +18932,19 @@ h2 {
 }
 
 .welcome .header {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 100;
   padding: 1rem 1.5rem;
   background-color: #222;
 }
 
 .welcome .header-separator {
+  margin-top: 64px;
+  position: relative;
   padding: 1rem 1.5rem;
   background-color: #00b0b9;
-}
-
-.welcome .banner {
-  border-bottom: 2px solid #565656;
 }
 
 .welcome .banner .title {
@@ -19010,11 +19012,11 @@ h2 {
 
 .footer {
   background-color: #222;
-  color: #454545;
+  color: #999999;
 }
 
 .footer a {
-  color: #454545;
+  color: #999999;
   text-decoration: underline;
 }
 
