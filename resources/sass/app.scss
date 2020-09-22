@@ -15,7 +15,7 @@ $yellow: #fab800;
 $blue-dark: #005368;
 $blue-cyan: #00b0b9;
 
-body, h2 {
+body, h2, button, input, select, textarea {
   font-family: $open-sans;
 }
 
@@ -143,12 +143,73 @@ body, h2 {
                     padding: 0;
                 }
                 .dropdown-menu{
-                    margin-bottom: -25px;
+                    margin-top: -25px;
                 }
             }
             .tools{
                 color: #00a4ac;
             }
+        }
+    }
+    .action-section{
+        .menu{
+            .menu-list{
+                li{
+                    margin: 15px 0;
+                }
+            }
+        }
+        .columns{
+            .columns.columns-buttons{
+                height: 100%;
+                .column.vcentered{
+                    align-items: center;
+                    display: flex;
+                    .btn-primary {
+                        border: 2px solid #747e7e;
+                        padding: 40px 50px;
+                        border-radius: 50px 0;
+                        -webkit-box-shadow: 5px 5px 5px 0px #92adaf, inset 4px 4px 15px 0px #92adaf, 5px 5px 15px 5px rgba(0,0,0,0);
+                        box-shadow: 5px 5px 5px 0px #92adaf, inset 4px 4px 15px 0px #92adaf, 5px 5px 15px 5px rgba(0,0,0,0);
+                    }
+                }
+                .btn-secundary{
+                    border: 2px solid #000;
+                    border-radius: 10px;
+
+                }
+                button{
+                    font-size: 1rem;
+                    color: #3e3e3e;
+                }
+            }
+            .columns-buttons-rotated{
+                height: 100%;
+            }
+            .btn-rotated{
+                -webkit-transform:rotate(-90deg);
+                -moz-transform: rotate(-90deg);
+            }
+        }
+    }
+    .banner{
+        .hero-body{
+            .container{
+                .title, .subtitle{
+                    color: $blue-dark;
+                }
+            }
+        }
+    }
+    .main{
+        .title{
+            color: $blue-dark;
+        }
+        .content{
+            background-color: $color-primary-dark;
+            border-radius: 50px;
+            min-height: 400px;
+            color: #FFF;
         }
     }
 }

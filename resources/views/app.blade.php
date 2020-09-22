@@ -5,7 +5,7 @@
         {{-- Header --}}
         <div class="header level is-mobile has-text-white is-size-7 mb-0 px-5 py-4">
             <div class="level-left">
-                <img class="image is-24x24" src="falta-image.png" alt="">
+                <img class="image is-64x64" src="{{ asset('img/logo-128.png') }}" alt="IA-Calendar">
             </div>
             <div class="level-right">
                 <div class="columns is-mobile  is-vcentered">
@@ -62,27 +62,42 @@
 
         {{-- Menu Section --}}
         <section class="action-section px-5 py-5">
-            <aside class="menu">
-                <ul class="menu-list">
-                    <li>
-                        <span class="icon is-small"><i class="fas fa-plus"></i></span> Crear Partícipe</li>
-                    <li><span class="icon is-small"><i class="fas fa-plus"></i></span> Crear Categoría</li>
-                    <li>Ver calendario</li>
-                    <li>Anuario Fiscal</li>
-                </ul>
-            </aside>
+            <div class="columns is-mobile">
+                <aside class="menu column is-one-quarter">
+                    <ul class="menu-list">
+                        <li><i class="fas fa-plus is-size-7"></i> Crear Partícipe</li>
+                        <li><i class="fas fa-plus is-size-7"></i> Crear Categoría</li>
+                        <li>Ver calendario</li>
+                        <li>Anuario Fiscal</li>
+                    </ul>
+                </aside>
+                <div class="column">
+                    <div class="columns columns-buttons my-0">
+                        <div class="column is-half-desktop is-two-fifths-table vcentered">
+                            <button class="btn-primary">Crear tu evento</button>
+                        </div>
+                        <div class="column">
+                            <div class="columns columns-buttons-rotated is-mobile">
+                                <button class="column is-3 btn-secundary mr-6"><div class="btn-rotated">Programador<br>Empresa</div></button>
+                                <button class="column is-3 btn-secundary mr-6"><div class="btn-rotated">Categoría</div></button>
+                                <button class="column is-3 btn-secundary mr-6"><div class="btn-rotated">Evento</div></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
         {{-- /Menu Section --}}
 
         {{-- Banner Section --}}
-        <section class="banner">
-            Aqui se cargara el slide/banner con transacción de imágenes, etc....
+        <section class="banner py-4">
+            <banner-app-carusel />
         </section>
         {{-- /Banner Section --}}
 
         {{-- Main Section --}}
         <section class="main">
-            Aquí va la interación o zona de trabajo principal, donde se cargará todo el trabajo.
+            <main-section />
         </section>
         {{-- /Main Section --}}
 

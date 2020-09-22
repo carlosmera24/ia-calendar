@@ -19,8 +19,11 @@ Vue.use(Buefy, {
     defaultIconPack: 'fas',
 });
 
+// Welcome components
 Vue.component('banner-info', require('./components/welcome/BannerInfoComponent.vue').default);
 Vue.component('banner-carusel', require('./components/welcome/BannerCaruselComponent.vue').default);
+// Welcome app
+Vue.component('main-section', require('./components/app/MainComponent.vue').default);
 
 const app = new Vue({
     el: '#app',
