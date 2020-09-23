@@ -19116,6 +19116,65 @@ textarea {
   color: #FFF;
 }
 
+.application .main .content .events-expire .columns .column.add-more {
+  display: flex;
+  align-items: center;
+}
+
+.application .main .content .events-expire .columns .column.add-more .icon {
+  color: #00b0b9;
+  margin: auto;
+}
+
+.application .main .content .events-expire .columns .column {
+  border: 3px solid #00b0b9;
+  border-radius: 10px;
+  min-height: 200px;
+}
+
+.application .main .content .categories-favorites .columns .column {
+  border: 3px solid #00b0b9;
+  border-radius: 30px;
+  min-height: 130px;
+}
+
+.application .main .content .categories-favorites .columns .column.add-more {
+  display: flex;
+  align-items: center;
+  border-radius: 0;
+}
+
+.application .main .content .categories-favorites .columns .column.add-more .icon {
+  color: #00b0b9;
+  margin: auto;
+}
+
+.application .main .content .notes .columns .column {
+  border-radius: 40px;
+  min-height: 100px;
+  background-color: #ffe481;
+  color: #000;
+  display: flex;
+  align-items: center;
+}
+
+.application .main .content .notes .columns .column span {
+  margin: auto;
+}
+
+.application .main .content .notes .columns .column.add-more {
+  display: flex;
+  align-items: center;
+  border: 3px solid #00b0b9;
+  border-radius: 0;
+  background-color: transparent;
+}
+
+.application .main .content .notes .columns .column.add-more .icon {
+  color: #00b0b9;
+  margin: auto;
+}
+
 @media (max-width: 768px) {
   .welcome .banner .title {
     font-size: 28pt;

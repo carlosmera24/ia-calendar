@@ -210,6 +210,67 @@ body, h2, button, input, select, textarea {
             border-radius: 50px;
             min-height: 400px;
             color: #FFF;
+            .events-expire{
+                .columns{
+                    .column.add-more{
+                        display: flex;
+                        align-items: center;
+                        .icon{
+                            color: $blue-cyan;
+                            margin: auto;
+                        }
+                    }
+                    .column{
+                        border: 3px solid $blue-cyan;
+                        border-radius: 10px;
+                        min-height: 200px;
+                    }
+                }
+            }
+            .categories-favorites{
+                .columns{
+                    .column{
+                        border: 3px solid $blue-cyan;
+                        border-radius: 30px;
+                        min-height: 130px;
+                    }
+                    .column.add-more{
+                        display: flex;
+                        align-items: center;
+                        border-radius: 0;
+                        .icon{
+                            color: $blue-cyan;
+                            margin: auto;
+                        }
+                    }
+                }
+            }
+            .notes{
+                .columns{
+                    .column{
+                        border-radius: 40px;
+                        min-height: 100px;
+                        background-color: #ffe481;
+                        color: #000;
+                        display: flex;
+                        align-items: center;
+                        span{
+                            margin: auto;
+                        }
+                    }
+                    .column.add-more{
+                        display: flex;
+                        align-items: center;
+                        border: 3px solid $blue-cyan;
+                        border-radius: 0;
+                        background-color: transparent;
+                        .icon{
+                            color: $blue-cyan;
+                            margin: auto;
+                        }
+                    }
+                }
+            }
         }
     }
 }
