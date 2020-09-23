@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
                         ProfileParticipantSeeder::class,
                         PermissionSeeder::class,
                         StateProgrammerMembershipSeeder::class,
-                        StateNoteSeeder::class
+                        StateNoteSeeder::class,
+                        UserSeeder::class,
                     ]);
     }
 }

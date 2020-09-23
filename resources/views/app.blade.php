@@ -41,7 +41,7 @@
                             </div>
                         </div>
                         {{-- /DropDown --}}
-                        <p class="is-size-6">Nombre Administrador</p>
+                    <p class="is-size-6">{{ Auth::user()->name }}</p>
                     </div>
                     <div class="column has-text-centered is-3 py-0 px-0">
                         <div class="content-icon-user">

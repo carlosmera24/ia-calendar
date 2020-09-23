@@ -22,7 +22,8 @@ Vue.use(Buefy, {
 // Welcome components
 Vue.component('banner-info', require('./components/welcome/BannerInfoComponent.vue').default);
 Vue.component('banner-carusel', require('./components/welcome/BannerCaruselComponent.vue').default);
-// Welcome app
+// App components
+Vue.component('login-form', require('./components/app/LoginFormComponent.vue').default);
 Vue.component('banner-app-carusel', require('./components/app/BannerCaruselComponent.vue').default);
 Vue.component('main-section', require('./components/app/MainComponent.vue').default);
 

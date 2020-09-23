@@ -19028,6 +19028,75 @@ textarea {
   border-top: 5px solid #fab800;
 }
 
+.login {
+  font-family: "Open Sans", sans-serif;
+}
+
+.login .hero .nav,
+.login .hero.is-success .nav {
+  box-shadow: none;
+}
+
+.login .box {
+  margin-top: 5rem;
+}
+
+.login .avatar {
+  margin-top: -70px;
+  padding-bottom: 20px;
+}
+
+.login .avatar img {
+  padding: 5px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+}
+
+.login input {
+  font-weight: 300;
+}
+
+.login input::-moz-placeholder {
+  color: #666;
+}
+
+.login input:-ms-input-placeholder {
+  color: #666;
+}
+
+.login input::placeholder {
+  color: #666;
+}
+
+.login p {
+  font-weight: 700;
+}
+
+.login p.subtitle {
+  padding-top: 1rem;
+}
+
+.login .login-hr {
+  border-bottom: 1px solid black;
+}
+
+.login .has-text-black {
+  color: black;
+}
+
+.login .field {
+  padding-bottom: 10px;
+}
+
+.login .fa {
+  margin-left: 5px;
+}
+
+.login button.is-info {
+  background-color: #005368;
+}
+
 .application .header {
   background-color: #005368;
   border-bottom: 5px solid #fab800;
