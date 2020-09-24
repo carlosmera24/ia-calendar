@@ -20,6 +20,7 @@ class LoginController extends Controller
     public function authenticate(Request $request)
     {
         $credentials = $request->only('user', 'password');
+        $credentials['status_users_id'] = 1;//Activo
 
         if (Auth::attempt($credentials)) {
             // Authentication passed...

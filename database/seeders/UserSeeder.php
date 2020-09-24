@@ -20,7 +20,8 @@ class UserSeeder extends Seeder
             'name' => 'Usuario Demo',
             'user' => 'demo-iacalendar',
             'password' => Hash::make('abcd1234'),
-            'roles_id' => 1
+            'roles_id' => 1,
+            'status_users_id' => 1
         ]);
     }
 }

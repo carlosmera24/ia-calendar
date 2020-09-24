@@ -1,5 +1,6 @@
 @extends('layouts.main')
 @section('title','Iniciar sesión')
+@section('class-footer','is-hidden')
 @section('content')
 <div class="login">
 

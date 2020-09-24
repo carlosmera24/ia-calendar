@@ -26,4 +26,45 @@ Desarrollo creado bajo la empresa [Infracounter](https://infracounter.com) por *
     php artisan migrate:fresh
     php artisan db:seed
     ```
+3. Script inicial para hosting/phpmyadmin:
+
+    Ejecutar la importación del archivo *database/resources/init_sql.sql* el cual contiene la estructura de la base de datos y los inserts principales.
+4. Importar iconos:
+    - Por consola:
+        ```
+        LOAD DATA
+        LOCAL INFILE '/var/www/html/ia-calendar/database/resources/icons.csv'
+        INTO TABLE icons
+        FIELDS TERMINATED BY ','
+        OPTIONALLY
+        ENCLOSED BY '"'
+        LINES TERMINATED BY '\n'
+        (`name`,`class_css`);
+        ```
+    - phpmyadmin:
+        ```
+        Importar archivos
+        database/resources/icons.csv
+        Formato: CSV
+        Nombre de las columnas: name,class_css
+        ```
+5. Importar fuentes:
+    - Por consola:
+        ```
+        LOAD DATA
+        LOCAL INFILE '/var/www/html/ia-calendar/database/resources/fonts.csv'
+        INTO TABLE fonts
+        FIELDS TERMINATED BY ','
+        OPTIONALLY
+        ENCLOSED BY '"'
+        LINES TERMINATED BY '\n'
+        (`name`,`description`,`class_css`);
+        ```
+    - phpmyadmin:
+        ```
+        Importar archivos
+        database/resources/fonts.csv
+        Formato: CSV
+        Nombre de las columnas: name,description,class_css
+        ```
 

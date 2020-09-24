@@ -21,12 +21,17 @@ class CreateUsersTable extends Migration
             $table->string('user',45);
             $table->text('password');
             $table->integer('roles_id');
+            $table->integer('status_users_id');
             $table->datetime('created_at')->default(new Expression('CURRENT_TIMESTAMP'));
             $table->datetime('updated_at')->default(new Expression('CURRENT_TIMESTAMP'));
 
-            $table->primary([ 'id', 'roles_id' ]);
+            $table->primary([ 'id', 'roles_id', 'status_users_id' ]);
 
             $table->foreign('roles_id')->references('id')->on('roles')
+                ->onUpdate('NO ACTION')
+                ->onDelete('NO ACTION');
+
+            $table->foreign('status_users_id')->references('id')->on('status_users')
                 ->onUpdate('NO ACTION')
                 ->onDelete('NO ACTION');
 

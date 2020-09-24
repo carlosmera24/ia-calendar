@@ -8,7 +8,7 @@
                 <img class="image is-32x32" src="{{ asset('img/logo-128.png') }}" alt="IA-Calendar">
             </div>
             <div class="level-right">
-                <a href="#" class="has-text-white">
+                <a href="{{ route('home') }}" class="has-text-white">
                     Iniciar <i class="fa fa-user is-size-4"></i>
                 </a>
             </div>
