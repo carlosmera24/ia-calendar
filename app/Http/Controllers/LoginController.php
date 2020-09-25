@@ -41,4 +41,16 @@ class LoginController extends Controller
                                     200
                                 );
     }
+
+    public function logout()
+    {
+        Auth::logout();
+
+        return response()->json(
+                                    array(
+                                            'status'    => 200,
+                                        ),
+                                    200
+        );
+    }
 }

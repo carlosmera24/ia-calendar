@@ -11,37 +11,11 @@
                 <div class="columns is-mobile  is-vcentered">
                     <div class="column has-text-right">
                         {{-- DropDown --}}
-                        <div class="dropdown" :class="{ 'is-active' : isActiveDropdown }">
-                            <div class="dropdown-trigger">
-                                <button class="btn is-size-6 mb-5" aria-haspopup="true" aria-controls="dropdown-menu" v-on:click="clickDropdown">
-                                    <span>Nombre empresa</span>
-                                    <span class="icon is-small">
-                                        <i class="fas fa-caret-down" aria-hidden="true"></i>
-                                    </span>
-                                </button>
-                            </div>
-                            <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                                <div class="dropdown-content has-text-left">
-                                    <a href="#" class="dropdown-item">
-                                        Activar modo noche
-                                    </a>
-                                    <a class="dropdown-item">
-                                        Administrar lideres
-                                    </a>
-                                    <a href="#" class="dropdown-item">
-                                        Configuración general
-                                    </a>
-                                    <a href="#" class="dropdown-item">
-                                        Preguntas frecuentes
-                                    </a>
-                                    <a href="#" class="dropdown-item" v-on:click="clickDropdown">
-                                        <strong>Cerrar</strong>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                            <dropdown-menu
+                                v-bind:url_logout="'{{ route('logout') }}'"
+                                v-bind:url_home="'{{ route('home') }}'"></dropdown-menu>
                         {{-- /DropDown --}}
-                    <p class="is-size-6">{{ Auth::user()->name }}</p>
+                        <p class="is-size-6">{{ Auth::user()->name }}</p>
                     </div>
                     <div class="column has-text-centered is-3 py-0 px-0">
                         <div class="content-icon-user">
