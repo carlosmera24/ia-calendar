@@ -2130,10 +2130,10 @@ __webpack_require__.r(__webpack_exports__);
         subtitulo: "sincroniza el tiempo en el menor orden"
       }, {
         titulo: "MÁS QUE UN PROGRAMADOR,<br>TU VIDA SANA",
-        subtitulo: "IA CALENDAR"
+        subtitulo: "IA CALENDARS"
       }, {
         titulo: "TU CALENDARIO SIEMPRE,<br>AL ALCANCE DE TU MANO",
-        subtitulo: "IA CALENDAR"
+        subtitulo: "IA CALENDARS"
       }]
     };
   }
@@ -2242,30 +2242,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['url_login', 'url_home', 'csrf_token'],
+  props: ['url_login', 'url_home', 'csrf_token', 'fields_json'],
   data: function data() {
     return {
       user: '',
       password: '',
-      validation: {
-        user: {
-          error: false,
-          msg: "Campo requerido"
-        },
-        password: {
-          error: false,
-          msg: "Campo requerido"
-        }
-      }
+      fields: [],
+      copy_msg_user: ''
     };
+  },
+  created: function created() {
+    this.fields = JSON.parse(this.fields_json);
+    this.copy_msg_user = this.fields.user.msg;
   },
   methods: {
     clickLogin: function clickLogin(e) {
       var _this = this;
 
-      this.validation.user.msg = "Campo requerido";
-      this.validation.user.error = this.user === '';
-      this.validation.password.error = this.password === '';
+      this.fields.user.msg = this.copy_msg_user;
+      this.fields.user.error = this.user === '';
+      this.fields.password.error = this.password === '';
 
       if (this.user !== '' || this.password !== '') {
         // return true;
@@ -2276,8 +2272,8 @@ __webpack_require__.r(__webpack_exports__);
         };
         axios.post(this.url_login, data).then(function (res) {
           if (res.data.status === 204) {
-            _this.validation.user.msg = res.data.data[0];
-            _this.validation.user.error = true;
+            _this.fields.user.msg = res.data.data[0];
+            _this.fields.user.error = true;
           } else if (res.data.status === 200) {
             window.location.href = _this.url_home;
           }
@@ -2378,13 +2374,13 @@ __webpack_require__.r(__webpack_exports__);
     return {
       banners: [{
         titulo: "MÁS QUE UN PROGRAMADOR,<br>TU VIDA SANA",
-        subtitulo: "IA CALENDAR"
+        subtitulo: "IA CALENDARS"
       }, {
         titulo: "PROGRAMA TU VIDA,<br>DE LA MEJOR MANERA",
-        subtitulo: "IA CALENDAR"
+        subtitulo: "IA CALENDARS"
       }, {
         titulo: "TU CALENDARIO SIEMPRE,<br>AL ALCANCE DE TU MANO",
-        subtitulo: "IA CALENDAR"
+        subtitulo: "IA CALENDARS"
       }]
     };
   }
@@ -40614,8 +40610,8 @@ var render = function() {
           "b-field",
           {
             attrs: {
-              type: { "is-danger": _vm.validation.user.error },
-              message: _vm.validation.user.error ? _vm.validation.user.msg : ""
+              type: { "is-danger": _vm.fields.user.error },
+              message: _vm.fields.user.error ? _vm.fields.user.msg : ""
             }
           },
           [
@@ -40624,7 +40620,7 @@ var render = function() {
                 name: "user",
                 size: "is-large",
                 type: "text",
-                placeholder: "Usuario",
+                placeholder: _vm.fields.user.placeholder,
                 autofocus: ""
               },
               model: {
@@ -40643,10 +40639,8 @@ var render = function() {
           "b-field",
           {
             attrs: {
-              type: { "is-danger": _vm.validation.password.error },
-              message: _vm.validation.password.error
-                ? _vm.validation.password.msg
-                : ""
+              type: { "is-danger": _vm.fields.password.error },
+              message: _vm.fields.password.error ? _vm.fields.password.msg : ""
             }
           },
           [
@@ -40654,7 +40648,7 @@ var render = function() {
               attrs: {
                 size: "is-large",
                 type: "password",
-                placeholder: "Contraseña",
+                placeholder: _vm.fields.password.placeholder,
                 autofocus: ""
               },
               model: {
@@ -40680,7 +40674,9 @@ var render = function() {
             }
           },
           [
-            _vm._v("\n            Login "),
+            _vm._v(
+              "\n            " + _vm._s(_vm.fields.login.placeholder) + " "
+            ),
             _c("i", {
               staticClass: "fas fa-sign-in-alt",
               attrs: { "aria-hidden": "true" }
@@ -40897,7 +40893,7 @@ var render = function() {
                     "div",
                     {
                       staticClass:
-                        "container is-pulled-right has-text-black has-text-centered"
+                        "container is-pulled-right has-text-black has-text-centered my-6"
                     },
                     [
                       _c("p", { staticClass: "title has-text-black" }, [

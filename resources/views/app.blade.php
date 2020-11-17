@@ -5,7 +5,7 @@
         {{-- Header --}}
         <div class="header level is-mobile has-text-white is-size-7 mb-0 px-5 py-4">
             <div class="level-left">
-                <img class="image is-64x64" src="{{ asset('img/logo-128.png') }}" alt="IA-Calendar">
+                <img class="image is-64x64" src="{{ asset('img/logo-128.png') }}" alt="IA-Calendars">
             </div>
             <div class="level-right">
                 <div class="columns is-mobile  is-vcentered">

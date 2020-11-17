@@ -5,11 +5,11 @@
         {{-- Header --}}
         <div class="header level is-mobile has-text-white is-size-7 mb-0">
             <div class="level-left">
-                <img class="image is-32x32" src="{{ asset('img/logo-128.png') }}" alt="IA-Calendar">
+                <img class="image is-32x32" src="{{ asset('img/logo-128.png') }}" alt="IA-Calendars">
             </div>
             <div class="level-right">
                 <a href="{{ route('home') }}" class="has-text-white">
-                    Iniciar <i class="fa fa-user is-size-4"></i>
+                    @lang('welcome.start') <i class="fa fa-user is-size-4"></i>
                 </a>
             </div>
         </div>

@@ -7,7 +7,7 @@
                     <article v-for="(item, objIndex) in obj"
                         :key="objIndex"
                         class="tile is-child is-6 py-6 px-6">
-                        <div class="container is-pulled-right has-text-black has-text-centered">
+                        <div class="container is-pulled-right has-text-black has-text-centered my-6">
                             <p class="title has-text-black">{{ item.titulo }}</p>
                             <p class="subtitle has-text-black is-size-4">{{ item.subtitulo }}</p>
                             <div class="button-info">
