@@ -11,8 +11,8 @@
                             <p class="title has-text-black">{{ item.titulo }}</p>
                             <p class="subtitle has-text-black is-size-4">{{ item.subtitulo }}</p>
                             <div class="button-info">
-                                <a href="" class="button-info-content">Explorar <i class="fas fa-caret-right"></i></a></div>
-                            <p class="more-info is-size-6">Más información <span class="is-size-7">&#9688;</span></p>
+                                <a href="" class="button-info-content">{{ text_explore }} <i class="fas fa-caret-right"></i></a></div>
+                            <p class="more-info is-size-6">{{ text_more }} <span class="is-size-7">&#9688;</span></p>
                         </div>
                     </article>
                 </div>
@@ -22,6 +22,10 @@
 </template>
 <script>
     export default {
+        props:[
+            'text_more',
+            'text_explore',
+        ],
         data() {
             return {
                 info: [

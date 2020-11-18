@@ -11,22 +11,22 @@
         <div class="dropdown-menu" id="dropdown-menu" role="menu">
             <div class="dropdown-content has-text-left">
                 <a href="#" class="dropdown-item">
-                    Activar modo noche
+                    {{ text_menu_dark }}
                 </a>
                 <a class="dropdown-item">
-                    Administrar lideres
+                    {{ text_admin_leaders }}
                 </a>
                 <a href="#" class="dropdown-item">
-                    Configuración general
+                    {{ text_general_setting }}
                 </a>
                 <a href="#" class="dropdown-item">
-                    Preguntas frecuentes
+                    {{ text_frequent_questions }}
                 </a>
                 <a href="#" class="dropdown-item" v-on:click="clickCerrarSesion">
-                    Cerrar sesión
+                    {{ text_logout }}
                 </a>
                 <a href="#" class="dropdown-item" v-on:click="clickDropdown">
-                    <strong>Cerrar</strong>
+                    <strong>{{ text_close }}</strong>
                 </a>
             </div>
         </div>
@@ -41,7 +41,13 @@ export default {
     },
     props: [
         'url_logout',
-        'url_home'
+        'url_home',
+        'text_menu_dark',
+        'text_admin_leaders',
+        'text_general_setting',
+        'text_frequent_questions',
+        'text_logout',
+        'text_close'
     ],
     methods: {
         clickDropdown(){

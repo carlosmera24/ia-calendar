@@ -23,8 +23,8 @@
             return {
                 banners: [
                     { titulo: "LLEVA TU VIDA EN ORDEN", subtitulo: "sincroniza el tiempo en el menor orden" },
-                    { titulo: "MÁS QUE UN PROGRAMADOR,<br>TU VIDA SANA", subtitulo: "IA CALENDARS" },
-                    { titulo: "TU CALENDARIO SIEMPRE,<br>AL ALCANCE DE TU MANO", subtitulo: "IA CALENDARS" }
+                    { titulo: "MÁS QUE UN PROGRAMADOR,<br>TU VIDA SANA", subtitulo: "IA CALENDAR'S" },
+                    { titulo: "TU CALENDARIO SIEMPRE,<br>AL ALCANCE DE TU MANO", subtitulo: "IA CALENDAR'S" }
                 ]
             }
         },

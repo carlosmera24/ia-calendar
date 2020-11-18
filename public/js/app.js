@@ -2130,10 +2130,10 @@ __webpack_require__.r(__webpack_exports__);
         subtitulo: "sincroniza el tiempo en el menor orden"
       }, {
         titulo: "MÁS QUE UN PROGRAMADOR,<br>TU VIDA SANA",
-        subtitulo: "IA CALENDARS"
+        subtitulo: "IA CALENDAR'S"
       }, {
         titulo: "TU CALENDARIO SIEMPRE,<br>AL ALCANCE DE TU MANO",
-        subtitulo: "IA CALENDARS"
+        subtitulo: "IA CALENDAR'S"
       }]
     };
   }
@@ -2190,7 +2190,7 @@ __webpack_require__.r(__webpack_exports__);
       isActiveDropdown: false
     };
   },
-  props: ['url_logout', 'url_home'],
+  props: ['url_logout', 'url_home', 'text_menu_dark', 'text_admin_leaders', 'text_general_setting', 'text_frequent_questions', 'text_logout', 'text_close'],
   methods: {
     clickDropdown: function clickDropdown() {
       this.isActiveDropdown = !this.isActiveDropdown;
@@ -2331,7 +2331,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['showTitle'],
+  props: ['showTitle', 'text_title', 'text_trigger_events_soon_expire', 'text_add_categories', 'text_add_notes'],
   data: function data() {
     return {
       visibleTitle: this.showTitle != null ? this.showTitle : true
@@ -2374,13 +2374,13 @@ __webpack_require__.r(__webpack_exports__);
     return {
       banners: [{
         titulo: "MÁS QUE UN PROGRAMADOR,<br>TU VIDA SANA",
-        subtitulo: "IA CALENDARS"
+        subtitulo: "IA CALENDAR'S"
       }, {
         titulo: "PROGRAMA TU VIDA,<br>DE LA MEJOR MANERA",
-        subtitulo: "IA CALENDARS"
+        subtitulo: "IA CALENDAR'S"
       }, {
         titulo: "TU CALENDARIO SIEMPRE,<br>AL ALCANCE DE TU MANO",
-        subtitulo: "IA CALENDARS"
+        subtitulo: "IA CALENDAR'S"
       }]
     };
   }
@@ -2420,6 +2420,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['text_more', 'text_explore'],
   data: function data() {
     return {
       info: [[{
@@ -40503,19 +40504,35 @@ var render = function() {
         [
           _c("div", { staticClass: "dropdown-content has-text-left" }, [
             _c("a", { staticClass: "dropdown-item", attrs: { href: "#" } }, [
-              _vm._v("\n                Activar modo noche\n            ")
+              _vm._v(
+                "\n                " +
+                  _vm._s(_vm.text_menu_dark) +
+                  "\n            "
+              )
             ]),
             _vm._v(" "),
             _c("a", { staticClass: "dropdown-item" }, [
-              _vm._v("\n                Administrar lideres\n            ")
+              _vm._v(
+                "\n                " +
+                  _vm._s(_vm.text_admin_leaders) +
+                  "\n            "
+              )
             ]),
             _vm._v(" "),
             _c("a", { staticClass: "dropdown-item", attrs: { href: "#" } }, [
-              _vm._v("\n                Configuración general\n            ")
+              _vm._v(
+                "\n                " +
+                  _vm._s(_vm.text_general_setting) +
+                  "\n            "
+              )
             ]),
             _vm._v(" "),
             _c("a", { staticClass: "dropdown-item", attrs: { href: "#" } }, [
-              _vm._v("\n                Preguntas frecuentes\n            ")
+              _vm._v(
+                "\n                " +
+                  _vm._s(_vm.text_frequent_questions) +
+                  "\n            "
+              )
             ]),
             _vm._v(" "),
             _c(
@@ -40525,7 +40542,13 @@ var render = function() {
                 attrs: { href: "#" },
                 on: { click: _vm.clickCerrarSesion }
               },
-              [_vm._v("\n                Cerrar sesión\n            ")]
+              [
+                _vm._v(
+                  "\n                " +
+                    _vm._s(_vm.text_logout) +
+                    "\n            "
+                )
+              ]
             ),
             _vm._v(" "),
             _c(
@@ -40535,7 +40558,7 @@ var render = function() {
                 attrs: { href: "#" },
                 on: { click: _vm.clickDropdown }
               },
-              [_c("strong", [_vm._v("Cerrar")])]
+              [_c("strong", [_vm._v(_vm._s(_vm.text_close))])]
             )
           ])
         ]
@@ -40715,11 +40738,39 @@ var render = function() {
       ? _c(
           "h4",
           { staticClass: "title has-text-weight-bold is-size-5 mx-6 mb-3" },
-          [_vm._v("Personaliza tu muro")]
+          [_vm._v(_vm._s(_vm.text_title))]
         )
       : _vm._e(),
     _vm._v(" "),
-    _vm._m(0)
+    _c("section", { staticClass: "content px-6 py-6" }, [
+      _c("div", { staticClass: "events-expire" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("p", { staticClass: "is-size-6 has-text-white my-4" }, [
+          _c("span", { staticClass: "is-size-7" }, [_vm._v("◘")]),
+          _vm._v(" " + _vm._s(_vm.text_trigger_events_soon_expire) + " "),
+          _c("i", { staticClass: "fas fa-lg fa-caret-down" })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "categories-favorites pt-6" }, [
+        _vm._m(1),
+        _vm._v(" "),
+        _c("p", { staticClass: "is-size-6 has-text-white my-4" }, [
+          _c("span", { staticClass: "is-size-7" }, [_vm._v("◘")]),
+          _vm._v(" " + _vm._s(_vm.text_add_categories))
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "notes pt-6" }, [
+        _vm._m(2),
+        _vm._v(" "),
+        _c("p", { staticClass: "is-size-6 has-text-white my-4" }, [
+          _c("span", { staticClass: "is-size-7" }, [_vm._v("◘")]),
+          _vm._v(" " + _vm._s(_vm.text_add_notes))
+        ])
+      ])
+    ])
   ])
 }
 var staticRenderFns = [
@@ -40727,75 +40778,59 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("section", { staticClass: "content px-6 py-6" }, [
-      _c("div", { staticClass: "events-expire" }, [
-        _c("div", { staticClass: "columns my-0" }, [
-          _c("div", { staticClass: "column add-more mr-5" }, [
-            _c("span", { staticClass: "icon icon-medium" }, [
-              _c("i", { staticClass: "fa fa-3x fa-plus" })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "column mr-5" }),
-          _vm._v(" "),
-          _c("div", { staticClass: "column mr-5" }),
-          _vm._v(" "),
-          _c("div", { staticClass: "column mr-5" })
-        ]),
-        _vm._v(" "),
-        _c("p", { staticClass: "is-size-6 has-text-white my-4" }, [
-          _c("span", { staticClass: "is-size-7" }, [_vm._v("◘")]),
-          _vm._v(" Activar eventos pronto a vencerse (30 días) "),
-          _c("i", { staticClass: "fas fa-lg fa-caret-down" })
+    return _c("div", { staticClass: "columns my-0" }, [
+      _c("div", { staticClass: "column add-more mr-5" }, [
+        _c("span", { staticClass: "icon icon-medium" }, [
+          _c("i", { staticClass: "fa fa-3x fa-plus" })
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "categories-favorites pt-6" }, [
-        _c("div", { staticClass: "columns my-0" }, [
-          _c("div", { staticClass: "column add-more is-2 mr-5" }, [
-            _c("span", { staticClass: "icon icon-medium" }, [
-              _c("i", { staticClass: "fa fa-3x fa-plus" })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "column add-more is-2 mr-5" }, [
-            _c("span", { staticClass: "icon icon-medium" }, [
-              _c("i", { staticClass: "fa fa-3x fa-plus" })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "column is-2 mr-5" })
-        ]),
-        _vm._v(" "),
-        _c("p", { staticClass: "is-size-6 has-text-white my-4" }, [
-          _c("span", { staticClass: "is-size-7" }, [_vm._v("◘")]),
-          _vm._v(" Agregar categorías")
+      _c("div", { staticClass: "column mr-5" }),
+      _vm._v(" "),
+      _c("div", { staticClass: "column mr-5" }),
+      _vm._v(" "),
+      _c("div", { staticClass: "column mr-5" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "columns my-0" }, [
+      _c("div", { staticClass: "column add-more is-2 mr-5" }, [
+        _c("span", { staticClass: "icon icon-medium" }, [
+          _c("i", { staticClass: "fa fa-3x fa-plus" })
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "notes pt-6" }, [
-        _c("div", { staticClass: "columns my-0" }, [
-          _c("div", { staticClass: "column add-more is-3 mr-5" }, [
-            _c("span", { staticClass: "icon icon-medium" }, [
-              _c("i", { staticClass: "fa fa-3x fa-plus" })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "column add-more is-3 mr-5" }, [
-            _c("span", { staticClass: "icon icon-medium" }, [
-              _c("i", { staticClass: "fa fa-3x fa-plus" })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "column is-3 mr-5" }, [
-            _c("span", [_vm._v("llamar al diseñador al medio día")])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("p", { staticClass: "is-size-6 has-text-white my-4" }, [
-          _c("span", { staticClass: "is-size-7" }, [_vm._v("◘")]),
-          _vm._v(" Agregar notas")
+      _c("div", { staticClass: "column add-more is-2 mr-5" }, [
+        _c("span", { staticClass: "icon icon-medium" }, [
+          _c("i", { staticClass: "fa fa-3x fa-plus" })
         ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "column is-2 mr-5" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "columns my-0" }, [
+      _c("div", { staticClass: "column add-more is-3 mr-5" }, [
+        _c("span", { staticClass: "icon icon-medium" }, [
+          _c("i", { staticClass: "fa fa-3x fa-plus" })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "column add-more is-3 mr-5" }, [
+        _c("span", { staticClass: "icon icon-medium" }, [
+          _c("i", { staticClass: "fa fa-3x fa-plus" })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "column is-3 mr-5" }, [
+        _c("span", [_vm._v("llamar al diseñador al medio día")])
       ])
     ])
   }
@@ -40906,9 +40941,24 @@ var render = function() {
                         [_vm._v(_vm._s(item.subtitulo))]
                       ),
                       _vm._v(" "),
-                      _vm._m(0, true),
+                      _c("div", { staticClass: "button-info" }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "button-info-content",
+                            attrs: { href: "" }
+                          },
+                          [
+                            _vm._v(_vm._s(_vm.text_explore) + " "),
+                            _c("i", { staticClass: "fas fa-caret-right" })
+                          ]
+                        )
+                      ]),
                       _vm._v(" "),
-                      _vm._m(1, true)
+                      _c("p", { staticClass: "more-info is-size-6" }, [
+                        _vm._v(_vm._s(_vm.text_more) + " "),
+                        _c("span", { staticClass: "is-size-7" }, [_vm._v("◘")])
+                      ])
                     ]
                   )
                 ]
@@ -40922,28 +40972,7 @@ var render = function() {
     0
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "button-info" }, [
-      _c("a", { staticClass: "button-info-content", attrs: { href: "" } }, [
-        _vm._v("Explorar "),
-        _c("i", { staticClass: "fas fa-caret-right" })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("p", { staticClass: "more-info is-size-6" }, [
-      _vm._v("Más información "),
-      _c("span", { staticClass: "is-size-7" }, [_vm._v("◘")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

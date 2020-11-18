@@ -22,9 +22,9 @@
         data() {
             return {
                 banners: [
-                    { titulo: "MÁS QUE UN PROGRAMADOR,<br>TU VIDA SANA", subtitulo: "IA CALENDARS" },
-                    { titulo: "PROGRAMA TU VIDA,<br>DE LA MEJOR MANERA", subtitulo: "IA CALENDARS" },
-                    { titulo: "TU CALENDARIO SIEMPRE,<br>AL ALCANCE DE TU MANO", subtitulo: "IA CALENDARS" }
+                    { titulo: "MÁS QUE UN PROGRAMADOR,<br>TU VIDA SANA", subtitulo: "IA CALENDAR'S" },
+                    { titulo: "PROGRAMA TU VIDA,<br>DE LA MEJOR MANERA", subtitulo: "IA CALENDAR'S" },
+                    { titulo: "TU CALENDARIO SIEMPRE,<br>AL ALCANCE DE TU MANO", subtitulo: "IA CALENDAR'S" }
                 ]
             }
         },

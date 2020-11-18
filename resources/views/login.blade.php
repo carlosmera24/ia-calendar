@@ -8,11 +8,11 @@
         <div class="hero-body">
             <div class="container has-text-centered">
                 <div class="column is-4 is-offset-4">
-                    <h3 class="title has-text-white">IA Calendars</h3>
+                    <h3 class="title has-text-white">IA Calendar's</h3>
                     <hr class="login-hr">
                     <div class="box">
                         <figure class="avatar">
-                            <img class="is-128x128" src="{{ asset('img/logo-128.png') }}" alt="IA-Calendars">
+                            <img class="is-128x128" src="{{ asset('img/logo-128.png') }}" alt="IA-Calendar's">
                         </figure>
                         @php
                             $fields = array(

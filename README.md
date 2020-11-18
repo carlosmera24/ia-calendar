@@ -1,4 +1,4 @@
-# IA Calendars - Infracounter
+# IA Calendar's - Infracounter
 
 Desarrollo creado bajo la empresa [Infracounter](https://infracounter.com) por **Carlos Eduardo Mera Ruiz** *Desarrollador Full Stack*.
 

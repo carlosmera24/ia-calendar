@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h4 class="title has-text-weight-bold is-size-5 mx-6 mb-3" v-if="visibleTitle">Personaliza tu muro</h4>
+        <h4 class="title has-text-weight-bold is-size-5 mx-6 mb-3" v-if="visibleTitle">{{ text_title }}</h4>
         <section class="content px-6 py-6">
             <div class="events-expire">
                 <div class="columns my-0">
@@ -10,7 +10,7 @@
                     <div class="column mr-5"></div>
                 </div>
                 <p class="is-size-6 has-text-white my-4">
-                    <span class="is-size-7">&#9688;</span> Activar eventos pronto a vencerse (30 días) <i class="fas fa-lg fa-caret-down"></i>
+                    <span class="is-size-7">&#9688;</span> {{ text_trigger_events_soon_expire }} <i class="fas fa-lg fa-caret-down"></i>
                 </p>
             </div>
             <div class="categories-favorites pt-6">
@@ -19,7 +19,7 @@
                     <div class="column add-more is-2 mr-5"><span class="icon icon-medium"><i class="fa fa-3x fa-plus"></i></span></div>
                     <div class="column is-2 mr-5"></div>
                 </div>
-                <p class="is-size-6 has-text-white my-4"><span class="is-size-7">&#9688;</span> Agregar categorías</p>
+                <p class="is-size-6 has-text-white my-4"><span class="is-size-7">&#9688;</span> {{ text_add_categories }}</p>
             </div>
             <div class="notes pt-6">
                 <div class="columns my-0">
@@ -27,7 +27,7 @@
                     <div class="column add-more is-3 mr-5"><span class="icon icon-medium"><i class="fa fa-3x fa-plus"></i></span></div>
                     <div class="column is-3 mr-5"><span>llamar al diseñador al medio día</span></div>
                 </div>
-                <p class="is-size-6 has-text-white my-4"><span class="is-size-7">&#9688;</span> Agregar notas</p>
+                <p class="is-size-6 has-text-white my-4"><span class="is-size-7">&#9688;</span> {{ text_add_notes }}</p>
             </div>
         </section>
     </div>
@@ -35,7 +35,11 @@
 <script>
 export default {
     props:[
-        'showTitle'
+        'showTitle',
+        'text_title',
+        'text_trigger_events_soon_expire',
+        'text_add_categories',
+        'text_add_notes'
     ],
     data() {
         return {
