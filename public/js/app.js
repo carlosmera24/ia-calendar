@@ -2312,6 +2312,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['showTitle', 'text_title', 'text_trigger_events_soon_expire', 'text_add_categories', 'text_add_notes'],
   data: function data() {

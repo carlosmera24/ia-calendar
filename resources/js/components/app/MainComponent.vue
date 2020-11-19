@@ -5,10 +5,12 @@
             <transition-group class="action-main"
                 enter-active-class="animate__animated animate__fadeInDown animated_delay"
                 leave-active-class="animate__animated animate__fadeOutDown">
+
                 <wall-section v-if="activeMenu.wall" v-bind:key="1"
                     v-bind:text_trigger_events_soon_expire="text_trigger_events_soon_expire"
                     v-bind:text_add_categories="text_add_categories"
                     v-bind:text_add_notes="text_add_notes" />
+
                 <participant-section v-if="activeMenu.create_participant" v-bind:key="2"/>
             </transition-group>
         </section>

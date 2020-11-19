@@ -50,7 +50,6 @@ const app = new Vue({
                     this.activeMenu[v[0]] = false;
                 }
             });
-
         }
     },
 });
