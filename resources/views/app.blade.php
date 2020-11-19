@@ -43,30 +43,15 @@
 
         {{-- Menu Section --}}
         <section class="action-section px-5 py-5">
-            <div class="columns is-mobile">
-                <aside class="menu column is-one-quarter">
-                    <ul class="menu-list">
-                        <li><i class="fas fa-plus is-size-7"></i> @lang('app.create_participate')</li>
-                        <li><i class="fas fa-plus is-size-7"></i> @lang('app.create_category')</li>
-                        <li>@lang('app.see_calendar')</li>
-                        <li>@lang('app.annual_fiscal')</li>
-                    </ul>
-                </aside>
-                <div class="column">
-                    <div class="columns columns-buttons my-0">
-                        <div class="column is-half-desktop is-two-fifths-table vcentered">
-                            <button class="btn-primary">@lang('app.create_your_event')</button>
-                        </div>
-                        <div class="column">
-                            <div class="columns columns-buttons-rotated is-mobile">
-                                <button class="column is-3 btn-secundary mr-6"><div class="btn-rotated">@lang('app.programmer')</div></button>
-                                <button class="column is-3 btn-secundary mr-6"><div class="btn-rotated">@lang('app.category')</div></button>
-                                <button class="column is-3 btn-secundary mr-6"><div class="btn-rotated">@lang('app.event')</div></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <main-menu-section
+                v-bind:text_create_participant='" {{ __('app.create_participant') }}"'
+                v-bind:text_create_category='" {{ __('app.create_category') }}"'
+                v-bind:text_see_calendar='" {{ __('app.see_calendar') }}"'
+                v-bind:text_anual_fiscal='" {{ __('app.annual_fiscal') }}"'
+                v-bind:text_create_your_event='" {{ __('app.create_your_event') }}"'
+                v-bind:text_programmer='" {{ __('app.programmer') }}"'
+                v-bind:text_category='" {{ __('app.category') }}"'
+                v-bind:text_event='" {{ __('app.event') }}"' />
         </section>
         {{-- /Menu Section --}}
 

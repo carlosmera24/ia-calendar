@@ -26,8 +26,30 @@ Vue.component('banner-carusel', require('./components/welcome/BannerCaruselCompo
 Vue.component('login-form', require('./components/app/LoginFormComponent.vue').default);
 Vue.component('dropdown-menu', require('./components/app/DropDownMenuComponent.vue').default);
 Vue.component('banner-app-carusel', require('./components/app/BannerCaruselComponent.vue').default);
+Vue.component('main-menu-section', require('./components/app/MainMenuComponent.vue').default);
 Vue.component('main-section', require('./components/app/MainComponent.vue').default);
+Vue.component('wall-section', require('./components/app/WallComponent.vue').default);
+Vue.component('participant-section', require('./components/app/NewParticipantComponent.vue').default);
 
 const app = new Vue({
     el: '#app',
+    data(){
+        return{
+            activeMenu: {
+                wall: true,
+                create_participant: false,
+            }
+        }
+    },
+    methods: {
+        setActiveMenu(item){
+            Object.entries(this.activeMenu).forEach((v) => {
+                if (v[0] === item) {
+                    this.activeMenu[item] = true;
+                } else {
+                    this.activeMenu[v[0]] = false;
+                }
+            });
+        }
+    },
 });

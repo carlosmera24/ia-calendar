@@ -1,34 +1,20 @@
 <template>
     <div>
-        <h4 class="title has-text-weight-bold is-size-5 mx-6 mb-3" v-if="visibleTitle">{{ text_title }}</h4>
+        <h4 class="title has-text-weight-bold is-size-5 mx-6 mb-3" v-if="activeMenu.wall">{{ text_title }}</h4>
         <section class="content px-6 py-6">
-            <div class="events-expire">
-                <div class="columns my-0">
-                    <div class="column add-more mr-5"><span class="icon icon-medium"><i class="fa fa-3x fa-plus"></i></span></div>
-                    <div class="column mr-5"></div>
-                    <div class="column mr-5"></div>
-                    <div class="column mr-5"></div>
-                </div>
-                <p class="is-size-6 has-text-white my-4">
-                    <span class="is-size-7">&#9688;</span> {{ text_trigger_events_soon_expire }} <i class="fas fa-lg fa-caret-down"></i>
-                </p>
-            </div>
-            <div class="categories-favorites pt-6">
-                <div class="columns my-0">
-                    <div class="column add-more is-2 mr-5"><span class="icon icon-medium"><i class="fa fa-3x fa-plus"></i></span></div>
-                    <div class="column add-more is-2 mr-5"><span class="icon icon-medium"><i class="fa fa-3x fa-plus"></i></span></div>
-                    <div class="column is-2 mr-5"></div>
-                </div>
-                <p class="is-size-6 has-text-white my-4"><span class="is-size-7">&#9688;</span> {{ text_add_categories }}</p>
-            </div>
-            <div class="notes pt-6">
-                <div class="columns my-0">
-                    <div class="column add-more is-3 mr-5"><span class="icon icon-medium"><i class="fa fa-3x fa-plus"></i></span></div>
-                    <div class="column add-more is-3 mr-5"><span class="icon icon-medium"><i class="fa fa-3x fa-plus"></i></span></div>
-                    <div class="column is-3 mr-5"><span>llamar al diseñador al medio día</span></div>
-                </div>
-                <p class="is-size-6 has-text-white my-4"><span class="is-size-7">&#9688;</span> {{ text_add_notes }}</p>
-            </div>
+            <transition name="trans-wall"
+                enter-active-class="animate__animated animate__fadeInDown"
+                leave-active-class="animate__animated animate__fadeOutDown">
+                <wall-section v-if="activeMenu.wall"
+                    v-bind:text_trigger_events_soon_expire="text_trigger_events_soon_expire"
+                    v-bind:text_add_categories="text_add_categories"
+                    v-bind:text_add_notes="text_add_notes" />
+            <!-- </transition>
+            <transition name="trans-participant"
+                enter-active-class="animate__animated animate__fadeInDown"
+                leave-active-class="animate__animated animate__bounceOutDown"> -->
+                <participant-section v-if="activeMenu.create_participant"/>
+            </transition>
         </section>
     </div>
 </template>
@@ -43,8 +29,11 @@ export default {
     ],
     data() {
         return {
-            visibleTitle: this.showTitle != null ? this.showTitle : true,
+            activeMenu: [],
         }
     },
+    created(){
+        this.activeMenu = this.$root.activeMenu;
+    }
 }
 </script>

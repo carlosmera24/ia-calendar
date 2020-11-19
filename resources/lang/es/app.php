@@ -8,7 +8,7 @@ return [
     | The following language lines contain the default messages used on app page
     |
     */
-    'create_participate'    =>  'Crear Partícipe',
+    'create_participant'    =>  'Crear Partícipe',
     'create_category'       =>  'Crear Categoría',
     'see_calendar'          =>  'Ver calendario',
     'annual_fiscal'         =>  'Anuario Fiscal',
@@ -18,7 +18,7 @@ return [
     'event'                 =>  'Evento',
 
     /**
-     * Menu section
+     * DropDown Menu section
      */
     'menu'  =>  [
         'activate_dark_mode'    =>  'Activar modo noche',
