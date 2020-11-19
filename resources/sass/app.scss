@@ -7,6 +7,9 @@
 //Google fonts
 @import "https://fonts.googleapis.com/css?family=Open+Sans:ital,300,400,600,700,800&display=swap";
 
+//Animate.css
+@import "~animate.css/animate.min.css";
+
 //Variables
 $open-sans: 'Open Sans', sans-serif;
 $color-primary-dark: #262626;
@@ -205,6 +208,13 @@ body, h2, button, input, select, textarea {
             .menu-list{
                 li{
                     margin: 15px 0;
+                    a{
+                        padding: 0;
+                    }
+                    a.is-active{
+                        background: none;
+                        color: #808080;
+                    }
                 }
             }
         }
@@ -320,8 +330,30 @@ body, h2, button, input, select, textarea {
                     }
                 }
             }
+            .new-participant{
+                .btn-close{
+                    background-color: $blue-cyan;
+                    border-color: $blue-cyan;
+                    border-radius: 50%;
+                }
+                .btn-close:hover{
+                    background-color: white;
+                    border-color: #666;
+                    color: #666;
+                }
+                h2{
+                   font-weight: bold;
+                   font-size: 2.5rem;
+                   margin: 0 40px;
+                }
+            }
         }
     }
+}
+// Transition delay custom
+.animated_delay{
+    animation-delay: 0.45s;
+    --animate-delay: 0.45s;
 }
 //-----------------------------------------------------------
 // Responsive seection
