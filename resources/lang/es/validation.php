@@ -169,7 +169,7 @@ return [
         'last_name'             => 'apellido',
         'message'               => 'mensaje',
         'minute'                => 'minuto',
-        'mobile'                => 'móvil',
+        'mobile'                => 'celular',
         'month'                 => 'mes',
         'name'                  => 'nombre',
         'password'              => 'contraseña',
@@ -184,6 +184,12 @@ return [
         'title'                 => 'título',
         'username'              => 'usuario',
         'year'                  => 'año',
+        'position_company'      => 'cargo',
+        'birth_date'            => 'fecha nacido',
+        'date_join_company'     => 'fecha ingreso',
+        'profile_image'         => 'Avatar',
+        'accept'                =>  'Aceptar',
+        'cancel'                =>  'Cancelar'
     ],
 
 ];

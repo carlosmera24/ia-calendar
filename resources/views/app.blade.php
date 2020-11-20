@@ -63,11 +63,66 @@
 
         {{-- Main Section --}}
         <section class="main">
+            @php
+                $fields_participant = [
+                    'first_name'    =>  [
+                                            'label' =>  __('validation.attributes.first_name'),
+                                            'error' => false,
+                                            'msg'   =>  __('validation.required', ['attribute' => ''])
+                                        ],
+                    'last_name'     =>  [
+                                            'label' =>  __('validation.attributes.last_name'),
+                                            'error' => false,
+                                            'msg'   =>  __('validation.required', ['attribute' => ''])
+                                        ],
+                    'email'         =>  [
+                                            'label' =>  __('validation.attributes.email'),
+                                            'error' => false,
+                                            'msg'   =>  __('validation.required', ['attribute' => ''])
+                                        ],
+                    'mobile'        =>  [
+                                            'label' =>  __('validation.attributes.mobile'),
+                                            'error' => false,
+                                            'msg'   =>  __('validation.required', ['attribute' => ''])
+                                        ],
+                    'position'      =>  [
+                                            'label' =>  __('validation.attributes.position_company'),
+                                            'error' => false,
+                                            'msg'   =>  __('validation.required', ['attribute' => ''])
+                                        ],
+                    'date_join'     =>  [
+                                            'label' =>  __('validation.attributes.date_join_company'),
+                                            'error' => false,
+                                            'msg'   =>  __('validation.required', ['attribute' => ''])
+                                        ],
+                    'birth_date'    =>  [
+                                            'label' =>  __('validation.attributes.birth_date'),
+                                            'error' => false,
+                                            'msg'   =>  __('validation.required', ['attribute' => ''])
+                                        ],
+                    'profile_image' =>  [
+                                            'label' =>  __('validation.attributes.profile_image'),
+                                            'error' => false,
+                                            'msg'   =>  __('validation.required', ['attribute' => ''])
+                                        ],
+                    'description'   =>  [
+                                            'label'         =>  __('validation.attributes.description'),
+                                            'placeholder'   =>  __('app.participant_new.description_placeholder'),
+                                            'error'         => false,
+                                            'msg'           =>  __('validation.required', ['attribute' => ''])
+                                        ],
+                ];
+            @endphp
             <main-section
-                v-bind:text_title='" {{ __('app.wall.title') }} "'
-                v-bind:text_trigger_events_soon_expire='" {{ __('app.wall.trigger_events_soon_expire') }} "'
-                v-bind:text_add_categories='" {{ __('app.wall.add_categories') }} "'
-                v-bind:text_add_notes='" {{ __('app.wall.add_notes') }} "' />
+                v-bind:text_wall_title='" {{ __('app.wall.title') }} "'
+                v-bind:text_wall_trigger_events_soon_expire='" {{ __('app.wall.trigger_events_soon_expire') }} "'
+                v-bind:text_wall_add_categories='" {{ __('app.wall.add_categories') }} "'
+                v-bind:text_wall_add_notes='" {{ __('app.wall.add_notes') }} "'
+                v-bind:text_participant_title='" {{ __('app.participant_new.title') }} "'
+                v-bind:text_accept='" {{ __('app.attributes.accept') }} "'
+                v-bind:text_cancel='" {{ __('app.attributes.cancel') }} "'
+                v-bind:text_participant_fields_json="' {{ json_encode($fields_participant) }} '"
+            />
         </section>
         {{-- /Main Section --}}
 

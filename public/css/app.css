@@ -19274,6 +19274,71 @@ textarea {
   margin: 0 40px;
 }
 
+.application .main .content .new-participant .form_new_participant {
+  padding: 60px 0 0;
+}
+
+.application .main .content .new-participant .form_new_participant .columns .field.column {
+  padding-left: 0;
+}
+
+.application .main .content .new-participant .form_new_participant .field-label {
+  padding-top: 0;
+}
+
+.application .main .content .new-participant .form_new_participant label {
+  color: #FFF;
+  text-transform: capitalize;
+  font-weight: normal;
+}
+
+.application .main .content .new-participant .form_new_participant .input {
+  padding: 0 15px;
+  border-radius: 0;
+  height: 25px;
+  color: #6797a3;
+}
+
+.application .main .content .new-participant .form_new_participant .input:focus {
+  border-color: #00b0b9;
+}
+
+.application .main .content .new-participant .form_new_participant .label_description {
+  margin: 30px 20px 10px;
+}
+
+.application .main .content .new-participant .form_new_participant .textarea {
+  background: none;
+  border: 5px solid #00b0b9;
+  border-radius: 20px;
+  resize: none;
+  color: #6797a3;
+}
+
+.application .main .content .new-participant .form_new_participant .textarea::-moz-placeholder {
+  color: #FFF;
+}
+
+.application .main .content .new-participant .form_new_participant .textarea:-ms-input-placeholder {
+  color: #FFF;
+}
+
+.application .main .content .new-participant .form_new_participant .textarea::placeholder {
+  color: #FFF;
+}
+
+.application .main .content .new-participant .form_new_participant .field_avatar .control {
+  padding: 10px 30px;
+}
+
+.application .main .content .new-participant .form_new_participant .avatar {
+  border: 5px solid #fab800;
+  border-radius: 50%;
+  height: 128px;
+  width: 128px;
+  text-align: center;
+}
+
 .animated_delay {
   -webkit-animation-delay: 0.45s;
           animation-delay: 0.45s;

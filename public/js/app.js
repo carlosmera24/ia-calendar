@@ -2314,8 +2314,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['showTitle', 'text_title', 'text_trigger_events_soon_expire', 'text_add_categories', 'text_add_notes'],
+  props: ['showTitle', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_participant_fields_json', 'text_accept', 'text_cancel'],
   data: function data() {
     return {
       activeMenu: []
@@ -2409,7 +2415,80 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['text_title', 'text_fields_json', 'text_accept', 'text_cancel'],
+  data: function data() {
+    return {
+      fields: [],
+      avatar: null
+    };
+  },
+  created: function created() {
+    this.fields = JSON.parse(this.text_fields_json);
+  },
   methods: {
     clickClose: function clickClose() {
       this.$root.setActiveMenu("wall");
@@ -40862,7 +40941,7 @@ var render = function() {
       ? _c(
           "h4",
           { staticClass: "title has-text-weight-bold is-size-5 mx-6 mb-3" },
-          [_vm._v(_vm._s(_vm.text_title))]
+          [_vm._v(_vm._s(_vm.text_wall_title))]
         )
       : _vm._e(),
     _vm._v(" "),
@@ -40886,15 +40965,23 @@ var render = function() {
                   key: 1,
                   attrs: {
                     text_trigger_events_soon_expire:
-                      _vm.text_trigger_events_soon_expire,
-                    text_add_categories: _vm.text_add_categories,
-                    text_add_notes: _vm.text_add_notes
+                      _vm.text_wall_trigger_events_soon_expire,
+                    text_add_categories: _vm.text_wall_add_categories,
+                    text_add_notes: _vm.text_wall_add_notes
                   }
                 })
               : _vm._e(),
             _vm._v(" "),
             _vm.activeMenu.create_participant
-              ? _c("participant-section", { key: 2 })
+              ? _c("participant-section", {
+                  key: 2,
+                  attrs: {
+                    text_title: _vm.text_participant_title,
+                    text_fields_json: _vm.text_participant_fields_json,
+                    text_accept: _vm.text_accept,
+                    text_cancel: _vm.text_cancel
+                  }
+                })
               : _vm._e()
           ],
           1
@@ -41049,7 +41136,199 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _c("h2", { staticClass: "has-text-white" }, [_vm._v("Partícipe nuevo")])
+      _c("h2", { staticClass: "has-text-white" }, [
+        _vm._v(_vm._s(_vm.text_title))
+      ]),
+      _vm._v(" "),
+      _c(
+        "form",
+        { staticClass: "form_new_participant", attrs: { action: "" } },
+        [
+          _c(
+            "div",
+            { staticClass: "columns is-multiline" },
+            [
+              _c(
+                "b-field",
+                {
+                  staticClass: "column is-4",
+                  attrs: {
+                    horizontal: "",
+                    label: _vm.fields.first_name.label,
+                    type: { "is-danger": _vm.fields.first_name.error },
+                    message: _vm.fields.first_name.error
+                      ? _vm.fields.first_name.msg
+                      : ""
+                  }
+                },
+                [
+                  _c("b-input", { attrs: { name: "first_name", expanded: "" } })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-field",
+                {
+                  staticClass: "column is-4",
+                  attrs: {
+                    horizontal: "",
+                    label: _vm.fields.last_name.label,
+                    type: { "is-danger": _vm.fields.last_name.error },
+                    message: _vm.fields.last_name.error
+                      ? _vm.fields.last_name.msg
+                      : ""
+                  }
+                },
+                [_c("b-input", { attrs: { name: "last_name", expanded: "" } })],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-field",
+                {
+                  staticClass: "column is-4",
+                  attrs: {
+                    horizontal: "",
+                    label: _vm.fields.position.label,
+                    type: { "is-danger": _vm.fields.position.error },
+                    message: _vm.fields.position.error
+                      ? _vm.fields.position.msg
+                      : ""
+                  }
+                },
+                [_c("b-input", { attrs: { name: "position", expanded: "" } })],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-field",
+                {
+                  staticClass: "column is-4",
+                  attrs: {
+                    horizontal: "",
+                    label: _vm.fields.email.label,
+                    type: { "is-danger": _vm.fields.email.error },
+                    message: _vm.fields.email.error ? _vm.fields.email.msg : ""
+                  }
+                },
+                [_c("b-input", { attrs: { name: "email", expanded: "" } })],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-field",
+                {
+                  staticClass: "column is-4",
+                  attrs: {
+                    horizontal: "",
+                    label: _vm.fields.mobile.label,
+                    type: { "is-danger": _vm.fields.mobile.error },
+                    message: _vm.fields.mobile.error
+                      ? _vm.fields.mobile.msg
+                      : ""
+                  }
+                },
+                [_c("b-input", { attrs: { name: "mobile", expanded: "" } })],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-field",
+                {
+                  staticClass: "column is-4",
+                  attrs: {
+                    horizontal: "",
+                    label: _vm.fields.date_join.label,
+                    type: { "is-danger": _vm.fields.date_join.error },
+                    message: _vm.fields.date_join.error
+                      ? _vm.fields.date_join.msg
+                      : ""
+                  }
+                },
+                [_c("b-input", { attrs: { name: "date_join", expanded: "" } })],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-field",
+                {
+                  staticClass: "column is-4",
+                  attrs: {
+                    horizontal: "",
+                    label: _vm.fields.birth_date.label,
+                    type: { "is-danger": _vm.fields.birth_date.error },
+                    message: _vm.fields.birth_date.error
+                      ? _vm.fields.birth_date.msg
+                      : ""
+                  }
+                },
+                [
+                  _c("b-input", { attrs: { name: "birth_date", expanded: "" } })
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "columns" },
+            [
+              _c(
+                "b-field",
+                {
+                  staticClass: "column is-half",
+                  attrs: {
+                    "custom-class": "label_description",
+                    label: _vm.fields.description.label,
+                    type: { "is-danger": _vm.fields.description.error },
+                    message: _vm.fields.description.error
+                      ? _vm.fields.description.msg
+                      : ""
+                  }
+                },
+                [
+                  _c("b-input", {
+                    attrs: {
+                      name: "description",
+                      type: "textarea",
+                      placeholder: _vm.fields.description.placeholder,
+                      expanded: ""
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "field field_avatar" }, [
+                _c("label", { staticClass: "label label_description" }, [
+                  _vm._v(" ")
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "contol",
+                    class: { "is-danger": _vm.fields.profile_image.error }
+                  },
+                  [
+                    _c("div", { staticClass: "avatar" }, [
+                      _vm.avatar == null
+                        ? _c("span", [
+                            _vm._v(_vm._s(_vm.fields.profile_image.label))
+                          ])
+                        : _vm._e()
+                    ])
+                  ]
+                )
+              ])
+            ],
+            1
+          )
+        ]
+      )
     ]
   )
 }

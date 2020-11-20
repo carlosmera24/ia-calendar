@@ -37,5 +37,14 @@ return [
         'trigger_events_soon_expire'    =>  'Activar eventos pronto a vencerse (30 días)',
         'add_categories'                =>  'Agregar categorías',
         'add_notes'                     =>  'Agregar notas'
-    ]
+    ],
+
+    /**
+     * New Participant Section
+     */
+
+     'participant_new'  =>  [
+            'title'                     =>  'Partícipe nuevo',
+            'description_placeholder'   =>  'Detalla brevemente el el cargo y funciones a realizar',
+     ],
 ];
