@@ -2190,7 +2190,7 @@ __webpack_require__.r(__webpack_exports__);
       isActiveDropdown: false
     };
   },
-  props: ['url_logout', 'url_home', 'text_menu_dark', 'text_admin_leaders', 'text_general_setting', 'text_frequent_questions', 'text_logout', 'text_close'],
+  props: ['url_logout', 'url_home', 'text_company_name', 'text_menu_dark', 'text_admin_leaders', 'text_general_setting', 'text_frequent_questions', 'text_logout', 'text_close'],
   methods: {
     clickDropdown: function clickDropdown() {
       this.isActiveDropdown = !this.isActiveDropdown;
@@ -2478,11 +2478,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['text_title', 'text_fields_json', 'text_accept', 'text_cancel'],
   data: function data() {
     return {
       fields: [],
+      fname: '',
+      lname: '',
+      position: '',
+      email: '',
+      mobile: '',
+      date_join: '',
+      birth_date: '',
       avatar: null
     };
   },
@@ -2492,6 +2505,18 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     clickClose: function clickClose() {
       this.$root.setActiveMenu("wall");
+    },
+    selectFile: function selectFile() {
+      this.$refs.fileAvatar.click();
+    },
+    save: function save() {
+      this.fields.first_name.error = this.fname === '';
+      this.fields.last_name.error = this.lname === '';
+      this.fields.position.error = this.position === '';
+      this.fields.date_join.error = this.date_join === '';
+      this.fields.birth_date.error = this.birth_date === '';
+      this.fields.profile_image.error = this.avatar == null;
+      console.log("fields", this.fields);
     }
   }
 });
@@ -40694,7 +40719,11 @@ var render = function() {
             },
             on: { click: _vm.clickDropdown }
           },
-          [_c("span", [_vm._v("Nombre empresa")]), _vm._v(" "), _vm._m(0)]
+          [
+            _c("span", [_vm._v(_vm._s(_vm.text_company_name))]),
+            _vm._v(" "),
+            _vm._m(0)
+          ]
         )
       ]),
       _vm._v(" "),
@@ -41162,7 +41191,16 @@ var render = function() {
                   }
                 },
                 [
-                  _c("b-input", { attrs: { name: "first_name", expanded: "" } })
+                  _c("b-input", {
+                    attrs: { name: "first_name", expanded: "" },
+                    model: {
+                      value: _vm.fname,
+                      callback: function($$v) {
+                        _vm.fname = $$v
+                      },
+                      expression: "fname"
+                    }
+                  })
                 ],
                 1
               ),
@@ -41180,7 +41218,18 @@ var render = function() {
                       : ""
                   }
                 },
-                [_c("b-input", { attrs: { name: "last_name", expanded: "" } })],
+                [
+                  _c("b-input", {
+                    attrs: { name: "last_name", expanded: "" },
+                    model: {
+                      value: _vm.lname,
+                      callback: function($$v) {
+                        _vm.lname = $$v
+                      },
+                      expression: "lname"
+                    }
+                  })
+                ],
                 1
               ),
               _vm._v(" "),
@@ -41197,7 +41246,18 @@ var render = function() {
                       : ""
                   }
                 },
-                [_c("b-input", { attrs: { name: "position", expanded: "" } })],
+                [
+                  _c("b-input", {
+                    attrs: { name: "position", expanded: "" },
+                    model: {
+                      value: _vm.position,
+                      callback: function($$v) {
+                        _vm.position = $$v
+                      },
+                      expression: "position"
+                    }
+                  })
+                ],
                 1
               ),
               _vm._v(" "),
@@ -41212,7 +41272,18 @@ var render = function() {
                     message: _vm.fields.email.error ? _vm.fields.email.msg : ""
                   }
                 },
-                [_c("b-input", { attrs: { name: "email", expanded: "" } })],
+                [
+                  _c("b-input", {
+                    attrs: { name: "email", expanded: "" },
+                    model: {
+                      value: _vm.email,
+                      callback: function($$v) {
+                        _vm.email = $$v
+                      },
+                      expression: "email"
+                    }
+                  })
+                ],
                 1
               ),
               _vm._v(" "),
@@ -41229,7 +41300,18 @@ var render = function() {
                       : ""
                   }
                 },
-                [_c("b-input", { attrs: { name: "mobile", expanded: "" } })],
+                [
+                  _c("b-input", {
+                    attrs: { name: "mobile", expanded: "" },
+                    model: {
+                      value: _vm.mobile,
+                      callback: function($$v) {
+                        _vm.mobile = $$v
+                      },
+                      expression: "mobile"
+                    }
+                  })
+                ],
                 1
               ),
               _vm._v(" "),
@@ -41246,7 +41328,18 @@ var render = function() {
                       : ""
                   }
                 },
-                [_c("b-input", { attrs: { name: "date_join", expanded: "" } })],
+                [
+                  _c("b-input", {
+                    attrs: { name: "date_join", expanded: "" },
+                    model: {
+                      value: _vm.date_join,
+                      callback: function($$v) {
+                        _vm.date_join = $$v
+                      },
+                      expression: "date_join"
+                    }
+                  })
+                ],
                 1
               ),
               _vm._v(" "),
@@ -41264,7 +41357,16 @@ var render = function() {
                   }
                 },
                 [
-                  _c("b-input", { attrs: { name: "birth_date", expanded: "" } })
+                  _c("b-input", {
+                    attrs: { name: "birth_date", expanded: "" },
+                    model: {
+                      value: _vm.birth_date,
+                      callback: function($$v) {
+                        _vm.birth_date = $$v
+                      },
+                      expression: "birth_date"
+                    }
+                  })
                 ],
                 1
               )
@@ -41302,10 +41404,15 @@ var render = function() {
                 1
               ),
               _vm._v(" "),
-              _c("div", { staticClass: "field field_avatar" }, [
+              _c("div", { staticClass: "field column field_avatar" }, [
                 _c("label", { staticClass: "label label_description" }, [
                   _vm._v(" ")
                 ]),
+                _vm._v(" "),
+                _c("input", {
+                  ref: "fileAvatar",
+                  attrs: { type: "file", accept: "image", name: "avatar" }
+                }),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -41314,16 +41421,48 @@ var render = function() {
                     class: { "is-danger": _vm.fields.profile_image.error }
                   },
                   [
-                    _c("div", { staticClass: "avatar" }, [
-                      _vm.avatar == null
-                        ? _c("span", [
-                            _vm._v(_vm._s(_vm.fields.profile_image.label))
-                          ])
-                        : _vm._e()
-                    ])
+                    _c(
+                      "div",
+                      {
+                        staticClass: "avatar is-flex",
+                        on: { click: _vm.selectFile }
+                      },
+                      [
+                        _vm.avatar == null
+                          ? _c("span", { staticClass: "text-avatar" }, [
+                              _vm._v(_vm._s(_vm.fields.profile_image.label))
+                            ])
+                          : _vm._e()
+                      ]
+                    )
                   ]
                 )
               ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "btn-actions" },
+            [
+              _c("b-button", { staticClass: "btn-cancel" }, [
+                _vm._v(_vm._s(_vm.text_cancel))
+              ]),
+              _vm._v(" "),
+              _c(
+                "b-button",
+                {
+                  staticClass: "btn-accept",
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.save($event)
+                    }
+                  }
+                },
+                [_vm._v(_vm._s(_vm.text_accept))]
+              )
             ],
             1
           )

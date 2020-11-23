@@ -2,7 +2,7 @@
     <div class="dropdown" :class="{ 'is-active' : isActiveDropdown }">
         <div class="dropdown-trigger">
             <button class="btn is-size-6 mb-5" aria-haspopup="true" aria-controls="dropdown-menu" v-on:click="clickDropdown">
-                <span>Nombre empresa</span>
+                <span>{{ text_company_name }}</span>
                 <span class="icon is-small">
                     <i class="fas fa-caret-down" aria-hidden="true"></i>
                 </span>
@@ -42,6 +42,7 @@ export default {
     props: [
         'url_logout',
         'url_home',
+        'text_company_name',
         'text_menu_dark',
         'text_admin_leaders',
         'text_general_setting',

@@ -384,8 +384,13 @@ body, h2, button, input, select, textarea {
                         color: #FFF;
                     }
                     .field_avatar{
+                        margin: 15px 40px 10px;
+                        padding: 0;
                         .control{
                             padding: 10px 30px;
+                        }
+                        input[type=file]{
+                            display: none;
                         }
                     }
                     .avatar{
@@ -395,6 +400,32 @@ body, h2, button, input, select, textarea {
                         width: 128px;
                         text-align: center;
                         align-items: center;
+                        cursor: pointer;
+                        .text-avatar{
+                            margin: auto;
+                            font-size: 22px;
+                        }
+                    }
+                    .avatar:hover{
+                        background-color: #666;
+                    }
+                    .btn-actions{
+                        text-align: right;
+                        .btn-accept,.btn-cancel{
+                            background-color: $blue-cyan;
+                            border: none;
+                            border-radius: 0;
+                            color: #FFF;
+                            font-weight: bold;
+                        }
+                        .btn-accept{
+                            padding: 15px 30px;
+                        }
+                        .btn-cancel{
+                            border-top-left-radius: 25px;
+                            border-bottom-left-radius: 25px;
+                            padding: 15px 30px;
+                        }
                     }
                 }
             }

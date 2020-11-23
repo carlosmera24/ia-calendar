@@ -19327,8 +19327,17 @@ textarea {
   color: #FFF;
 }
 
+.application .main .content .new-participant .form_new_participant .field_avatar {
+  margin: 15px 40px 10px;
+  padding: 0;
+}
+
 .application .main .content .new-participant .form_new_participant .field_avatar .control {
   padding: 10px 30px;
+}
+
+.application .main .content .new-participant .form_new_participant .field_avatar input[type=file] {
+  display: none;
 }
 
 .application .main .content .new-participant .form_new_participant .avatar {
@@ -19337,6 +19346,40 @@ textarea {
   height: 128px;
   width: 128px;
   text-align: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.application .main .content .new-participant .form_new_participant .avatar .text-avatar {
+  margin: auto;
+  font-size: 22px;
+}
+
+.application .main .content .new-participant .form_new_participant .avatar:hover {
+  background-color: #666;
+}
+
+.application .main .content .new-participant .form_new_participant .btn-actions {
+  text-align: right;
+}
+
+.application .main .content .new-participant .form_new_participant .btn-actions .btn-accept,
+.application .main .content .new-participant .form_new_participant .btn-actions .btn-cancel {
+  background-color: #00b0b9;
+  border: none;
+  border-radius: 0;
+  color: #FFF;
+  font-weight: bold;
+}
+
+.application .main .content .new-participant .form_new_participant .btn-actions .btn-accept {
+  padding: 15px 30px;
+}
+
+.application .main .content .new-participant .form_new_participant .btn-actions .btn-cancel {
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+  padding: 15px 30px;
 }
 
 .animated_delay {

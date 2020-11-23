@@ -19,7 +19,7 @@ class CreateParticipantsTable extends Migration
             $table->integer('id');
             $table->integer('persons_id');
             $table->integer('programmers_id');
-            $table->integer('users_id');
+            $table->integer('users_id')->nullable();
             $table->integer('profiles_participants_id');
             $table->text('description')->nullable();
             $table->datetime('created_at')->default(new Expression('CURRENT_TIMESTAMP'));

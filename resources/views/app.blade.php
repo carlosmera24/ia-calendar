@@ -11,9 +11,22 @@
                 <div class="columns is-mobile  is-vcentered">
                     <div class="column has-text-right">
                         {{-- DropDown --}}
+                            @php
+                                $user = Auth::user();
+                                $programmer = null;
+                                if(  $user->participants() != null )
+                                {
+                                    $participant = $user->participants()->get()[0];
+                                    if( $participant->programmer() != null )
+                                    {
+                                        $programmer = $participant->programmer()->get()[0];
+                                    }
+                                }
+                            @endphp
                             <dropdown-menu
                                 v-bind:url_logout="'{{ route('logout') }}'"
                                 v-bind:url_home="'{{ route('home') }}'"
+                                v-bind:text_company_name='"{{ isset($programmer) ? $programmer->entity_name : "" }}"'
                                 v-bind:text_menu_dark="'{{ __('app.menu.activate_dark_mode') }}'"
                                 v-bind:text_admin_leaders="'{{ __('app.menu.admin_leaders') }}'"
                                 v-bind:text_general_setting="'{{ __('app.menu.general_setting') }}'"
@@ -119,8 +132,8 @@
                 v-bind:text_wall_add_categories='" {{ __('app.wall.add_categories') }} "'
                 v-bind:text_wall_add_notes='" {{ __('app.wall.add_notes') }} "'
                 v-bind:text_participant_title='" {{ __('app.participant_new.title') }} "'
-                v-bind:text_accept='" {{ __('app.attributes.accept') }} "'
-                v-bind:text_cancel='" {{ __('app.attributes.cancel') }} "'
+                v-bind:text_accept='" {{ __('validation.attributes.accept') }} "'
+                v-bind:text_cancel='" {{ __('validation.attributes.cancel') }} "'
                 v-bind:text_participant_fields_json="' {{ json_encode($fields_participant) }} '"
             />
         </section>
