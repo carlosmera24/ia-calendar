@@ -17,7 +17,8 @@
                     v-bind:text_title="text_participant_title"
                     v-bind:text_fields_json="text_participant_fields_json"
                     v-bind:text_accept="text_accept"
-                    v-bind:text_cancel="text_cancel" />
+                    v-bind:text_cancel="text_cancel"
+                    v-bind:url_person_store="url_person_store" />
             </transition-group>
         </section>
     </div>
@@ -34,6 +35,7 @@ export default {
         'text_participant_fields_json',
         'text_accept',
         'text_cancel',
+        'url_person_store',
     ],
     data() {
         return {

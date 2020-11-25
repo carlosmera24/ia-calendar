@@ -1,5 +1,6 @@
 <template>
     <div class="new-participant" name="fade">
+        <b-loading :is-full-page="true" v-model="isLoading" :can-cancel="false"></b-loading>
         <p>
             <button class="btn-close button" v-on:click.prevent="clickClose">
                 <span class="icon is-small">
@@ -8,6 +9,14 @@
             </button>
         </p>
         <h2 class="has-text-white">{{ text_title }}</h2>
+        <section class="alert-section mt-4">
+            <b-notification v-model="hasErrors" type="is-danger" hasIcon role="alert">
+                <h4 class="has-text-white">{{ errors.text }}</h4>
+                <ul>
+                    <li v-for="(error, index) in errors.errors" v-bind:key="index">{{ error }}</li>
+                </ul>
+            </b-notification>
+        </section>
         <form class="form_new_participant" action="">
             <div class="columns is-multiline">
                 <b-field horizontal class="column is-4"
@@ -44,13 +53,27 @@
                     :label="fields.date_join.label"
                     v-bind:type="{ 'is-danger' : fields.date_join.error }"
                     :message="fields.date_join.error ? fields.date_join.msg : ''">
-                    <b-input name="date_join" v-model="date_join" expanded></b-input>
+                    <b-datepicker
+                        v-model="date_join"
+                        :show-week-number="false"
+                        :open-on-focus="true"
+                        :locale="locale"
+                        :date-formatter="dateFormat"
+                        trap-focus expanded>
+                    </b-datepicker>
                 </b-field>
                 <b-field horizontal class="column is-4"
                     :label="fields.birth_date.label"
                     v-bind:type="{ 'is-danger' : fields.birth_date.error }"
                     :message="fields.birth_date.error ? fields.birth_date.msg : ''">
-                    <b-input name="birth_date" v-model="birth_date" expanded></b-input>
+                    <b-datepicker
+                        v-model="birth_date"
+                        :show-week-number="false"
+                        :open-on-focus="true"
+                        :locale="locale"
+                        :date-formatter="dateFormat"
+                        trap-focus expanded>
+                    </b-datepicker>
                 </b-field>
             </div>
             <div class="columns">
@@ -80,24 +103,37 @@
     </div>
 </template>
 <script>
+import { procesarErroresRequest } from '../../functions.js';
+var moment = require('moment');
+
+//Import PNotify
+import { success } from '@pnotify/core';
+import '@pnotify/core/dist/PNotify.css';
+import '@pnotify/core/dist/BrightTheme.css';
+
 export default{
     props: [
         'text_title',
         'text_fields_json',
         'text_accept',
-        'text_cancel'
+        'text_cancel',
+        'url_person_store'
     ],
     data() {
         return {
+            isLoading: false,
             fields: [],
+            hasErrors: false,
+            errors: {},
             fname: '',
             lname: '',
             position: '',
             email: '',
             mobile: '',
-            date_join: '',
-            birth_date: '',
+            date_join: null,
+            birth_date: null,
             avatar: null,
+            locale: undefined, //Set browser language
         }
     },
     created(){
@@ -114,13 +150,47 @@ export default{
             this.fields.first_name.error = this.fname === '';
             this.fields.last_name.error = this.lname === '';
             this.fields.position.error = this.position === '';
-            this.fields.date_join.error = this.date_join === '';
-            this.fields.birth_date.error = this.birth_date === '';
+            this.fields.date_join.error = this.date_join === null;
+            this.fields.birth_date.error = this.birth_date === null;
 
-            if( !this.fields.first_name.error &&  this.fields.last_name.error  && this.fields.position.error && this.fields.date_join.error && birth_date.error)
+            if( !this.fields.first_name.error &&  !this.fields.last_name.error  && !this.fields.position.error
+                && !this.fields.date_join.error && !this.birth_date.error)
             {
-                //axios save
+                const person = {
+                    first_name: this.fname,
+                    last_name: this.lname,
+                    birth_date: this.dateFormat(this.birth_date),
+                    position_company: this.position,
+                    date_join_company: this.dateFormat(this.date_join),
+                };
+                this.isLoading = true;
+                axios.post(this.url_person_store, person)
+                    .then( response => {
+                            this.showErrors({});
+                            if( response.data.status === 201 )//created person
+                            {
+                                const id_person = response.data.data.id;
+                                success({
+                                    title: 'Success!',
+                                    text: 'Persona creada satisfactoriamente.'
+                                });
+                            }
+                        },
+                        error => {
+                          this.showErrors( error.response );
+                        }
+                    )
+                    .then( () => {
+                        this.isLoading = false;
+                    });
             }
+        },
+        showErrors(resError){
+            this.errors = procesarErroresRequest( resError );
+            this.hasErrors = this.errors.errors.length > 0;
+        },
+        dateFormat(d){
+            return moment(d).format('YYYY-MM-DD');
         }
     }
 }

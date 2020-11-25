@@ -135,6 +135,7 @@
                 v-bind:text_accept='" {{ __('validation.attributes.accept') }} "'
                 v-bind:text_cancel='" {{ __('validation.attributes.cancel') }} "'
                 v-bind:text_participant_fields_json="' {{ json_encode($fields_participant) }} '"
+                v-bind:url_person_store='" {{ route('person_store') }} "'
             />
         </section>
         {{-- /Main Section --}}
