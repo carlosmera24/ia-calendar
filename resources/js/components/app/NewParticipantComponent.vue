@@ -82,7 +82,7 @@
                     :label="fields.description.label"
                     v-bind:type="{ 'is-danger' : fields.description.error }"
                     :message="fields.description.error ? fields.description.msg : ''">
-                    <b-input name="description" type="textarea" :placeholder="fields.description.placeholder" expanded></b-input>
+                    <b-input name="description" type="textarea" v-model="description" :placeholder="fields.description.placeholder" expanded></b-input>
                 </b-field>
                 <div class="field column field_avatar">
                     <label class="label label_description">&nbsp;</label>
@@ -117,7 +117,9 @@ export default{
         'text_fields_json',
         'text_accept',
         'text_cancel',
-        'url_person_store'
+        'url_person_store',
+        'url_participant_store',
+        'programmer'
     ],
     data() {
         return {
@@ -132,7 +134,9 @@ export default{
             mobile: '',
             date_join: null,
             birth_date: null,
+            description: null,
             avatar: null,
+            id_profile: 3, //Set default "Invitado"
             locale: undefined, //Set browser language
         }
     },
@@ -164,16 +168,37 @@ export default{
                     date_join_company: this.dateFormat(this.date_join),
                 };
                 this.isLoading = true;
+                //Create person
                 axios.post(this.url_person_store, person)
                     .then( response => {
                             this.showErrors({});
                             if( response.data.status === 201 )//created person
                             {
                                 const id_person = response.data.data.id;
-                                success({
-                                    title: 'Success!',
-                                    text: 'Persona creada satisfactoriamente.'
-                                });
+                                //create participant
+                                const participant = {
+                                    persons_id: id_person,
+                                    programmers_id: this.programmer.id,
+                                    profiles_participants_id: this.id_profile,
+                                    description: this.description,
+                                };
+                                axios.post(this.url_participant_store, participant)
+                                    .then( response => {
+                                        if( response.data.status === 201 )
+                                        {
+                                            success({
+                                                title: 'Success!',
+                                                text: 'Partícipe creado satisfactoriamente.'
+                                            });
+                                            //Limpiar formulario
+                                            this.cleanForm();
+                                        }
+                                    },
+                                    error => {
+                                        this.showErrors( error.response );
+                                    }
+                                );
+
                             }
                         },
                         error => {
@@ -191,6 +216,19 @@ export default{
         },
         dateFormat(d){
             return moment(d).format('YYYY-MM-DD');
+        },
+        cleanForm(){
+            this.hasErrors = false;
+            this.errors = {};
+            this.fname = '';
+            this.lname = '';
+            this.position = '';
+            this.email = '';
+            this.mobile = '';
+            this.date_join= null;
+            this.birth_date = null;
+            this.description = null;
+            this.avatar = null;
         }
     }
 }

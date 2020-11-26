@@ -16,14 +16,14 @@ class TestDataSeeder extends Seeder
     public function run()
     {
         //Clean data demo
-        DB::statement('DELETE FROM programmers WHERE id > 0');
-        DB::statement('ALTER TABLE programmers AUTO_INCREMENT = 0');
-        DB::statement('DELETE FROM users WHERE id > 0');
-        DB::statement('ALTER TABLE users AUTO_INCREMENT = 0');
-        DB::statement('DELETE FROM persons WHERE id > 0');
-        DB::statement('ALTER TABLE persons AUTO_INCREMENT = 0');
         DB::statement('DELETE FROM participants WHERE id > 0');
         DB::statement('ALTER TABLE participants AUTO_INCREMENT = 0');
+        DB::statement('DELETE FROM persons WHERE id > 0');
+        DB::statement('ALTER TABLE persons AUTO_INCREMENT = 0');
+        DB::statement('DELETE FROM users WHERE id > 0');
+        DB::statement('ALTER TABLE users AUTO_INCREMENT = 0');
+        DB::statement('DELETE FROM programmers WHERE id > 0');
+        DB::statement('ALTER TABLE programmers AUTO_INCREMENT = 0');
 
         /**
          * Insert data

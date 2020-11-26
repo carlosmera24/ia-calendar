@@ -9,12 +9,13 @@ use Validator;
 class PersonController extends Controller
 {
     protected $rules_store = [
-                                'first_name'    =>  'required | min:3 | max:100',
-                                'last_name'    =>  'required | min:3 | max:100',
-                                'birth_date'    =>  'required | date_format:Y-m-d',
-                                'position_company'    =>  'required | min:3 | max:60',
-                                'date_join_company'    =>  'required | date_format:Y-m-d',
+                                'first_name'        =>  'required | min:3 | max:100',
+                                'last_name'         =>  'required | min:3 | max:100',
+                                'birth_date'        =>  'required | date_format:Y-m-d',
+                                'position_company'  =>  'required | min:3 | max:60',
+                                'date_join_company' =>  'required | date_format:Y-m-d',
                             ];
+
     /**
      * Display a listing of the resource.
      *
@@ -37,7 +38,6 @@ class PersonController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */

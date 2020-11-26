@@ -127,6 +127,7 @@
                 ];
             @endphp
             <main-section
+                v-bind:programmer_json="' {{ str_replace("'", "\'",json_encode($programmer)) }} '"
                 v-bind:text_wall_title='" {{ __('app.wall.title') }} "'
                 v-bind:text_wall_trigger_events_soon_expire='" {{ __('app.wall.trigger_events_soon_expire') }} "'
                 v-bind:text_wall_add_categories='" {{ __('app.wall.add_categories') }} "'
@@ -136,6 +137,7 @@
                 v-bind:text_cancel='" {{ __('validation.attributes.cancel') }} "'
                 v-bind:text_participant_fields_json="' {{ json_encode($fields_participant) }} '"
                 v-bind:url_person_store='" {{ route('person_store') }} "'
+                v-bind:url_participant_store='" {{ route('participant_store') }} "'
             />
         </section>
         {{-- /Main Section --}}

@@ -29,7 +29,6 @@ class CreateParticipantsTable extends Migration
                                 'id',
                                 'persons_id',
                                 'programmers_id',
-                                'users_id',
                                 'profiles_participants_id'
                             ],
                             'participants_id_primaries'

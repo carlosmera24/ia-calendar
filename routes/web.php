@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PersonController;
+use App\Http\Controllers\ParticipantController;
 /**
  * ----------------------------------------------------------
  * Welcome zone
@@ -21,6 +22,7 @@ Route::get('/app', function(){
     return view('app');
 })->middleware('auth')->name('home');
 Route::post('/person/store', [ PersonController::class, 'store' ])->name('person_store');
+Route::post('/participant/store', [ ParticipantController::class, 'store' ])->name('participant_store');
 // Sesion
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('start_login');

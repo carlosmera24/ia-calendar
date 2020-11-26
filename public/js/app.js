@@ -2394,15 +2394,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['showTitle', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_participant_fields_json', 'text_accept', 'text_cancel', 'url_person_store'],
+  props: ['showTitle', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_participant_fields_json', 'text_accept', 'text_cancel', 'url_person_store', 'url_participant_store', 'programmer_json'],
   data: function data() {
     return {
-      activeMenu: []
+      activeMenu: [],
+      programmer: {}
     };
   },
   created: function created() {
     this.activeMenu = this.$root.activeMenu;
+    this.programmer = JSON.parse(this.programmer_json);
   }
 });
 
@@ -2597,7 +2601,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_title', 'text_fields_json', 'text_accept', 'text_cancel', 'url_person_store'],
+  props: ['text_title', 'text_fields_json', 'text_accept', 'text_cancel', 'url_person_store', 'url_participant_store', 'programmer'],
   data: function data() {
     return {
       isLoading: false,
@@ -2611,7 +2615,10 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
       mobile: '',
       date_join: null,
       birth_date: null,
+      description: null,
       avatar: null,
+      id_profile: 3,
+      //Set default "Invitado"
       locale: undefined //Set browser language
 
     };
@@ -2643,16 +2650,32 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
           position_company: this.position,
           date_join_company: this.dateFormat(this.date_join)
         };
-        this.isLoading = true;
+        this.isLoading = true; //Create person
+
         axios.post(this.url_person_store, person).then(function (response) {
           _this.showErrors({});
 
           if (response.data.status === 201) //created person
             {
-              var id_person = response.data.data.id;
-              Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_1__["success"])({
-                title: 'Success!',
-                text: 'Persona creada satisfactoriamente.'
+              var id_person = response.data.data.id; //create participant
+
+              var participant = {
+                persons_id: id_person,
+                programmers_id: _this.programmer.id,
+                profiles_participants_id: _this.id_profile,
+                description: _this.description
+              };
+              axios.post(_this.url_participant_store, participant).then(function (response) {
+                if (response.data.status === 201) {
+                  Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_1__["success"])({
+                    title: 'Success!',
+                    text: 'Partícipe creado satisfactoriamente.'
+                  }); //Limpiar formulario
+
+                  _this.cleanForm();
+                }
+              }, function (error) {
+                _this.showErrors(error.response);
               });
             }
         }, function (error) {
@@ -2668,6 +2691,19 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
     },
     dateFormat: function dateFormat(d) {
       return moment(d).format('YYYY-MM-DD');
+    },
+    cleanForm: function cleanForm() {
+      this.hasErrors = false;
+      this.errors = {};
+      this.fname = '';
+      this.lname = '';
+      this.position = '';
+      this.email = '';
+      this.mobile = '';
+      this.date_join = null;
+      this.birth_date = null;
+      this.description = null;
+      this.avatar = null;
     }
   }
 });
@@ -63081,11 +63117,13 @@ var render = function() {
               ? _c("participant-section", {
                   key: 2,
                   attrs: {
+                    programmer: _vm.programmer,
                     text_title: _vm.text_participant_title,
                     text_fields_json: _vm.text_participant_fields_json,
                     text_accept: _vm.text_accept,
                     text_cancel: _vm.text_cancel,
-                    url_person_store: _vm.url_person_store
+                    url_person_store: _vm.url_person_store,
+                    url_participant_store: _vm.url_participant_store
                   }
                 })
               : _vm._e()
@@ -63534,6 +63572,13 @@ var render = function() {
                       type: "textarea",
                       placeholder: _vm.fields.description.placeholder,
                       expanded: ""
+                    },
+                    model: {
+                      value: _vm.description,
+                      callback: function($$v) {
+                        _vm.description = $$v
+                      },
+                      expression: "description"
                     }
                   })
                 ],
