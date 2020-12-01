@@ -2399,8 +2399,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['showTitle', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_participant_fields_json', 'text_accept', 'text_cancel', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'urls_emails_store', 'urls_mobiles_store', 'programmer_json'],
+  props: ['showTitle', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_participant_fields_json', 'text_accept', 'text_cancel', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'programmer_json', 'numbers_emailes', 'numbers_mobiles'],
   data: function data() {
     return {
       activeMenu: [],
@@ -2409,6 +2413,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.activeMenu = this.$root.activeMenu;
+    console.log(this.numbers_emailes);
   }
 });
 
@@ -2596,6 +2601,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
@@ -2607,7 +2625,7 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_title', 'text_fields_json', 'text_accept', 'text_cancel', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'urls_emails_store', 'urls_mobiles_store', 'programmer_json'],
+  props: ['text_title', 'text_fields_json', 'text_accept', 'text_cancel', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'programmer_json', 'numbers_emailes', 'numbers_mobiles'],
   data: function data() {
     return {
       isLoading: false,
@@ -2620,9 +2638,7 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
       position: '',
       emails: [],
       mobiles: [],
-      email: '',
       emailMsg: '',
-      mobile: '',
       mobileMsg: '',
       date_join: null,
       birth_date: null,
@@ -2630,10 +2646,8 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
       avatar: null,
       id_profile: 3,
       //Set default "Invitado"
-      locale: undefined,
-      //Set browser language
-      numMail: 3,
-      numCell: 3
+      locale: undefined //Set browser language
+
     };
   },
   created: function created() {
@@ -2644,7 +2658,7 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
   methods: {
     createArraysInputs: function createArraysInputs() {
       //create inputs for e-mails
-      for (var i = 0; i < this.numMail; i++) {
+      for (var i = 0; i < this.numbers_emailes; i++) {
         this.emails.push({
           value: '',
           error: false
@@ -2652,7 +2666,7 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
       } //create inputs for mobiles
 
 
-      for (var i = 0; i < this.numCell; i++) {
+      for (var i = 0; i < this.numbers_mobiles; i++) {
         this.mobiles.push({
           value: '',
           error: false
@@ -2677,8 +2691,54 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
         this.avatar = this.url_person_ui_avatar + "?name=" + name + '&size=128';
       }
     },
-    save: function save() {
+    emailExist: function emailExist(index) {
       var _this = this;
+
+      var value = this.emails[index].value;
+
+      if (value !== "") {
+        this.isLoading = true;
+        axios.post(this.url_person_email_exist, {
+          email: value
+        }).then(function (response) {
+          _this.showErrors({});
+
+          if (response.data.status === 200 && response.data.exist) {
+            _this.emails[index].error = true;
+            _this.emailMsg = _this.fields.email.msg_exist;
+          }
+        }, function (error) {
+          _this.showErrors(error.response);
+        }).then(function () {
+          _this.isLoading = false;
+        });
+      }
+    },
+    mobileExist: function mobileExist(index) {
+      var _this2 = this;
+
+      var value = this.mobiles[index].value;
+
+      if (value !== "") {
+        this.isLoading = true;
+        axios.post(this.url_person_cellphone_exist, {
+          mobile: value
+        }).then(function (response) {
+          _this2.showErrors({});
+
+          if (response.data.status === 200 && response.data.exist) {
+            _this2.mobiles[index].error = true;
+            _this2.mobileMsg = _this2.fields.mobile.msg_exist;
+          }
+        }, function (error) {
+          _this2.showErrors(error.response);
+        }).then(function () {
+          _this2.isLoading = false;
+        });
+      }
+    },
+    save: function save() {
+      var _this3 = this;
 
       this.fields.first_name.error = this.fname === '';
       this.fields.last_name.error = this.lname === '';
@@ -2691,7 +2751,7 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
 
         if (index === 0) {
           element.error = element.value === '';
-          _this.emailMsg = _this.fields.email.msg;
+          _this3.emailMsg = _this3.fields.email.msg;
           errors_others = true;
         }
 
@@ -2702,7 +2762,7 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
           });
           element.error = !(res === undefined);
           errors_others = element.error;
-          _this.emailMsg = _this.fields.email.msg_validate;
+          _this3.emailMsg = _this3.fields.email.msg_validate;
         }
       });
       this.mobiles.forEach(function (element, index) {
@@ -2710,7 +2770,7 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
 
         if (index === 0) {
           element.error = element.value === "";
-          _this.mobileMsg = _this.fields.mobile.msg;
+          _this3.mobileMsg = _this3.fields.mobile.msg;
           errors_others = true;
         }
 
@@ -2722,7 +2782,7 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
           });
           element.error = !(res === undefined);
           errors_others = element.error;
-          _this.mobileMsg = _this.fields.mobile.msg_validate;
+          _this3.mobileMsg = _this3.fields.mobile.msg_validate;
         }
       });
 
@@ -2737,7 +2797,7 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
         this.isLoading = true; // Create person
 
         axios.post(this.url_person_store, person).then(function (response) {
-          _this.showErrors({});
+          _this3.showErrors({});
 
           if (response.data.status === 201) //created person
             {
@@ -2745,22 +2805,22 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
 
               var participant = {
                 persons_id: id_person,
-                programmers_id: _this.programmer.id,
-                profiles_participants_id: _this.id_profile,
-                description: _this.description
+                programmers_id: _this3.programmer.id,
+                profiles_participants_id: _this3.id_profile,
+                description: _this3.description
               };
-              axios.post(_this.url_participant_store, participant).then(function (response) {
+              axios.post(_this3.url_participant_store, participant).then(function (response) {
                 if (response.data.status === 201) {
                   // Create emails
                   var emails = [];
 
-                  _this.emails.forEach(function (element) {
+                  _this3.emails.forEach(function (element) {
                     if (element.value !== "") {
                       emails.push(element.value);
                     }
                   });
 
-                  axios.post(_this.urls_emails_store, {
+                  axios.post(_this3.urls_emails_store, {
                     emails: emails,
                     persons_id: id_person
                   }).then(function (response) {
@@ -2768,13 +2828,13 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
                       //Create cellphones
                       var mobiles = [];
 
-                      _this.mobiles.forEach(function (element) {
+                      _this3.mobiles.forEach(function (element) {
                         if (element.value !== "") {
                           mobiles.push(element.value);
                         }
                       });
 
-                      axios.post(_this.urls_mobiles_store, {
+                      axios.post(_this3.urls_mobiles_store, {
                         mobiles: mobiles,
                         persons_id: id_person
                       }).then(function (response) {
@@ -2784,24 +2844,24 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
                             text: 'Partícipe creado satisfactoriamente.'
                           }); //Limpiar formulario
 
-                          _this.cleanForm();
+                          _this3.cleanForm();
                         }
                       }, function (error) {
-                        _this.showErrors(error.response);
+                        _this3.showErrors(error.response);
                       });
                     }
                   }, function (error) {
-                    _this.showErrors(error.response);
+                    _this3.showErrors(error.response);
                   });
                 }
               }, function (error) {
-                _this.showErrors(error.response);
+                _this3.showErrors(error.response);
               });
             }
         }, function (error) {
-          _this.showErrors(error.response);
+          _this3.showErrors(error.response);
         }).then(function () {
-          _this.isLoading = false;
+          _this3.isLoading = false;
         });
       }
     },
@@ -64518,6 +64578,8 @@ var render = function() {
                   key: 2,
                   attrs: {
                     programmer_json: _vm.programmer_json,
+                    numbers_emailes: _vm.numbers_emailes,
+                    numbers_mobiles: _vm.numbers_mobiles,
                     text_title: _vm.text_participant_title,
                     text_fields_json: _vm.text_participant_fields_json,
                     text_accept: _vm.text_accept,
@@ -64525,8 +64587,10 @@ var render = function() {
                     url_person_ui_avatar: _vm.url_person_ui_avatar,
                     url_person_store: _vm.url_person_store,
                     url_participant_store: _vm.url_participant_store,
+                    url_person_email_exist: _vm.url_person_email_exist,
                     urls_mobiles_store: _vm.urls_mobiles_store,
-                    urls_emails_store: _vm.urls_emails_store
+                    urls_emails_store: _vm.urls_emails_store,
+                    url_person_cellphone_exist: _vm.url_person_cellphone_exist
                   }
                 })
               : _vm._e()
@@ -64850,6 +64914,11 @@ var render = function() {
                   [
                     _c("b-input", {
                       attrs: { name: "email", maxlength: "45", expanded: "" },
+                      on: {
+                        blur: function($event) {
+                          return _vm.emailExist(index)
+                        }
+                      },
                       model: {
                         value: inputEmail.value,
                         callback: function($$v) {
@@ -64879,6 +64948,11 @@ var render = function() {
                   [
                     _c("b-input", {
                       attrs: { name: "mobile", maxlength: "12", expanded: "" },
+                      on: {
+                        blur: function($event) {
+                          return _vm.mobileExist(index)
+                        }
+                      },
                       nativeOn: {
                         keyup: function($event) {
                           return _vm.onlyNumber($event, index)

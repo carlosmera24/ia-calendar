@@ -14,4 +14,20 @@ class PersonCellphone extends Model
     {
         return $this->belongsTo('App\Models\Person','persons_id');
     }
+
+    /**
+     * Validate if cellphone exists
+     * @param $mobile to validate
+     * @return boolen
+     */
+    public static function cellphoneExist( $mobile )
+    {
+        $mobile = PersonCellphone::where('cellphone_number', $mobile)->first();
+        if( empty($mobile) )
+        {
+            return false;
+        }else{
+            return true;
+        }
+    }
 }

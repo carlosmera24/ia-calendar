@@ -20,6 +20,9 @@ class PersonEmailController extends Controller
                                         'persons_id'                =>  'required|exists:persons,id',
 
                                     ];
+    protected $rules_email_exist = [
+                                        'email' => 'required|email|max:45'
+                                    ];
 
     /**
      * Display a listing of the resource.
@@ -29,6 +32,36 @@ class PersonEmailController extends Controller
     public function index()
     {
         //
+    }
+
+    /**
+     * Search email.
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function emailExist(Request $request)
+    {
+        $validator = Validator::make($request->input(), $this->rules_email_exist);
+        if( $validator->fails() )
+        {
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'error'     =>  "BadRequest",
+                                                'data'      =>  $validator->getMessageBag()->toArray()
+                                            ),
+                                        400
+                                    );
+        }else
+        {
+            return response()->json(
+                                    array(
+                                            'status'    =>  200,
+                                            'exist'      =>  PersonEmail::emailExist( $request->email )
+                                        ),
+                                    200
+                                );
+        }
     }
 
     /**

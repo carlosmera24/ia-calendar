@@ -20,6 +20,9 @@ class PersonCellphoneController extends Controller
                                         'persons_id'                =>  'required|exists:persons,id',
 
                                     ];
+    protected $rules_mobile_exist = [
+                                        'mobile' => 'required|regex:/^\d{10,12}/'
+                                    ];
     /**
      * Display a listing of the resource.
      *
@@ -28,6 +31,36 @@ class PersonCellphoneController extends Controller
     public function index()
     {
         //
+    }
+
+    /**
+     * Search email.
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function emailExist(Request $request)
+    {
+        $validator = Validator::make($request->input(), $this->rules_mobile_exist);
+        if( $validator->fails() )
+        {
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'error'     =>  "BadRequest",
+                                                'data'      =>  $validator->getMessageBag()->toArray()
+                                            ),
+                                        400
+                                    );
+        }else
+        {
+            return response()->json(
+                                    array(
+                                            'status'    =>  200,
+                                            'exist'      =>  PersonCellphone::cellphoneExist( $request->mobile )
+                                        ),
+                                    200
+                                );
+        }
     }
 
     /**

@@ -28,7 +28,9 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/person/store', [ PersonController::class, 'store' ])->name('person_store');
     Route::post('/participant/store', [ ParticipantController::class, 'store' ])->name('participant_store');
     Route::post('/persons-emails/store-array', [ PersonEmailController::class, 'storeArray' ])->name('persons_emails_store_array');
+    Route::post('/persons-emails/email-exist', [ PersonEmailController::class, 'emailExist' ])->name('persons_emails_exist');
     Route::post('/persons-cellphones/store-array', [ PersonCellphoneController::class, 'storeArray' ])->name('persons_mobiles_store_array');
+    Route::post('/persons-cellphones/cellphone-exist', [ PersonCellphoneController::class, 'emailExist' ])->name('persons_cellphone_exist');
 });
 // Sesion
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');

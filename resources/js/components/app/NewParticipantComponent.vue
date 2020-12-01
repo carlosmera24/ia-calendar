@@ -42,14 +42,27 @@
                     :label="fields.email.label"
                     v-bind:type="{ 'is-danger' : inputEmail.error }"
                     :message="inputEmail.error ? emailMsg : ''">
-                    <b-input name="email" v-model="inputEmail.value" maxlength="45" expanded></b-input>
+                    <b-input
+                        name="email"
+                        v-model="inputEmail.value"
+                        v-on:blur="emailExist(index)"
+                        maxlength="45"
+                        expanded>
+                    </b-input>
                 </b-field>
                 <b-field horizontal class="column is-4"
                     v-for="(inputMobile, index) in mobiles" :key="'mobile.'+index"
                     :label="fields.mobile.label"
                     v-bind:type="{ 'is-danger' : inputMobile.error }"
                     :message="inputMobile.error ? mobileMsg : ''">
-                    <b-input name="mobile" v-on:keyup.native="onlyNumber($event, index)" v-model="inputMobile.value" maxlength="12" expanded></b-input>
+                    <b-input
+                        name="mobile"
+                        v-on:keyup.native="onlyNumber($event, index)"
+                        v-model="inputMobile.value"
+                        v-on:blur="mobileExist(index)"
+                        maxlength="12"
+                        expanded>
+                    </b-input>
                 </b-field>
                 <b-field horizontal class="column is-4"
                     :label="fields.date_join.label"
@@ -125,7 +138,11 @@ export default{
         'url_participant_store',
         'urls_emails_store',
         'urls_mobiles_store',
+        'url_person_email_exist',
+        'url_person_cellphone_exist',
         'programmer_json',
+        'numbers_emailes',
+        'numbers_mobiles',
     ],
     data() {
         return {
@@ -139,9 +156,7 @@ export default{
             position: '',
             emails: [],
             mobiles: [],
-            email: '',
             emailMsg: '',
-            mobile: '',
             mobileMsg: '',
             date_join: null,
             birth_date: null,
@@ -149,8 +164,6 @@ export default{
             avatar: null,
             id_profile: 3, //Set default "Invitado"
             locale: undefined, //Set browser language
-            numMail: 3,
-            numCell: 3,
         }
     },
     created(){
@@ -161,7 +174,7 @@ export default{
     methods: {
         createArraysInputs(){
             //create inputs for e-mails
-            for( var i=0;  i < this.numMail; i++ )
+            for( var i=0;  i < this.numbers_emailes; i++ )
             {
                 this.emails.push({
                     value: '',
@@ -169,7 +182,7 @@ export default{
                 });
             }
             //create inputs for mobiles
-            for( var i=0;  i < this.numCell; i++ )
+            for( var i=0;  i < this.numbers_mobiles; i++ )
             {
                 this.mobiles.push({
                     value: '',
@@ -192,6 +205,50 @@ export default{
             if( name !== "" )
             {
                 this.avatar = this.url_person_ui_avatar +"?name="+ name +'&size=128';
+            }
+        },
+        emailExist(index){
+            const value = this.emails[ index ].value;
+            if( value !== "" )
+            {
+                this.isLoading = true;
+                axios.post(this.url_person_email_exist,{ email: value })
+                    .then( response => {
+                        this.showErrors({});
+                        if( response.data.status === 200 && response.data.exist )
+                        {
+                            this.emails[ index ].error = true;
+                            this.emailMsg = this.fields.email.msg_exist;
+                        }
+                    },
+                    error => {
+                        this.showErrors( error.response );
+                    })
+                    .then( () => {
+                        this.isLoading = false;
+                    });
+            }
+        },
+        mobileExist(index){
+            const value = this.mobiles[ index ].value;
+            if( value !== "" )
+            {
+                this.isLoading = true;
+                axios.post(this.url_person_cellphone_exist,{ mobile: value })
+                    .then( response => {
+                        this.showErrors({});
+                        if( response.data.status === 200 && response.data.exist )
+                        {
+                            this.mobiles[ index ].error = true;
+                            this.mobileMsg = this.fields.mobile.msg_exist;
+                        }
+                    },
+                    error => {
+                        this.showErrors( error.response );
+                    })
+                    .then( () => {
+                        this.isLoading = false;
+                    });
             }
         },
         save(){

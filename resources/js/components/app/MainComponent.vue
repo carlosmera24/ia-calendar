@@ -15,6 +15,8 @@
                 <participant-section v-if="activeMenu.create_participant"
                     v-bind:key="2"
                     v-bind:programmer_json="programmer_json"
+                    v-bind:numbers_emailes="numbers_emailes"
+                    v-bind:numbers_mobiles="numbers_mobiles"
                     v-bind:text_title="text_participant_title"
                     v-bind:text_fields_json="text_participant_fields_json"
                     v-bind:text_accept="text_accept"
@@ -22,8 +24,10 @@
                     v-bind:url_person_ui_avatar="url_person_ui_avatar"
                     v-bind:url_person_store="url_person_store"
                     v-bind:url_participant_store="url_participant_store"
+                    v-bind:url_person_email_exist="url_person_email_exist"
                     v-bind:urls_mobiles_store="urls_mobiles_store"
-                    v-bind:urls_emails_store="urls_emails_store" />
+                    v-bind:urls_emails_store="urls_emails_store"
+                    v-bind:url_person_cellphone_exist="url_person_cellphone_exist" />
             </transition-group>
         </section>
     </div>
@@ -45,7 +49,11 @@ export default {
         'url_participant_store',
         'urls_emails_store',
         'urls_mobiles_store',
+        'url_person_email_exist',
+        'url_person_cellphone_exist',
         'programmer_json',
+        'numbers_emailes',
+        'numbers_mobiles',
     ],
     data() {
         return {
@@ -55,6 +63,7 @@ export default {
     },
     created(){
         this.activeMenu = this.$root.activeMenu;
+        console.log(this.numbers_emailes);
     }
 }
 </script>

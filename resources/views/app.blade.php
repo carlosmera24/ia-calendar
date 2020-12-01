@@ -22,6 +22,9 @@
                                         $programmer = $participant->programmer()->get()[0];
                                     }
                                 }
+                                //TODO -> Get memberships
+                                $numMailes = 3;
+                                $numMobiles = 3;
                             @endphp
                             <dropdown-menu
                                 v-bind:url_logout="'{{ route('logout') }}'"
@@ -92,13 +95,15 @@
                                             'label'             =>  __('validation.attributes.email'),
                                             'error'             => false,
                                             'msg'               =>  __('validation.required', ['attribute' => '']),
-                                            'msg_validate'      =>  __('validation.email', ['attribute' => ''])
+                                            'msg_validate'      =>  __('validation.email', ['attribute' => '']),
+                                            'msg_exist'         =>  __('validation.custom.email.unique', ['attribute' => __('validation.attributes.email')])
                                         ],
                     'mobile'        =>  [
                                             'label' =>  __('validation.attributes.mobile'),
                                             'error' => false,
                                             'msg'   =>  __('validation.required', ['attribute' => '']),
-                                            'msg_validate'   =>  __('validation.mobile', ['attribute' => ''])
+                                            'msg_validate'   =>  __('validation.mobile', ['attribute' => '']),
+                                            'msg_exist'   =>  __('validation.custom.mobile.unique', ['attribute' => __('validation.attributes.mobile')])
                                         ],
                     'position'      =>  [
                                             'label' =>  __('validation.attributes.position_company'),
@@ -129,6 +134,8 @@
                 ];
             @endphp
             <main-section
+                v-bind:numbers_emailes="'{{ $numMailes }}'"
+                v-bind:numbers_mobiles="'{{ $numMobiles }}'"
                 v-bind:programmer_json="'{{ str_replace("'", "\'",json_encode($programmer)) }}'"
                 v-bind:text_wall_title='"{{ __('app.wall.title') }} "'
                 v-bind:text_wall_trigger_events_soon_expire='"{{ __('app.wall.trigger_events_soon_expire') }}"'
@@ -143,6 +150,8 @@
                 v-bind:url_participant_store='"{{ route('participant_store') }}"'
                 v-bind:urls_emails_store='"{{ route('persons_emails_store_array') }}"'
                 v-bind:urls_mobiles_store='"{{ route('persons_mobiles_store_array') }}"'
+                v-bind:url_person_email_exist='"{{ route('persons_emails_exist') }}"'
+                v-bind:url_person_cellphone_exist='"{{ route('persons_cellphone_exist') }}"'
             />
         </section>
         {{-- /Main Section --}}
