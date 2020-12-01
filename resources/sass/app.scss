@@ -389,9 +389,6 @@ body, h2, button, input, select, textarea {
                         .control{
                             padding: 10px 30px;
                         }
-                        input[type=file]{
-                            display: none;
-                        }
                     }
                     .avatar{
                         border: 5px solid $yellow;
@@ -400,10 +397,12 @@ body, h2, button, input, select, textarea {
                         width: 128px;
                         text-align: center;
                         align-items: center;
-                        cursor: pointer;
                         .text-avatar{
                             margin: auto;
                             font-size: 22px;
+                        }
+                        img{
+                            border-radius: 50%;
                         }
                     }
                     .avatar:hover{

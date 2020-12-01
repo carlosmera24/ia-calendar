@@ -18,6 +18,7 @@ class CreatePersonsCellphonesTable extends Migration
             $table->engine = 'InnoDB';
             $table->integer('id');
             $table->string('cellphone_number',45);
+            $table->tinyInteger('initial_register',false)->default(0)->comment('0:No, 1:Yes');
             $table->integer('persons_id');
             $table->datetime('created_at')->default(new Expression('CURRENT_TIMESTAMP'));
             $table->datetime('updated_at')->default(new Expression('CURRENT_TIMESTAMP'));
@@ -36,7 +37,7 @@ class CreatePersonsCellphonesTable extends Migration
         });
 
         //Add autoincrement to id
-        DB::statement("ALTER TABLE persons_emails MODIFY id INT AUTO_INCREMENT");
+        DB::statement("ALTER TABLE persons_cellphones MODIFY id INT AUTO_INCREMENT");
     }
 
     /**

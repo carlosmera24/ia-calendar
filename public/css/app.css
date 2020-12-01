@@ -19884,10 +19884,6 @@ textarea {
   padding: 10px 30px;
 }
 
-.application .main .content .new-participant .form_new_participant .field_avatar input[type=file] {
-  display: none;
-}
-
 .application .main .content .new-participant .form_new_participant .avatar {
   border: 5px solid #fab800;
   border-radius: 50%;
@@ -19895,12 +19891,15 @@ textarea {
   width: 128px;
   text-align: center;
   align-items: center;
-  cursor: pointer;
 }
 
 .application .main .content .new-participant .form_new_participant .avatar .text-avatar {
   margin: auto;
   font-size: 22px;
+}
+
+.application .main .content .new-participant .form_new_participant .avatar img {
+  border-radius: 50%;
 }
 
 .application .main .content .new-participant .form_new_participant .avatar:hover {

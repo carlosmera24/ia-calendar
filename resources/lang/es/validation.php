@@ -90,6 +90,7 @@ return [
         'string'  => ':attribute debe contener al menos :min caracteres.',
         'array'   => ':attribute debe tener al menos :min elementos.',
     ],
+    'mobile'               => ':attribute no es un teléfono celular valido.',
     'multiple_of'          => 'El campo :attribute debe ser múltiplo de :value',
     'not_in'               => ':attribute es inválido.',
     'not_regex'            => 'El formato del campo :attribute no es válido.',

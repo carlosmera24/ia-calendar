@@ -14,13 +14,16 @@
 
                 <participant-section v-if="activeMenu.create_participant"
                     v-bind:key="2"
-                    v-bind:programmer="programmer"
+                    v-bind:programmer_json="programmer_json"
                     v-bind:text_title="text_participant_title"
                     v-bind:text_fields_json="text_participant_fields_json"
                     v-bind:text_accept="text_accept"
                     v-bind:text_cancel="text_cancel"
+                    v-bind:url_person_ui_avatar="url_person_ui_avatar"
                     v-bind:url_person_store="url_person_store"
-                    v-bind:url_participant_store="url_participant_store" />
+                    v-bind:url_participant_store="url_participant_store"
+                    v-bind:urls_mobiles_store="urls_mobiles_store"
+                    v-bind:urls_emails_store="urls_emails_store" />
             </transition-group>
         </section>
     </div>
@@ -37,8 +40,11 @@ export default {
         'text_participant_fields_json',
         'text_accept',
         'text_cancel',
+        'url_person_ui_avatar',
         'url_person_store',
         'url_participant_store',
+        'urls_emails_store',
+        'urls_mobiles_store',
         'programmer_json',
     ],
     data() {
@@ -49,7 +55,6 @@ export default {
     },
     created(){
         this.activeMenu = this.$root.activeMenu;
-        this.programmer = JSON.parse( this.programmer_json );
     }
 }
 </script>

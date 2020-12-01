@@ -14,4 +14,14 @@ class Person extends Model
     {
         return $this->hasMany('App\Models\Participant','persons_id');
     }
+
+    public function personsEmails()
+    {
+        return $this->hasMany('App\Models\PersonEmail','persons_id');
+    }
+
+    public function personsCellphones()
+    {
+        return $this->hasMany('App\Models\PersonCellphone','persons_id');
+    }
 }

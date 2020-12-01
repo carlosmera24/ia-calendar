@@ -18,6 +18,7 @@ class CreatePersonsEmailsTable extends Migration
             $table->engine = 'InnoDB';
             $table->integer('id');
             $table->string('email',45);
+            $table->tinyInteger('initial_register',false)->default(0)->comment('0:No, 1:Yes');
             $table->integer('persons_id');
             $table->datetime('created_at')->default(new Expression('CURRENT_TIMESTAMP'));
             $table->datetime('updated_at')->default(new Expression('CURRENT_TIMESTAMP'));

@@ -13,8 +13,8 @@ mix.browserSync({
     proxy: 'ia-calendar.com',
     files: [
         'resources/views/**/*.php',
-        'app/**/*.php',
-        'routes/**/*.php',
+        // 'app/**/*.php',
+        // 'routes/**/*.php',
         'public/js/*.js',
         'public/css/*.css'
     ],

@@ -57,14 +57,14 @@
         {{-- Menu Section --}}
         <section class="action-section px-5 py-5">
             <main-menu-section
-                v-bind:text_create_participant='" {{ __('app.create_participant') }}"'
-                v-bind:text_create_category='" {{ __('app.create_category') }}"'
-                v-bind:text_see_calendar='" {{ __('app.see_calendar') }}"'
-                v-bind:text_anual_fiscal='" {{ __('app.annual_fiscal') }}"'
-                v-bind:text_create_your_event='" {{ __('app.create_your_event') }}"'
-                v-bind:text_programmer='" {{ __('app.programmer') }}"'
-                v-bind:text_category='" {{ __('app.category') }}"'
-                v-bind:text_event='" {{ __('app.event') }}"' />
+                v-bind:text_create_participant='"{{ __('app.create_participant') }}"'
+                v-bind:text_create_category='"{{ __('app.create_category') }}"'
+                v-bind:text_see_calendar='"{{ __('app.see_calendar') }}"'
+                v-bind:text_anual_fiscal='"{{ __('app.annual_fiscal') }}"'
+                v-bind:text_create_your_event='"{{ __('app.create_your_event') }}"'
+                v-bind:text_programmer='"{{ __('app.programmer') }}"'
+                v-bind:text_category='"{{ __('app.category') }}"'
+                v-bind:text_event='"{{ __('app.event') }}"' />
         </section>
         {{-- /Menu Section --}}
 
@@ -89,14 +89,16 @@
                                             'msg'   =>  __('validation.required', ['attribute' => ''])
                                         ],
                     'email'         =>  [
-                                            'label' =>  __('validation.attributes.email'),
-                                            'error' => false,
-                                            'msg'   =>  __('validation.required', ['attribute' => ''])
+                                            'label'             =>  __('validation.attributes.email'),
+                                            'error'             => false,
+                                            'msg'               =>  __('validation.required', ['attribute' => '']),
+                                            'msg_validate'      =>  __('validation.email', ['attribute' => ''])
                                         ],
                     'mobile'        =>  [
                                             'label' =>  __('validation.attributes.mobile'),
                                             'error' => false,
-                                            'msg'   =>  __('validation.required', ['attribute' => ''])
+                                            'msg'   =>  __('validation.required', ['attribute' => '']),
+                                            'msg_validate'   =>  __('validation.mobile', ['attribute' => ''])
                                         ],
                     'position'      =>  [
                                             'label' =>  __('validation.attributes.position_company'),
@@ -127,17 +129,20 @@
                 ];
             @endphp
             <main-section
-                v-bind:programmer_json="' {{ str_replace("'", "\'",json_encode($programmer)) }} '"
-                v-bind:text_wall_title='" {{ __('app.wall.title') }} "'
-                v-bind:text_wall_trigger_events_soon_expire='" {{ __('app.wall.trigger_events_soon_expire') }} "'
-                v-bind:text_wall_add_categories='" {{ __('app.wall.add_categories') }} "'
-                v-bind:text_wall_add_notes='" {{ __('app.wall.add_notes') }} "'
-                v-bind:text_participant_title='" {{ __('app.participant_new.title') }} "'
-                v-bind:text_accept='" {{ __('validation.attributes.accept') }} "'
-                v-bind:text_cancel='" {{ __('validation.attributes.cancel') }} "'
+                v-bind:programmer_json="'{{ str_replace("'", "\'",json_encode($programmer)) }}'"
+                v-bind:text_wall_title='"{{ __('app.wall.title') }} "'
+                v-bind:text_wall_trigger_events_soon_expire='"{{ __('app.wall.trigger_events_soon_expire') }}"'
+                v-bind:text_wall_add_categories='"{{ __('app.wall.add_categories') }}"'
+                v-bind:text_wall_add_notes='"{{ __('app.wall.add_notes') }} "'
+                v-bind:text_participant_title='" {{ __('app.participant_new.title') }}"'
+                v-bind:text_accept='"{{ __('validation.attributes.accept') }}"'
+                v-bind:text_cancel='"{{ __('validation.attributes.cancel') }}"'
                 v-bind:text_participant_fields_json="' {{ json_encode($fields_participant) }} '"
-                v-bind:url_person_store='" {{ route('person_store') }} "'
-                v-bind:url_participant_store='" {{ route('participant_store') }} "'
+                v-bind:url_person_ui_avatar='"{{ route('person_uiavatar') }}"'
+                v-bind:url_person_store='"{{ route('person_store') }}"'
+                v-bind:url_participant_store='"{{ route('participant_store') }}"'
+                v-bind:urls_emails_store='"{{ route('persons_emails_store_array') }}"'
+                v-bind:urls_mobiles_store='"{{ route('persons_mobiles_store_array') }}"'
             />
         </section>
         {{-- /Main Section --}}
