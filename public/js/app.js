@@ -2403,8 +2403,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['showTitle', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_participant_fields_json', 'text_accept', 'text_cancel', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'programmer_json', 'numbers_emailes', 'numbers_mobiles'],
+  props: ['showTitle', 'text_success', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_created_participant', 'text_participant_title', 'text_participant_fields_json', 'text_accept', 'text_cancel', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'programmer_json', 'numbers_emailes', 'numbers_mobiles'],
   data: function data() {
     return {
       activeMenu: [],
@@ -2611,6 +2612,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
@@ -2622,7 +2624,7 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_title', 'text_fields_json', 'text_accept', 'text_cancel', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'programmer_json', 'numbers_emailes', 'numbers_mobiles'],
+  props: ['text_title', 'text_success', 'text_created_participant', 'text_fields_json', 'text_accept', 'text_cancel', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'programmer_json', 'numbers_emailes', 'numbers_mobiles'],
   data: function data() {
     return {
       isLoading: false,
@@ -2641,6 +2643,7 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
       birth_date: null,
       description: null,
       avatar: null,
+      maxBirthDate: new Date(moment().subtract(18, 'years')),
       id_profile: 3,
       //Set default "Invitado"
       locale: undefined //Set browser language
@@ -2882,8 +2885,8 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
                                       }).then(function (response) {
                                         if (response.data.status === 201) {
                                           Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_1__["success"])({
-                                            title: 'Success!',
-                                            text: 'Partícipe creado satisfactoriamente.'
+                                            title: _this5.text_success,
+                                            text: _this5.text_created_participant
                                           }); //Limpiar formulario
 
                                           _this5.cleanForm();
@@ -64632,7 +64635,8 @@ var render = function() {
                     programmer_json: _vm.programmer_json,
                     numbers_emailes: _vm.numbers_emailes,
                     numbers_mobiles: _vm.numbers_mobiles,
-                    text_title: _vm.text_participant_title,
+                    text_success: _vm.text_success,
+                    text_created_participant: _vm.text_created_participant,
                     text_fields_json: _vm.text_participant_fields_json,
                     text_accept: _vm.text_accept,
                     text_cancel: _vm.text_cancel,
@@ -65068,6 +65072,7 @@ var render = function() {
                       "open-on-focus": true,
                       locale: _vm.locale,
                       "date-formatter": _vm.dateFormat,
+                      "max-date": _vm.maxBirthDate,
                       "trap-focus": "",
                       expanded: ""
                     },

@@ -17,7 +17,8 @@
                     v-bind:programmer_json="programmer_json"
                     v-bind:numbers_emailes="numbers_emailes"
                     v-bind:numbers_mobiles="numbers_mobiles"
-                    v-bind:text_title="text_participant_title"
+                    v-bind:text_success="text_success"
+                    v-bind:text_created_participant="text_created_participant"
                     v-bind:text_fields_json="text_participant_fields_json"
                     v-bind:text_accept="text_accept"
                     v-bind:text_cancel="text_cancel"
@@ -36,10 +37,12 @@
 export default {
     props:[
         'showTitle',
+        'text_success',
         'text_wall_title',
         'text_wall_trigger_events_soon_expire',
         'text_wall_add_categories',
         'text_wall_add_notes',
+        'text_created_participant',
         'text_participant_title',
         'text_participant_fields_json',
         'text_accept',

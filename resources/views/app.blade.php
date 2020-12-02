@@ -137,11 +137,13 @@
                 v-bind:numbers_emailes="'{{ $numMailes }}'"
                 v-bind:numbers_mobiles="'{{ $numMobiles }}'"
                 v-bind:programmer_json="'{{ str_replace("'", "\'",json_encode($programmer)) }}'"
+                v-bind:text_success='"{{ __('messages.success') }} "'
                 v-bind:text_wall_title='"{{ __('app.wall.title') }} "'
                 v-bind:text_wall_trigger_events_soon_expire='"{{ __('app.wall.trigger_events_soon_expire') }}"'
                 v-bind:text_wall_add_categories='"{{ __('app.wall.add_categories') }}"'
                 v-bind:text_wall_add_notes='"{{ __('app.wall.add_notes') }} "'
                 v-bind:text_participant_title='" {{ __('app.participant_new.title') }}"'
+                v-bind:text_created_participant='" {{ __('messages.created_participant') }}"'
                 v-bind:text_accept='"{{ __('validation.attributes.accept') }}"'
                 v-bind:text_cancel='"{{ __('validation.attributes.cancel') }}"'
                 v-bind:text_participant_fields_json="' {{ json_encode($fields_participant) }} '"

@@ -85,6 +85,7 @@
                         :open-on-focus="true"
                         :locale="locale"
                         :date-formatter="dateFormat"
+                        :max-date="maxBirthDate"
                         trap-focus expanded>
                     </b-datepicker>
                 </b-field>
@@ -128,6 +129,8 @@ import '@pnotify/core/dist/BrightTheme.css';
 export default{
     props: [
         'text_title',
+        'text_success',
+        'text_created_participant',
         'text_fields_json',
         'text_accept',
         'text_cancel',
@@ -160,6 +163,7 @@ export default{
             birth_date: null,
             description: null,
             avatar: null,
+            maxBirthDate: new Date(moment().subtract(18, 'years')),
             id_profile: 3, //Set default "Invitado"
             locale: undefined, //Set browser language
         }
@@ -391,8 +395,8 @@ export default{
                                                                                                         if( response.data.status === 201 )
                                                                                                         {
                                                                                                             success({
-                                                                                                                title: 'Success!',
-                                                                                                                text: 'Partícipe creado satisfactoriamente.'
+                                                                                                                title: this.text_success,
+                                                                                                                text: this.text_created_participant
                                                                                                             });
                                                                                                             //Limpiar formulario
                                                                                                             this.cleanForm();
