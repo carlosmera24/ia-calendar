@@ -63,7 +63,6 @@ export default {
     },
     created(){
         this.activeMenu = this.$root.activeMenu;
-        console.log(this.numbers_emailes);
     }
 }
 </script>

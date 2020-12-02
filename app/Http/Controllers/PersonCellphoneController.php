@@ -20,8 +20,12 @@ class PersonCellphoneController extends Controller
                                         'persons_id'                =>  'required|exists:persons,id',
 
                                     ];
-    protected $rules_mobile_exist = [
+    protected $rules_mobile_exists = [
                                         'mobile' => 'required|regex:/^\d{10,12}/'
+                                    ];
+    protected $rules_mobiles_exists = [
+                                        'mobiles'   =>  'required|array|min:1',
+                                        'mobiles.*' =>  'required|regex:/^\d{10,12}/',
                                     ];
     /**
      * Display a listing of the resource.
@@ -38,9 +42,9 @@ class PersonCellphoneController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function emailExist(Request $request)
+    public function cellphoneExists(Request $request)
     {
-        $validator = Validator::make($request->input(), $this->rules_mobile_exist);
+        $validator = Validator::make($request->input(), $this->rules_mobile_exists);
         if( $validator->fails() )
         {
             return response()->json(
@@ -57,6 +61,49 @@ class PersonCellphoneController extends Controller
                                     array(
                                             'status'    =>  200,
                                             'exist'      =>  PersonCellphone::cellphoneExist( $request->mobile )
+                                        ),
+                                    200
+                                );
+        }
+    }
+
+    /**
+     * Search cellphones.
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function cellphonesExists(Request $request)
+    {
+        $validator = Validator::make($request->input(), $this->rules_mobiles_exists);
+        if( $validator->fails() )
+        {
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'error'     =>  "BadRequest",
+                                                'data'      =>  $validator->getMessageBag()->toArray()
+                                            ),
+                                        400
+                                    );
+        }else
+        {
+            $array_validate = array();
+            $exists = false;
+            foreach( $request->mobiles as $key => $val )
+            {
+                $mobile_exists = PersonCellphone::cellphoneExist( $val );
+                $exists = $exists ? $exists : $mobile_exists;
+                $array_validate[] = [
+                                        'exists'    => $mobile_exists,
+                                        'mobile'     => $val
+                                    ];
+            }
+
+            return response()->json(
+                                    array(
+                                            'status'    =>  200,
+                                            'exists'    =>  $exists,
+                                            'validate'  =>  $array_validate
                                         ),
                                     200
                                 );

@@ -23,6 +23,10 @@ class PersonEmailController extends Controller
     protected $rules_email_exist = [
                                         'email' => 'required|email|max:45'
                                     ];
+    protected $rules_emails_exists = [
+                                        'emails'    =>  'required|array|min:1',
+                                        'emails.*'  =>  'required|email|max:45',
+                                    ];
 
     /**
      * Display a listing of the resource.
@@ -39,7 +43,7 @@ class PersonEmailController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function emailExist(Request $request)
+    public function emailExists(Request $request)
     {
         $validator = Validator::make($request->input(), $this->rules_email_exist);
         if( $validator->fails() )
@@ -58,6 +62,49 @@ class PersonEmailController extends Controller
                                     array(
                                             'status'    =>  200,
                                             'exist'      =>  PersonEmail::emailExist( $request->email )
+                                        ),
+                                    200
+                                );
+        }
+    }
+
+    /**
+     * Search emailes.
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function emailsExists(Request $request)
+    {
+        $validator = Validator::make($request->input(), $this->rules_emails_exists);
+        if( $validator->fails() )
+        {
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'error'     =>  "BadRequest",
+                                                'data'      =>  $validator->getMessageBag()->toArray()
+                                            ),
+                                        400
+                                    );
+        }else
+        {
+            $array_validate = array();
+            $exists = false;
+            foreach( $request->emails as $key => $val )
+            {
+                $email_exists = PersonEmail::emailExist( $val );
+                $exists = $exists ? $exists : $email_exists;
+                $array_validate[] = [
+                                        'exists'    => $email_exists,
+                                        'email'     => $val
+                                    ];
+            }
+
+            return response()->json(
+                                    array(
+                                            'status'    =>  200,
+                                            'exists'    =>  $exists,
+                                            'validate'  =>  $array_validate
                                         ),
                                     200
                                 );

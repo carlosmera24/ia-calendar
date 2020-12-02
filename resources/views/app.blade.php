@@ -150,8 +150,8 @@
                 v-bind:url_participant_store='"{{ route('participant_store') }}"'
                 v-bind:urls_emails_store='"{{ route('persons_emails_store_array') }}"'
                 v-bind:urls_mobiles_store='"{{ route('persons_mobiles_store_array') }}"'
-                v-bind:url_person_email_exist='"{{ route('persons_emails_exist') }}"'
-                v-bind:url_person_cellphone_exist='"{{ route('persons_cellphone_exist') }}"'
+                v-bind:url_person_email_exist='"{{ route('persons_emails_exists') }}"'
+                v-bind:url_person_cellphone_exist='"{{ route('persons_cellphones_exists') }}"'
             />
         </section>
         {{-- /Main Section --}}

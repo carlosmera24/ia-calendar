@@ -41,11 +41,10 @@
                     v-for="(inputEmail, index) in emails" :key="index"
                     :label="fields.email.label"
                     v-bind:type="{ 'is-danger' : inputEmail.error }"
-                    :message="inputEmail.error ? emailMsg : ''">
+                    :message="inputEmail.error ? emailMsg[index] : ''">
                     <b-input
                         name="email"
                         v-model="inputEmail.value"
-                        v-on:blur="emailExist(index)"
                         maxlength="45"
                         expanded>
                     </b-input>
@@ -54,12 +53,11 @@
                     v-for="(inputMobile, index) in mobiles" :key="'mobile.'+index"
                     :label="fields.mobile.label"
                     v-bind:type="{ 'is-danger' : inputMobile.error }"
-                    :message="inputMobile.error ? mobileMsg : ''">
+                    :message="inputMobile.error ? mobileMsg[index] : ''">
                     <b-input
                         name="mobile"
                         v-on:keyup.native="onlyNumber($event, index)"
                         v-model="inputMobile.value"
-                        v-on:blur="mobileExist(index)"
                         maxlength="12"
                         expanded>
                     </b-input>
@@ -156,8 +154,8 @@ export default{
             position: '',
             emails: [],
             mobiles: [],
-            emailMsg: '',
-            mobileMsg: '',
+            emailMsg: [],
+            mobileMsg: [],
             date_join: null,
             birth_date: null,
             description: null,
@@ -171,6 +169,9 @@ export default{
         this.programmer = JSON.parse(this.programmer_json);
         this.createArraysInputs();
     },
+    computed:{
+
+    },
     methods: {
         createArraysInputs(){
             //create inputs for e-mails
@@ -178,16 +179,19 @@ export default{
             {
                 this.emails.push({
                     value: '',
-                    error: false
+                    error: false,
                 });
+                this.emailMsg.push('');
+
             }
             //create inputs for mobiles
             for( var i=0;  i < this.numbers_mobiles; i++ )
             {
                 this.mobiles.push({
                     value: '',
-                    error: false
+                    error: false,
                 });
+                this.mobileMsg.push('');
             }
         },
         clickClose(){
@@ -207,49 +211,55 @@ export default{
                 this.avatar = this.url_person_ui_avatar +"?name="+ name +'&size=128';
             }
         },
-        emailExist(index){
-            const value = this.emails[ index ].value;
-            if( value !== "" )
-            {
-                this.isLoading = true;
-                axios.post(this.url_person_email_exist,{ email: value })
-                    .then( response => {
-                        this.showErrors({});
-                        if( response.data.status === 200 && response.data.exist )
-                        {
-                            this.emails[ index ].error = true;
-                            this.emailMsg = this.fields.email.msg_exist;
-                        }
-                    },
-                    error => {
-                        this.showErrors( error.response );
-                    })
-                    .then( () => {
-                        this.isLoading = false;
-                    });
-            }
+        isEqualEmails(pos){
+            var equal = false;
+            this.emails.forEach( (element,index) => {
+                if( pos !== index )
+                {
+                    if(this.emails[ pos ].value === element.value )
+                    {
+                        equal = true;
+                        this.emails[ pos ].error = true;
+                        this.emailMsg[ pos ] = this.fields.email.msg_validate;
+                    }
+                }
+            });
+            return equal;
         },
-        mobileExist(index){
-            const value = this.mobiles[ index ].value;
-            if( value !== "" )
-            {
-                this.isLoading = true;
-                axios.post(this.url_person_cellphone_exist,{ mobile: value })
-                    .then( response => {
-                        this.showErrors({});
-                        if( response.data.status === 200 && response.data.exist )
-                        {
-                            this.mobiles[ index ].error = true;
-                            this.mobileMsg = this.fields.mobile.msg_exist;
-                        }
-                    },
-                    error => {
-                        this.showErrors( error.response );
-                    })
-                    .then( () => {
-                        this.isLoading = false;
-                    });
-            }
+        isEqualMobiles(pos){
+            var equal = false;
+            this.mobiles.forEach( (element,index) => {
+                if( pos !== index )
+                {
+                    if(this.mobiles[ pos ].value === element.value )
+                    {
+                        equal = true;
+                        this.mobiles[ pos ].error = true;
+                        this.mobileMsg[ pos ] = this.fields.mobile.msg_validate;
+                    }
+                }
+            });
+            return equal;
+        },
+        proccessEmailsExists( validates ){
+            validates.forEach( (e,i) => {
+                if( e.exists === true ){
+                    this.emails[i].error = true;
+                    this.emailMsg[i] = this.fields.email.msg_exist;
+                }
+            });
+        },
+        proccessCellphonesExists( validates ){
+            validates.forEach( (e,i) => {
+                if( e.exists === true ){
+                    this.mobiles[i].error = true;
+                    this.mobileMsg[i] = this.fields.mobile.msg_exist;
+                }
+            });
+        },
+        showErrors(resError){
+            this.errors = procesarErroresRequest( resError );
+            this.hasErrors = this.errors.errors.length > 0;
         },
         save(){
             this.fields.first_name.error = this.fname === '';
@@ -257,21 +267,29 @@ export default{
             this.fields.position.error = this.position === '';
             this.fields.date_join.error = this.date_join === null;
             this.fields.birth_date.error = this.birth_date === null;
-            var errors_others = false;
+            var is_email_mobile_duplicate = false;
             this.emails.forEach( (element, index) => {
                 element.error = false;
-                if( index === 0 )
+                if( index === 0)
                 {
                     element.error = element.value === '';
-                    this.emailMsg = this.fields.email.msg;
-                    errors_others = true;
+                    this.emailMsg[ index ] = this.fields.email.msg;
                 }
                 if( element.value !== "" )
                 {
                     const res = validate.single(element.value, { presence: true, email: true } );
-                    element.error = !(res === undefined);
-                    errors_others = element.error;
-                    this.emailMsg = this.fields.email.msg_validate;
+                    if( !(res === undefined) )
+                    {
+                        element.error = true;
+                        this.emailMsg[ index ] = this.fields.email.msg_validate;
+                    }else
+                    {
+                        //emails equals
+                        if( this.isEqualEmails(index) )
+                        {
+                            is_email_mobile_duplicate = true;
+                        }
+                    }
                 }
             });
             this.mobiles.forEach( (element, index) => {
@@ -279,109 +297,158 @@ export default{
                 if( index === 0 )
                 {
                     element.error = element.value === "";
-                    this.mobileMsg = this.fields.mobile.msg;
-                    errors_others = true;
+                    this.mobileMsg[ index ] = this.fields.mobile.msg;
                 }
                 if( element.value !== "" )
                 {
                     const res = validate.single(element.value, { length: { minimum: 10 } } );
-                    element.error = !(res === undefined);
-                    errors_others = element.error;
-                    this.mobileMsg = this.fields.mobile.msg_validate;
+                    if( !(res === undefined) )
+                    {
+                        element.error = true;
+                        this.mobileMsg[ index ] = this.fields.mobile.msg_validate;
+                    }else
+                    {
+                        //mobiles equals
+                        if(  this.isEqualMobiles(index) )
+                        {
+                            is_email_mobile_duplicate = true;
+                        }
+                    }
                 }
             });
 
             if( !this.fields.first_name.error &&  !this.fields.last_name.error  && !this.fields.position.error
-                && !this.fields.date_join.error && !this.birth_date.error && !errors_others)
+                && !this.fields.date_join.error && !this.birth_date.error && !is_email_mobile_duplicate )
             {
-                const person = {
-                    first_name: this.fname,
-                    last_name: this.lname,
-                    birth_date: this.dateFormat(this.birth_date),
-                    position_company: this.position,
-                    date_join_company: this.dateFormat(this.date_join),
-                };
+                //Validatate if emailss exist in database
+                const emails = [];
+                this.emails.forEach( element => {
+                    if( element.value !== "" ){
+                        emails.push( element.value );
+                    }
+                });
                 this.isLoading = true;
-
-                // Create person
-                axios.post(this.url_person_store, person)
+                axios.post(this.url_person_email_exist, { emails: emails} )
                     .then( response => {
-                            this.showErrors({});
-                            if( response.data.status === 201 )//created person
+                        this.showErrors({});
+                            if( response.data.status === 200 )
                             {
-                                const id_person = response.data.data.id;
-                                //create participant
-                                const participant = {
-                                    persons_id: id_person,
-                                    programmers_id: this.programmer.id,
-                                    profiles_participants_id: this.id_profile,
-                                    description: this.description,
-                                };
-                                axios.post(this.url_participant_store, participant)
-                                    .then( response => {
-                                        if( response.data.status === 201 )
-                                        {
-                                            // Create emails
-                                            const emails = [];
-                                            this.emails.forEach( element => {
-                                                if( element.value !== "" ){
-                                                    emails.push( element.value );
-                                                }
-                                            });
-                                            axios.post( this.urls_emails_store, { emails: emails, persons_id: id_person } )
-                                                .then( response => {
-                                                    if( response.data.status === 201 )
-                                                    {
-                                                        //Create cellphones
-                                                        const mobiles = [];
-                                                        this.mobiles.forEach( element => {
-                                                            if( element.value !== "" ){
-                                                                mobiles.push( element.value );
-                                                            }
-                                                        });
-                                                        axios.post( this.urls_mobiles_store, { mobiles: mobiles, persons_id: id_person } )
-                                                            .then( response => {
-                                                                if( response.data.status === 201 )
-                                                                {
-                                                                    success({
-                                                                        title: 'Success!',
-                                                                        text: 'Partícipe creado satisfactoriamente.'
-                                                                    });
-                                                                    //Limpiar formulario
-                                                                    this.cleanForm();
-                                                                }
-                                                            },
-                                                            error => {
-                                                                        this.showErrors( error.response );
-                                                                    }
-                                                            );
-                                                    }
-                                                },
-                                                error => {
-                                                            this.showErrors( error.response );
-                                                        }
-                                                );
+                                this.proccessEmailsExists(response.data.validate);
+                                if( response.data.exists === false )//No exists emails
+                                {
+                                    //Validate if cellphones exists in database
+                                    const mobiles = [];
+                                    this.mobiles.forEach( element => {
+                                        if( element.value !== "" ){
+                                            mobiles.push( element.value );
                                         }
-                                    },
-                                    error => {
-                                        this.showErrors( error.response );
-                                    }
-                                );
+                                    });
+                                    this.isLoading = true;
+                                    axios.post(this.url_person_cellphone_exist, { mobiles: mobiles})
+                                        .then( response => {
+                                            this.showErrors({});
+                                                if( response.data.status === 200 )
+                                                {
+                                                    this.proccessCellphonesExists(response.data.validate);
 
+                                                    if( response.data.exists === false )//Not exists cellphones
+                                                    {
+                                                        // Create person
+                                                        const person = {
+                                                        first_name: this.fname,
+                                                        last_name: this.lname,
+                                                        birth_date: this.dateFormat(this.birth_date),
+                                                        position_company: this.position,
+                                                        date_join_company: this.dateFormat(this.date_join),
+                                                        };
+                                                        this.isLoading = true;
+
+                                                        axios.post(this.url_person_store, person)
+                                                            .then( response => {
+                                                                    this.showErrors({});
+                                                                    if( response.data.status === 201 )//created person
+                                                                    {
+                                                                        const id_person = response.data.data.id;
+                                                                        //create participant
+                                                                        const participant = {
+                                                                            persons_id: id_person,
+                                                                            programmers_id: this.programmer.id,
+                                                                            profiles_participants_id: this.id_profile,
+                                                                            description: this.description,
+                                                                        };
+                                                                        axios.post(this.url_participant_store, participant)
+                                                                            .then( response => {
+                                                                                if( response.data.status === 201 )
+                                                                                {
+                                                                                    // Create emails
+                                                                                    axios.post( this.urls_emails_store, { emails: emails, persons_id: id_person } )
+                                                                                        .then( response => {
+                                                                                            if( response.data.status === 201 )
+                                                                                            {
+                                                                                                //Create cellphones
+                                                                                                axios.post( this.urls_mobiles_store, { mobiles: mobiles, persons_id: id_person } )
+                                                                                                    .then( response => {
+                                                                                                        if( response.data.status === 201 )
+                                                                                                        {
+                                                                                                            success({
+                                                                                                                title: 'Success!',
+                                                                                                                text: 'Partícipe creado satisfactoriamente.'
+                                                                                                            });
+                                                                                                            //Limpiar formulario
+                                                                                                            this.cleanForm();
+                                                                                                        }
+                                                                                                    },
+                                                                                                    error => {
+                                                                                                                this.showErrors( error );
+                                                                                                            }
+                                                                                                    );
+                                                                                            }
+                                                                                        },
+                                                                                        error => {
+                                                                                                    this.showErrors( error );
+                                                                                                }
+                                                                                        );
+                                                                                }
+                                                                            },
+                                                                            error => {
+                                                                                this.showErrors( error );
+                                                                            }
+                                                                        );
+
+                                                                    }
+                                                                },
+                                                                error => {
+                                                                this.showErrors( error );
+                                                                }
+                                                            )
+                                                            .then( () => {
+                                                                this.isLoading = false;
+                                                            });
+                                                    }
+
+                                                }
+                                            },
+                                            error => {
+                                                this.showErrors( error );
+                                            }
+                                        )
+                                        .then( () => {
+                                            this.isLoading = false;
+                                        });
+                                }
                             }
                         },
                         error => {
-                          this.showErrors( error.response );
+                            this.showErrors( error );
                         }
                     )
                     .then( () => {
                         this.isLoading = false;
                     });
+
+
+
             }
-        },
-        showErrors(resError){
-            this.errors = procesarErroresRequest( resError );
-            this.hasErrors = this.errors.errors.length > 0;
         },
         dateFormat(d){
             return moment(d).format('YYYY-MM-DD');

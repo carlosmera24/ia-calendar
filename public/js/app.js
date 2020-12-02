@@ -2413,7 +2413,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.activeMenu = this.$root.activeMenu;
-    console.log(this.numbers_emailes);
   }
 });
 
@@ -2612,8 +2611,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
@@ -2638,8 +2635,8 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
       position: '',
       emails: [],
       mobiles: [],
-      emailMsg: '',
-      mobileMsg: '',
+      emailMsg: [],
+      mobileMsg: [],
       date_join: null,
       birth_date: null,
       description: null,
@@ -2655,6 +2652,7 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
     this.programmer = JSON.parse(this.programmer_json);
     this.createArraysInputs();
   },
+  computed: {},
   methods: {
     createArraysInputs: function createArraysInputs() {
       //create inputs for e-mails
@@ -2663,6 +2661,7 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
           value: '',
           error: false
         });
+        this.emailMsg.push('');
       } //create inputs for mobiles
 
 
@@ -2671,6 +2670,7 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
           value: '',
           error: false
         });
+        this.mobileMsg.push('');
       }
     },
     clickClose: function clickClose() {
@@ -2691,68 +2691,75 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
         this.avatar = this.url_person_ui_avatar + "?name=" + name + '&size=128';
       }
     },
-    emailExist: function emailExist(index) {
+    isEqualEmails: function isEqualEmails(pos) {
       var _this = this;
 
-      var value = this.emails[index].value;
-
-      if (value !== "") {
-        this.isLoading = true;
-        axios.post(this.url_person_email_exist, {
-          email: value
-        }).then(function (response) {
-          _this.showErrors({});
-
-          if (response.data.status === 200 && response.data.exist) {
-            _this.emails[index].error = true;
-            _this.emailMsg = _this.fields.email.msg_exist;
+      var equal = false;
+      this.emails.forEach(function (element, index) {
+        if (pos !== index) {
+          if (_this.emails[pos].value === element.value) {
+            equal = true;
+            _this.emails[pos].error = true;
+            _this.emailMsg[pos] = _this.fields.email.msg_validate;
           }
-        }, function (error) {
-          _this.showErrors(error.response);
-        }).then(function () {
-          _this.isLoading = false;
-        });
-      }
+        }
+      });
+      return equal;
     },
-    mobileExist: function mobileExist(index) {
+    isEqualMobiles: function isEqualMobiles(pos) {
       var _this2 = this;
 
-      var value = this.mobiles[index].value;
-
-      if (value !== "") {
-        this.isLoading = true;
-        axios.post(this.url_person_cellphone_exist, {
-          mobile: value
-        }).then(function (response) {
-          _this2.showErrors({});
-
-          if (response.data.status === 200 && response.data.exist) {
-            _this2.mobiles[index].error = true;
-            _this2.mobileMsg = _this2.fields.mobile.msg_exist;
+      var equal = false;
+      this.mobiles.forEach(function (element, index) {
+        if (pos !== index) {
+          if (_this2.mobiles[pos].value === element.value) {
+            equal = true;
+            _this2.mobiles[pos].error = true;
+            _this2.mobileMsg[pos] = _this2.fields.mobile.msg_validate;
           }
-        }, function (error) {
-          _this2.showErrors(error.response);
-        }).then(function () {
-          _this2.isLoading = false;
-        });
-      }
+        }
+      });
+      return equal;
+    },
+    proccessEmailsExists: function proccessEmailsExists(validates) {
+      var _this3 = this;
+
+      validates.forEach(function (e, i) {
+        if (e.exists === true) {
+          _this3.emails[i].error = true;
+          _this3.emailMsg[i] = _this3.fields.email.msg_exist;
+        }
+      });
+    },
+    proccessCellphonesExists: function proccessCellphonesExists(validates) {
+      var _this4 = this;
+
+      validates.forEach(function (e, i) {
+        if (e.exists === true) {
+          _this4.mobiles[i].error = true;
+          _this4.mobileMsg[i] = _this4.fields.mobile.msg_exist;
+        }
+      });
+    },
+    showErrors: function showErrors(resError) {
+      this.errors = Object(_functions_js__WEBPACK_IMPORTED_MODULE_0__["procesarErroresRequest"])(resError);
+      this.hasErrors = this.errors.errors.length > 0;
     },
     save: function save() {
-      var _this3 = this;
+      var _this5 = this;
 
       this.fields.first_name.error = this.fname === '';
       this.fields.last_name.error = this.lname === '';
       this.fields.position.error = this.position === '';
       this.fields.date_join.error = this.date_join === null;
       this.fields.birth_date.error = this.birth_date === null;
-      var errors_others = false;
+      var is_email_mobile_duplicate = false;
       this.emails.forEach(function (element, index) {
         element.error = false;
 
         if (index === 0) {
           element.error = element.value === '';
-          _this3.emailMsg = _this3.fields.email.msg;
-          errors_others = true;
+          _this5.emailMsg[index] = _this5.fields.email.msg;
         }
 
         if (element.value !== "") {
@@ -2760,9 +2767,16 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
             presence: true,
             email: true
           });
-          element.error = !(res === undefined);
-          errors_others = element.error;
-          _this3.emailMsg = _this3.fields.email.msg_validate;
+
+          if (!(res === undefined)) {
+            element.error = true;
+            _this5.emailMsg[index] = _this5.fields.email.msg_validate;
+          } else {
+            //emails equals
+            if (_this5.isEqualEmails(index)) {
+              is_email_mobile_duplicate = true;
+            }
+          }
         }
       });
       this.mobiles.forEach(function (element, index) {
@@ -2770,8 +2784,7 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
 
         if (index === 0) {
           element.error = element.value === "";
-          _this3.mobileMsg = _this3.fields.mobile.msg;
-          errors_others = true;
+          _this5.mobileMsg[index] = _this5.fields.mobile.msg;
         }
 
         if (element.value !== "") {
@@ -2780,94 +2793,133 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
               minimum: 10
             }
           });
-          element.error = !(res === undefined);
-          errors_others = element.error;
-          _this3.mobileMsg = _this3.fields.mobile.msg_validate;
+
+          if (!(res === undefined)) {
+            element.error = true;
+            _this5.mobileMsg[index] = _this5.fields.mobile.msg_validate;
+          } else {
+            //mobiles equals
+            if (_this5.isEqualMobiles(index)) {
+              is_email_mobile_duplicate = true;
+            }
+          }
         }
       });
 
-      if (!this.fields.first_name.error && !this.fields.last_name.error && !this.fields.position.error && !this.fields.date_join.error && !this.birth_date.error && !errors_others) {
-        var person = {
-          first_name: this.fname,
-          last_name: this.lname,
-          birth_date: this.dateFormat(this.birth_date),
-          position_company: this.position,
-          date_join_company: this.dateFormat(this.date_join)
-        };
-        this.isLoading = true; // Create person
+      if (!this.fields.first_name.error && !this.fields.last_name.error && !this.fields.position.error && !this.fields.date_join.error && !this.birth_date.error && !is_email_mobile_duplicate) {
+        //Validatate if emailss exist in database
+        var emails = [];
+        this.emails.forEach(function (element) {
+          if (element.value !== "") {
+            emails.push(element.value);
+          }
+        });
+        this.isLoading = true;
+        axios.post(this.url_person_email_exist, {
+          emails: emails
+        }).then(function (response) {
+          _this5.showErrors({});
 
-        axios.post(this.url_person_store, person).then(function (response) {
-          _this3.showErrors({});
+          if (response.data.status === 200) {
+            _this5.proccessEmailsExists(response.data.validate);
 
-          if (response.data.status === 201) //created person
-            {
-              var id_person = response.data.data.id; //create participant
+            if (response.data.exists === false) //No exists emails
+              {
+                //Validate if cellphones exists in database
+                var mobiles = [];
 
-              var participant = {
-                persons_id: id_person,
-                programmers_id: _this3.programmer.id,
-                profiles_participants_id: _this3.id_profile,
-                description: _this3.description
-              };
-              axios.post(_this3.url_participant_store, participant).then(function (response) {
-                if (response.data.status === 201) {
-                  // Create emails
-                  var emails = [];
+                _this5.mobiles.forEach(function (element) {
+                  if (element.value !== "") {
+                    mobiles.push(element.value);
+                  }
+                });
 
-                  _this3.emails.forEach(function (element) {
-                    if (element.value !== "") {
-                      emails.push(element.value);
-                    }
-                  });
+                _this5.isLoading = true;
+                axios.post(_this5.url_person_cellphone_exist, {
+                  mobiles: mobiles
+                }).then(function (response) {
+                  _this5.showErrors({});
 
-                  axios.post(_this3.urls_emails_store, {
-                    emails: emails,
-                    persons_id: id_person
-                  }).then(function (response) {
-                    if (response.data.status === 201) {
-                      //Create cellphones
-                      var mobiles = [];
+                  if (response.data.status === 200) {
+                    _this5.proccessCellphonesExists(response.data.validate);
 
-                      _this3.mobiles.forEach(function (element) {
-                        if (element.value !== "") {
-                          mobiles.push(element.value);
-                        }
-                      });
+                    if (response.data.exists === false) //Not exists cellphones
+                      {
+                        // Create person
+                        var person = {
+                          first_name: _this5.fname,
+                          last_name: _this5.lname,
+                          birth_date: _this5.dateFormat(_this5.birth_date),
+                          position_company: _this5.position,
+                          date_join_company: _this5.dateFormat(_this5.date_join)
+                        };
+                        _this5.isLoading = true;
+                        axios.post(_this5.url_person_store, person).then(function (response) {
+                          _this5.showErrors({});
 
-                      axios.post(_this3.urls_mobiles_store, {
-                        mobiles: mobiles,
-                        persons_id: id_person
-                      }).then(function (response) {
-                        if (response.data.status === 201) {
-                          Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_1__["success"])({
-                            title: 'Success!',
-                            text: 'Partícipe creado satisfactoriamente.'
-                          }); //Limpiar formulario
+                          if (response.data.status === 201) //created person
+                            {
+                              var id_person = response.data.data.id; //create participant
 
-                          _this3.cleanForm();
-                        }
-                      }, function (error) {
-                        _this3.showErrors(error.response);
-                      });
-                    }
-                  }, function (error) {
-                    _this3.showErrors(error.response);
-                  });
-                }
-              }, function (error) {
-                _this3.showErrors(error.response);
-              });
-            }
+                              var participant = {
+                                persons_id: id_person,
+                                programmers_id: _this5.programmer.id,
+                                profiles_participants_id: _this5.id_profile,
+                                description: _this5.description
+                              };
+                              axios.post(_this5.url_participant_store, participant).then(function (response) {
+                                if (response.data.status === 201) {
+                                  // Create emails
+                                  axios.post(_this5.urls_emails_store, {
+                                    emails: emails,
+                                    persons_id: id_person
+                                  }).then(function (response) {
+                                    if (response.data.status === 201) {
+                                      //Create cellphones
+                                      axios.post(_this5.urls_mobiles_store, {
+                                        mobiles: mobiles,
+                                        persons_id: id_person
+                                      }).then(function (response) {
+                                        if (response.data.status === 201) {
+                                          Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_1__["success"])({
+                                            title: 'Success!',
+                                            text: 'Partícipe creado satisfactoriamente.'
+                                          }); //Limpiar formulario
+
+                                          _this5.cleanForm();
+                                        }
+                                      }, function (error) {
+                                        _this5.showErrors(error);
+                                      });
+                                    }
+                                  }, function (error) {
+                                    _this5.showErrors(error);
+                                  });
+                                }
+                              }, function (error) {
+                                _this5.showErrors(error);
+                              });
+                            }
+                        }, function (error) {
+                          _this5.showErrors(error);
+                        }).then(function () {
+                          _this5.isLoading = false;
+                        });
+                      }
+                  }
+                }, function (error) {
+                  _this5.showErrors(error);
+                }).then(function () {
+                  _this5.isLoading = false;
+                });
+              }
+          }
         }, function (error) {
-          _this3.showErrors(error.response);
+          _this5.showErrors(error);
         }).then(function () {
-          _this3.isLoading = false;
+          _this5.isLoading = false;
         });
       }
-    },
-    showErrors: function showErrors(resError) {
-      this.errors = Object(_functions_js__WEBPACK_IMPORTED_MODULE_0__["procesarErroresRequest"])(resError);
-      this.hasErrors = this.errors.errors.length > 0;
     },
     dateFormat: function dateFormat(d) {
       return moment(d).format('YYYY-MM-DD');
@@ -64908,17 +64960,12 @@ var render = function() {
                       horizontal: "",
                       label: _vm.fields.email.label,
                       type: { "is-danger": inputEmail.error },
-                      message: inputEmail.error ? _vm.emailMsg : ""
+                      message: inputEmail.error ? _vm.emailMsg[index] : ""
                     }
                   },
                   [
                     _c("b-input", {
                       attrs: { name: "email", maxlength: "45", expanded: "" },
-                      on: {
-                        blur: function($event) {
-                          return _vm.emailExist(index)
-                        }
-                      },
                       model: {
                         value: inputEmail.value,
                         callback: function($$v) {
@@ -64942,17 +64989,12 @@ var render = function() {
                       horizontal: "",
                       label: _vm.fields.mobile.label,
                       type: { "is-danger": inputMobile.error },
-                      message: inputMobile.error ? _vm.mobileMsg : ""
+                      message: inputMobile.error ? _vm.mobileMsg[index] : ""
                     }
                   },
                   [
                     _c("b-input", {
                       attrs: { name: "mobile", maxlength: "12", expanded: "" },
-                      on: {
-                        blur: function($event) {
-                          return _vm.mobileExist(index)
-                        }
-                      },
                       nativeOn: {
                         keyup: function($event) {
                           return _vm.onlyNumber($event, index)
@@ -78303,51 +78345,69 @@ __webpack_require__.r(__webpack_exports__);
 /**
 * Función encargada de procesar los errores retornados por el request en
 * una peticón ajax
-* @param response error.response
+* @param error error
 * @return JSON {text,errors[]}
 */
-function procesarErroresRequest(response) {
+function procesarErroresRequest(error) {
   var text = '';
   var errors = [];
 
-  switch (response.status) {
-    case 0:
-      // text = 'Error en su conexión a internet';
-      text += response.statusText;
-      break;
+  if (Object.keys(error).length !== 0) {
+    if (error.response) {
+      switch (error.response.status) {
+        case 0:
+          // text = 'Error en su conexión a internet';
+          text += error.response.statusText;
+          break;
 
-    case 400:
-      text += response.statusText;
-      Object.keys(response.data.data).forEach(function (key) {
-        response.data.data[key].forEach(function (content) {
-          errors[errors.length] = content;
-        });
-      });
-      break;
-    // case 419:
-    //     text = 'Excepción: Coincidencia de token CSRF';
-    //     break;
-    // case 404:
-    //     text = 'Solicitud no encontrada';
-    //     break;
-    // case 405:
-    //     text = 'Método no permitido';
-    //     break;
-    // case 500:
-    //     text = 'Error en su solicitud, por favor intentelo más tarde.';
-    //     break;
-    // case 503:
-    //     text = 'Problemas con su conexión a Internet, por favor intentelo más tarde.';
-    //     break;
+        case 400:
+          text += error.response.statusText;
+          Object.keys(error.response.data.data).forEach(function (key) {
+            error.response.data.data[key].forEach(function (content) {
+              errors.push(content);
+            });
+          });
+          break;
+        // case 419:
+        //     text = 'Excepción: Coincidencia de token CSRF';
+        //     break;
+        // case 404:
+        //     text = 'Solicitud no encontrada';
+        //     break;
+        // case 405:
+        //     text = 'Método no permitido';
+        //     break;
 
-    default:
-      text += response.statusText; // if (response.statusText == "abort") {
-      //     text = 'Su solicitud ha sido abortada, por favor inténtelo más tarde.';
-      // } else {
-      //     text = 'Lo sentimos, error desconocido' + response.statusText + '';
-      // }
+        case 500:
+          text += error.response.statusText; // text = 'Error en su solicitud, por favor intentelo más tarde.';
 
-      break;
+          errors.push(error.message);
+
+          if (error.response.data.message) {
+            errors.push(error.response.data.message);
+          }
+
+          break;
+        // case 503:
+        //     text = 'Problemas con su conexión a Internet, por favor intentelo más tarde.';
+        //     break;
+
+        default:
+          text += error.response.statusText; // if (response.statusText == "abort") {
+          //     text = 'Su solicitud ha sido abortada, por favor inténtelo más tarde.';
+          // } else {
+          //     text = 'Lo sentimos, error desconocido' + response.statusText + '';
+          // }
+
+          break;
+      }
+    } else if (error.request) {
+      console.log("requestError", error.request);
+      errors.push(error.request);
+    } else {
+      console.log('Error', error);
+      errors.push(error);
+    }
   }
 
   return {
