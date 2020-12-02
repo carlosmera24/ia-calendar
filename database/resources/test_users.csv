@@ -1,0 +1,2 @@
+id,name,user,password,roles_id,status_users_id,created_at,updated_at
+1,"Usuario Demo",demo-iacalendar,$2y$10$GYlDcOkv/hUseRZLx/p.nuVtc5nZxPPSMmVJTUHjO8YROrmxXai16,1,1,"2020-12-01 12:42:03","2020-12-01 12:42:03"

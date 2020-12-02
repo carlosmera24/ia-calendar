@@ -1,0 +1,2 @@
+id,persons_id,programmers_id,users_id,profiles_participants_id,description,created_at,updated_at
+1,1,1,1,1,"Participante inicial administrador para el manejo de demostración y creación del app.","2020-12-01 12:42:03","2020-12-01 12:42:03"
