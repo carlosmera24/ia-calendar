@@ -2404,6 +2404,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['showTitle', 'text_success', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_created_participant', 'text_participant_title', 'text_participant_fields_json', 'text_accept', 'text_cancel', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'programmer_json', 'numbers_emailes', 'numbers_mobiles'],
   data: function data() {
@@ -64635,6 +64636,7 @@ var render = function() {
                     programmer_json: _vm.programmer_json,
                     numbers_emailes: _vm.numbers_emailes,
                     numbers_mobiles: _vm.numbers_mobiles,
+                    text_title: _vm.text_participant_title,
                     text_success: _vm.text_success,
                     text_created_participant: _vm.text_created_participant,
                     text_fields_json: _vm.text_participant_fields_json,

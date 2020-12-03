@@ -17,6 +17,7 @@
                     v-bind:programmer_json="programmer_json"
                     v-bind:numbers_emailes="numbers_emailes"
                     v-bind:numbers_mobiles="numbers_mobiles"
+                    v-bind:text_title="text_participant_title"
                     v-bind:text_success="text_success"
                     v-bind:text_created_participant="text_created_participant"
                     v-bind:text_fields_json="text_participant_fields_json"
