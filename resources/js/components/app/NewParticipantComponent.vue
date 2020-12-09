@@ -271,13 +271,17 @@ export default{
             this.fields.position.error = this.position === '';
             this.fields.date_join.error = this.date_join === null;
             this.fields.birth_date.error = this.birth_date === null;
-            var is_email_mobile_duplicate = false;
+            var is_email_duplicate = false;
+            var is_mobile_duplicate = false;
+            var isEmailError = false;
+            var isMobileError = false;
             this.emails.forEach( (element, index) => {
                 element.error = false;
                 if( index === 0)
                 {
                     element.error = element.value === '';
                     this.emailMsg[ index ] = this.fields.email.msg;
+                    isEmailError = isEmailError ? isEmailError : element.error;
                 }
                 if( element.value !== "" )
                 {
@@ -286,12 +290,13 @@ export default{
                     {
                         element.error = true;
                         this.emailMsg[ index ] = this.fields.email.msg_validate;
+                        isEmailError = isEmailError ? isEmailError : element.error;
                     }else
                     {
                         //emails equals
                         if( this.isEqualEmails(index) )
                         {
-                            is_email_mobile_duplicate = true;
+                            is_email_duplicate = true;
                         }
                     }
                 }
@@ -302,6 +307,7 @@ export default{
                 {
                     element.error = element.value === "";
                     this.mobileMsg[ index ] = this.fields.mobile.msg;
+                    isMobileError = isMobileError ? isMobileError : element.error;
                 }
                 if( element.value !== "" )
                 {
@@ -310,19 +316,21 @@ export default{
                     {
                         element.error = true;
                         this.mobileMsg[ index ] = this.fields.mobile.msg_validate;
+                        isMobileError = isMobileError ? isMobileError : element.error;
                     }else
                     {
                         //mobiles equals
                         if(  this.isEqualMobiles(index) )
                         {
-                            is_email_mobile_duplicate = true;
+                            is_mobile_duplicate = true;
                         }
                     }
                 }
             });
 
             if( !this.fields.first_name.error &&  !this.fields.last_name.error  && !this.fields.position.error
-                && !this.fields.date_join.error && !this.birth_date.error && !is_email_mobile_duplicate )
+                && !this.fields.date_join.error && !this.birth_date.error && !isEmailError && !isMobileError
+                && !is_email_duplicate && !is_mobile_duplicate )
             {
                 //Validatate if emailss exist in database
                 const emails = [];
