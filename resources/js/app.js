@@ -23,6 +23,7 @@ Vue.use(Buefy, {
 Vue.component('banner-info', require('./components/welcome/BannerInfoComponent.vue').default);
 Vue.component('banner-carusel', require('./components/welcome/BannerCaruselComponent.vue').default);
 // App components
+Vue.component('content-main', require('./components/app/ContentMainComponent.vue').default);
 Vue.component('login-form', require('./components/app/LoginFormComponent.vue').default);
 Vue.component('dropdown-menu-setting', require('./components/app/DropDownMenuSettingComponent.vue').default);
 Vue.component('banner-app-carusel', require('./components/app/BannerCaruselComponent.vue').default);
@@ -33,21 +34,23 @@ Vue.component('participant-section', require('./components/app/NewParticipantCom
 
 const app = new Vue({
     el: '#app',
-    data(){
-        return{
-            activeMenu: {
-                wall: true,
-                create_participant: false,
+    data() {
+        return {
+            contentActive: {
+                main: true,
+                settingAdmin: false,
+                settingLeader: false,
+                settingGest: false,
             }
         }
     },
     methods: {
-        setActiveMenu(item){
-            Object.entries(this.activeMenu).forEach((v) => {
+        setActiveContent(item){
+            Object.entries(this.contentActive).forEach((v) => {
                 if (v[0] === item) {
-                    this.activeMenu[item] = true;
+                    this.contentActive[item] = true;
                 } else {
-                    this.activeMenu[v[0]] = false;
+                    this.contentActive[v[0]] = false;
                 }
             });
         }

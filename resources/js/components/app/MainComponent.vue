@@ -1,42 +1,73 @@
 <template>
     <div>
-        <h4 class="title has-text-weight-bold is-size-5 mx-6 mb-3" v-if="activeMenu.wall">{{ text_wall_title }}</h4>
-        <section class="content px-6 py-6">
-            <transition-group class="action-main"
-                enter-active-class="animate__animated animate__fadeInDown animated_delay"
-                leave-active-class="animate__animated animate__fadeOutDown">
-
-                <wall-section v-if="activeMenu.wall"
-                    v-bind:key="1"
-                    v-bind:text_trigger_events_soon_expire="text_wall_trigger_events_soon_expire"
-                    v-bind:text_add_categories="text_wall_add_categories"
-                    v-bind:text_add_notes="text_wall_add_notes" />
-
-                <participant-section v-if="activeMenu.create_participant"
-                    v-bind:key="2"
-                    v-bind:programmer_json="programmer_json"
-                    v-bind:numbers_emailes="numbers_emailes"
-                    v-bind:numbers_mobiles="numbers_mobiles"
-                    v-bind:text_title="text_participant_title"
-                    v-bind:text_success="text_success"
-                    v-bind:text_created_participant="text_created_participant"
-                    v-bind:text_fields_json="text_participant_fields_json"
-                    v-bind:text_accept="text_accept"
-                    v-bind:text_cancel="text_cancel"
-                    v-bind:url_person_ui_avatar="url_person_ui_avatar"
-                    v-bind:url_person_store="url_person_store"
-                    v-bind:url_participant_store="url_participant_store"
-                    v-bind:url_person_email_exist="url_person_email_exist"
-                    v-bind:urls_mobiles_store="urls_mobiles_store"
-                    v-bind:urls_emails_store="urls_emails_store"
-                    v-bind:url_person_cellphone_exist="url_person_cellphone_exist" />
-            </transition-group>
+        <!-- Menu Section -->
+        <section class="action-section px-5 py-5">
+            <main-menu-section
+                v-on:activeMenu="setActiveMenu"
+                v-bind:text_create_participant='text_create_participant'
+                v-bind:text_create_category='text_create_category'
+                v-bind:text_see_calendar='text_see_calendar'
+                v-bind:text_anual_fiscal='text_anual_fiscal'
+                v-bind:text_create_your_event='text_create_your_event'
+                v-bind:text_programmer='text_programmer'
+                v-bind:text_category='text_category'
+                v-bind:text_event='text_event' />
         </section>
+        <!-- /Menu Section -->
+        <!-- Banner Section -->
+        <section class="banner py-4">
+            <banner-app-carusel />
+        </section>
+        <!-- /Banner Section -->
+        <!-- Main Section -->
+        <section class="main">
+            <h4 class="title has-text-weight-bold is-size-5 mx-6 mb-3" v-if="activeMenu.wall">{{ text_wall_title }}</h4>
+            <section class="content px-6 py-6">
+                <transition-group class="action-main"
+                    enter-active-class="animate__animated animate__fadeInDown animated_delay"
+                    leave-active-class="animate__animated animate__fadeOutDown">
+
+                    <wall-section v-if="activeMenu.wall"
+                        v-bind:key="1"
+                        v-bind:text_trigger_events_soon_expire="text_wall_trigger_events_soon_expire"
+                        v-bind:text_add_categories="text_wall_add_categories"
+                        v-bind:text_add_notes="text_wall_add_notes" />
+
+                    <participant-section v-if="activeMenu.create_participant"
+                        v-bind:key="2"
+                        v-bind:programmer_json="programmer_json"
+                        v-bind:numbers_emailes="numbers_emailes"
+                        v-bind:numbers_mobiles="numbers_mobiles"
+                        v-bind:text_title="text_participant_title"
+                        v-bind:text_success="text_success"
+                        v-bind:text_created_participant="text_created_participant"
+                        v-bind:text_fields_json="text_participant_fields_json"
+                        v-bind:text_accept="text_accept"
+                        v-bind:text_cancel="text_cancel"
+                        v-bind:url_person_ui_avatar="url_person_ui_avatar"
+                        v-bind:url_person_store="url_person_store"
+                        v-bind:url_participant_store="url_participant_store"
+                        v-bind:url_person_email_exist="url_person_email_exist"
+                        v-bind:urls_mobiles_store="urls_mobiles_store"
+                        v-bind:urls_emails_store="urls_emails_store"
+                        v-bind:url_person_cellphone_exist="url_person_cellphone_exist" />
+                </transition-group>
+            </section>
+        </section>
+         <!-- /Main Section  -->
     </div>
 </template>
 <script>
 export default {
     props:[
+        'text_create_participant',
+        'text_create_category',
+        'text_see_calendar',
+        'text_anual_fiscal',
+        'text_create_your_event',
+        'text_programmer',
+        'text_category',
+        'text_event',
         'showTitle',
         'text_success',
         'text_wall_title',
@@ -61,12 +92,22 @@ export default {
     ],
     data() {
         return {
-            activeMenu: [],
-            programmer: {}
+            activeMenu: {
+                wall: true,
+                create_participant: false,
+            }
         }
     },
-    created(){
-        this.activeMenu = this.$root.activeMenu;
+    methods: {
+        setActiveMenu(item){
+            Object.entries(this.activeMenu).forEach((v) => {
+                if (v[0] === item) {
+                    this.activeMenu[item] = true;
+                } else {
+                    this.activeMenu[v[0]] = false;
+                }
+            });
+        }
     }
 }
 </script>

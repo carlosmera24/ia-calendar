@@ -17,7 +17,7 @@
                 <a class="dropdown-item">
                     {{ text_admin_leaders }}
                 </a>
-                <a href="#" class="dropdown-item">
+                <a href="#" class="dropdown-item" v-on:click="clickItem(settingGeneral)">
                     {{ text_general_setting }}
                 </a>
                 <a href="#" class="dropdown-item">
@@ -38,9 +38,11 @@ export default {
     data() {
         return {
             isActiveDropdown: false,
+            settingGeneral: 'settingAdmin',
         }
     },
     props: [
+        'profile',
         'url_logout',
         'url_home',
         'text_company_name',
@@ -51,9 +53,30 @@ export default {
         'text_logout',
         'text_close'
     ],
+    created(){
+        //Set general settings from profile
+        switch(this.profile)
+        {
+            case '1': //Admin
+                this.settingGeneral = 'settingAdmin';
+                break;
+            case '2': //Líder
+                this.settingGeneral = 'settingLeader';
+                break;
+            case '2': //Invitado
+                this.settingGeneral = 'settingGest';
+                break;
+            default:
+                break;
+        }
+    },
     methods: {
         clickDropdown(){
             this.isActiveDropdown = !this.isActiveDropdown;
+        },
+        clickItem(item){
+            this.isActiveDropdown = false;
+            this.$root.setActiveContent(item);
         },
         clickCerrarSesion(){
             axios.post( this.url_logout )

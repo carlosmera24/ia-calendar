@@ -44,15 +44,15 @@ export default{
     ],
     data() {
         return {
-            activeMenu: [],
+            activeMenu: {},
         }
     },
     created(){
-        this.activeMenu = this.$root.activeMenu;
+        this.activeMenu = this.$parent.activeMenu;
     },
     methods: {
         clickMenu( name ){
-            this.$root.setActiveMenu(name);
+            this.$emit('activeMenu', name);
         }
     }
 }
