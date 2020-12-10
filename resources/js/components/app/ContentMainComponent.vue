@@ -30,7 +30,9 @@
             v-bind:url_person_email_exist='url_person_email_exist'
             v-bind:url_person_cellphone_exist='url_person_cellphone_exist'
         />
-        <div v-elseif="contentActive.settingAdmin">Configuración para el administrador del programador</div>
+        <manage-leader v-else-if="contentActive.adminLeaders"
+            v-bind:text_admin_leaders='text_admin_leaders'
+         />
     </div>
 </template>
 <script>
@@ -64,6 +66,7 @@ export default {
         'urls_mobiles_store',
         'url_person_email_exist',
         'url_person_cellphone_exist',
+        'text_admin_leaders',
     ],
     data() {
         return {

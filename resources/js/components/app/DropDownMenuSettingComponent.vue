@@ -14,7 +14,10 @@
                 <a href="#" class="dropdown-item">
                     {{ text_menu_dark }}
                 </a>
-                <a class="dropdown-item">
+                <!-- If profiles is Admin or Secondary/Alternate Admin  -->
+                <a class="dropdown-item"
+                    v-if="profile === '1'"
+                    v-on:click="clickItem('adminLeaders')">
                     {{ text_admin_leaders }}
                 </a>
                 <a href="#" class="dropdown-item" v-on:click="clickItem(settingGeneral)">
@@ -63,7 +66,7 @@ export default {
             case '2': //Líder
                 this.settingGeneral = 'settingLeader';
                 break;
-            case '2': //Invitado
+            case '3': //Invitado
                 this.settingGeneral = 'settingGest';
                 break;
             default:

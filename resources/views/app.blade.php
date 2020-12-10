@@ -143,6 +143,7 @@
             v-bind:urls_mobiles_store='"{{ route('persons_mobiles_store_array') }}"'
             v-bind:url_person_email_exist='"{{ route('persons_emails_exists') }}"'
             v-bind:url_person_cellphone_exist='"{{ route('persons_cellphones_exists') }}"'
+            v-bind:text_admin_leaders="'{{ __('app.menu.admin_leaders') }}'"
         />
         {{-- /Content Main --}}
     </div>

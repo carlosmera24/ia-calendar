@@ -10,6 +10,9 @@
 //Animate.css
 @import "~animate.css/animate.min.css";
 
+//vue-select
+@import "vue-select/src/scss/vue-select.scss";
+
 //Variables
 $open-sans: 'Open Sans', sans-serif;
 $color-primary-dark: #262626;
@@ -210,230 +213,240 @@ body, h2, button, input, select, textarea {
             }
         }
     }
-    .action-section{
-        .menu{
-            .menu-list{
-                li{
-                    margin: 15px 0;
-                    a{
-                        padding: 0;
-                    }
-                    a.is-active{
-                        background: none;
-                        color: #808080;
+    .content-main{
+        .action-section{
+            .menu{
+                .menu-list{
+                    li{
+                        margin: 15px 0;
+                        a{
+                            padding: 0;
+                        }
+                        a.is-active{
+                            background: none;
+                            color: #808080;
+                        }
                     }
                 }
             }
-        }
-        .columns{
-            .columns.columns-buttons{
-                height: 100%;
-                .column.vcentered{
-                    align-items: center;
-                    display: flex;
-                    .btn-primary {
-                        border: 2px solid #747e7e;
-                        padding: 40px 50px;
-                        border-radius: 50px 0;
-                        -webkit-box-shadow: 5px 5px 5px 0px #92adaf, inset 4px 4px 15px 0px #92adaf, 5px 5px 15px 5px rgba(0,0,0,0);
-                        box-shadow: 5px 5px 5px 0px #92adaf, inset 4px 4px 15px 0px #92adaf, 5px 5px 15px 5px rgba(0,0,0,0);
+            .columns{
+                .columns.columns-buttons{
+                    height: 100%;
+                    .column.vcentered{
+                        align-items: center;
+                        display: flex;
+                        .btn-primary {
+                            border: 2px solid #747e7e;
+                            padding: 40px 50px;
+                            border-radius: 50px 0;
+                            -webkit-box-shadow: 5px 5px 5px 0px #92adaf, inset 4px 4px 15px 0px #92adaf, 5px 5px 15px 5px rgba(0,0,0,0);
+                            box-shadow: 5px 5px 5px 0px #92adaf, inset 4px 4px 15px 0px #92adaf, 5px 5px 15px 5px rgba(0,0,0,0);
+                        }
                     }
-                }
-                .btn-secundary{
-                    border: 2px solid #000;
-                    border-radius: 10px;
+                    .btn-secundary{
+                        border: 2px solid #000;
+                        border-radius: 10px;
 
+                    }
+                    button{
+                        font-size: 1rem;
+                        color: #3e3e3e;
+                    }
                 }
-                button{
-                    font-size: 1rem;
-                    color: #3e3e3e;
+                .columns-buttons-rotated{
+                    height: 100%;
                 }
-            }
-            .columns-buttons-rotated{
-                height: 100%;
-            }
-            .btn-rotated{
-                -webkit-transform:rotate(-90deg);
-                -moz-transform: rotate(-90deg);
-            }
-        }
-    }
-    .banner{
-        .hero-body{
-            .container{
-                .title, .subtitle{
-                    color: $blue-dark;
+                .btn-rotated{
+                    -webkit-transform:rotate(-90deg);
+                    -moz-transform: rotate(-90deg);
                 }
             }
         }
-    }
-    .main{
-        .title{
-            color: $blue-dark;
+        .banner{
+            .hero-body{
+                .container{
+                    .title, .subtitle{
+                        color: $blue-dark;
+                    }
+                }
+            }
+        }
+        .main{
+            .title{
+                color: $blue-dark;
+            }
+            .content{
+                background-color: $color-primary-dark;
+                border-radius: 50px;
+                min-height: 400px;
+                color: #FFF;
+                .events-expire{
+                    .columns{
+                        .column.add-more{
+                            display: flex;
+                            align-items: center;
+                            .icon{
+                                color: $blue-cyan;
+                                margin: auto;
+                            }
+                        }
+                        .column{
+                            border: 3px solid $blue-cyan;
+                            border-radius: 10px;
+                            min-height: 200px;
+                        }
+                    }
+                }
+                .categories-favorites{
+                    .columns{
+                        .column{
+                            border: 3px solid $blue-cyan;
+                            border-radius: 30px;
+                            min-height: 130px;
+                        }
+                        .column.add-more{
+                            display: flex;
+                            align-items: center;
+                            border-radius: 0;
+                            .icon{
+                                color: $blue-cyan;
+                                margin: auto;
+                            }
+                        }
+                    }
+                }
+                .notes{
+                    .columns{
+                        .column{
+                            border-radius: 40px;
+                            min-height: 100px;
+                            background-color: #ffe481;
+                            color: #000;
+                            display: flex;
+                            align-items: center;
+                            span{
+                                margin: auto;
+                            }
+                        }
+                        .column.add-more{
+                            display: flex;
+                            align-items: center;
+                            border: 3px solid $blue-cyan;
+                            border-radius: 0;
+                            background-color: transparent;
+                            .icon{
+                                color: $blue-cyan;
+                                margin: auto;
+                            }
+                        }
+                    }
+                }
+                .new-participant{
+                    .btn-close{
+                        background-color: $blue-cyan;
+                        border-color: $blue-cyan;
+                        border-radius: 50%;
+                    }
+                    .btn-close:hover{
+                        background-color: white;
+                        border-color: #666;
+                        color: #666;
+                    }
+                    h2{
+                       font-weight: bold;
+                       font-size: 2.5rem;
+                       margin: 0 40px;
+                    }
+                    .form_new_participant{
+                        padding: 60px 0 0;
+                        .columns{
+                            .field.column{
+                                padding-left: 0;
+                            }
+                        }
+                        .field-label{
+                            padding-top: 0;
+                        }
+                        label{
+                            color: #FFF;
+                            text-transform: capitalize;
+                            font-weight: normal;
+                        }
+                        .input{
+                            padding: 0 15px;
+                            border-radius: 0;
+                            height: 25px;
+                            color: #6797a3;
+                        }
+                        .input:focus{
+                            border-color: $blue-cyan;
+                        }
+                        .label_description{
+                            margin: 30px 20px 10px;
+                        }
+                        .textarea{
+                            background: none;
+                            border: 5px solid $blue-cyan;
+                            border-radius: 20px;
+                            resize: none;
+                            color: #6797a3;
+                        }
+                        .textarea::placeholder{
+                            color: #FFF;
+                        }
+                        .field_avatar{
+                            margin: 15px 40px 10px;
+                            padding: 0;
+                            .control{
+                                padding: 10px 30px;
+                            }
+                        }
+                        .avatar{
+                            border: 5px solid $yellow;
+                            border-radius: 50%;
+                            height: 128px;
+                            width: 128px;
+                            text-align: center;
+                            align-items: center;
+                            .text-avatar{
+                                margin: auto;
+                                font-size: 22px;
+                            }
+                            img{
+                                border-radius: 50%;
+                            }
+                        }
+                        .avatar:hover{
+                            background-color: #666;
+                        }
+                        .btn-actions{
+                            text-align: right;
+                            .btn-accept,.btn-cancel{
+                                background-color: $blue-cyan;
+                                border: none;
+                                border-radius: 0;
+                                color: #FFF;
+                                font-weight: bold;
+                            }
+                            .btn-accept{
+                                padding: 15px 30px;
+                            }
+                            .btn-cancel{
+                                border-top-left-radius: 25px;
+                                border-bottom-left-radius: 25px;
+                                padding: 15px 30px;
+                            }
+                        }
+                    }
+                }
+            }
         }
         .content{
-            background-color: $color-primary-dark;
-            border-radius: 50px;
-            min-height: 400px;
-            color: #FFF;
-            .events-expire{
-                .columns{
-                    .column.add-more{
-                        display: flex;
-                        align-items: center;
-                        .icon{
-                            color: $blue-cyan;
-                            margin: auto;
-                        }
-                    }
-                    .column{
-                        border: 3px solid $blue-cyan;
-                        border-radius: 10px;
-                        min-height: 200px;
-                    }
-                }
-            }
-            .categories-favorites{
-                .columns{
-                    .column{
-                        border: 3px solid $blue-cyan;
-                        border-radius: 30px;
-                        min-height: 130px;
-                    }
-                    .column.add-more{
-                        display: flex;
-                        align-items: center;
-                        border-radius: 0;
-                        .icon{
-                            color: $blue-cyan;
-                            margin: auto;
-                        }
-                    }
-                }
-            }
-            .notes{
-                .columns{
-                    .column{
-                        border-radius: 40px;
-                        min-height: 100px;
-                        background-color: #ffe481;
-                        color: #000;
-                        display: flex;
-                        align-items: center;
-                        span{
-                            margin: auto;
-                        }
-                    }
-                    .column.add-more{
-                        display: flex;
-                        align-items: center;
-                        border: 3px solid $blue-cyan;
-                        border-radius: 0;
-                        background-color: transparent;
-                        .icon{
-                            color: $blue-cyan;
-                            margin: auto;
-                        }
-                    }
-                }
-            }
-            .new-participant{
-                .btn-close{
-                    background-color: $blue-cyan;
-                    border-color: $blue-cyan;
-                    border-radius: 50%;
-                }
-                .btn-close:hover{
-                    background-color: white;
-                    border-color: #666;
-                    color: #666;
-                }
-                h2{
-                   font-weight: bold;
-                   font-size: 2.5rem;
-                   margin: 0 40px;
-                }
-                .form_new_participant{
-                    padding: 60px 0 0;
-                    .columns{
-                        .field.column{
-                            padding-left: 0;
-                        }
-                    }
-                    .field-label{
-                        padding-top: 0;
-                    }
-                    label{
-                        color: #FFF;
-                        text-transform: capitalize;
-                        font-weight: normal;
-                    }
-                    .input{
-                        padding: 0 15px;
-                        border-radius: 0;
-                        height: 25px;
-                        color: #6797a3;
-                    }
-                    .input:focus{
-                        border-color: $blue-cyan;
-                    }
-                    .label_description{
-                        margin: 30px 20px 10px;
-                    }
-                    .textarea{
-                        background: none;
-                        border: 5px solid $blue-cyan;
-                        border-radius: 20px;
-                        resize: none;
-                        color: #6797a3;
-                    }
-                    .textarea::placeholder{
-                        color: #FFF;
-                    }
-                    .field_avatar{
-                        margin: 15px 40px 10px;
-                        padding: 0;
-                        .control{
-                            padding: 10px 30px;
-                        }
-                    }
-                    .avatar{
-                        border: 5px solid $yellow;
-                        border-radius: 50%;
-                        height: 128px;
-                        width: 128px;
-                        text-align: center;
-                        align-items: center;
-                        .text-avatar{
-                            margin: auto;
-                            font-size: 22px;
-                        }
-                        img{
-                            border-radius: 50%;
-                        }
-                    }
-                    .avatar:hover{
-                        background-color: #666;
-                    }
-                    .btn-actions{
-                        text-align: right;
-                        .btn-accept,.btn-cancel{
-                            background-color: $blue-cyan;
-                            border: none;
-                            border-radius: 0;
-                            color: #FFF;
-                            font-weight: bold;
-                        }
-                        .btn-accept{
-                            padding: 15px 30px;
-                        }
-                        .btn-cancel{
-                            border-top-left-radius: 25px;
-                            border-bottom-left-radius: 25px;
-                            padding: 15px 30px;
-                        }
-                    }
-                }
+            h2{
+                font-weight: bold;
+                font-size: 2.5rem;
+                text-transform: uppercase;
+                // margin: 0 40px;
             }
         }
     }

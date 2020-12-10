@@ -24,11 +24,12 @@ Vue.component('banner-info', require('./components/welcome/BannerInfoComponent.v
 Vue.component('banner-carusel', require('./components/welcome/BannerCaruselComponent.vue').default);
 // App components
 Vue.component('content-main', require('./components/app/ContentMainComponent.vue').default);
+Vue.component('manage-leader', require('./components/app/ManageLeaderComponent.vue').default);
+Vue.component('main-section', require('./components/app/MainComponent.vue').default);
 Vue.component('login-form', require('./components/app/LoginFormComponent.vue').default);
 Vue.component('dropdown-menu-setting', require('./components/app/DropDownMenuSettingComponent.vue').default);
 Vue.component('banner-app-carusel', require('./components/app/BannerCaruselComponent.vue').default);
 Vue.component('main-menu-section', require('./components/app/MainMenuComponent.vue').default);
-Vue.component('main-section', require('./components/app/MainComponent.vue').default);
 Vue.component('wall-section', require('./components/app/WallComponent.vue').default);
 Vue.component('participant-section', require('./components/app/NewParticipantComponent.vue').default);
 
@@ -38,6 +39,7 @@ const app = new Vue({
         return {
             contentActive: {
                 main: true,
+                adminLeaders: false,
                 settingAdmin: false,
                 settingLeader: false,
                 settingGest: false,
