@@ -2,6 +2,21 @@
 @section('title','Bienvenido')
 @section('content')
     <div class="application">
+        @php
+            $user = Auth::user();
+            $programmer = null;
+            if(  $user->participants() != null )
+            {
+                $participant = $user->participants()->get()[0];
+                if( $participant->programmer() != null )
+                {
+                    $programmer = $participant->programmer()->get()[0];
+                }
+            }
+            //TODO -> Get memberships
+            $numMailes = 3;
+            $numMobiles = 3;
+        @endphp
         {{-- Header --}}
         <div class="header level is-mobile has-text-white is-size-7 mb-0 px-5 py-4">
             <div class="level-left">
@@ -10,34 +25,7 @@
             <div class="level-right">
                 <div class="columns is-mobile  is-vcentered">
                     <div class="column has-text-right">
-                        {{-- DropDown --}}
-                            @php
-                                $user = Auth::user();
-                                $programmer = null;
-                                if(  $user->participants() != null )
-                                {
-                                    $participant = $user->participants()->get()[0];
-                                    if( $participant->programmer() != null )
-                                    {
-                                        $programmer = $participant->programmer()->get()[0];
-                                    }
-                                }
-                                //TODO -> Get memberships
-                                $numMailes = 3;
-                                $numMobiles = 3;
-                            @endphp
-                            <dropdown-menu
-                                v-bind:url_logout="'{{ route('logout') }}'"
-                                v-bind:url_home="'{{ route('home') }}'"
-                                v-bind:text_company_name='"{{ isset($programmer) ? $programmer->entity_name : "" }}"'
-                                v-bind:text_menu_dark="'{{ __('app.menu.activate_dark_mode') }}'"
-                                v-bind:text_admin_leaders="'{{ __('app.menu.admin_leaders') }}'"
-                                v-bind:text_general_setting="'{{ __('app.menu.general_setting') }}'"
-                                v-bind:text_frequent_questions="'{{ __('app.menu.frequent_questions') }}'"
-                                v-bind:text_logout="'{{ __('app.menu.logout') }}'"
-                                v-bind:text_close="'{{ __('app.menu.close') }}'">
-                            </dropdown-menu>
-                        {{-- /DropDown --}}
+                        <p class="company_name is-size-6 mb-5">{{ isset($programmer) ? $programmer->entity_name : "" }}</p>
                         <p class="is-size-6">{{ Auth::user()->name }}</p>
                     </div>
                     <div class="column has-text-centered is-3 py-0 px-0">
@@ -48,7 +36,20 @@
                     <div class="column is-2 has-text-right tools">
                         <div class="columns is-multiline is-0 is-variable is-size-5">
                             <div class="column is-full py-1 px-1"><i class="fas fa-bell"></i></div>
-                            <div class="column is-full py-1 px-1"><i class="fas fa-cog"></i></div>
+                            <div class="column is-full py-1 px-1">
+                                {{-- DropDown --}}
+                                    <dropdown-menu-setting
+                                        v-bind:url_logout="'{{ route('logout') }}'"
+                                        v-bind:url_home="'{{ route('home') }}'"
+                                        v-bind:text_menu_dark="'{{ __('app.menu.activate_dark_mode') }}'"
+                                        v-bind:text_admin_leaders="'{{ __('app.menu.admin_leaders') }}'"
+                                        v-bind:text_general_setting="'{{ __('app.menu.general_setting') }}'"
+                                        v-bind:text_frequent_questions="'{{ __('app.menu.frequent_questions') }}'"
+                                        v-bind:text_logout="'{{ __('app.menu.logout') }}'"
+                                        v-bind:text_close="'{{ __('app.menu.close') }}'">
+                                    </dropdown-menu-setting>
+                                {{-- /DropDown --}}
+                            </div>
                             <div class="column is-full py-1 px-1"><i class="fas fa-search"></i></div>
                         </div>
                     </div>

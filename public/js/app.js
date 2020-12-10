@@ -2214,15 +2214,16 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/app/DropDownMenuComponent.vue?vue&type=script&lang=js&":
-/*!************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/app/DropDownMenuComponent.vue?vue&type=script&lang=js& ***!
-  \************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/app/DropDownMenuSettingComponent.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/app/DropDownMenuSettingComponent.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -64324,10 +64325,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/app/DropDownMenuComponent.vue?vue&type=template&id=036678e4&":
-/*!****************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/app/DropDownMenuComponent.vue?vue&type=template&id=036678e4& ***!
-  \****************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/app/DropDownMenuSettingComponent.vue?vue&type=template&id=bf7c3414&":
+/*!***********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/app/DropDownMenuSettingComponent.vue?vue&type=template&id=bf7c3414& ***!
+  \***********************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -64341,13 +64342,17 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "dropdown", class: { "is-active": _vm.isActiveDropdown } },
+    {
+      staticClass: "dropdown-setting dropdown",
+      class: { "is-active": _vm.isActiveDropdown }
+    },
     [
       _c("div", { staticClass: "dropdown-trigger" }, [
         _c(
           "button",
           {
-            staticClass: "btn is-size-6 mb-5",
+            staticClass: "btn is-size-5",
+            class: { "is-active": _vm.isActiveDropdown },
             attrs: {
               "aria-haspopup": "true",
               "aria-controls": "dropdown-menu"
@@ -64355,9 +64360,10 @@ var render = function() {
             on: { click: _vm.clickDropdown }
           },
           [
-            _c("span", [_vm._v(_vm._s(_vm.text_company_name))]),
-            _vm._v(" "),
-            _vm._m(0)
+            _c("i", {
+              staticClass: "fas fa-cog",
+              attrs: { "aria-hidden": "true" }
+            })
           ]
         )
       ]),
@@ -64433,19 +64439,7 @@ var render = function() {
     ]
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "icon is-small" }, [
-      _c("i", {
-        staticClass: "fas fa-caret-down",
-        attrs: { "aria-hidden": "true" }
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -77687,7 +77681,7 @@ Vue.component('banner-info', __webpack_require__(/*! ./components/welcome/Banner
 Vue.component('banner-carusel', __webpack_require__(/*! ./components/welcome/BannerCaruselComponent.vue */ "./resources/js/components/welcome/BannerCaruselComponent.vue")["default"]); // App components
 
 Vue.component('login-form', __webpack_require__(/*! ./components/app/LoginFormComponent.vue */ "./resources/js/components/app/LoginFormComponent.vue")["default"]);
-Vue.component('dropdown-menu', __webpack_require__(/*! ./components/app/DropDownMenuComponent.vue */ "./resources/js/components/app/DropDownMenuComponent.vue")["default"]);
+Vue.component('dropdown-menu-setting', __webpack_require__(/*! ./components/app/DropDownMenuSettingComponent.vue */ "./resources/js/components/app/DropDownMenuSettingComponent.vue")["default"]);
 Vue.component('banner-app-carusel', __webpack_require__(/*! ./components/app/BannerCaruselComponent.vue */ "./resources/js/components/app/BannerCaruselComponent.vue")["default"]);
 Vue.component('main-menu-section', __webpack_require__(/*! ./components/app/MainMenuComponent.vue */ "./resources/js/components/app/MainMenuComponent.vue")["default"]);
 Vue.component('main-section', __webpack_require__(/*! ./components/app/MainComponent.vue */ "./resources/js/components/app/MainComponent.vue")["default"]);
@@ -77789,17 +77783,17 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/app/DropDownMenuComponent.vue":
-/*!***************************************************************!*\
-  !*** ./resources/js/components/app/DropDownMenuComponent.vue ***!
-  \***************************************************************/
+/***/ "./resources/js/components/app/DropDownMenuSettingComponent.vue":
+/*!**********************************************************************!*\
+  !*** ./resources/js/components/app/DropDownMenuSettingComponent.vue ***!
+  \**********************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _DropDownMenuComponent_vue_vue_type_template_id_036678e4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DropDownMenuComponent.vue?vue&type=template&id=036678e4& */ "./resources/js/components/app/DropDownMenuComponent.vue?vue&type=template&id=036678e4&");
-/* harmony import */ var _DropDownMenuComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DropDownMenuComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/app/DropDownMenuComponent.vue?vue&type=script&lang=js&");
+/* harmony import */ var _DropDownMenuSettingComponent_vue_vue_type_template_id_bf7c3414___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DropDownMenuSettingComponent.vue?vue&type=template&id=bf7c3414& */ "./resources/js/components/app/DropDownMenuSettingComponent.vue?vue&type=template&id=bf7c3414&");
+/* harmony import */ var _DropDownMenuSettingComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DropDownMenuSettingComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/app/DropDownMenuSettingComponent.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -77809,9 +77803,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _DropDownMenuComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _DropDownMenuComponent_vue_vue_type_template_id_036678e4___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _DropDownMenuComponent_vue_vue_type_template_id_036678e4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _DropDownMenuSettingComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _DropDownMenuSettingComponent_vue_vue_type_template_id_bf7c3414___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _DropDownMenuSettingComponent_vue_vue_type_template_id_bf7c3414___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -77821,38 +77815,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/app/DropDownMenuComponent.vue"
+component.options.__file = "resources/js/components/app/DropDownMenuSettingComponent.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/app/DropDownMenuComponent.vue?vue&type=script&lang=js&":
-/*!****************************************************************************************!*\
-  !*** ./resources/js/components/app/DropDownMenuComponent.vue?vue&type=script&lang=js& ***!
-  \****************************************************************************************/
+/***/ "./resources/js/components/app/DropDownMenuSettingComponent.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************!*\
+  !*** ./resources/js/components/app/DropDownMenuSettingComponent.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DropDownMenuComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./DropDownMenuComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/app/DropDownMenuComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DropDownMenuComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DropDownMenuSettingComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./DropDownMenuSettingComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/app/DropDownMenuSettingComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DropDownMenuSettingComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/app/DropDownMenuComponent.vue?vue&type=template&id=036678e4&":
-/*!**********************************************************************************************!*\
-  !*** ./resources/js/components/app/DropDownMenuComponent.vue?vue&type=template&id=036678e4& ***!
-  \**********************************************************************************************/
+/***/ "./resources/js/components/app/DropDownMenuSettingComponent.vue?vue&type=template&id=bf7c3414&":
+/*!*****************************************************************************************************!*\
+  !*** ./resources/js/components/app/DropDownMenuSettingComponent.vue?vue&type=template&id=bf7c3414& ***!
+  \*****************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DropDownMenuComponent_vue_vue_type_template_id_036678e4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./DropDownMenuComponent.vue?vue&type=template&id=036678e4& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/app/DropDownMenuComponent.vue?vue&type=template&id=036678e4&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DropDownMenuComponent_vue_vue_type_template_id_036678e4___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DropDownMenuSettingComponent_vue_vue_type_template_id_bf7c3414___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./DropDownMenuSettingComponent.vue?vue&type=template&id=bf7c3414& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/app/DropDownMenuSettingComponent.vue?vue&type=template&id=bf7c3414&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DropDownMenuSettingComponent_vue_vue_type_template_id_bf7c3414___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DropDownMenuComponent_vue_vue_type_template_id_036678e4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DropDownMenuSettingComponent_vue_vue_type_template_id_bf7c3414___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

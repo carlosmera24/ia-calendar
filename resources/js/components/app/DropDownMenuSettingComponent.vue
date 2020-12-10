@@ -1,11 +1,12 @@
 <template>
-    <div class="dropdown" :class="{ 'is-active' : isActiveDropdown }">
+    <div class="dropdown-setting dropdown" :class="{ 'is-active' : isActiveDropdown }">
         <div class="dropdown-trigger">
-            <button class="btn is-size-6 mb-5" aria-haspopup="true" aria-controls="dropdown-menu" v-on:click="clickDropdown">
-                <span>{{ text_company_name }}</span>
-                <span class="icon is-small">
-                    <i class="fas fa-caret-down" aria-hidden="true"></i>
-                </span>
+            <button class="btn is-size-5"
+                :class="{ 'is-active' : isActiveDropdown }"
+                aria-haspopup="true"
+                aria-controls="dropdown-menu"
+                v-on:click="clickDropdown">
+                <i class="fas fa-cog" aria-hidden="true"></i>
             </button>
         </div>
         <div class="dropdown-menu" id="dropdown-menu" role="menu">
