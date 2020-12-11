@@ -20322,6 +20322,10 @@ textarea {
   padding-left: 30px;
 }
 
+.application .content-main .content .form_manage_leader label::first-letter {
+  text-transform: uppercase;
+}
+
 .animated_delay {
   -webkit-animation-delay: 0.45s;
           animation-delay: 0.45s;

@@ -31,9 +31,15 @@
             v-bind:url_person_cellphone_exist='url_person_cellphone_exist'
         />
         <manage-leader v-else-if="contentActive.adminLeaders"
+            v-on:activeMainSection="setActiveSection"
             v-bind:text_admin_leaders='text_admin_leaders'
             v-bind:programmer_json="programmer_json"
             v-bind:user_id="user_id"
+            v-bind:text_search_participant="text_search_participant"
+            v-bind:text_participant_fields_json="text_participant_fields_json"
+            v-bind:text_associate_leader="text_associate_leader"
+            v-bind:text_apply='text_apply'
+            v-bind:text_cancel='text_cancel'
             v-bind:url_participants_programmer="url_participants_programmer"
          />
     </div>
@@ -60,8 +66,13 @@ export default {
         'text_participant_title',
         'text_created_participant',
         'text_accept',
+        'text_apply',
         'text_cancel',
         'text_participant_fields_json',
+        'text_admin_leaders',
+        'user_id',
+        'text_search_participant',
+        'text_associate_leader',
         'url_person_ui_avatar',
         'url_person_store',
         'url_participant_store',
@@ -70,8 +81,6 @@ export default {
         'url_person_email_exist',
         'url_person_cellphone_exist',
         'url_participants_programmer',
-        'text_admin_leaders',
-        'user_id',
     ],
     data() {
         return {
@@ -80,6 +89,11 @@ export default {
     },
     created(){
         this.contentActive = this.$root.contentActive;
+    },
+    methods: {
+        setActiveSection(item){
+            this.$root.setActiveContent( item );
+        }
     }
 }
 </script>

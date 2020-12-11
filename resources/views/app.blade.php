@@ -134,8 +134,13 @@
             v-bind:text_participant_title='" {{ __('app.participant_new.title') }}"'
             v-bind:text_created_participant='" {{ __('messages.created_participant') }}"'
             v-bind:text_accept='"{{ __('validation.attributes.accept') }}"'
+            v-bind:text_apply='"{{ __('validation.attributes.apply') }}"'
             v-bind:text_cancel='"{{ __('validation.attributes.cancel') }}"'
             v-bind:text_participant_fields_json="' {{ json_encode($fields_participant) }} '"
+            v-bind:text_admin_leaders="'{{ __('app.menu.admin_leaders') }}'"
+            v-bind:user_id="'{{ $user->id }}'"
+            v-bind:text_search_participant="'{{ __('app.manage_leader.search_participant') }}'"
+            v-bind:text_associate_leader="'{{ __('app.manage_leader.associate_leader') }}'"
             v-bind:url_person_ui_avatar='"{{ route('person_uiavatar') }}"'
             v-bind:url_person_store='"{{ route('person_store') }}"'
             v-bind:url_participant_store='"{{ route('participant_store') }}"'
@@ -144,8 +149,6 @@
             v-bind:url_person_email_exist='"{{ route('persons_emails_exists') }}"'
             v-bind:url_person_cellphone_exist='"{{ route('persons_cellphones_exists') }}"'
             v-bind:url_participants_programmer='"{{ route('participants_list_programmer') }}"'
-            v-bind:text_admin_leaders="'{{ __('app.menu.admin_leaders') }}'"
-            v-bind:user_id="'{{ $user->id }}'"
         />
         {{-- /Content Main --}}
     </div>

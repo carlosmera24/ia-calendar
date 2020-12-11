@@ -30,6 +30,14 @@ return [
     ],
 
     /**
+     * manage-leader
+     */
+    'manage_leader' =>  [
+        'search_participant'    =>  'Buscar partícipe',
+        'associate_leader'      =>  'Asociar como líder',
+    ],
+
+    /**
      * Wall section
      */
     'wall'  =>  [

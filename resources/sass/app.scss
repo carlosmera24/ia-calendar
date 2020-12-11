@@ -452,6 +452,9 @@ body, h2, button, input, select, textarea {
                 .vs__selected-options{
                     padding-left: 30px;
                 }
+                label::first-letter{
+                    text-transform: uppercase;
+                }
             }
         }
     }

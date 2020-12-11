@@ -110,8 +110,8 @@
                 </div>
             </div>
             <div class="btn-actions">
-                <b-button  class="btn-cancel" v-on:click.prevent="clickClose">{{ text_cancel }}</b-button>
-                <b-button class="btn-accept" v-on:click.prevent="save">{{ text_accept }}</b-button>
+                <b-button  class="btn-cancel is-capitalized" v-on:click.prevent="clickClose">{{ text_cancel }}</b-button>
+                <b-button class="btn-accept is-capitalized" v-on:click.prevent="save">{{ text_accept }}</b-button>
             </div>
         </form>
     </div>
@@ -199,7 +199,7 @@ export default{
             }
         },
         clickClose(){
-            this.$root.setActiveMenu( "wall" );
+            this.$emit('activeMenu', 'wall');
         },
         selectFile(){
             this.$refs.fileAvatar.click()

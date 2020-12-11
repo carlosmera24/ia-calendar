@@ -35,6 +35,7 @@
 
                     <participant-section v-if="activeMenu.create_participant"
                         v-bind:key="2"
+                        v-on:activeMenu="setActiveMenu"
                         v-bind:programmer_json="programmer_json"
                         v-bind:numbers_emailes="numbers_emailes"
                         v-bind:numbers_mobiles="numbers_mobiles"
