@@ -2260,8 +2260,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_accept', 'text_cancel', 'text_participant_fields_json', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'text_admin_leaders'],
+  props: ['text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_accept', 'text_cancel', 'text_participant_fields_json', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'text_admin_leaders', 'user_id'],
   data: function data() {
     return {
       contentActive: {}
@@ -2615,8 +2618,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-select */ "./node_modules/vue-select/dist/vue-select.js");
-/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_select__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _functions_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../functions.js */ "./resources/js/functions.js");
+/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-select */ "./node_modules/vue-select/dist/vue-select.js");
+/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_select__WEBPACK_IMPORTED_MODULE_1__);
 //
 //
 //
@@ -2637,40 +2641,69 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//Import vue-select
+//
+//
+//
+//
+//
+//
+//
+//
+ //Import vue-select
 
-Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_0___default.a);
+
+Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       isLoading: false,
+      hasErrors: false,
+      errors: {},
       participanError: false,
-      participants: [{
-        participant: 'Carlos Mera',
-        meta: {
-          id: 1,
-          first_name: 'Carlos',
-          last_name: 'Mera'
-        }
-      }, {
-        participant: 'Ximena Mera',
-        meta: {
-          id: 2,
-          first_name: 'Ximena',
-          last_name: 'Mera'
-        }
-      }, {
-        participant: 'Lili Mera',
-        meta: {
-          id: 3,
-          first_name: 'Lili',
-          last_name: 'Mera'
-        }
-      }],
-      participanIdSelect: null
+      participants: [],
+      participanIdSelect: null,
+      programmer: {}
     };
   },
-  props: ['text_admin_leaders']
+  props: ['text_admin_leaders', 'programmer_json', 'user_id', 'url_participants_programmer'],
+  created: function created() {
+    this.programmer = JSON.parse(this.programmer_json);
+  },
+  mounted: function mounted() {
+    this.getParticipants();
+  },
+  methods: {
+    showErrors: function showErrors(resError) {
+      this.errors = Object(_functions_js__WEBPACK_IMPORTED_MODULE_0__["procesarErroresRequest"])(resError);
+      this.hasErrors = this.errors.errors.length > 0;
+    },
+    getParticipants: function getParticipants() {
+      var _this = this;
+
+      this.isLoading = true;
+      axios.post(this.url_participants_programmer, {
+        programmers_id: this.programmer.id,
+        users_id: this.user_id
+      }).then(function (response) {
+        if (response.data.status === 200) {
+          response.data.participants.forEach(function (element) {
+            var name = element.first_name + " " + element.last_name;
+            var participant = Object(_functions_js__WEBPACK_IMPORTED_MODULE_0__["capitalize"])(name.toLocaleLowerCase());
+            var tmp = {
+              participant: participant,
+              meta: element
+            };
+
+            _this.participants.push(tmp);
+          });
+        }
+      }, function (error) {
+        _this.showErrors(error);
+      }).then(function () {
+        _this.isLoading = false;
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -64574,7 +64607,12 @@ var render = function() {
           })
         : _vm.contentActive.adminLeaders
         ? _c("manage-leader", {
-            attrs: { text_admin_leaders: _vm.text_admin_leaders }
+            attrs: {
+              text_admin_leaders: _vm.text_admin_leaders,
+              programmer_json: _vm.programmer_json,
+              user_id: _vm.user_id,
+              url_participants_programmer: _vm.url_participants_programmer
+            }
           })
         : _vm._e()
     ],
@@ -65120,6 +65158,40 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("h2", [_vm._v(_vm._s(_vm.text_admin_leaders))]),
+      _vm._v(" "),
+      _c(
+        "section",
+        { staticClass: "alert-section mt-4" },
+        [
+          _c(
+            "b-notification",
+            {
+              attrs: { type: "is-danger", hasIcon: "", role: "alert" },
+              model: {
+                value: _vm.hasErrors,
+                callback: function($$v) {
+                  _vm.hasErrors = $$v
+                },
+                expression: "hasErrors"
+              }
+            },
+            [
+              _c("h4", { staticClass: "has-text-white" }, [
+                _vm._v(_vm._s(_vm.errors.text))
+              ]),
+              _vm._v(" "),
+              _c(
+                "ul",
+                _vm._l(_vm.errors.errors, function(error, index) {
+                  return _c("li", { key: index }, [_vm._v(_vm._s(error))])
+                }),
+                0
+              )
+            ]
+          )
+        ],
+        1
+      ),
       _vm._v(" "),
       _c("form", { staticClass: "form_manage_leader", attrs: { action: "" } }, [
         _c("div", { staticClass: "field" }, [
@@ -78893,12 +78965,13 @@ __webpack_require__.r(__webpack_exports__);
 /*!***********************************!*\
   !*** ./resources/js/functions.js ***!
   \***********************************/
-/*! exports provided: procesarErroresRequest */
+/*! exports provided: procesarErroresRequest, capitalize */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "procesarErroresRequest", function() { return procesarErroresRequest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "capitalize", function() { return capitalize; });
 /**
  * Funciones personalizadas, con métodos de ayuda o generales
  * Por Carlos Eduardo Mera Ruiz
@@ -78976,6 +79049,19 @@ function procesarErroresRequest(error) {
     text: text,
     errors: errors
   };
+}
+/**
+ * Function for capitalize string
+ * @param String word
+ * @return String
+ */
+
+function capitalize(word) {
+  return word.replace(/\w\S*/g, function (w) {
+    return w.replace(/^\w/, function (c) {
+      return c.toUpperCase();
+    });
+  });
 }
 
 /***/ }),

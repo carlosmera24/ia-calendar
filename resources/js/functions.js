@@ -73,3 +73,15 @@ export function procesarErroresRequest(error) {
         errors: errors
     };
 }
+
+/**
+ * Function for capitalize string
+ * @param String word
+ * @return String
+ */
+export function capitalize(word){
+    return word.replace(/\w\S*/g, (w) => (
+                                            w.replace(/^\w/, (c) => c.toUpperCase())
+                                        )
+                        );
+}

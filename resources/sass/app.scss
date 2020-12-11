@@ -448,6 +448,11 @@ body, h2, button, input, select, textarea {
                 text-transform: uppercase;
                 // margin: 0 40px;
             }
+            .form_manage_leader{
+                .vs__selected-options{
+                    padding-left: 30px;
+                }
+            }
         }
     }
 }

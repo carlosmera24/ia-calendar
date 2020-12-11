@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Participant;
-use Illuminate\Http\Request;
 use Validator;
+use App\Models\Participant;
+use App\Models\PersonEmail;
+use Illuminate\Http\Request;
+use App\Models\PersonCellphone;
 
 class ParticipantController extends Controller
 {
@@ -16,6 +18,11 @@ class ParticipantController extends Controller
                                 'description'               =>  'nullable|min:2|',
 
                             ];
+    protected $rules_list_participants = [
+                                            'programmers_id'    =>  'required|integer|exists:programmers,id',
+                                            'users_id'          =>  'nullable|integer|exists:users,id',
+                                        ];
+
     /**
      * Display a listing of the resource.
      *
@@ -24,6 +31,64 @@ class ParticipantController extends Controller
     public function index()
     {
         //
+    }
+
+    /**
+     * Return a list of particpants and your data from ID programmer
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function listFromProgrammer(Request $request)
+    {
+        $validator = Validator::make($request->input(), $this->rules_list_participants);
+        if( $validator->fails() )
+        {
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'error'     =>  "BadRequest",
+                                                'data'      =>  $validator->getMessageBag()->toArray()
+                                            ),
+                                        400
+                                    );
+        }else
+        {
+            $user_id = $request->users_id;
+            $participants = Participant::leftJoin('persons','persons_id','persons.id')
+                                        ->select(
+                                                    'participants.id','participants.programmers_id','participants.users_id',
+                                                    'participants.profiles_participants_id','participants.description',
+                                                    'persons.id AS persons_id','persons.first_name','persons.last_name',
+                                                    'persons.birth_date','persons.position_company','persons.date_join_company',
+                                                )
+                                        ->where('participants.programmers_id', $request->programmers_id)
+                                        ->when( $user_id, function( $query, $user_id ){
+                                            return $query->whereNull('participants.users_id')
+                                                        ->orWhere('participants.users_id','!=', $user_id);
+                                        } )
+                                        ->get();
+            //Search emails and cellphones
+            foreach($participants as $index => $participant)
+            {
+                //Search emails
+               $emails = PersonEmail::where('persons_id', $participant->persons_id )
+                                    ->get();
+                $participant['emails'] = $emails;
+                $participants[ $index ] = $participant;
+                //Search cellphones
+               $mobiles = PersonCellphone::where('persons_id', $participant->persons_id )
+                                    ->get();
+                $participant['cellphones'] = $mobiles;
+                $participants[ $index ] = $participant;
+            }
+            return response()->json(
+                                        array(
+                                                'status'        =>  200,
+                                                'participants'  =>  $participants
+                                            ),
+                                        200
+                                    );
+        }
     }
 
     /**
@@ -62,14 +127,6 @@ class ParticipantController extends Controller
             $participe->users_id = $request->users_id;
             $participe->profiles_participants_id = $request->profiles_participants_id;
             $participe->description = $request->description;
-            // if( isset($request->users_id) )
-            // {
-            //     $participe->users_id = $request->users_id;
-            // }
-            // if( isset($request->description) )
-            // {
-            //     $participe->description = $request->description;
-            // }
 
             //save new participant
             if( $participe->save() )

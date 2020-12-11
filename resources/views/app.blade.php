@@ -143,7 +143,9 @@
             v-bind:urls_mobiles_store='"{{ route('persons_mobiles_store_array') }}"'
             v-bind:url_person_email_exist='"{{ route('persons_emails_exists') }}"'
             v-bind:url_person_cellphone_exist='"{{ route('persons_cellphones_exists') }}"'
+            v-bind:url_participants_programmer='"{{ route('participants_list_programmer') }}"'
             v-bind:text_admin_leaders="'{{ __('app.menu.admin_leaders') }}'"
+            v-bind:user_id="'{{ $user->id }}'"
         />
         {{-- /Content Main --}}
     </div>

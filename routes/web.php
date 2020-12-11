@@ -26,6 +26,7 @@ Route::group(['middleware' => ['auth']], function(){
     })->name('home');
     Route::get('person/ui-avatar', [PersonController::class, 'getUiAvatar'])->name('person_uiavatar');
     Route::post('/person/store', [ PersonController::class, 'store' ])->name('person_store');
+    Route::post('/participants/list-programmer', [ ParticipantController::class, 'listFromProgrammer' ])->name('participants_list_programmer');
     Route::post('/participant/store', [ ParticipantController::class, 'store' ])->name('participant_store');
     Route::post('/persons-emails/store-array', [ PersonEmailController::class, 'storeArray' ])->name('persons_emails_store_array');
     Route::post('/persons-emails/email-exists', [ PersonEmailController::class, 'emailExists' ])->name('persons_email_exists');

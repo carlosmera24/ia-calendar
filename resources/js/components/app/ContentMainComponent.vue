@@ -32,6 +32,9 @@
         />
         <manage-leader v-else-if="contentActive.adminLeaders"
             v-bind:text_admin_leaders='text_admin_leaders'
+            v-bind:programmer_json="programmer_json"
+            v-bind:user_id="user_id"
+            v-bind:url_participants_programmer="url_participants_programmer"
          />
     </div>
 </template>
@@ -66,7 +69,9 @@ export default {
         'urls_mobiles_store',
         'url_person_email_exist',
         'url_person_cellphone_exist',
+        'url_participants_programmer',
         'text_admin_leaders',
+        'user_id',
     ],
     data() {
         return {
