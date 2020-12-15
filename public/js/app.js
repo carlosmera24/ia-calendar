@@ -2269,8 +2269,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'text_search_participant', 'text_associate_leader', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer'],
+  props: ['text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'text_search_participant', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer'],
   data: function data() {
     return {
       contentActive: {}
@@ -2738,27 +2749,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
  //Import vue-select
 
 
 Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a);
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_admin_leaders', 'programmer_json', 'user_id', 'text_search_participant', 'text_participant_fields_json', 'text_associate_leader', 'text_apply', 'text_cancel', 'url_participants_programmer'],
+  props: ['text_admin_leaders', 'programmer_json', 'user_id', 'text_search_participant', 'text_participant_fields_json', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_apply', 'text_cancel', 'url_participants_programmer'],
   data: function data() {
     return {
       isLoading: false,
@@ -2767,6 +2763,28 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a);
       participanError: false,
       participants: [],
       participantSelected: null,
+      permissions: {
+        consult_categories_events: {
+          value: false,
+          label: this.text_consult_categories_events
+        },
+        create_events: {
+          value: false,
+          label: this.text_create_events
+        },
+        modify_events: {
+          value: false,
+          label: this.text_modify_events
+        },
+        share_events: {
+          value: false,
+          label: this.text_share_events
+        },
+        delete_events: {
+          value: false,
+          label: this.text_delete_events
+        }
+      },
       programmer: {},
       fields: []
     };
@@ -2786,8 +2804,15 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a);
       this.errors = Object(_functions_js__WEBPACK_IMPORTED_MODULE_0__["procesarErroresRequest"])(resError);
       this.hasErrors = this.errors.errors.length > 0;
     },
-    getParticipants: function getParticipants() {
+    clickAssociateLeader: function clickAssociateLeader() {
       var _this = this;
+
+      Object.keys(this.permissions).forEach(function (k, index) {
+        _this.permissions[k].value = true;
+      });
+    },
+    getParticipants: function getParticipants() {
+      var _this2 = this;
 
       this.isLoading = true;
       axios.post(this.url_participants_programmer, {
@@ -2803,13 +2828,13 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a);
               meta: element
             };
 
-            _this.participants.push(tmp);
+            _this2.participants.push(tmp);
           });
         }
       }, function (error) {
-        _this.showErrors(error);
+        _this2.showErrors(error);
       }).then(function () {
-        _this.isLoading = false;
+        _this2.isLoading = false;
       });
     }
   }
@@ -64680,56 +64705,80 @@ var render = function() {
     "div",
     { staticClass: "content-main" },
     [
-      _vm.contentActive.main
-        ? _c("main-section", {
-            attrs: {
-              text_create_participant: _vm.text_create_participant,
-              text_create_category: _vm.text_create_category,
-              text_see_calendar: _vm.text_see_calendar,
-              text_anual_fiscal: _vm.text_anual_fiscal,
-              text_create_your_event: _vm.text_create_your_event,
-              text_programmer: _vm.text_programmer,
-              text_category: _vm.text_category,
-              text_event: _vm.text_event,
-              numbers_emailes: _vm.numbers_emailes,
-              numbers_mobiles: _vm.numbers_mobiles,
-              programmer_json: _vm.programmer_json,
-              text_success: _vm.text_success,
-              text_wall_title: _vm.text_wall_title,
-              text_wall_trigger_events_soon_expire:
-                _vm.text_wall_trigger_events_soon_expire,
-              text_wall_add_categories: _vm.text_wall_add_categories,
-              text_wall_add_notes: _vm.text_wall_add_notes,
-              text_participant_title: _vm.text_participant_title,
-              text_created_participant: _vm.text_created_participant,
-              text_accept: _vm.text_accept,
-              text_cancel: _vm.text_cancel,
-              text_participant_fields_json: _vm.text_participant_fields_json,
-              url_person_ui_avatar: _vm.url_person_ui_avatar,
-              url_person_store: _vm.url_person_store,
-              url_participant_store: _vm.url_participant_store,
-              urls_emails_store: _vm.urls_emails_store,
-              urls_mobiles_store: _vm.urls_mobiles_store,
-              url_person_email_exist: _vm.url_person_email_exist,
-              url_person_cellphone_exist: _vm.url_person_cellphone_exist
-            }
-          })
-        : _vm.contentActive.adminLeaders
-        ? _c("manage-leader", {
-            attrs: {
-              text_admin_leaders: _vm.text_admin_leaders,
-              programmer_json: _vm.programmer_json,
-              user_id: _vm.user_id,
-              text_search_participant: _vm.text_search_participant,
-              text_participant_fields_json: _vm.text_participant_fields_json,
-              text_associate_leader: _vm.text_associate_leader,
-              text_apply: _vm.text_apply,
-              text_cancel: _vm.text_cancel,
-              url_participants_programmer: _vm.url_participants_programmer
-            },
-            on: { activeMainSection: _vm.setActiveSection }
-          })
-        : _vm._e()
+      _c(
+        "transition-group",
+        {
+          staticClass: "action-main",
+          attrs: {
+            "enter-active-class":
+              "animate__animated animate__backInLeft animated_delay",
+            "leave-active-class": "animate__animated animate__backOutRight"
+          }
+        },
+        [
+          _vm.contentActive.main
+            ? _c("main-section", {
+                key: 1,
+                attrs: {
+                  text_create_participant: _vm.text_create_participant,
+                  text_create_category: _vm.text_create_category,
+                  text_see_calendar: _vm.text_see_calendar,
+                  text_anual_fiscal: _vm.text_anual_fiscal,
+                  text_create_your_event: _vm.text_create_your_event,
+                  text_programmer: _vm.text_programmer,
+                  text_category: _vm.text_category,
+                  text_event: _vm.text_event,
+                  numbers_emailes: _vm.numbers_emailes,
+                  numbers_mobiles: _vm.numbers_mobiles,
+                  programmer_json: _vm.programmer_json,
+                  text_success: _vm.text_success,
+                  text_wall_title: _vm.text_wall_title,
+                  text_wall_trigger_events_soon_expire:
+                    _vm.text_wall_trigger_events_soon_expire,
+                  text_wall_add_categories: _vm.text_wall_add_categories,
+                  text_wall_add_notes: _vm.text_wall_add_notes,
+                  text_participant_title: _vm.text_participant_title,
+                  text_created_participant: _vm.text_created_participant,
+                  text_accept: _vm.text_accept,
+                  text_cancel: _vm.text_cancel,
+                  text_participant_fields_json:
+                    _vm.text_participant_fields_json,
+                  url_person_ui_avatar: _vm.url_person_ui_avatar,
+                  url_person_store: _vm.url_person_store,
+                  url_participant_store: _vm.url_participant_store,
+                  urls_emails_store: _vm.urls_emails_store,
+                  urls_mobiles_store: _vm.urls_mobiles_store,
+                  url_person_email_exist: _vm.url_person_email_exist,
+                  url_person_cellphone_exist: _vm.url_person_cellphone_exist
+                }
+              })
+            : _vm.contentActive.adminLeaders
+            ? _c("manage-leader", {
+                key: 2,
+                attrs: {
+                  text_admin_leaders: _vm.text_admin_leaders,
+                  programmer_json: _vm.programmer_json,
+                  user_id: _vm.user_id,
+                  text_search_participant: _vm.text_search_participant,
+                  text_participant_fields_json:
+                    _vm.text_participant_fields_json,
+                  text_associate_leader: _vm.text_associate_leader,
+                  text_consult_categories_events:
+                    _vm.text_consult_categories_events,
+                  text_create_events: _vm.text_create_events,
+                  text_modify_events: _vm.text_modify_events,
+                  text_share_events: _vm.text_share_events,
+                  text_delete_events: _vm.text_delete_events,
+                  text_apply: _vm.text_apply,
+                  text_cancel: _vm.text_cancel,
+                  url_participants_programmer: _vm.url_participants_programmer
+                },
+                on: { activeMainSection: _vm.setActiveSection }
+              })
+            : _vm._e()
+        ],
+        1
+      )
     ],
     1
   )
@@ -65481,9 +65530,19 @@ var render = function() {
           "section",
           { staticClass: "data_permissions" },
           [
-            _c("b-button", [
-              _c("span", { staticClass: "is-size-5" }, [_vm._v("◘")])
-            ]),
+            _c(
+              "b-button",
+              {
+                attrs: { disabled: _vm.participantSelected ? false : true },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.clickAssociateLeader($event)
+                  }
+                }
+              },
+              [_c("span", { staticClass: "is-size-5" }, [_vm._v("◘")])]
+            ),
             _vm._v(" "),
             _c(
               "div",
@@ -65500,87 +65559,43 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "div",
-                  { staticClass: "field column is-12 is-horizontal" },
-                  [
-                    _c(
-                      "b-switch",
-                      { attrs: { value: false, type: "is-success" } },
+                  { staticClass: "content_permissions column is-12" },
+                  _vm._l(_vm.permissions, function(permission, index) {
+                    return _c(
+                      "div",
+                      {
+                        key: "permission." + index,
+                        staticClass: "field column is-12 is-horizontal"
+                      },
                       [
-                        _vm._v(
-                          "\n                        Consultar Categorías y Eventos\n                    "
+                        _c(
+                          "b-switch",
+                          {
+                            attrs: {
+                              disabled: _vm.participantSelected ? false : true,
+                              type: "is-success"
+                            },
+                            model: {
+                              value: permission.value,
+                              callback: function($$v) {
+                                _vm.$set(permission, "value", $$v)
+                              },
+                              expression: "permission.value"
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(permission.label) +
+                                "\n                        "
+                            )
+                          ]
                         )
-                      ]
+                      ],
+                      1
                     )
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "field column is-12 is-horizontal" },
-                  [
-                    _c(
-                      "b-switch",
-                      { attrs: { value: false, type: "is-success" } },
-                      [
-                        _vm._v(
-                          "\n                        Crear Eventos\n                    "
-                        )
-                      ]
-                    )
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "field column is-12 is-horizontal" },
-                  [
-                    _c(
-                      "b-switch",
-                      { attrs: { value: false, type: "is-success" } },
-                      [
-                        _vm._v(
-                          "\n                        Modificar Eventos\n                    "
-                        )
-                      ]
-                    )
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "field column is-12 is-horizontal" },
-                  [
-                    _c(
-                      "b-switch",
-                      { attrs: { value: false, type: "is-success" } },
-                      [
-                        _vm._v(
-                          "\n                        Compartir Eventos\n                    "
-                        )
-                      ]
-                    )
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "field column is-12 is-horizontal" },
-                  [
-                    _c(
-                      "b-switch",
-                      { attrs: { value: false, type: "is-success" } },
-                      [
-                        _vm._v(
-                          "\n                        Eliminar Eventos\n                    "
-                        )
-                      ]
-                    )
-                  ],
-                  1
+                  }),
+                  0
                 )
               ],
               1

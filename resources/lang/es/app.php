@@ -33,8 +33,13 @@ return [
      * manage-leader
      */
     'manage_leader' =>  [
-        'search_participant'    =>  'Buscar partícipe',
-        'associate_leader'      =>  'Asociar como líder',
+        'search_participant'        =>  'Buscar partícipe',
+        'associate_leader'          =>  'Asociar como líder',
+        'consult_categories_events' =>  'Consultar Categorías y Eventos',
+        'create_events'             =>  'Crear Eventos',
+        'modify_events'             =>  'Modificar Eventos',
+        'share_events'              =>  'Compartir Eventos',
+        'delete_events'             =>  'Eliminar Eventos',
     ],
 
     /**

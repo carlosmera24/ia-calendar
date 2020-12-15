@@ -20326,6 +20326,12 @@ textarea {
   text-transform: uppercase;
 }
 
+.application .content-main .content .form_manage_leader .data_permissions .content_permissions {
+  padding-left: 47px;
+  padding-top: 0;
+  margin-top: -12px;
+}
+
 .animated_delay {
   -webkit-animation-delay: 0.45s;
           animation-delay: 0.45s;

@@ -455,6 +455,13 @@ body, h2, button, input, select, textarea {
                 label::first-letter{
                     text-transform: uppercase;
                 }
+                .data_permissions{
+                    .content_permissions{
+                        padding-left: 47px;
+                        padding-top: 0;
+                        margin-top: -12px;
+                    }
+                }
             }
         }
     }

@@ -73,41 +73,26 @@
                 </div>
             </section>
             <section class="data_permissions">
-                <b-button><span class="is-size-5">&#9688;</span></b-button>
+                <b-button
+                    :disabled="participantSelected ? false : true"
+                    v-on:click.prevent="clickAssociateLeader"
+                    >
+                    <span class="is-size-5">&#9688;</span>
+                </b-button>
                 <div class="columns is-multiline" >
                     <b-field horizontal class="column is-12"
                         :label="text_associate_leader">
                         <span></span>
                     </b-field>
-                     <div class="field column is-12 is-horizontal">
-                        <b-switch :value="false"
-                            type="is-success">
-                            Consultar Categorías y Eventos
-                        </b-switch>
-                    </div>
-                     <div class="field column is-12 is-horizontal">
-                        <b-switch :value="false"
-                            type="is-success">
-                            Crear Eventos
-                        </b-switch>
-                    </div>
-                     <div class="field column is-12 is-horizontal">
-                        <b-switch :value="false"
-                            type="is-success">
-                            Modificar Eventos
-                        </b-switch>
-                    </div>
-                    <div class="field column is-12 is-horizontal">
-                        <b-switch :value="false"
-                            type="is-success">
-                            Compartir Eventos
-                        </b-switch>
-                    </div>
-                    <div class="field column is-12 is-horizontal">
-                        <b-switch :value="false"
-                            type="is-success">
-                            Eliminar Eventos
-                        </b-switch>
+                    <div class="content_permissions column is-12">
+                        <div class="field column is-12 is-horizontal"
+                            v-for="(permission, index) in permissions" :key="'permission.'+ index">
+                            <b-switch v-model="permission.value"
+                                :disabled="participantSelected ? false : true"
+                                type="is-success">
+                                {{ permission.label }}
+                            </b-switch>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -133,6 +118,11 @@ export default {
         'text_search_participant',
         'text_participant_fields_json',
         'text_associate_leader',
+        'text_consult_categories_events',
+        'text_create_events',
+        'text_modify_events',
+        'text_share_events',
+        'text_delete_events',
         'text_apply',
         'text_cancel',
         'url_participants_programmer'
@@ -145,6 +135,28 @@ export default {
             participanError: false,
             participants:[],
             participantSelected: null,
+            permissions: {
+                            consult_categories_events: {
+                                                            value: false,
+                                                            label: this.text_consult_categories_events
+                                                        },
+                            create_events: {
+                                                value: false,
+                                                label: this.text_create_events
+                                            },
+                            modify_events: {
+                                                value: false,
+                                                label: this.text_modify_events
+                                            },
+                            share_events: {
+                                                value: false,
+                                                label: this.text_share_events
+                                            },
+                            delete_events: {
+                                                value: false,
+                                                label: this.text_delete_events
+                                            },
+                        },
             programmer: {},
             fields: [],
         }
@@ -163,6 +175,11 @@ export default {
         showErrors(resError){
             this.errors = procesarErroresRequest( resError );
             this.hasErrors = this.errors.errors.length > 0;
+        },
+        clickAssociateLeader(){
+            Object.keys(this.permissions).forEach( (k,index) => {
+                this.permissions[k].value = true;
+            });
         },
         getParticipants(){
             this.isLoading = true;
