@@ -2280,8 +2280,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'text_search_participant', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer'],
+  props: ['text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'text_search_participant', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'url_permissions_participant'],
   data: function data() {
     return {
       contentActive: {}
@@ -2749,12 +2750,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
  //Import vue-select
 
 
 Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a);
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_admin_leaders', 'programmer_json', 'user_id', 'text_search_participant', 'text_participant_fields_json', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_apply', 'text_cancel', 'url_participants_programmer'],
+  props: ['text_admin_leaders', 'programmer_json', 'user_id', 'text_search_participant', 'text_participant_fields_json', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_apply', 'text_cancel', 'url_participants_programmer', 'url_permissions_participant'],
   data: function data() {
     return {
       isLoading: false,
@@ -2766,25 +2768,33 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a);
       permissions: {
         consult_categories_events: {
           value: false,
-          label: this.text_consult_categories_events
+          label: this.text_consult_categories_events,
+          id: [1, //categories.index
+          6 //events.index
+          ]
         },
         create_events: {
           value: false,
-          label: this.text_create_events
+          label: this.text_create_events,
+          id: 7
         },
         modify_events: {
           value: false,
-          label: this.text_modify_events
+          label: this.text_modify_events,
+          id: 8
         },
         share_events: {
           value: false,
-          label: this.text_share_events
+          label: this.text_share_events,
+          id: 10
         },
         delete_events: {
           value: false,
-          label: this.text_delete_events
+          label: this.text_delete_events,
+          id: 9
         }
       },
+      associate_leader: false,
       programmer: {},
       fields: []
     };
@@ -2807,8 +2817,9 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a);
     clickAssociateLeader: function clickAssociateLeader() {
       var _this = this;
 
+      this.associate_leader = !this.associate_leader;
       Object.keys(this.permissions).forEach(function (k, index) {
-        _this.permissions[k].value = true;
+        _this.permissions[k].value = _this.associate_leader;
       });
     },
     getParticipants: function getParticipants() {
@@ -2835,6 +2846,28 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a);
         _this2.showErrors(error);
       }).then(function () {
         _this2.isLoading = false;
+      });
+    },
+    onSelectChanged: function onSelectChanged() {
+      if (this.participantSelected !== null) {
+        this.getPermissions(this.participantSelected.id);
+      }
+    },
+    getPermissions: function getPermissions(id_participant) {
+      var _this3 = this;
+
+      this.isLoading = true;
+      axios.post(this.url_permissions_participant, {
+        participants_id: id_participant
+      }).then(function (response) {
+        if (response.data.status === 200) {
+          // TODO
+          console.log("permisos", response.data.permissions);
+        }
+      }, function (error) {
+        _this3.showErrors(error);
+      }).then(function () {
+        _this3.isLoading = false;
       });
     }
   }
@@ -64771,7 +64804,8 @@ var render = function() {
                   text_delete_events: _vm.text_delete_events,
                   text_apply: _vm.text_apply,
                   text_cancel: _vm.text_cancel,
-                  url_participants_programmer: _vm.url_participants_programmer
+                  url_participants_programmer: _vm.url_participants_programmer,
+                  url_permissions_participant: _vm.url_permissions_participant
                 },
                 on: { activeMainSection: _vm.setActiveSection }
               })
@@ -65373,6 +65407,7 @@ var render = function() {
                   placeholder: _vm.text_search_participant,
                   label: "participant"
                 },
+                on: { input: _vm.onSelectChanged },
                 model: {
                   value: _vm.participantSelected,
                   callback: function($$v) {

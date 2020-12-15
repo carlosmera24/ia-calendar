@@ -154,6 +154,7 @@
             v-bind:url_person_email_exist='"{{ route('persons_emails_exists') }}"'
             v-bind:url_person_cellphone_exist='"{{ route('persons_cellphones_exists') }}"'
             v-bind:url_participants_programmer='"{{ route('participants_list_programmer') }}"'
+            v-bind:url_permissions_participant='"{{ route('list_permissions') }}"'
         />
         {{-- /Content Main --}}
     </div>

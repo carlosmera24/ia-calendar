@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
+use App\Models\Programmer;
+use App\Models\PermissionParticipant;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Participant extends Model
 {
@@ -12,17 +15,22 @@ class Participant extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\Models\User','users_id');
+        return $this->belongsTo(User::class,'users_id');
     }
 
     public function programmer()
     {
-        return $this->belongsTo('App\Models\Programmer','programmers_id');
+        return $this->belongsTo(Programmer::class,'programmers_id');
     }
 
     public function person()
     {
-        return $this->belongsTo('App\Models\Person','persons_id');
+        return $this->belongsTo(Person::class,'persons_id');
+    }
+
+    public function permissionsParticipants()
+    {
+        return $this->hasMany(PermissionParticipant::class,'participants_id');
     }
 
 }

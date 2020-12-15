@@ -51,6 +51,7 @@
                 v-bind:text_apply='text_apply'
                 v-bind:text_cancel='text_cancel'
                 v-bind:url_participants_programmer="url_participants_programmer"
+                v-bind:url_permissions_participant="url_permissions_participant"
             />
         </transition-group>
     </div>
@@ -97,6 +98,7 @@ export default {
         'url_person_email_exist',
         'url_person_cellphone_exist',
         'url_participants_programmer',
+        'url_permissions_participant',
     ],
     data() {
         return {

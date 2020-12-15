@@ -18,6 +18,7 @@
                         :reduce="participant => participant.meta"
                         :placeholder="text_search_participant"
                         label="participant"
+                        @input="onSelectChanged"
                     />
                     <div class="icon is-small is-left">
                         <i class="fas fa-search"></i>
@@ -125,7 +126,8 @@ export default {
         'text_delete_events',
         'text_apply',
         'text_cancel',
-        'url_participants_programmer'
+        'url_participants_programmer',
+        'url_permissions_participant'
     ],
     data() {
         return {
@@ -138,25 +140,34 @@ export default {
             permissions: {
                             consult_categories_events: {
                                                             value: false,
-                                                            label: this.text_consult_categories_events
+                                                            label: this.text_consult_categories_events,
+                                                            id: [
+                                                                    1, //categories.index
+                                                                    6, //events.index
+                                                                ]
                                                         },
                             create_events: {
                                                 value: false,
-                                                label: this.text_create_events
+                                                label: this.text_create_events,
+                                                id: 7
                                             },
                             modify_events: {
                                                 value: false,
-                                                label: this.text_modify_events
+                                                label: this.text_modify_events,
+                                                id: 8
                                             },
                             share_events: {
                                                 value: false,
-                                                label: this.text_share_events
+                                                label: this.text_share_events,
+                                                id: 10
                                             },
                             delete_events: {
                                                 value: false,
-                                                label: this.text_delete_events
+                                                label: this.text_delete_events,
+                                                id: 9
                                             },
                         },
+            associate_leader: false,
             programmer: {},
             fields: [],
         }
@@ -177,8 +188,9 @@ export default {
             this.hasErrors = this.errors.errors.length > 0;
         },
         clickAssociateLeader(){
+            this.associate_leader = !this.associate_leader;
             Object.keys(this.permissions).forEach( (k,index) => {
-                this.permissions[k].value = true;
+                this.permissions[k].value = this.associate_leader;
             });
         },
         getParticipants(){
@@ -196,6 +208,29 @@ export default {
                             }
                             this.participants.push( tmp );
                         });
+                    }
+                },
+                error => {
+                    this.showErrors(error);
+                })
+                .then( () => {
+                    this.isLoading = false;
+                });
+        },
+        onSelectChanged(){
+            if( this.participantSelected !== null)
+            {
+                this.getPermissions( this.participantSelected.id );
+            }
+        },
+        getPermissions( id_participant ){
+            this.isLoading = true;
+            axios.post(this.url_permissions_participant, { participants_id : id_participant })
+                .then( response => {
+                    if( response.data.status === 200 )
+                    {
+                        // TODO
+                        console.log("permisos", response.data.permissions );
                     }
                 },
                 error => {

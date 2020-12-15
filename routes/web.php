@@ -6,6 +6,7 @@ use App\Http\Controllers\PersonController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\PersonEmailController;
 use App\Http\Controllers\PersonCellphoneController;
+use App\Http\Controllers\PermissionParticipantController;
 /**
  * ----------------------------------------------------------
  * Welcome zone
@@ -34,6 +35,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/persons-cellphones/store-array', [ PersonCellphoneController::class, 'storeArray' ])->name('persons_mobiles_store_array');
     Route::post('/persons-cellphones/cellphone-exists', [ PersonCellphoneController::class, 'cellphoneExists' ])->name('persons_cellphone_exists');
     Route::post('/persons-cellphones/cellphones-exists', [ PersonCellphoneController::class, 'cellphonesExists' ])->name('persons_cellphones_exists');
+    Route::post('/permissions-participants/list-permissions', [ PermissionParticipantController::class, 'listPermissionsParticipant' ])->name('list_permissions');
 });
 // Sesion
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');

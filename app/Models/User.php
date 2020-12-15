@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Participant;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -39,6 +40,6 @@ class User extends Authenticatable
 
     public function participants()
     {
-        return $this->hasMany('App\Models\Participant','users_id');
+        return $this->hasMany(Participant::class,'users_id');
     }
 }
