@@ -40,6 +40,8 @@
                 v-bind:text_admin_leaders='text_admin_leaders'
                 v-bind:programmer_json="programmer_json"
                 v-bind:user_id="user_id"
+                v-bind:text_success='text_success'
+                v-bind:text_updated_participant='text_updated_participant'
                 v-bind:text_search_participant="text_search_participant"
                 v-bind:text_participant_fields_json="text_participant_fields_json"
                 v-bind:text_associate_leader="text_associate_leader"
@@ -52,6 +54,7 @@
                 v-bind:text_cancel='text_cancel'
                 v-bind:url_participants_programmer="url_participants_programmer"
                 v-bind:url_permissions_participant="url_permissions_participant"
+                v-bind:url_store_permissions_participant="url_store_permissions_participant"
             />
         </transition-group>
     </div>
@@ -77,6 +80,7 @@ export default {
         'text_wall_add_notes',
         'text_participant_title',
         'text_created_participant',
+        'text_updated_participant',
         'text_accept',
         'text_apply',
         'text_cancel',
@@ -99,6 +103,7 @@ export default {
         'url_person_cellphone_exist',
         'url_participants_programmer',
         'url_permissions_participant',
+        'url_store_permissions_participant',
     ],
     data() {
         return {

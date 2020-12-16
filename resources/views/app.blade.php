@@ -133,6 +133,7 @@
             v-bind:text_wall_add_notes='"{{ __('app.wall.add_notes') }} "'
             v-bind:text_participant_title='" {{ __('app.participant_new.title') }}"'
             v-bind:text_created_participant='" {{ __('messages.created_participant') }}"'
+            v-bind:text_updated_participant='" {{ __('messages.updated_participant') }}"'
             v-bind:text_accept='"{{ __('validation.attributes.accept') }}"'
             v-bind:text_apply='"{{ __('validation.attributes.apply') }}"'
             v-bind:text_cancel='"{{ __('validation.attributes.cancel') }}"'
@@ -155,6 +156,7 @@
             v-bind:url_person_cellphone_exist='"{{ route('persons_cellphones_exists') }}"'
             v-bind:url_participants_programmer='"{{ route('participants_list_programmer') }}"'
             v-bind:url_permissions_participant='"{{ route('list_permissions') }}"'
+            v-bind:url_store_permissions_participant='"{{ route('permissions_participants_store') }}"'
         />
         {{-- /Content Main --}}
     </div>

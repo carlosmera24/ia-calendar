@@ -13,6 +13,12 @@ class PermissionParticipantController extends Controller
                                             'permissions_ids'    =>  'nullable|array||min:1',
                                             'permissions_ids.*'  =>  'required|integer|exists:permissions,id',
                                         ];
+    protected $rules_store = [
+                                'participants_id'       =>  'required|integer|exists:participants,id',
+                                'permissions_ids'       =>  'required|array||min:1',
+                                'permissions_ids.*.id'    =>  'required|integer|exists:permissions,id',
+                                'permissions_ids.*.value' =>  'required|boolean',
+                            ];
 
     /**
      * Display a listing of the resource.
@@ -48,7 +54,8 @@ class PermissionParticipantController extends Controller
             $permissions = PermissionParticipant::where('participants_id', $request->participants_id )
                                                 ->when($permissions_ids, function($query, $permissions_ids){
                                                     return $query->whereIn('permissions_id', $permissions_ids);
-                                                });
+                                                })
+                                                ->get();
             return response()->json(
                                         array(
                                                 'status'        =>  200,
@@ -77,7 +84,54 @@ class PermissionParticipantController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->input(), $this->rules_store);
+        if( $validator->fails() )
+        {
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'error'     =>  "BadRequest",
+                                                'data'      =>  $validator->getMessageBag()->toArray()
+                                            ),
+                                        400
+                                    );
+        }else
+        {
+            $result = array();
+            foreach( $request->permissions_ids as $ids )
+            {
+                //search permission
+                $permission = PermissionParticipant::where('participants_id', $request->participants_id)
+                                                    ->where('permissions_id', $ids['id'])
+                                                    ->first();
+
+                $tmp = array( 'permissions_id' => $ids['id'], 'exists' => isset($permission) );
+
+                if( isset($permission)  && !$ids['value'] )
+                {
+                    //Delete permission participant
+                    $tmp['id'] = $permission->id;
+                    $tmp['delete'] = $permission->delete();
+                }else if( !isset($permission) && $ids['value'] )
+                {
+                    //Create new permission participant
+                    $new = new PermissionParticipant();
+                    $new->participants_id = $request->participants_id;
+                    $new->permissions_id = $ids['id'];
+                    $tmp['create'] = $new->save();
+                    $tmp['id'] = $new->id;
+                }
+                $result[] = $tmp;
+            }
+
+            return response()->json(
+                                        array(
+                                                'status'    =>  200,
+                                                'data'      =>  $result
+                                            ),
+                                        200
+                                    );
+        }
     }
 
     /**

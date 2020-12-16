@@ -11,5 +11,6 @@ return [
     |
     */
     'success'               =>  'Éxito!',
-    'created_participant'   =>  'Partícipe creado satisfactoriamente.'
+    'created_participant'   =>  'Partícipe creado satisfactoriamente.',
+    'updated_participant'   =>  'Partícipe actualizado satisfactoriamente.'
 ];

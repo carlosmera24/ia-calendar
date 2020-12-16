@@ -99,17 +99,26 @@
             </section>
             <div class="btn-actions has-text-centered">
                 <b-button  class="btn-cancel is-capitalized" v-on:click.prevent="clickCancel">{{ text_cancel }}</b-button>
-                <b-button class="btn-accept is-capitalized" v-on:click.prevent="save">{{ text_apply }}</b-button>
+                <b-button
+                    class="btn-accept is-capitalized"
+                    v-on:click.prevent="clickApply"
+                    :disabled="participantSelected ? false : true">
+                    {{ text_apply }}
+                </b-button>
             </div>
         </form>
     </div>
 </template>
 <script>
 import { procesarErroresRequest, capitalize } from '../../functions.js';
-
+var validate = require('validate.js');
 //Import vue-select
 import vSelect from 'vue-select'
 Vue.component('v-select', vSelect)
+//Import PNotify
+import { success } from '@pnotify/core';
+import '@pnotify/core/dist/PNotify.css';
+import '@pnotify/core/dist/BrightTheme.css';
 
 export default {
     props: [
@@ -126,8 +135,11 @@ export default {
         'text_delete_events',
         'text_apply',
         'text_cancel',
+        'text_success',
+        'text_updated_participant',
         'url_participants_programmer',
-        'url_permissions_participant'
+        'url_permissions_participant',
+        'url_store_permissions_participant'
     ],
     data() {
         return {
@@ -138,34 +150,39 @@ export default {
             participants:[],
             participantSelected: null,
             permissions: {
-                            consult_categories_events: {
-                                                            value: false,
-                                                            label: this.text_consult_categories_events,
-                                                            id: [
-                                                                    1, //categories.index
-                                                                    6, //events.index
-                                                                ]
-                                                        },
-                            create_events: {
-                                                value: false,
-                                                label: this.text_create_events,
-                                                id: 7
-                                            },
-                            modify_events: {
-                                                value: false,
-                                                label: this.text_modify_events,
-                                                id: 8
-                                            },
-                            share_events: {
-                                                value: false,
-                                                label: this.text_share_events,
-                                                id: 10
-                                            },
-                            delete_events: {
-                                                value: false,
-                                                label: this.text_delete_events,
-                                                id: 9
-                                            },
+                            1: {
+                                    value: false,
+                                    label: this.text_consult_categories_events,
+                                    permission: [ 'categories.index', 'events.index' ],
+                                    id: [
+                                            1, //categories.index
+                                            6, //events.index
+                                        ]
+                                },
+                            7: {
+                                    value: false,
+                                    label: this.text_create_events,
+                                    permission: 'events.create',
+                                    id: 7
+                                },
+                            8: {
+                                    value: false,
+                                    label: this.text_modify_events,
+                                    permission: 'events.edit',
+                                    id: 8
+                                },
+                            10: {
+                                    value: false,
+                                    label: this.text_share_events,
+                                    permission: 'events.share',
+                                    id: 10
+                                },
+                            9: {
+                                    value: false,
+                                    label: this.text_delete_events,
+                                    permission: 'events.delete',
+                                    id: 9
+                                },
                         },
             associate_leader: false,
             programmer: {},
@@ -197,6 +214,7 @@ export default {
             this.isLoading = true;
             axios.post(this.url_participants_programmer, { programmers_id : this.programmer.id, users_id: this.user_id })
                 .then( response => {
+                    this.showErrors({});
                     if( response.data.status === 200 )
                     {
                         response.data.participants.forEach( element => {
@@ -218,24 +236,74 @@ export default {
                 });
         },
         onSelectChanged(){
+            this.resetPermissions();
             if( this.participantSelected !== null)
             {
                 this.getPermissions( this.participantSelected.id );
             }
         },
+        resetPermissions(){
+            Object.keys(this.permissions).forEach( (k,index) => {
+                this.permissions[k].value = false;
+            });
+        },
         getPermissions( id_participant ){
             this.isLoading = true;
             axios.post(this.url_permissions_participant, { participants_id : id_participant })
                 .then( response => {
+                    this.showErrors({});
                     if( response.data.status === 200 )
                     {
-                        // TODO
-                        console.log("permisos", response.data.permissions );
+                        const permissions = response.data.permissions;
+                        if( !validate.isEmpty(permissions) ){
+                            //Load permissions
+                            permissions.forEach( permi => {
+                                if( permi.permissions_id !== 6 )
+                                {
+                                    this.permissions[ permi.permissions_id ].value = true;
+                                }
+                            });
+                        }else{
+                            this.resetPermissions();
+                        }
                     }
                 },
                 error => {
                     this.showErrors(error);
                 })
+                .then( () => {
+                    this.isLoading = false;
+                });
+        },
+        clickApply(){
+            var permissions_ids = [];
+            Object.keys( this.permissions ).forEach( k => {
+                const permi = this.permissions[k];
+                if( validate.isArray( permi.id ) )
+                {
+                    permi.id.forEach( id => {
+                        permissions_ids.push( { id: id, value: permi.value } );
+                    });
+                }else{
+                    permissions_ids.push( { id: permi.id, value: permi.value } );
+                }
+            } );
+            //Save permissions as leader
+            this.isLoading = true;
+            axios.post(this.url_store_permissions_participant, { participants_id: this.participantSelected.id, permissions_ids: permissions_ids })
+                    .then( response => {
+                        this.showErrors({});
+                        if( response.data.status === 200 )
+                        {
+                            success({
+                                        title: this.text_success,
+                                        text: this.text_updated_participant
+                                    });
+                        }
+                    },
+                    error => {
+                        this.showErrors(error);
+                    } )
                 .then( () => {
                     this.isLoading = false;
                 });
