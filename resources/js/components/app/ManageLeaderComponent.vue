@@ -139,7 +139,8 @@ export default {
         'text_updated_participant',
         'url_participants_programmer',
         'url_permissions_participant',
-        'url_store_permissions_participant'
+        'url_store_permissions_participant',
+        'url_participant_update'
     ],
     data() {
         return {
@@ -187,6 +188,7 @@ export default {
             associate_leader: false,
             programmer: {},
             fields: [],
+            PROFILE_LEADER: 2, //ID Profile leader
         }
     },
     created(){
@@ -277,8 +279,10 @@ export default {
         },
         clickApply(){
             var permissions_ids = [];
+            var associated_leader = this.associate_leader;
             Object.keys( this.permissions ).forEach( k => {
                 const permi = this.permissions[k];
+                associated_leader = permi.value ? permi.value : associated_leader;
                 if( validate.isArray( permi.id ) )
                 {
                     permi.id.forEach( id => {
@@ -295,10 +299,36 @@ export default {
                         this.showErrors({});
                         if( response.data.status === 200 )
                         {
+                            //Change profile to Leader
+                            if( associated_leader && this.participantSelected.profiles_participants_id !== this.PROFILE_LEADER )
+                            {
+                                const param = {
+                                    profiles_participants_id: this.PROFILE_LEADER,
+                                    id: this.participantSelected.id
+                                };
+                                axios.post( this.url_participant_update, param )
+                                    .then( response => {
+                                        this.showErrors({});
+                                        if( response.data.status === 200 )
+                                        {
+                                            this.getParticipants();
+
+                                        }else if( response.data.status === 204 )
+                                        {
+                                            this.showErrors( response.data.data );
+                                        }
+                                    },
+                                    error => {
+                                        this.showErrors(error);
+                                    } );
+                            }
+
                             success({
                                         title: this.text_success,
                                         text: this.text_updated_participant
                                     });
+
+
                         }
                     },
                     error => {

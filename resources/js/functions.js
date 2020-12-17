@@ -19,10 +19,10 @@ export function procesarErroresRequest(error) {
             switch (error.response.status) {
                 case 0:
                     // text = 'Error en su conexión a internet';
-                    text += error.response.statusText;
+                    text += error.response.data.error ? error.response.data.error : error.response.statusText;
                     break;
                 case 400:
-                    text += error.response.statusText;
+                    text += error.response.data.error ? error.response.data.error : error.response.statusText;
                     Object.keys(error.response.data.data).forEach(function (key) {
                         error.response.data.data[key].forEach(function (content) {
                             errors.push(content);
@@ -39,7 +39,7 @@ export function procesarErroresRequest(error) {
                 //     text = 'Método no permitido';
                 //     break;
                 case 500:
-                    text += error.response.statusText;
+                    text += error.response.data.error ? error.response.data.error : error.response.statusText;
                     // text = 'Error en su solicitud, por favor intentelo más tarde.';
                     errors.push(error.message );
                     if( error.response.data.message )
@@ -51,7 +51,7 @@ export function procesarErroresRequest(error) {
                 //     text = 'Problemas con su conexión a Internet, por favor intentelo más tarde.';
                 //     break;
                 default:
-                    text += error.response.statusText;
+                    text += error.response.data.error ? error.response.data.error : error.response.statusText;
                     // if (response.statusText == "abort") {
                     //     text = 'Su solicitud ha sido abortada, por favor inténtelo más tarde.';
                     // } else {

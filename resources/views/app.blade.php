@@ -150,6 +150,7 @@
             v-bind:url_person_ui_avatar='"{{ route('person_uiavatar') }}"'
             v-bind:url_person_store='"{{ route('person_store') }}"'
             v-bind:url_participant_store='"{{ route('participant_store') }}"'
+            v-bind:url_participant_update='"{{ route('participant_update') }}"'
             v-bind:urls_emails_store='"{{ route('persons_emails_store_array') }}"'
             v-bind:urls_mobiles_store='"{{ route('persons_mobiles_store_array') }}"'
             v-bind:url_person_email_exist='"{{ route('persons_emails_exists') }}"'

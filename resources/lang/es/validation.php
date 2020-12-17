@@ -194,7 +194,8 @@ return [
         'profile_image'         => 'Avatar',
         'accept'                =>  'aceptar',
         'apply'                 =>  'aplicar',
-        'cancel'                =>  'cancelar'
+        'cancel'                =>  'cancelar',
+        'participant'           =>  'partícipe'
     ],
 
 ];

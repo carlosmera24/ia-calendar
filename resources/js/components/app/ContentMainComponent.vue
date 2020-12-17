@@ -55,6 +55,7 @@
                 v-bind:url_participants_programmer="url_participants_programmer"
                 v-bind:url_permissions_participant="url_permissions_participant"
                 v-bind:url_store_permissions_participant="url_store_permissions_participant"
+                v-bind:url_participant_update="url_participant_update"
             />
         </transition-group>
     </div>
@@ -97,6 +98,7 @@ export default {
         'url_person_ui_avatar',
         'url_person_store',
         'url_participant_store',
+        'url_participant_update',
         'urls_emails_store',
         'urls_mobiles_store',
         'url_person_email_exist',

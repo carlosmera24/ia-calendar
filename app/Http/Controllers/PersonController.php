@@ -54,7 +54,7 @@ class PersonController extends Controller
             return response()->json(
                                         array(
                                                 'status'    =>  400,
-                                                'error'     =>  "BadRequest",
+                                                'error'     =>  __('messages.bad_request'),
                                                 'data'      =>  $validator->getMessageBag()->toArray()
                                             ),
                                         400
@@ -152,7 +152,7 @@ class PersonController extends Controller
             return response()->json(
                                         array(
                                                 'status'    =>  400,
-                                                'error'     =>  "BadRequest",
+                                                'error'     =>  __('messages.bad_request'),
                                                 'data'      =>  $validator->getMessageBag()->toArray()
                                             ),
                                         400

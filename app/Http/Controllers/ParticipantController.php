@@ -18,6 +18,14 @@ class ParticipantController extends Controller
                                 'description'               =>  'nullable|min:2|',
 
                             ];
+    protected $rules_update = [
+                                'persons_id'                =>  'nullable|integer|exists:persons,id',
+                                'programmers_id'            =>  'nullable|integer|exists:programmers,id',
+                                'users_id'                  =>  'nullable|integer|exists:users,id',
+                                'profiles_participants_id'  =>  'nullable|integer|exists:profiles_participants,id',
+                                'description'               =>  'nullable|min:2|',
+
+                            ];
     protected $rules_list_participants = [
                                             'programmers_id'    =>  'required|integer|exists:programmers,id',
                                             'users_id'          =>  'nullable|integer|exists:users,id',
@@ -46,7 +54,7 @@ class ParticipantController extends Controller
             return response()->json(
                                         array(
                                                 'status'    =>  400,
-                                                'error'     =>  "BadRequest",
+                                                'error'     =>  __('messages.bad_request'),
                                                 'data'      =>  $validator->getMessageBag()->toArray()
                                             ),
                                         400
@@ -114,7 +122,7 @@ class ParticipantController extends Controller
             return response()->json(
                                         array(
                                                 'status'    =>  400,
-                                                'error'     =>  "BadRequest",
+                                                'error'     =>  __('messages.bad_request'),
                                                 'data'      =>  $validator->getMessageBag()->toArray()
                                             ),
                                         400
@@ -146,7 +154,7 @@ class ParticipantController extends Controller
                                         array(
                                                 'status'    =>  400,
                                                 'data'      =>  array(
-                                                                        "msg"    => "Error saving the new participant in the database"
+                                                                        "msg"    => __('messages.error_saving', [ 'attribute' => __('validation.attributes.participant') ])
                                                                     )
                                             ),
                                         400
@@ -178,14 +186,89 @@ class ParticipantController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Participant  $participant
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Participant $participant)
     {
-        //
+        $validator = Validator::make($request->input(), $this->rules_update);
+        if( $validator->fails() )
+        {
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'error'     =>  __('messages.bad_request'),
+                                                'data'      =>  $validator->getMessageBag()->toArray()
+                                            ),
+                                        400
+                                    );
+        }else
+        {
+            //search participant
+            $participant = Participant::find( $request->id );
+
+            //Not found
+            if( empty($participant) )
+            {
+                return response()->json(
+                                            array(
+                                                'status'    =>  204,
+                                                'error'     =>  __('messages.no_content'),
+                                                'data'      =>  array(
+                                                                        __('messages.no_found', [
+                                                                                                    'attribute' => __('validation.attributes.participant'),
+                                                                                                    'id' => $request->id
+                                                                                                ]
+                                                                            )
+                                                                    )
+                                            ),
+                                            200
+                                        );
+            }
+
+            //Update
+            if( isset( $request->persons_id ) )
+            {
+                $participant->persons_id = $request->persons_id;
+            }
+
+            if( isset( $request->programmers_id ) )
+            {
+                $participant->programmers_id = $request->programmers_id;
+            }
+
+            if( isset( $request->profiles_participants_id ) )
+            {
+                $participant->profiles_participants_id = $request->profiles_participants_id;
+            }
+
+            $participant->description = $request->profiles_participants_id;
+            $participant->users_id = $request->users_id;
+
+            if( $participant->update() )
+            {
+                return response()->json(
+                                        array(
+                                                'status'    =>  200,
+                                                'data'      =>  array(
+                                                                        "id"    => $participant->id
+                                                                    )
+                                            ),
+                                        200
+                                    );
+            }
+
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'data'      =>  array(
+                                                                        "msg"    => __('messages.error_updating', [ 'attribute' => __('validation.attributes.participant') ])
+                                                                    )
+                                            ),
+                                        400
+                                    );
+        }
     }
 
     /**
