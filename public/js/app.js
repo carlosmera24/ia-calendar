@@ -2285,8 +2285,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_updated_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'text_search_participant', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'url_participant_update', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'url_permissions_participant', 'url_store_permissions_participant'],
+  props: ['text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_no_options', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_updated_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'text_search_participant', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'url_participant_update', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'url_permissions_participant', 'url_store_permissions_participant'],
   data: function data() {
     return {
       contentActive: {}
@@ -2766,6 +2767,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -2778,7 +2781,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_admin_leaders', 'programmer_json', 'user_id', 'text_search_participant', 'text_participant_fields_json', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_apply', 'text_cancel', 'text_success', 'text_updated_participant', 'url_participants_programmer', 'url_permissions_participant', 'url_store_permissions_participant', 'url_participant_update'],
+  props: ['text_admin_leaders', 'programmer_json', 'user_id', 'text_search_participant', 'text_participant_fields_json', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_apply', 'text_cancel', 'text_success', 'text_no_options', 'text_updated_participant', 'url_participants_programmer', 'url_permissions_participant', 'url_store_permissions_participant', 'url_participant_update'],
   data: function data() {
     return {
       isLoading: false,
@@ -64907,6 +64910,7 @@ var render = function() {
                   programmer_json: _vm.programmer_json,
                   user_id: _vm.user_id,
                   text_success: _vm.text_success,
+                  text_no_options: _vm.text_no_options,
                   text_updated_participant: _vm.text_updated_participant,
                   text_search_participant: _vm.text_search_participant,
                   text_participant_fields_json:
@@ -65517,24 +65521,34 @@ var render = function() {
             "div",
             { staticClass: "control has-icons-left" },
             [
-              _c("v-select", {
-                attrs: {
-                  options: _vm.participants,
-                  reduce: function(participant) {
-                    return participant.meta
+              _c(
+                "v-select",
+                {
+                  attrs: {
+                    options: _vm.participants,
+                    reduce: function(participant) {
+                      return participant.meta
+                    },
+                    placeholder: _vm.text_search_participant,
+                    label: "participant"
                   },
-                  placeholder: _vm.text_search_participant,
-                  label: "participant"
+                  on: { input: _vm.onSelectChanged },
+                  model: {
+                    value: _vm.participantSelected,
+                    callback: function($$v) {
+                      _vm.participantSelected = $$v
+                    },
+                    expression: "participantSelected"
+                  }
                 },
-                on: { input: _vm.onSelectChanged },
-                model: {
-                  value: _vm.participantSelected,
-                  callback: function($$v) {
-                    _vm.participantSelected = $$v
-                  },
-                  expression: "participantSelected"
-                }
-              }),
+                [
+                  _c(
+                    "div",
+                    { attrs: { slot: "no-options" }, slot: "no-options" },
+                    [_vm._v(_vm._s(_vm.text_no_options))]
+                  )
+                ]
+              ),
               _vm._v(" "),
               _vm._m(0)
             ],

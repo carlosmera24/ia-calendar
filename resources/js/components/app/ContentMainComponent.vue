@@ -41,6 +41,7 @@
                 v-bind:programmer_json="programmer_json"
                 v-bind:user_id="user_id"
                 v-bind:text_success='text_success'
+                v-bind:text_no_options='text_no_options'
                 v-bind:text_updated_participant='text_updated_participant'
                 v-bind:text_search_participant="text_search_participant"
                 v-bind:text_participant_fields_json="text_participant_fields_json"
@@ -75,6 +76,7 @@ export default {
         'numbers_mobiles',
         'programmer_json',
         'text_success',
+        'text_no_options',
         'text_wall_title',
         'text_wall_trigger_events_soon_expire',
         'text_wall_add_categories',

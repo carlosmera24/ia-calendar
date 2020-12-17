@@ -19,7 +19,9 @@
                         :placeholder="text_search_participant"
                         label="participant"
                         @input="onSelectChanged"
-                    />
+                    >
+                        <div slot="no-options">{{ text_no_options }}</div>
+                    </v-select>
                     <div class="icon is-small is-left">
                         <i class="fas fa-search"></i>
                     </div>
@@ -136,6 +138,7 @@ export default {
         'text_apply',
         'text_cancel',
         'text_success',
+        'text_no_options',
         'text_updated_participant',
         'url_participants_programmer',
         'url_permissions_participant',

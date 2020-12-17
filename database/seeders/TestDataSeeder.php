@@ -16,6 +16,8 @@ class TestDataSeeder extends Seeder
     public function run()
     {
         //Clean data demo
+        DB::statement('DELETE FROM permissions_participants WHERE id > 0');
+        DB::statement('ALTER TABLE permissions_participants AUTO_INCREMENT = 0');
         DB::statement('DELETE FROM participants WHERE id > 0');
         DB::statement('ALTER TABLE participants AUTO_INCREMENT = 0');
         DB::statement('DELETE FROM persons_emails WHERE id > 0');
