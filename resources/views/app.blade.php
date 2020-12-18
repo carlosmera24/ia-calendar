@@ -148,7 +148,7 @@
             v-bind:text_modify_events="'{{ __('app.manage_leader.modify_events') }}'"
             v-bind:text_share_events="'{{ __('app.manage_leader.share_events') }}'"
             v-bind:text_delete_events="'{{ __('app.manage_leader.delete_events') }}'"
-            v-bind:url_person_ui_avatar='"{{ route('person_uiavatar') }}"'
+            v-bind:url_person_ui_avatar='"{{ route('participant_generate_avatar') }}"'
             v-bind:url_person_store='"{{ route('person_store') }}"'
             v-bind:url_participant_store='"{{ route('participant_store') }}"'
             v-bind:url_participant_update='"{{ route('participant_update') }}"'

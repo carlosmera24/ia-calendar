@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Person;
-use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -16,10 +15,6 @@ class PersonController extends Controller
                                 'position_company'  =>  'required | min:3 | max:60',
                                 'date_join_company' =>  'required | date_format:Y-m-d',
                             ];
-
-    protected $rule_ui_avatar = [
-                                    'name' => 'required|min:1',
-                                ];
 
     /**
      * Display a listing of the resource.
@@ -137,47 +132,5 @@ class PersonController extends Controller
     public function destroy(Person $person)
     {
         //
-    }
-
-    /**
-     * Return image in format stream
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function getUiAvatar(Request $request)
-    {
-        $validator = Validator::make($request->input(), $this->rule_ui_avatar);
-        if( $validator->fails() )
-        {
-            return response()->json(
-                                        array(
-                                                'status'    =>  400,
-                                                'error'     =>  __('messages.bad_request'),
-                                                'data'      =>  $validator->getMessageBag()->toArray()
-                                            ),
-                                        400
-                                    );
-        }else
-        {
-            $url_ui_avatar = "https://ui-avatars.com/api/";
-            $client = new Client();
-            $response = $client->request(
-                                    'GET',
-                                    $url_ui_avatar,
-                                    [
-                                        'query' => $request->all()
-                                    ]
-                                );
-            if( $response->getStatusCode() == 200 )
-            {
-                $file = $response->getBody()->getContents();
-                $header = [
-                    'Content-Type' => 'image/png"',
-                ];
-
-                return response($file, 200)
-                                ->withHeaders($header);
-            }
-        }
     }
 }

@@ -8,6 +8,7 @@ Desarrollo creado bajo la empresa [Infracounter](https://infracounter.com) por *
 3. Buefy
 4. **Dependencias Back (Composer):**
     - laravel/ui
+    - laravolt/avatar
 
 5. **Dependencias Front (NPM):**
     - @fortawesome/fontawesome-free **^5.14.0**

@@ -416,6 +416,9 @@ body, h2, button, input, select, textarea {
                                 border-radius: 50%;
                             }
                         }
+                        .avatar-active{
+                            background-color: #CCC;
+                        }
                         .avatar:hover{
                             background-color: #666;
                         }

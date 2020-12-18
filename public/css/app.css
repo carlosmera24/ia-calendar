@@ -20285,6 +20285,10 @@ textarea {
   border-radius: 50%;
 }
 
+.application .content-main .main .content .new-participant .form_new_participant .avatar-active {
+  background-color: #CCC;
+}
+
 .application .content-main .main .content .new-participant .form_new_participant .avatar:hover {
   background-color: #666;
 }

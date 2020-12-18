@@ -25,8 +25,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('/app', function(){
         return view('app');
     })->name('home');
-    Route::get('person/ui-avatar', [PersonController::class, 'getUiAvatar'])->name('person_uiavatar');
     Route::post('/person/store', [ PersonController::class, 'store' ])->name('person_store');
+    Route::post('/participants/generate-avatar', [ ParticipantController::class, 'getAvatarFromString' ])->name('participant_generate_avatar');
     Route::post('/participants/list-programmer', [ ParticipantController::class, 'listFromProgrammer' ])->name('participants_list_programmer');
     Route::post('/participant/store', [ ParticipantController::class, 'store' ])->name('participant_store');
     Route::post('/participant/update', [ ParticipantController::class, 'update' ])->name('participant_update');

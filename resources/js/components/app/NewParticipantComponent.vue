@@ -102,7 +102,10 @@
                     <label class="label label_description">&nbsp;</label>
                     <div class="contol"
                         v-bind:class="{ 'is-danger' : fields.profile_image.error }">
-                        <div class="avatar is-flex" v-on:click="selectFile">
+                        <div class="avatar is-flex"
+                            v-on:click="selectFile"
+                            :class="{ 'avatar-active' : avatar }"
+                            >
                             <span class="text-avatar" v-if="avatar == null">{{ fields.profile_image.label }}</span>
                             <img :src="avatar" v-else>
                         </div>
@@ -206,13 +209,20 @@ export default{
         },
         getAvatar(e){
             const name = this.fname +" "+ this.lname;
-            const params = {
-                params:{
-                name: name,}
-            };
             if( name !== "" )
             {
-                this.avatar = this.url_person_ui_avatar +"?name="+ name +'&size=128';
+                axios.post( this.url_person_ui_avatar, { name: name } )
+                    .then( response => {
+                        this.showErrors({});
+                        if( response.data.status === 200 )
+                        {
+                            console.log("avatar", response.data.avatar);
+                            this.avatar = response.data.avatar.encoded;
+                        }
+                    },
+                    error => {
+                        this.showErrors( error );
+                    } );
             }
         },
         isEqualEmails(pos){

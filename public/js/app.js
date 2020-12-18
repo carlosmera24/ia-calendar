@@ -3126,6 +3126,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
@@ -3196,64 +3199,72 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
       this.$refs.fileAvatar.click();
     },
     getAvatar: function getAvatar(e) {
+      var _this = this;
+
       var name = this.fname + " " + this.lname;
-      var params = {
-        params: {
-          name: name
-        }
-      };
 
       if (name !== "") {
-        this.avatar = this.url_person_ui_avatar + "?name=" + name + '&size=128';
+        axios.post(this.url_person_ui_avatar, {
+          name: name
+        }).then(function (response) {
+          _this.showErrors({});
+
+          if (response.data.status === 200) {
+            console.log("avatar", response.data.avatar);
+            _this.avatar = response.data.avatar.encoded;
+          }
+        }, function (error) {
+          _this.showErrors(error);
+        });
       }
     },
     isEqualEmails: function isEqualEmails(pos) {
-      var _this = this;
+      var _this2 = this;
 
       var equal = false;
       this.emails.forEach(function (element, index) {
         if (pos !== index) {
-          if (_this.emails[pos].value === element.value) {
+          if (_this2.emails[pos].value === element.value) {
             equal = true;
-            _this.emails[pos].error = true;
-            _this.emailMsg[pos] = _this.fields.email.msg_validate;
+            _this2.emails[pos].error = true;
+            _this2.emailMsg[pos] = _this2.fields.email.msg_validate;
           }
         }
       });
       return equal;
     },
     isEqualMobiles: function isEqualMobiles(pos) {
-      var _this2 = this;
+      var _this3 = this;
 
       var equal = false;
       this.mobiles.forEach(function (element, index) {
         if (pos !== index) {
-          if (_this2.mobiles[pos].value === element.value) {
+          if (_this3.mobiles[pos].value === element.value) {
             equal = true;
-            _this2.mobiles[pos].error = true;
-            _this2.mobileMsg[pos] = _this2.fields.mobile.msg_validate;
+            _this3.mobiles[pos].error = true;
+            _this3.mobileMsg[pos] = _this3.fields.mobile.msg_validate;
           }
         }
       });
       return equal;
     },
     proccessEmailsExists: function proccessEmailsExists(validates) {
-      var _this3 = this;
-
-      validates.forEach(function (e, i) {
-        if (e.exists === true) {
-          _this3.emails[i].error = true;
-          _this3.emailMsg[i] = _this3.fields.email.msg_exist;
-        }
-      });
-    },
-    proccessCellphonesExists: function proccessCellphonesExists(validates) {
       var _this4 = this;
 
       validates.forEach(function (e, i) {
         if (e.exists === true) {
-          _this4.mobiles[i].error = true;
-          _this4.mobileMsg[i] = _this4.fields.mobile.msg_exist;
+          _this4.emails[i].error = true;
+          _this4.emailMsg[i] = _this4.fields.email.msg_exist;
+        }
+      });
+    },
+    proccessCellphonesExists: function proccessCellphonesExists(validates) {
+      var _this5 = this;
+
+      validates.forEach(function (e, i) {
+        if (e.exists === true) {
+          _this5.mobiles[i].error = true;
+          _this5.mobileMsg[i] = _this5.fields.mobile.msg_exist;
         }
       });
     },
@@ -3262,7 +3273,7 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
       this.hasErrors = this.errors.errors.length > 0;
     },
     save: function save() {
-      var _this5 = this;
+      var _this6 = this;
 
       this.fields.first_name.error = this.fname === '';
       this.fields.last_name.error = this.lname === '';
@@ -3278,7 +3289,7 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
 
         if (index === 0) {
           element.error = element.value === '';
-          _this5.emailMsg[index] = _this5.fields.email.msg;
+          _this6.emailMsg[index] = _this6.fields.email.msg;
           isEmailError = isEmailError ? isEmailError : element.error;
         }
 
@@ -3290,11 +3301,11 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
 
           if (!(res === undefined)) {
             element.error = true;
-            _this5.emailMsg[index] = _this5.fields.email.msg_validate;
+            _this6.emailMsg[index] = _this6.fields.email.msg_validate;
             isEmailError = isEmailError ? isEmailError : element.error;
           } else {
             //emails equals
-            if (_this5.isEqualEmails(index)) {
+            if (_this6.isEqualEmails(index)) {
               is_email_duplicate = true;
             }
           }
@@ -3305,7 +3316,7 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
 
         if (index === 0) {
           element.error = element.value === "";
-          _this5.mobileMsg[index] = _this5.fields.mobile.msg;
+          _this6.mobileMsg[index] = _this6.fields.mobile.msg;
           isMobileError = isMobileError ? isMobileError : element.error;
         }
 
@@ -3318,11 +3329,11 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
 
           if (!(res === undefined)) {
             element.error = true;
-            _this5.mobileMsg[index] = _this5.fields.mobile.msg_validate;
+            _this6.mobileMsg[index] = _this6.fields.mobile.msg_validate;
             isMobileError = isMobileError ? isMobileError : element.error;
           } else {
             //mobiles equals
-            if (_this5.isEqualMobiles(index)) {
+            if (_this6.isEqualMobiles(index)) {
               is_mobile_duplicate = true;
             }
           }
@@ -3341,44 +3352,44 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
         axios.post(this.url_person_email_exist, {
           emails: emails
         }).then(function (response) {
-          _this5.showErrors({});
+          _this6.showErrors({});
 
           if (response.data.status === 200) {
-            _this5.proccessEmailsExists(response.data.validate);
+            _this6.proccessEmailsExists(response.data.validate);
 
             if (response.data.exists === false) //No exists emails
               {
                 //Validate if cellphones exists in database
                 var mobiles = [];
 
-                _this5.mobiles.forEach(function (element) {
+                _this6.mobiles.forEach(function (element) {
                   if (element.value !== "") {
                     mobiles.push(element.value);
                   }
                 });
 
-                _this5.isLoading = true;
-                axios.post(_this5.url_person_cellphone_exist, {
+                _this6.isLoading = true;
+                axios.post(_this6.url_person_cellphone_exist, {
                   mobiles: mobiles
                 }).then(function (response) {
-                  _this5.showErrors({});
+                  _this6.showErrors({});
 
                   if (response.data.status === 200) {
-                    _this5.proccessCellphonesExists(response.data.validate);
+                    _this6.proccessCellphonesExists(response.data.validate);
 
                     if (response.data.exists === false) //Not exists cellphones
                       {
                         // Create person
                         var person = {
-                          first_name: _this5.fname,
-                          last_name: _this5.lname,
-                          birth_date: _this5.dateFormat(_this5.birth_date),
-                          position_company: _this5.position,
-                          date_join_company: _this5.dateFormat(_this5.date_join)
+                          first_name: _this6.fname,
+                          last_name: _this6.lname,
+                          birth_date: _this6.dateFormat(_this6.birth_date),
+                          position_company: _this6.position,
+                          date_join_company: _this6.dateFormat(_this6.date_join)
                         };
-                        _this5.isLoading = true;
-                        axios.post(_this5.url_person_store, person).then(function (response) {
-                          _this5.showErrors({});
+                        _this6.isLoading = true;
+                        axios.post(_this6.url_person_store, person).then(function (response) {
+                          _this6.showErrors({});
 
                           if (response.data.status === 201) //created person
                             {
@@ -3386,61 +3397,61 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
 
                               var participant = {
                                 persons_id: id_person,
-                                programmers_id: _this5.programmer.id,
-                                profiles_participants_id: _this5.id_profile,
-                                description: _this5.description
+                                programmers_id: _this6.programmer.id,
+                                profiles_participants_id: _this6.id_profile,
+                                description: _this6.description
                               };
-                              axios.post(_this5.url_participant_store, participant).then(function (response) {
+                              axios.post(_this6.url_participant_store, participant).then(function (response) {
                                 if (response.data.status === 201) {
                                   // Create emails
-                                  axios.post(_this5.urls_emails_store, {
+                                  axios.post(_this6.urls_emails_store, {
                                     emails: emails,
                                     persons_id: id_person
                                   }).then(function (response) {
                                     if (response.data.status === 201) {
                                       //Create cellphones
-                                      axios.post(_this5.urls_mobiles_store, {
+                                      axios.post(_this6.urls_mobiles_store, {
                                         mobiles: mobiles,
                                         persons_id: id_person
                                       }).then(function (response) {
                                         if (response.data.status === 201) {
                                           Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_1__["success"])({
-                                            title: _this5.text_success,
-                                            text: _this5.text_created_participant
+                                            title: _this6.text_success,
+                                            text: _this6.text_created_participant
                                           }); //Limpiar formulario
 
-                                          _this5.cleanForm();
+                                          _this6.cleanForm();
                                         }
                                       }, function (error) {
-                                        _this5.showErrors(error);
+                                        _this6.showErrors(error);
                                       });
                                     }
                                   }, function (error) {
-                                    _this5.showErrors(error);
+                                    _this6.showErrors(error);
                                   });
                                 }
                               }, function (error) {
-                                _this5.showErrors(error);
+                                _this6.showErrors(error);
                               });
                             }
                         }, function (error) {
-                          _this5.showErrors(error);
+                          _this6.showErrors(error);
                         }).then(function () {
-                          _this5.isLoading = false;
+                          _this6.isLoading = false;
                         });
                       }
                   }
                 }, function (error) {
-                  _this5.showErrors(error);
+                  _this6.showErrors(error);
                 }).then(function () {
-                  _this5.isLoading = false;
+                  _this6.isLoading = false;
                 });
               }
           }
         }, function (error) {
-          _this5.showErrors(error);
+          _this6.showErrors(error);
         }).then(function () {
-          _this5.isLoading = false;
+          _this6.isLoading = false;
         });
       }
     },
@@ -66210,6 +66221,7 @@ var render = function() {
                       "div",
                       {
                         staticClass: "avatar is-flex",
+                        class: { "avatar-active": _vm.avatar },
                         on: { click: _vm.selectFile }
                       },
                       [

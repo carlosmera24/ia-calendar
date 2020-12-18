@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Validator;
 use App\Models\Participant;
 use App\Models\PersonEmail;
+use Laravolt\Avatar\Avatar;
 use Illuminate\Http\Request;
 use App\Models\PersonCellphone;
 
@@ -30,6 +31,9 @@ class ParticipantController extends Controller
                                             'programmers_id'    =>  'required|integer|exists:programmers,id',
                                             'users_id'          =>  'nullable|integer|exists:users,id',
                                         ];
+    protected $rules_avatar =   [
+                                    'name' => 'required|min:1'
+                                ];
 
     /**
      * Display a listing of the resource.
@@ -39,6 +43,44 @@ class ParticipantController extends Controller
     public function index()
     {
         //
+    }
+
+    /**
+     * Return a image string64 from string
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getAvatarFromString( Request $request )
+    {
+        $validator = Validator::make($request->input(), $this->rules_avatar);
+        if( $validator->fails() )
+        {
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'error'     =>  __('messages.bad_request'),
+                                                'data'      =>  $validator->getMessageBag()->toArray()
+                                            ),
+                                        400
+                                    );
+        }else
+        {
+            $avatar = new Avatar();
+            $avatar64 = $avatar->create( strtoupper( $request->name ) )
+                                ->setBackground('#CCCCCC')
+                                ->setBorder(1,'#CCCCCC')
+                                ->setDimension( 128 )
+                                ->setFontSize( 72 )
+                                ->toBase64();
+
+            return response()->json(
+                                        array(
+                                                'status'    =>  200,
+                                                'avatar'    =>  $avatar64
+                                            ),
+                                        200
+                                    );
+        }
     }
 
     /**
