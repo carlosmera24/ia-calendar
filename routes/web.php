@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PersonController;
+use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\PersonEmailController;
 use App\Http\Controllers\PersonCellphoneController;
@@ -27,7 +28,7 @@ Route::group(['middleware' => ['auth']], function(){
     })->name('home');
     Route::post('/person/store', [ PersonController::class, 'store' ])->name('person_store');
     Route::post('/participants/generate-avatar', [ ParticipantController::class, 'getAvatarFromString' ])->name('participant_generate_avatar');
-    Route::post('/participants/list-programmer', [ ParticipantController::class, 'listFromProgrammer' ])->name('participants_list_programmer');
+    Route::post('/participants/list-from-programmer', [ ParticipantController::class, 'listFromProgrammer' ])->name('participants_list_programmer');
     Route::post('/participant/store', [ ParticipantController::class, 'store' ])->name('participant_store');
     Route::post('/participant/update', [ ParticipantController::class, 'update' ])->name('participant_update');
     Route::post('/persons-emails/store-array', [ PersonEmailController::class, 'storeArray' ])->name('persons_emails_store_array');
@@ -38,6 +39,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/persons-cellphones/cellphones-exists', [ PersonCellphoneController::class, 'cellphonesExists' ])->name('persons_cellphones_exists');
     Route::post('/permissions-participants/store', [ PermissionParticipantController::class, 'store' ])->name('permissions_participants_store');
     Route::post('/permissions-participants/list-permissions', [ PermissionParticipantController::class, 'listPermissionsParticipant' ])->name('list_permissions');
+    Route::post('/categories/list-from-programmer', [ CategorieController::class, 'listFromProgrammer' ])->name('list_categories_from_programmer');
 });
 // Sesion
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');

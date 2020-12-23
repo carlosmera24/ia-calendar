@@ -2286,8 +2286,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_no_options', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_updated_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'text_search_participant', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'url_participant_update', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'url_permissions_participant', 'url_store_permissions_participant'],
+  props: ['text_breadcrumbs_init', 'text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'text_filter_categories', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_no_options', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_updated_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'text_search_participant', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'url_participant_update', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_store_permissions_participant'],
   data: function data() {
     return {
       contentActive: {}
@@ -2781,6 +2784,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -2793,7 +2806,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_admin_leaders', 'programmer_json', 'user_id', 'text_search_participant', 'text_participant_fields_json', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_apply', 'text_cancel', 'text_success', 'text_no_options', 'text_updated_participant', 'url_participants_programmer', 'url_permissions_participant', 'url_store_permissions_participant', 'url_participant_update'],
+  props: ['text_breadcrumbs_init', 'text_admin_leaders', 'programmer_json', 'user_id', 'text_search_participant', 'text_participant_fields_json', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_filter_categories', 'text_apply', 'text_cancel', 'text_success', 'text_no_options', 'text_updated_participant', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_store_permissions_participant', 'url_participant_update'],
   data: function data() {
     return {
       isLoading: false,
@@ -2836,6 +2849,8 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
           id: 9
         }
       },
+      categories: [],
+      categoriesSelected: null,
       associate_leader: false,
       programmer: {},
       fields: [],
@@ -2886,7 +2901,9 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
             };
 
             _this2.participants.push(tmp);
-          });
+          }); //Get categories
+
+          _this2.getCategories();
         }
       }, function (error) {
         _this2.showErrors(error);
@@ -2894,7 +2911,34 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         _this2.isLoading = false;
       });
     },
-    onSelectChanged: function onSelectChanged() {
+    getCategories: function getCategories() {
+      var _this3 = this;
+
+      this.isLoading = true;
+      axios.post(this.url_categories_programmer, {
+        programmers_id: this.programmer.id
+      }).then(function (response) {
+        _this3.showErrors({});
+
+        if (response.data.status === 200) {
+          response.data.categories.forEach(function (element) {
+            var name = element.name;
+            var categorie = Object(_functions_js__WEBPACK_IMPORTED_MODULE_0__["capitalize"])(name.toLocaleLowerCase());
+            var tmp = {
+              categorie: categorie,
+              meta: element
+            };
+
+            _this3.categories.push(tmp);
+          });
+        }
+      }, function (error) {
+        _this3.showErrors(error);
+      }).then(function () {
+        _this3.isLoading = false;
+      });
+    },
+    onSelectParticipantChanged: function onSelectParticipantChanged() {
       this.resetPermissions();
 
       if (this.participantSelected !== null) {
@@ -2902,20 +2946,20 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       }
     },
     resetPermissions: function resetPermissions() {
-      var _this3 = this;
+      var _this4 = this;
 
       Object.keys(this.permissions).forEach(function (k, index) {
-        _this3.permissions[k].value = false;
+        _this4.permissions[k].value = false;
       });
     },
     getPermissions: function getPermissions(id_participant) {
-      var _this4 = this;
+      var _this5 = this;
 
       this.isLoading = true;
       axios.post(this.url_permissions_participant, {
         participants_id: id_participant
       }).then(function (response) {
-        _this4.showErrors({});
+        _this5.showErrors({});
 
         if (response.data.status === 200) {
           var permissions = response.data.permissions;
@@ -2924,26 +2968,26 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
             //Load permissions
             permissions.forEach(function (permi) {
               if (permi.permissions_id !== 6) {
-                _this4.permissions[permi.permissions_id].value = true;
+                _this5.permissions[permi.permissions_id].value = true;
               }
             });
           } else {
-            _this4.resetPermissions();
+            _this5.resetPermissions();
           }
         }
       }, function (error) {
-        _this4.showErrors(error);
+        _this5.showErrors(error);
       }).then(function () {
-        _this4.isLoading = false;
+        _this5.isLoading = false;
       });
     },
     clickApply: function clickApply() {
-      var _this5 = this;
+      var _this6 = this;
 
       var permissions_ids = [];
       var associated_leader = this.associate_leader;
       Object.keys(this.permissions).forEach(function (k) {
-        var permi = _this5.permissions[k];
+        var permi = _this6.permissions[k];
         associated_leader = permi.value ? permi.value : associated_leader;
 
         if (validate.isArray(permi.id)) {
@@ -2966,37 +3010,37 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         participants_id: this.participantSelected.id,
         permissions_ids: permissions_ids
       }).then(function (response) {
-        _this5.showErrors({});
+        _this6.showErrors({});
 
         if (response.data.status === 200) {
           //Change profile to Leader
-          if (associated_leader && _this5.participantSelected.profiles_participants_id !== _this5.PROFILE_LEADER) {
+          if (associated_leader && _this6.participantSelected.profiles_participants_id !== _this6.PROFILE_LEADER) {
             var param = {
-              profiles_participants_id: _this5.PROFILE_LEADER,
-              id: _this5.participantSelected.id
+              profiles_participants_id: _this6.PROFILE_LEADER,
+              id: _this6.participantSelected.id
             };
-            axios.post(_this5.url_participant_update, param).then(function (response) {
-              _this5.showErrors({});
+            axios.post(_this6.url_participant_update, param).then(function (response) {
+              _this6.showErrors({});
 
               if (response.data.status === 200) {
-                _this5.getParticipants();
+                _this6.getParticipants();
               } else if (response.data.status === 204) {
-                _this5.showErrors(response.data.data);
+                _this6.showErrors(response.data.data);
               }
             }, function (error) {
-              _this5.showErrors(error);
+              _this6.showErrors(error);
             });
           }
 
           Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_2__["success"])({
-            title: _this5.text_success,
-            text: _this5.text_updated_participant
+            title: _this6.text_success,
+            text: _this6.text_updated_participant
           });
         }
       }, function (error) {
-        _this5.showErrors(error);
+        _this6.showErrors(error);
       }).then(function () {
-        _this5.isLoading = false;
+        _this6.isLoading = false;
       });
     }
   }
@@ -64929,6 +64973,7 @@ var render = function() {
             ? _c("manage-leader", {
                 key: 2,
                 attrs: {
+                  text_breadcrumbs_init: _vm.text_breadcrumbs_init,
                   text_admin_leaders: _vm.text_admin_leaders,
                   programmer_json: _vm.programmer_json,
                   user_id: _vm.user_id,
@@ -64945,9 +64990,11 @@ var render = function() {
                   text_modify_events: _vm.text_modify_events,
                   text_share_events: _vm.text_share_events,
                   text_delete_events: _vm.text_delete_events,
+                  text_filter_categories: _vm.text_filter_categories,
                   text_apply: _vm.text_apply,
                   text_cancel: _vm.text_cancel,
                   url_participants_programmer: _vm.url_participants_programmer,
+                  url_categories_programmer: _vm.url_categories_programmer,
                   url_permissions_participant: _vm.url_permissions_participant,
                   url_store_permissions_participant:
                     _vm.url_store_permissions_participant,
@@ -65522,7 +65569,7 @@ var render = function() {
                 [
                   _vm._m(0),
                   _vm._v(" "),
-                  _c("span", [_vm._v("Volver al inicio")])
+                  _c("span", [_vm._v(_vm._s(_vm.text_breadcrumbs_init))])
                 ]
               )
             ])
@@ -65583,7 +65630,7 @@ var render = function() {
                     placeholder: _vm.text_search_participant,
                     label: "participant"
                   },
-                  on: { input: _vm.onSelectChanged },
+                  on: { input: _vm.onSelectParticipantChanged },
                   model: {
                     value: _vm.participantSelected,
                     callback: function($$v) {
@@ -65818,6 +65865,36 @@ var render = function() {
                 )
               ],
               1
+            ),
+            _vm._v(" "),
+            _c(
+              "v-select",
+              {
+                attrs: {
+                  multiple: "",
+                  disabled: _vm.participantSelected ? false : true,
+                  options: _vm.categories,
+                  reduce: function(categorie) {
+                    return categorie.meta
+                  },
+                  placeholder: _vm.text_filter_categories,
+                  label: "categorie"
+                },
+                model: {
+                  value: _vm.categoriesSelected,
+                  callback: function($$v) {
+                    _vm.categoriesSelected = $$v
+                  },
+                  expression: "categoriesSelected"
+                }
+              },
+              [
+                _c(
+                  "div",
+                  { attrs: { slot: "no-options" }, slot: "no-options" },
+                  [_vm._v(_vm._s(_vm.text_no_options))]
+                )
+              ]
             )
           ],
           1

@@ -18,6 +18,10 @@ class TestDataSeeder extends Seeder
         //Clean data demo
         DB::statement('DELETE FROM permissions_participants WHERE id > 0');
         DB::statement('ALTER TABLE permissions_participants AUTO_INCREMENT = 0');
+        DB::statement('DELETE FROM categories WHERE id > 0');
+        DB::statement('ALTER TABLE categories AUTO_INCREMENT = 0');
+        DB::statement('DELETE FROM colors WHERE id > 0');
+        DB::statement('ALTER TABLE colors AUTO_INCREMENT = 0');
         DB::statement('DELETE FROM participants WHERE id > 0');
         DB::statement('ALTER TABLE participants AUTO_INCREMENT = 0');
         DB::statement('DELETE FROM persons_emails WHERE id > 0');
@@ -76,5 +80,76 @@ class TestDataSeeder extends Seeder
             'profiles_participants_id' => 1,
             'description' => "Participante inicial administrador para el manejo de demostración y creación del app.",
         ]);
+
+        //Colors
+        DB::table('colors')->insert([
+            [
+                'id' => 1,
+                'name' => 'gris',
+                'description' => 'Color gris base para pruebas',
+                'color' => '#CCCCCC',
+            ],
+            [
+                'id' => 2,
+                'name' => 'rojo',
+                'description' => 'Color rojo base para pruebas',
+                'color' => '#FF0000',
+            ],
+            [
+                'id' => 3,
+                'name' => 'azul',
+                'description' => 'Color azul base para pruebas',
+                'color' => '#000FFF',
+            ],
+            [
+                'id' => 4,
+                'name' => 'negro',
+                'description' => 'Color negro base para pruebas',
+                'color' => '#000000',
+            ]
+
+        ]);
+
+        //Categories
+        DB::table('categories')->insert([
+            [
+                'id' => 1,
+                'programmers_id' => 1,
+                'name' => 'Demo',
+                'description' => 'Primera categoría demo, creada para las pruebas de integración',
+                'icons_id' => 3,
+                'colors_id' => 1,
+                'users_id' => 1,
+            ],
+            [
+                'id' => 2,
+                'programmers_id' => 1,
+                'name' => 'Test',
+                'description' => 'Segunda categoría demo, creada para las pruebas de integración',
+                'icons_id' => 4,
+                'colors_id' => 2,
+                'users_id' => 1,
+            ],
+            [
+                'id' => 3,
+                'programmers_id' => 1,
+                'name' => 'Desarrollo',
+                'description' => 'Tercera categoría demo, creada para las pruebas de integración',
+                'icons_id' => 6,
+                'colors_id' => 3,
+                'users_id' => 1,
+            ],
+            [
+                'id' => 4,
+                'programmers_id' => 1,
+                'name' => 'Seguimiento',
+                'description' => 'Cuarta categoría demo, creada para las pruebas de integración',
+                'icons_id' => 27,
+                'colors_id' => 3,
+                'users_id' => 1,
+            ]
+
+        ]);
+
     }
 }

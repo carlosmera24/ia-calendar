@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Categorie;
 use App\Models\Participant;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -41,5 +42,10 @@ class User extends Authenticatable
     public function participants()
     {
         return $this->hasMany(Participant::class,'users_id');
+    }
+
+    public function categories()
+    {
+        return $this->hasMany(Categorie::class,'users_id');
     }
 }

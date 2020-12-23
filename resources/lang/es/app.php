@@ -16,6 +16,7 @@ return [
     'programmer'            =>  'Programador<br>Empresa',
     'category'              =>  'Categoría',
     'event'                 =>  'Evento',
+    'breadcrumbs_init'       =>  'Volver al inicio',
 
     /**
      * DropDown Menu section
@@ -40,6 +41,7 @@ return [
         'modify_events'             =>  'Modificar Eventos',
         'share_events'              =>  'Compartir Eventos',
         'delete_events'             =>  'Eliminar Eventos',
+        'filter_categories'         =>  'Filtrar categorías, para asociar como líder',
     ],
 
     /**

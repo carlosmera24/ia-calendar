@@ -37,6 +37,7 @@
             <manage-leader v-else-if="contentActive.adminLeaders"
                 v-bind:key="2"
                 v-on:activeMainSection="setActiveSection"
+                v-bind:text_breadcrumbs_init='text_breadcrumbs_init'
                 v-bind:text_admin_leaders='text_admin_leaders'
                 v-bind:programmer_json="programmer_json"
                 v-bind:user_id="user_id"
@@ -51,9 +52,11 @@
                 v-bind:text_modify_events="text_modify_events"
                 v-bind:text_share_events="text_share_events"
                 v-bind:text_delete_events="text_delete_events"
+                v-bind:text_filter_categories="text_filter_categories"
                 v-bind:text_apply='text_apply'
                 v-bind:text_cancel='text_cancel'
                 v-bind:url_participants_programmer="url_participants_programmer"
+                v-bind:url_categories_programmer="url_categories_programmer"
                 v-bind:url_permissions_participant="url_permissions_participant"
                 v-bind:url_store_permissions_participant="url_store_permissions_participant"
                 v-bind:url_participant_update="url_participant_update"
@@ -64,6 +67,7 @@
 <script>
 export default {
     props: [
+        'text_breadcrumbs_init',
         'text_create_participant',
         'text_create_category',
         'text_see_calendar',
@@ -72,6 +76,7 @@ export default {
         'text_programmer',
         'text_category',
         'text_event',
+        'text_filter_categories',
         'numbers_emailes',
         'numbers_mobiles',
         'programmer_json',
@@ -106,6 +111,7 @@ export default {
         'url_person_email_exist',
         'url_person_cellphone_exist',
         'url_participants_programmer',
+        'url_categories_programmer',
         'url_permissions_participant',
         'url_store_permissions_participant',
     ],

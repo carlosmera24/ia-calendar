@@ -123,6 +123,7 @@
             v-bind:text_programmer='"{{ __('app.programmer') }}"'
             v-bind:text_category='"{{ __('app.category') }}"'
             v-bind:text_event='"{{ __('app.event') }}"'
+            v-bind:text_breadcrumbs_init='"{{ __('app.breadcrumbs_init') }}"'
             v-bind:numbers_emailes="'{{ $numMailes }}'"
             v-bind:numbers_mobiles="'{{ $numMobiles }}'"
             v-bind:programmer_json="'{{ str_replace("'", "\'",json_encode($programmer)) }}'"
@@ -148,6 +149,7 @@
             v-bind:text_modify_events="'{{ __('app.manage_leader.modify_events') }}'"
             v-bind:text_share_events="'{{ __('app.manage_leader.share_events') }}'"
             v-bind:text_delete_events="'{{ __('app.manage_leader.delete_events') }}'"
+            v-bind:text_filter_categories="'{{ __('app.manage_leader.filter_categories') }}'"
             v-bind:url_person_ui_avatar='"{{ route('participant_generate_avatar') }}"'
             v-bind:url_person_store='"{{ route('person_store') }}"'
             v-bind:url_participant_store='"{{ route('participant_store') }}"'
@@ -157,6 +159,7 @@
             v-bind:url_person_email_exist='"{{ route('persons_emails_exists') }}"'
             v-bind:url_person_cellphone_exist='"{{ route('persons_cellphones_exists') }}"'
             v-bind:url_participants_programmer='"{{ route('participants_list_programmer') }}"'
+            v-bind:url_categories_programmer='"{{ route('list_categories_from_programmer') }}"'
             v-bind:url_permissions_participant='"{{ route('list_permissions') }}"'
             v-bind:url_store_permissions_participant='"{{ route('permissions_participants_store') }}"'
         />

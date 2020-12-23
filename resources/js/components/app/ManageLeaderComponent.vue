@@ -8,7 +8,7 @@
                         <span class="icon is-small">
                             <i class="fas fa-home" aria-hidden="true"></i>
                         </span>
-                        <span>Volver al inicio</span>
+                        <span>{{ text_breadcrumbs_init }}</span>
                     </a>
                 </li>
             </ul>
@@ -30,7 +30,7 @@
                         :reduce="participant => participant.meta"
                         :placeholder="text_search_participant"
                         label="participant"
-                        @input="onSelectChanged"
+                        @input="onSelectParticipantChanged"
                     >
                         <div slot="no-options">{{ text_no_options }}</div>
                     </v-select>
@@ -110,6 +110,16 @@
                         </div>
                     </div>
                 </div>
+                <v-select v-model="categoriesSelected"
+                    multiple
+                    :disabled="participantSelected ? false : true"
+                    :options="categories"
+                    :reduce="categorie => categorie.meta"
+                    :placeholder="text_filter_categories"
+                    label="categorie"
+                    >
+                    <div slot="no-options">{{ text_no_options }}</div>
+                </v-select>
             </section>
             <div class="btn-actions has-text-centered">
                 <b-button  class="btn-cancel is-capitalized" v-on:click.prevent="clickCancel">{{ text_cancel }}</b-button>
@@ -136,6 +146,7 @@ import '@pnotify/core/dist/BrightTheme.css';
 
 export default {
     props: [
+        'text_breadcrumbs_init',
         'text_admin_leaders',
         'programmer_json',
         'user_id',
@@ -147,12 +158,14 @@ export default {
         'text_modify_events',
         'text_share_events',
         'text_delete_events',
+        'text_filter_categories',
         'text_apply',
         'text_cancel',
         'text_success',
         'text_no_options',
         'text_updated_participant',
         'url_participants_programmer',
+        'url_categories_programmer',
         'url_permissions_participant',
         'url_store_permissions_participant',
         'url_participant_update'
@@ -200,6 +213,8 @@ export default {
                                     id: 9
                                 },
                         },
+            categories: [],
+            categoriesSelected: null,
             associate_leader: false,
             programmer: {},
             fields: [],
@@ -243,6 +258,8 @@ export default {
                             }
                             this.participants.push( tmp );
                         });
+                        //Get categories
+                        this.getCategories();
                     }
                 },
                 error => {
@@ -252,7 +269,32 @@ export default {
                     this.isLoading = false;
                 });
         },
-        onSelectChanged(){
+        getCategories(){
+            this.isLoading = true;
+            axios.post(this.url_categories_programmer, { programmers_id : this.programmer.id })
+                .then( response => {
+                    this.showErrors({});
+                    if( response.data.status === 200 )
+                    {
+                        response.data.categories.forEach( element => {
+                            const name = element.name;
+                            const categorie = capitalize( name.toLocaleLowerCase() );
+                            const tmp = {
+                                categorie: categorie,
+                                meta: element
+                            }
+                            this.categories.push( tmp );
+                        });
+                    }
+                },
+                error => {
+                    this.showErrors(error);
+                })
+                .then( () => {
+                    this.isLoading = false;
+                });
+        },
+        onSelectParticipantChanged(){
             this.resetPermissions();
             if( this.participantSelected !== null)
             {
