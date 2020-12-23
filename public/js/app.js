@@ -2769,6 +2769,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -65490,6 +65502,34 @@ var render = function() {
         }
       }),
       _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "breadcrumb", attrs: { "aria-label": "breadcrumbs" } },
+        [
+          _c("ul", [
+            _c("li", [
+              _c(
+                "a",
+                {
+                  attrs: { href: "#" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.clickCancel($event)
+                    }
+                  }
+                },
+                [
+                  _vm._m(0),
+                  _vm._v(" "),
+                  _c("span", [_vm._v("Volver al inicio")])
+                ]
+              )
+            ])
+          ])
+        ]
+      ),
+      _vm._v(" "),
       _c("h2", [_vm._v(_vm._s(_vm.text_admin_leaders))]),
       _vm._v(" "),
       _c(
@@ -65561,7 +65601,7 @@ var render = function() {
                 ]
               ),
               _vm._v(" "),
-              _vm._m(0)
+              _vm._m(1)
             ],
             1
           )
@@ -65830,6 +65870,14 @@ var render = function() {
   )
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "icon is-small" }, [
+      _c("i", { staticClass: "fas fa-home", attrs: { "aria-hidden": "true" } })
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

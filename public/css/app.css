@@ -20316,10 +20316,15 @@ textarea {
   padding: 15px 30px;
 }
 
+.application .content-main .content .breadcrumb ul {
+  margin: 0;
+}
+
 .application .content-main .content h2 {
   font-weight: bold;
   font-size: 2.5rem;
   text-transform: uppercase;
+  margin: 23px 0;
 }
 
 .application .content-main .content .form_manage_leader .vs__selected-options {

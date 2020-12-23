@@ -1,6 +1,18 @@
 <template>
     <div class="content px-5 py-5">
         <b-loading :is-full-page="true" v-model="isLoading" :can-cancel="false"></b-loading>
+        <div class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li>
+                    <a href="#" v-on:click.prevent="clickCancel">
+                        <span class="icon is-small">
+                            <i class="fas fa-home" aria-hidden="true"></i>
+                        </span>
+                        <span>Volver al inicio</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
         <h2>{{ text_admin_leaders }}</h2>
         <section class="alert-section mt-4">
             <b-notification v-model="hasErrors" type="is-danger" hasIcon role="alert">
