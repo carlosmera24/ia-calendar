@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
                         PermissionSeeder::class,
                         StateProgrammerMembershipSeeder::class,
                         StateNoteSeeder::class,
+                        IconSeeder::class,
+                        FontSeeder::class,
                     ]);
     }
 }

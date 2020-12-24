@@ -9,6 +9,7 @@ Desarrollo creado bajo la empresa [Infracounter](https://infracounter.com) por *
 4. **Dependencias Back (Composer):**
     - laravel/ui
     - laravolt/avatar
+    - jeroenzwart/laravel-csv-seeder
 
 5. **Dependencias Front (NPM):**
     - @fortawesome/fontawesome-free **^5.14.0**
@@ -27,6 +28,7 @@ Desarrollo creado bajo la empresa [Infracounter](https://infracounter.com) por *
     php artisan migrate:fresh
     php artisan db:seed
     ```
+    >Se incluye la importación de los archivos csv para Icons y Fonts, para hacer el proceso manual ver los puntos **4** y **5**
 3. Script inicial para hosting/phpmyadmin:
 
     Ejecutar la importación del archivo *database/resources/init_sql.sql* el cual contiene la estructura de la base de datos y los inserts principales.
@@ -68,4 +70,13 @@ Desarrollo creado bajo la empresa [Infracounter](https://infracounter.com) por *
         Formato: CSV
         Nombre de las columnas: name,description,class_css
         ```
+6. Datos de prueba:
+    ```
+    php artisan db:seed --class=TestDataSeeder
+    ```
+    >Este comando limpiará los datos para iniciar pruebas
+    Para limpiar los datos de prueba puede optar por ejecutar:
+    ```
+    php artisan migrate:fresh --seed
+    ```
 
