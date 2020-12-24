@@ -35,7 +35,7 @@
                     :label="fields.position.label"
                     v-bind:type="{ 'is-danger' : fields.position.error }"
                     :message="fields.position.error ? fields.position.msg : ''">
-                    <b-input name="position" v-model="position" maxlength="60" expanded></b-input>
+                    <b-input name="position" v-model="position" v-on:blur="setTrim('position')" maxlength="60" expanded></b-input>
                 </b-field>
                 <b-field horizontal class="column is-4"
                     v-for="(inputEmail, index) in emails" :key="index"
@@ -180,6 +180,17 @@ export default{
 
     },
     methods: {
+        setTrim(model){
+            switch(model)
+            {
+                case 'position':
+                    this.position = this.position.trim();
+                    break;
+                    //TODO manejar otros campos con index para emails y mobiles
+                default:
+                    break;
+            }
+        },
         createArraysInputs(){
             //create inputs for e-mails
             for( var i=0;  i < this.numbers_emailes; i++ )
@@ -208,7 +219,9 @@ export default{
             this.$refs.fileAvatar.click()
         },
         getAvatar(e){
-            const name = this.fname +" "+ this.lname;
+            this.fname = this.fname.trim();
+            this.lname = this.lname.trim();
+            const name = ( this.fname +" "+ this.lname ).trim();
             if( name !== "" )
             {
                 axios.post( this.url_person_ui_avatar, { name: name } )
@@ -223,6 +236,8 @@ export default{
                     error => {
                         this.showErrors( error );
                     } );
+            }else{
+                this.avatar = null;
             }
         },
         isEqualEmails(pos){

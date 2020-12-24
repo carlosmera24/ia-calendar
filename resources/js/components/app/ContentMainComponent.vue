@@ -52,6 +52,9 @@
                 v-bind:text_modify_events="text_modify_events"
                 v-bind:text_share_events="text_share_events"
                 v-bind:text_delete_events="text_delete_events"
+                v-bind:text_create_categorie="text_create_categorie"
+                v-bind:text_modify_categorie="text_modify_categorie"
+                v-bind:text_delete_categorie="text_delete_categorie"
                 v-bind:text_filter_categories="text_filter_categories"
                 v-bind:text_apply='text_apply'
                 v-bind:text_cancel='text_cancel'
@@ -102,6 +105,9 @@ export default {
         'text_modify_events',
         'text_share_events',
         'text_delete_events',
+        'text_create_categorie',
+        'text_modify_categorie',
+        'text_delete_categorie',
         'url_person_ui_avatar',
         'url_person_store',
         'url_participant_store',

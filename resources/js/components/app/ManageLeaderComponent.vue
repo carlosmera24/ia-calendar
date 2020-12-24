@@ -95,10 +95,13 @@
                     <span class="is-size-5">&#9688;</span>
                 </b-button>
                 <div class="columns is-multiline" >
-                    <b-field horizontal class="column is-12"
-                        :label="text_associate_leader">
-                        <span></span>
-                    </b-field>
+                    <div class="field column is-12">
+                        <div class="field-label">
+                            <label class="label label_associate_lader">
+                                {{ text_associate_leader }}
+                            </label>
+                        </div>
+                    </div>
                     <div class="content_permissions column is-12">
                         <div class="field column is-12 is-horizontal"
                             v-for="(permission, index) in permissions" :key="'permission.'+ index">
@@ -110,16 +113,18 @@
                         </div>
                     </div>
                 </div>
-                <v-select v-model="categoriesSelected"
-                    multiple
-                    :disabled="participantSelected ? false : true"
-                    :options="categories"
-                    :reduce="categorie => categorie.meta"
-                    :placeholder="text_filter_categories"
-                    label="categorie"
-                    >
-                    <div slot="no-options">{{ text_no_options }}</div>
-                </v-select>
+                <div class="content_categories">
+                    <v-select v-model="categoriesSelected"
+                        multiple
+                        :disabled="participantSelected ? false : true"
+                        :options="categories"
+                        :reduce="categorie => categorie.meta"
+                        :placeholder="text_filter_categories"
+                        label="categorie"
+                        >
+                        <div slot="no-options">{{ text_no_options }}</div>
+                    </v-select>
+                </div>
             </section>
             <div class="btn-actions has-text-centered">
                 <b-button  class="btn-cancel is-capitalized" v-on:click.prevent="clickCancel">{{ text_cancel }}</b-button>
@@ -158,6 +163,9 @@ export default {
         'text_modify_events',
         'text_share_events',
         'text_delete_events',
+        'text_create_categorie',
+        'text_modify_categorie',
+        'text_delete_categorie',
         'text_filter_categories',
         'text_apply',
         'text_cancel',
@@ -187,6 +195,24 @@ export default {
                                             1, //categories.index
                                             6, //events.index
                                         ]
+                                },
+                            2: {
+                                    value: false,
+                                    label: this.text_create_categorie,
+                                    permission: 'categories.create',
+                                    id: 2
+                                },
+                            3: {
+                                    value: false,
+                                    label: this.text_modify_categorie,
+                                    permission: 'categories.edit',
+                                    id: 3
+                                },
+                            4: {
+                                    value: false,
+                                    label: this.text_delete_categorie,
+                                    permission: 'categories.delete',
+                                    id: 4
                                 },
                             7: {
                                     value: false,

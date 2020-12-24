@@ -464,10 +464,22 @@ body, h2, button, input, select, textarea {
                     text-transform: uppercase;
                 }
                 .data_permissions{
+                    .label_associate_lader{
+                        text-align: left;
+                        padding-left: 30px;
+                    }
                     .content_permissions{
                         padding-left: 47px;
                         padding-top: 0;
                         margin-top: -12px;
+                    }
+                    .content_categories{
+                        padding-left: 47px;
+                        margin-bottom: 25px;
+                        width: 70%;
+                        .vs__selected-options{
+                            padding-left: 12px;
+                        }
                     }
                 }
             }

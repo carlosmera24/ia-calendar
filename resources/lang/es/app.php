@@ -41,6 +41,9 @@ return [
         'modify_events'             =>  'Modificar Eventos',
         'share_events'              =>  'Compartir Eventos',
         'delete_events'             =>  'Eliminar Eventos',
+        'create_categorie'          =>  'Crear Categoría',
+        'modify_categorie'          =>  'Modificar Categoría',
+        'delete_categorie'          =>  'Eliminar Categoría',
         'filter_categories'         =>  'Filtrar categorías, para asociar como líder',
     ],
 
