@@ -85,12 +85,3 @@ export function capitalize(word){
                                         )
                         );
 }
-
-/**
- * Function for removes whitespace from both ends of a string.
- * @param String phrase
- * @retunr String
- */
-export function trimSpaces( phrase ){
-    return phrase.trim();
-}
