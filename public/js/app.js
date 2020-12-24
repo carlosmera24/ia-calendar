@@ -2289,8 +2289,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_breadcrumbs_init', 'text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'text_filter_categories', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_no_options', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_updated_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'text_search_participant', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'url_participant_update', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_store_permissions_participant'],
+  props: ['text_breadcrumbs_init', 'text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'text_filter_categories', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_no_options', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_updated_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'text_search_participant', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_create_categorie', 'text_modify_categorie', 'text_delete_categorie', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'url_participant_update', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_store_permissions_participant'],
   data: function data() {
     return {
       contentActive: {}
@@ -2794,6 +2797,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -2806,7 +2814,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_breadcrumbs_init', 'text_admin_leaders', 'programmer_json', 'user_id', 'text_search_participant', 'text_participant_fields_json', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_filter_categories', 'text_apply', 'text_cancel', 'text_success', 'text_no_options', 'text_updated_participant', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_store_permissions_participant', 'url_participant_update'],
+  props: ['text_breadcrumbs_init', 'text_admin_leaders', 'programmer_json', 'user_id', 'text_search_participant', 'text_participant_fields_json', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_create_categorie', 'text_modify_categorie', 'text_delete_categorie', 'text_filter_categories', 'text_apply', 'text_cancel', 'text_success', 'text_no_options', 'text_updated_participant', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_store_permissions_participant', 'url_participant_update'],
   data: function data() {
     return {
       isLoading: false,
@@ -2823,6 +2831,24 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
           id: [1, //categories.index
           6 //events.index
           ]
+        },
+        2: {
+          value: false,
+          label: this.text_create_categorie,
+          permission: 'categories.create',
+          id: 2
+        },
+        3: {
+          value: false,
+          label: this.text_modify_categorie,
+          permission: 'categories.edit',
+          id: 3
+        },
+        4: {
+          value: false,
+          label: this.text_delete_categorie,
+          permission: 'categories.delete',
+          id: 4
         },
         7: {
           value: false,
@@ -3229,6 +3255,17 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
   },
   computed: {},
   methods: {
+    setTrim: function setTrim(model) {
+      switch (model) {
+        case 'position':
+          this.position = this.position.trim();
+          break;
+        //TODO manejar otros campos con index para emails y mobiles
+
+        default:
+          break;
+      }
+    },
     createArraysInputs: function createArraysInputs() {
       //create inputs for e-mails
       for (var i = 0; i < this.numbers_emailes; i++) {
@@ -3257,7 +3294,9 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
     getAvatar: function getAvatar(e) {
       var _this = this;
 
-      var name = this.fname + " " + this.lname;
+      this.fname = this.fname.trim();
+      this.lname = this.lname.trim();
+      var name = (this.fname + " " + this.lname).trim();
 
       if (name !== "") {
         axios.post(this.url_person_ui_avatar, {
@@ -3272,6 +3311,8 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
         }, function (error) {
           _this.showErrors(error);
         });
+      } else {
+        this.avatar = null;
       }
     },
     isEqualEmails: function isEqualEmails(pos) {
@@ -64990,6 +65031,9 @@ var render = function() {
                   text_modify_events: _vm.text_modify_events,
                   text_share_events: _vm.text_share_events,
                   text_delete_events: _vm.text_delete_events,
+                  text_create_categorie: _vm.text_create_categorie,
+                  text_modify_categorie: _vm.text_modify_categorie,
+                  text_delete_categorie: _vm.text_delete_categorie,
                   text_filter_categories: _vm.text_filter_categories,
                   text_apply: _vm.text_apply,
                   text_cancel: _vm.text_cancel,
@@ -65810,91 +65854,96 @@ var render = function() {
               [_c("span", { staticClass: "is-size-5" }, [_vm._v("◘")])]
             ),
             _vm._v(" "),
+            _c("div", { staticClass: "columns is-multiline" }, [
+              _c("div", { staticClass: "field column is-12" }, [
+                _c("div", { staticClass: "field-label" }, [
+                  _c("label", { staticClass: "label label_associate_lader" }, [
+                    _vm._v(
+                      "\n                            " +
+                        _vm._s(_vm.text_associate_leader) +
+                        "\n                        "
+                    )
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "content_permissions column is-12" },
+                _vm._l(_vm.permissions, function(permission, index) {
+                  return _c(
+                    "div",
+                    {
+                      key: "permission." + index,
+                      staticClass: "field column is-12 is-horizontal"
+                    },
+                    [
+                      _c(
+                        "b-switch",
+                        {
+                          attrs: {
+                            disabled: _vm.participantSelected ? false : true,
+                            type: "is-success"
+                          },
+                          model: {
+                            value: permission.value,
+                            callback: function($$v) {
+                              _vm.$set(permission, "value", $$v)
+                            },
+                            expression: "permission.value"
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                            " +
+                              _vm._s(permission.label) +
+                              "\n                        "
+                          )
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                }),
+                0
+              )
+            ]),
+            _vm._v(" "),
             _c(
               "div",
-              { staticClass: "columns is-multiline" },
+              { staticClass: "content_categories" },
               [
                 _c(
-                  "b-field",
+                  "v-select",
                   {
-                    staticClass: "column is-12",
-                    attrs: { horizontal: "", label: _vm.text_associate_leader }
-                  },
-                  [_c("span")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "content_permissions column is-12" },
-                  _vm._l(_vm.permissions, function(permission, index) {
-                    return _c(
-                      "div",
-                      {
-                        key: "permission." + index,
-                        staticClass: "field column is-12 is-horizontal"
+                    attrs: {
+                      multiple: "",
+                      disabled: _vm.participantSelected ? false : true,
+                      options: _vm.categories,
+                      reduce: function(categorie) {
+                        return categorie.meta
                       },
-                      [
-                        _c(
-                          "b-switch",
-                          {
-                            attrs: {
-                              disabled: _vm.participantSelected ? false : true,
-                              type: "is-success"
-                            },
-                            model: {
-                              value: permission.value,
-                              callback: function($$v) {
-                                _vm.$set(permission, "value", $$v)
-                              },
-                              expression: "permission.value"
-                            }
-                          },
-                          [
-                            _vm._v(
-                              "\n                            " +
-                                _vm._s(permission.label) +
-                                "\n                        "
-                            )
-                          ]
-                        )
-                      ],
-                      1
+                      placeholder: _vm.text_filter_categories,
+                      label: "categorie"
+                    },
+                    model: {
+                      value: _vm.categoriesSelected,
+                      callback: function($$v) {
+                        _vm.categoriesSelected = $$v
+                      },
+                      expression: "categoriesSelected"
+                    }
+                  },
+                  [
+                    _c(
+                      "div",
+                      { attrs: { slot: "no-options" }, slot: "no-options" },
+                      [_vm._v(_vm._s(_vm.text_no_options))]
                     )
-                  }),
-                  0
+                  ]
                 )
               ],
               1
-            ),
-            _vm._v(" "),
-            _c(
-              "v-select",
-              {
-                attrs: {
-                  multiple: "",
-                  disabled: _vm.participantSelected ? false : true,
-                  options: _vm.categories,
-                  reduce: function(categorie) {
-                    return categorie.meta
-                  },
-                  placeholder: _vm.text_filter_categories,
-                  label: "categorie"
-                },
-                model: {
-                  value: _vm.categoriesSelected,
-                  callback: function($$v) {
-                    _vm.categoriesSelected = $$v
-                  },
-                  expression: "categoriesSelected"
-                }
-              },
-              [
-                _c(
-                  "div",
-                  { attrs: { slot: "no-options" }, slot: "no-options" },
-                  [_vm._v(_vm._s(_vm.text_no_options))]
-                )
-              ]
             )
           ],
           1
@@ -66144,6 +66193,11 @@ var render = function() {
                 [
                   _c("b-input", {
                     attrs: { name: "position", maxlength: "60", expanded: "" },
+                    on: {
+                      blur: function($event) {
+                        return _vm.setTrim("position")
+                      }
+                    },
                     model: {
                       value: _vm.position,
                       callback: function($$v) {
@@ -79694,13 +79748,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!***********************************!*\
   !*** ./resources/js/functions.js ***!
   \***********************************/
-/*! exports provided: procesarErroresRequest, capitalize */
+/*! exports provided: procesarErroresRequest, capitalize, trimSpaces */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "procesarErroresRequest", function() { return procesarErroresRequest; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "capitalize", function() { return capitalize; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "trimSpaces", function() { return trimSpaces; });
 /**
  * Funciones personalizadas, con métodos de ayuda o generales
  * Por Carlos Eduardo Mera Ruiz
@@ -79791,6 +79846,15 @@ function capitalize(word) {
       return c.toUpperCase();
     });
   });
+}
+/**
+ * Function for removes whitespace from both ends of a string.
+ * @param String phrase
+ * @retunr String
+ */
+
+function trimSpaces(phrase) {
+  return phrase.trim();
 }
 
 /***/ }),

@@ -20335,10 +20335,25 @@ textarea {
   text-transform: uppercase;
 }
 
+.application .content-main .content .form_manage_leader .data_permissions .label_associate_lader {
+  text-align: left;
+  padding-left: 30px;
+}
+
 .application .content-main .content .form_manage_leader .data_permissions .content_permissions {
   padding-left: 47px;
   padding-top: 0;
   margin-top: -12px;
+}
+
+.application .content-main .content .form_manage_leader .data_permissions .content_categories {
+  padding-left: 47px;
+  margin-bottom: 25px;
+  width: 70%;
+}
+
+.application .content-main .content .form_manage_leader .data_permissions .content_categories .vs__selected-options {
+  padding-left: 12px;
 }
 
 .animated_delay {
