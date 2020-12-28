@@ -482,6 +482,19 @@ body, h2, button, input, select, textarea {
                         }
                     }
                 }
+                .content_given_admin_permissions{
+                    .is-grouped{
+                        display: flex;
+                        align-items: center;
+                        .button.btn-main{
+                            border: none;
+                            padding: 0;
+                        }
+                        .control-label{
+                            padding-left: calc(0.75em - 1px);
+                        }
+                    }
+                }
             }
         }
     }

@@ -34,17 +34,19 @@ return [
      * manage-leader
      */
     'manage_leader' =>  [
-        'search_participant'        =>  'Buscar partícipe',
-        'associate_leader'          =>  'Asociar como líder',
-        'consult_categories_events' =>  'Consultar Categorías y Eventos',
-        'create_events'             =>  'Crear Eventos',
-        'modify_events'             =>  'Modificar Eventos',
-        'share_events'              =>  'Compartir Eventos',
-        'delete_events'             =>  'Eliminar Eventos',
-        'create_categorie'          =>  'Crear Categoría',
-        'modify_categorie'          =>  'Modificar Categoría',
-        'delete_categorie'          =>  'Eliminar Categoría',
-        'filter_categories'         =>  'Filtrar categorías, para asociar como líder',
+        'search_participant'            =>  'Buscar partícipe',
+        'associate_leader'              =>  'Asociar como líder',
+        'consult_categories_events'     =>  'Consultar Categorías y Eventos',
+        'create_events'                 =>  'Crear Eventos',
+        'modify_events'                 =>  'Modificar Eventos',
+        'share_events'                  =>  'Compartir Eventos',
+        'delete_events'                 =>  'Eliminar Eventos',
+        'create_categorie'              =>  'Crear Categoría',
+        'modify_categorie'              =>  'Modificar Categoría',
+        'delete_categorie'              =>  'Eliminar Categoría',
+        'filter_categories'             =>  'Filtrar categorías, para asociar como líder',
+        'give_admin_categories_events'  =>  'Dar credenciales al líder en las categorías y eventos del Administrador/Administrador suplente',
+        'back_to_participant'           =>  'Volver a ser únicamente participe',
     ],
 
     /**

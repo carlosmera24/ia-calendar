@@ -126,6 +126,20 @@
                     </v-select>
                 </div>
             </section>
+            <section class="content_given_admin_permissions">
+                <div class="is-grouped">
+                    <div class="button btn-main">
+                        <b-checkbox-button
+                            v-model="isPermissionsAdmin"
+                            :disabled="participantSelected ? false : true"
+                            native-value="true"
+                            type="is-success">
+                            <span class="is-size-5">&#9688;</span>
+                        </b-checkbox-button>
+                    </div>
+                    <span class="control-label">{{ text_give_admin_categories_events }}</span>
+                </div>
+            </section>
             <div class="btn-actions has-text-centered">
                 <b-button  class="btn-cancel is-capitalized" v-on:click.prevent="clickCancel">{{ text_cancel }}</b-button>
                 <b-button
@@ -167,6 +181,8 @@ export default {
         'text_modify_categorie',
         'text_delete_categorie',
         'text_filter_categories',
+        'text_give_admin_categories_events',
+        'text_back_to_participant',
         'text_apply',
         'text_cancel',
         'text_success',
@@ -245,6 +261,7 @@ export default {
             categoriesSelected: [],
             associate_leader: false,
             isAssociatedLeader: false,
+            isPermissionsAdmin: [],
             programmer: {},
             fields: [],
             PROFILE_LEADER: 2, //ID Profile leader

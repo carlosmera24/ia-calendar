@@ -2294,8 +2294,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_breadcrumbs_init', 'text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'text_filter_categories', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_no_options', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_updated_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'text_search_participant', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_create_categorie', 'text_modify_categorie', 'text_delete_categorie', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'url_participant_update', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories'],
+  props: ['text_breadcrumbs_init', 'text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'text_filter_categories', 'text_give_admin_categories_events', 'text_back_to_participant', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_no_options', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_updated_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'text_search_participant', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_create_categorie', 'text_modify_categorie', 'text_delete_categorie', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'url_participant_update', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories'],
   data: function data() {
     return {
       contentActive: {}
@@ -2804,6 +2806,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -2816,7 +2832,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_breadcrumbs_init', 'text_admin_leaders', 'programmer_json', 'user_id', 'text_search_participant', 'text_participant_fields_json', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_create_categorie', 'text_modify_categorie', 'text_delete_categorie', 'text_filter_categories', 'text_apply', 'text_cancel', 'text_success', 'text_no_options', 'text_updated_participant', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories', 'url_participant_update'],
+  props: ['text_breadcrumbs_init', 'text_admin_leaders', 'programmer_json', 'user_id', 'text_search_participant', 'text_participant_fields_json', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_create_categorie', 'text_modify_categorie', 'text_delete_categorie', 'text_filter_categories', 'text_give_admin_categories_events', 'text_back_to_participant', 'text_apply', 'text_cancel', 'text_success', 'text_no_options', 'text_updated_participant', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories', 'url_participant_update'],
   data: function data() {
     return {
       isLoading: false,
@@ -2881,6 +2897,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       categoriesSelected: [],
       associate_leader: false,
       isAssociatedLeader: false,
+      isPermissionsAdmin: [],
       programmer: {},
       fields: [],
       PROFILE_LEADER: 2 //ID Profile leader
@@ -65142,6 +65159,9 @@ var render = function() {
                   text_modify_categorie: _vm.text_modify_categorie,
                   text_delete_categorie: _vm.text_delete_categorie,
                   text_filter_categories: _vm.text_filter_categories,
+                  text_give_admin_categories_events:
+                    _vm.text_give_admin_categories_events,
+                  text_back_to_participant: _vm.text_back_to_participant,
                   text_apply: _vm.text_apply,
                   text_cancel: _vm.text_cancel,
                   url_participants_programmer: _vm.url_participants_programmer,
@@ -66058,6 +66078,40 @@ var render = function() {
           ],
           1
         ),
+        _vm._v(" "),
+        _c("section", { staticClass: "content_given_admin_permissions" }, [
+          _c("div", { staticClass: "is-grouped" }, [
+            _c(
+              "div",
+              { staticClass: "button btn-main" },
+              [
+                _c(
+                  "b-checkbox-button",
+                  {
+                    attrs: {
+                      disabled: _vm.participantSelected ? false : true,
+                      "native-value": "true",
+                      type: "is-success"
+                    },
+                    model: {
+                      value: _vm.isPermissionsAdmin,
+                      callback: function($$v) {
+                        _vm.isPermissionsAdmin = $$v
+                      },
+                      expression: "isPermissionsAdmin"
+                    }
+                  },
+                  [_c("span", { staticClass: "is-size-5" }, [_vm._v("◘")])]
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("span", { staticClass: "control-label" }, [
+              _vm._v(_vm._s(_vm.text_give_admin_categories_events))
+            ])
+          ])
+        ]),
         _vm._v(" "),
         _c(
           "div",

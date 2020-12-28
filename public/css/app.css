@@ -20356,6 +20356,20 @@ textarea {
   padding-left: 12px;
 }
 
+.application .content-main .content .form_manage_leader .content_given_admin_permissions .is-grouped {
+  display: flex;
+  align-items: center;
+}
+
+.application .content-main .content .form_manage_leader .content_given_admin_permissions .is-grouped .button.btn-main {
+  border: none;
+  padding: 0;
+}
+
+.application .content-main .content .form_manage_leader .content_given_admin_permissions .is-grouped .control-label {
+  padding-left: calc(0.75em - 1px);
+}
+
 .animated_delay {
   -webkit-animation-delay: 0.45s;
           animation-delay: 0.45s;

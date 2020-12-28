@@ -153,6 +153,8 @@
             v-bind:text_modify_categorie="'{{ __('app.manage_leader.modify_categorie') }}'"
             v-bind:text_delete_categorie="'{{ __('app.manage_leader.delete_categorie') }}'"
             v-bind:text_filter_categories="'{{ __('app.manage_leader.filter_categories') }}'"
+            v-bind:text_give_admin_categories_events="'{{ __('app.manage_leader.give_admin_categories_events') }}'"
+            v-bind:text_back_to_participant="'{{ __('app.manage_leader.back_to_participant') }}'"
             v-bind:url_person_ui_avatar='"{{ route('participant_generate_avatar') }}"'
             v-bind:url_person_store='"{{ route('person_store') }}"'
             v-bind:url_participant_store='"{{ route('participant_store') }}"'

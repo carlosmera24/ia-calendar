@@ -56,6 +56,8 @@
                 v-bind:text_modify_categorie="text_modify_categorie"
                 v-bind:text_delete_categorie="text_delete_categorie"
                 v-bind:text_filter_categories="text_filter_categories"
+                v-bind:text_give_admin_categories_events="text_give_admin_categories_events"
+                v-bind:text_back_to_participant="text_back_to_participant"
                 v-bind:text_apply='text_apply'
                 v-bind:text_cancel='text_cancel'
                 v-bind:url_participants_programmer="url_participants_programmer"
@@ -82,6 +84,8 @@ export default {
         'text_category',
         'text_event',
         'text_filter_categories',
+        'text_give_admin_categories_events',
+        'text_back_to_participant',
         'numbers_emailes',
         'numbers_mobiles',
         'programmer_json',
