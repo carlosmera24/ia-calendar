@@ -3323,7 +3323,18 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
 
       this.fname = this.fname.trim();
       this.lname = this.lname.trim();
-      var name = (this.fname + " " + this.lname).trim();
+      var name = ""; //Only one first name
+
+      if (this.fname !== "") {
+        name = this.fname.split(" ", 1)[0];
+      } //Only one last name
+
+
+      if (this.lname !== "") {
+        name += " " + this.lname.split(" ", 1)[0];
+      }
+
+      name = name.trim();
 
       if (name !== "") {
         axios.post(this.url_person_ui_avatar, {
