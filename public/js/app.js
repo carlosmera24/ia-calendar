@@ -3211,6 +3211,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
@@ -3256,11 +3275,19 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
   computed: {},
   methods: {
     setTrim: function setTrim(model) {
+      var index = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
       switch (model) {
         case 'position':
           this.position = this.position.trim();
           break;
-        //TODO manejar otros campos con index para emails y mobiles
+
+        case 'email':
+          if (index >= 0) {
+            this.emails[index].value = this.emails[index].value.trim();
+          }
+
+          break;
 
         default:
           break;
@@ -66226,6 +66253,11 @@ var render = function() {
                   [
                     _c("b-input", {
                       attrs: { name: "email", maxlength: "45", expanded: "" },
+                      on: {
+                        blur: function($event) {
+                          return _vm.setTrim("email", index)
+                        }
+                      },
                       model: {
                         value: inputEmail.value,
                         callback: function($$v) {
@@ -79748,14 +79780,13 @@ __webpack_require__.r(__webpack_exports__);
 /*!***********************************!*\
   !*** ./resources/js/functions.js ***!
   \***********************************/
-/*! exports provided: procesarErroresRequest, capitalize, trimSpaces */
+/*! exports provided: procesarErroresRequest, capitalize */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "procesarErroresRequest", function() { return procesarErroresRequest; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "capitalize", function() { return capitalize; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "trimSpaces", function() { return trimSpaces; });
 /**
  * Funciones personalizadas, con métodos de ayuda o generales
  * Por Carlos Eduardo Mera Ruiz
@@ -79846,15 +79877,6 @@ function capitalize(word) {
       return c.toUpperCase();
     });
   });
-}
-/**
- * Function for removes whitespace from both ends of a string.
- * @param String phrase
- * @retunr String
- */
-
-function trimSpaces(phrase) {
-  return phrase.trim();
 }
 
 /***/ }),

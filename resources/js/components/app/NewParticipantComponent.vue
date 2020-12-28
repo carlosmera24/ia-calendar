@@ -23,19 +23,37 @@
                     :label="fields.first_name.label"
                     v-bind:type="{ 'is-danger' : fields.first_name.error }"
                     :message="fields.first_name.error ? fields.first_name.msg : ''">
-                    <b-input name="first_name" v-model="fname" v-on:blur="getAvatar" maxlength="100" expanded></b-input>
+                    <b-input
+                        name="first_name"
+                        v-model="fname"
+                        v-on:blur="getAvatar"
+                        maxlength="100"
+                        expanded>
+                    </b-input>
                 </b-field>
                 <b-field horizontal class="column is-4"
                     :label="fields.last_name.label"
                     v-bind:type="{ 'is-danger' : fields.last_name.error }"
                     :message="fields.last_name.error ? fields.last_name.msg : ''">
-                    <b-input name="last_name" v-model="lname" v-on:blur="getAvatar" maxlength="100" expanded></b-input>
+                    <b-input
+                        name="last_name"
+                        v-model="lname"
+                        v-on:blur="getAvatar"
+                        maxlength="100"
+                        expanded>
+                    </b-input>
                 </b-field>
                 <b-field horizontal class="column is-4"
                     :label="fields.position.label"
                     v-bind:type="{ 'is-danger' : fields.position.error }"
                     :message="fields.position.error ? fields.position.msg : ''">
-                    <b-input name="position" v-model="position" v-on:blur="setTrim('position')" maxlength="60" expanded></b-input>
+                    <b-input
+                        name="position"
+                        v-model="position"
+                        v-on:blur="setTrim('position')"
+                        maxlength="60"
+                        expanded>
+                    </b-input>
                 </b-field>
                 <b-field horizontal class="column is-4"
                     v-for="(inputEmail, index) in emails" :key="index"
@@ -45,6 +63,7 @@
                     <b-input
                         name="email"
                         v-model="inputEmail.value"
+                        v-on:blur="setTrim('email', index)"
                         maxlength="45"
                         expanded>
                     </b-input>
@@ -180,13 +199,17 @@ export default{
 
     },
     methods: {
-        setTrim(model){
+        setTrim(model, index = null){
             switch(model)
             {
                 case 'position':
                     this.position = this.position.trim();
                     break;
-                    //TODO manejar otros campos con index para emails y mobiles
+                case 'email':
+                    if( index >= 0 ){
+                        this.emails[index].value = this.emails[index].value.trim();
+                    }
+                    break;
                 default:
                     break;
             }
