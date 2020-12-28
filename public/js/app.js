@@ -2292,8 +2292,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_breadcrumbs_init', 'text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'text_filter_categories', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_no_options', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_updated_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'text_search_participant', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_create_categorie', 'text_modify_categorie', 'text_delete_categorie', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'url_participant_update', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_store_permissions_participant'],
+  props: ['text_breadcrumbs_init', 'text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'text_filter_categories', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_no_options', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_updated_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'text_search_participant', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_create_categorie', 'text_modify_categorie', 'text_delete_categorie', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'url_participant_update', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories'],
   data: function data() {
     return {
       contentActive: {}
@@ -2814,7 +2816,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_breadcrumbs_init', 'text_admin_leaders', 'programmer_json', 'user_id', 'text_search_participant', 'text_participant_fields_json', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_create_categorie', 'text_modify_categorie', 'text_delete_categorie', 'text_filter_categories', 'text_apply', 'text_cancel', 'text_success', 'text_no_options', 'text_updated_participant', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_store_permissions_participant', 'url_participant_update'],
+  props: ['text_breadcrumbs_init', 'text_admin_leaders', 'programmer_json', 'user_id', 'text_search_participant', 'text_participant_fields_json', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_create_categorie', 'text_modify_categorie', 'text_delete_categorie', 'text_filter_categories', 'text_apply', 'text_cancel', 'text_success', 'text_no_options', 'text_updated_participant', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories', 'url_participant_update'],
   data: function data() {
     return {
       isLoading: false,
@@ -2876,8 +2878,9 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         }
       },
       categories: [],
-      categoriesSelected: null,
+      categoriesSelected: [],
       associate_leader: false,
+      isAssociatedLeader: false,
       programmer: {},
       fields: [],
       PROFILE_LEADER: 2 //ID Profile leader
@@ -2966,6 +2969,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
     },
     onSelectParticipantChanged: function onSelectParticipantChanged() {
       this.resetPermissions();
+      this.categoriesSelected = [];
 
       if (this.participantSelected !== null) {
         this.getPermissions(this.participantSelected.id);
@@ -2996,7 +3000,9 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
               if (permi.permissions_id !== 6) {
                 _this5.permissions[permi.permissions_id].value = true;
               }
-            });
+            }); //load categories
+
+            _this5.getCategoriesParticipant(id_participant);
           } else {
             _this5.resetPermissions();
           }
@@ -3007,14 +3013,45 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         _this5.isLoading = false;
       });
     },
-    clickApply: function clickApply() {
+    getCategoriesParticipant: function getCategoriesParticipant(id_participant) {
       var _this6 = this;
 
+      this.isLoading = true;
+      axios.post(this.url_participant_categories, {
+        participants_id: id_participant
+      }).then(function (response) {
+        _this6.showErrors({});
+
+        if (response.data.status === 200) {
+          var categories = response.data.categories;
+
+          if (!validate.isEmpty(categories)) {
+            //Load categories
+            categories.forEach(function (cat) {
+              _this6.categories.forEach(function (categorie) {
+                if (cat.categories_id === categorie.meta.id) {
+                  _this6.categoriesSelected.push(categorie.meta);
+                }
+              });
+            });
+          } else {
+            _this6.categoriesSelected = [];
+          }
+        }
+      }, function (error) {
+        _this6.showErrors(error);
+      }).then(function () {
+        _this6.isLoading = false;
+      });
+    },
+    clickApply: function clickApply() {
+      var _this7 = this;
+
+      this.isAssociatedLeader = this.associate_leader;
       var permissions_ids = [];
-      var associated_leader = this.associate_leader;
       Object.keys(this.permissions).forEach(function (k) {
-        var permi = _this6.permissions[k];
-        associated_leader = permi.value ? permi.value : associated_leader;
+        var permi = _this7.permissions[k];
+        _this7.isAssociatedLeader = permi.value ? permi.value : _this7.isAssociatedLeader;
 
         if (validate.isArray(permi.id)) {
           permi.id.forEach(function (id) {
@@ -3036,38 +3073,70 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         participants_id: this.participantSelected.id,
         permissions_ids: permissions_ids
       }).then(function (response) {
-        _this6.showErrors({});
+        _this7.showErrors({});
+
+        if (response.data.status === 200) {
+          //Save categories
+          _this7.setCategories();
+        }
+      }, function (error) {
+        _this7.showErrors(error);
+      }).then(function () {
+        _this7.isLoading = false;
+      });
+    },
+    setCategories: function setCategories() {
+      var _this8 = this;
+
+      var categories_ids = [];
+      this.categoriesSelected.forEach(function (categorie) {
+        categories_ids.push(categorie.id);
+      });
+      this.isLoading = true;
+      axios.post(this.url_store_participants_categories, {
+        participants_id: this.participantSelected.id,
+        categories_ids: categories_ids
+      }).then(function (response) {
+        _this8.showErrors({});
 
         if (response.data.status === 200) {
           //Change profile to Leader
-          if (associated_leader && _this6.participantSelected.profiles_participants_id !== _this6.PROFILE_LEADER) {
-            var param = {
-              profiles_participants_id: _this6.PROFILE_LEADER,
-              id: _this6.participantSelected.id
-            };
-            axios.post(_this6.url_participant_update, param).then(function (response) {
-              _this6.showErrors({});
-
-              if (response.data.status === 200) {
-                _this6.getParticipants();
-              } else if (response.data.status === 204) {
-                _this6.showErrors(response.data.data);
-              }
-            }, function (error) {
-              _this6.showErrors(error);
-            });
-          }
-
-          Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_2__["success"])({
-            title: _this6.text_success,
-            text: _this6.text_updated_participant
-          });
+          _this8.setProfileAsLeader();
         }
       }, function (error) {
-        _this6.showErrors(error);
+        _this8.showErrors(error);
       }).then(function () {
-        _this6.isLoading = false;
+        _this8.isLoading = false;
       });
+    },
+    setProfileAsLeader: function setProfileAsLeader() {
+      var _this9 = this;
+
+      if (this.isAssociatedLeader && this.participantSelected.profiles_participants_id !== this.PROFILE_LEADER) {
+        var param = {
+          profiles_participants_id: this.PROFILE_LEADER,
+          id: this.participantSelected.id
+        };
+        axios.post(this.url_participant_update, param).then(function (response) {
+          _this9.showErrors({});
+
+          if (response.data.status === 200) {
+            Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_2__["success"])({
+              title: _this9.text_success,
+              text: _this9.text_updated_participant
+            });
+          } else if (response.data.status === 204) {
+            _this9.showErrors(response.data.data);
+          }
+        }, function (error) {
+          _this9.showErrors(error);
+        });
+      } else {
+        Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_2__["success"])({
+          title: this.text_success,
+          text: this.text_updated_participant
+        });
+      }
     }
   }
 });
@@ -65078,8 +65147,11 @@ var render = function() {
                   url_participants_programmer: _vm.url_participants_programmer,
                   url_categories_programmer: _vm.url_categories_programmer,
                   url_permissions_participant: _vm.url_permissions_participant,
+                  url_participant_categories: _vm.url_participant_categories,
                   url_store_permissions_participant:
                     _vm.url_store_permissions_participant,
+                  url_store_participants_categories:
+                    _vm.url_store_participants_categories,
                   url_participant_update: _vm.url_participant_update
                 },
                 on: { activeMainSection: _vm.setActiveSection }

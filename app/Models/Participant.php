@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Programmer;
+use App\Models\ParticipantCategorie;
 use App\Models\PermissionParticipant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,6 +32,10 @@ class Participant extends Model
     public function permissionsParticipants()
     {
         return $this->hasMany(PermissionParticipant::class,'participants_id');
+    }
+    public function partiipantsCategories()
+    {
+        return $this->hasMany(ParticipantCategorie::class,'participants_id');
     }
 
 }

@@ -165,6 +165,8 @@
             v-bind:url_categories_programmer='"{{ route('list_categories_from_programmer') }}"'
             v-bind:url_permissions_participant='"{{ route('list_permissions') }}"'
             v-bind:url_store_permissions_participant='"{{ route('permissions_participants_store') }}"'
+            v-bind:url_participant_categories='"{{ route('list_participant_categories') }}"'
+            v-bind:url_store_participants_categories='"{{ route('participants_categories_store') }}"'
         />
         {{-- /Content Main --}}
     </div>

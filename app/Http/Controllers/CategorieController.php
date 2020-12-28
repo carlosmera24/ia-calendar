@@ -8,10 +8,9 @@ use Illuminate\Http\Request;
 
 class CategorieController extends Controller
 {
-    protected $rules_list_categories = [
+    protected $rules_list_categories =  [
                                             'programmers_id'    =>  'required|integer|exists:programmers,id',
                                         ];
-
     /**
      * Display a listing of the resource.
      *

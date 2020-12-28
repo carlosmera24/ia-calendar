@@ -7,6 +7,7 @@ use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\PersonEmailController;
 use App\Http\Controllers\PersonCellphoneController;
+use App\Http\Controllers\ParticipantCategorieController;
 use App\Http\Controllers\PermissionParticipantController;
 /**
  * ----------------------------------------------------------
@@ -40,6 +41,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/permissions-participants/store', [ PermissionParticipantController::class, 'store' ])->name('permissions_participants_store');
     Route::post('/permissions-participants/list-permissions', [ PermissionParticipantController::class, 'listPermissionsParticipant' ])->name('list_permissions');
     Route::post('/categories/list-from-programmer', [ CategorieController::class, 'listFromProgrammer' ])->name('list_categories_from_programmer');
+    Route::post('/participants-categories/store', [ ParticipantCategorieController::class, 'store' ])->name('participants_categories_store');
+    Route::post('/participants-categories/list-categories', [ ParticipantCategorieController::class, 'listParticipantCategorie' ])->name('list_participant_categories');
 });
 // Sesion
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');

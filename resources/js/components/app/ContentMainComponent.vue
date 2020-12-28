@@ -61,7 +61,9 @@
                 v-bind:url_participants_programmer="url_participants_programmer"
                 v-bind:url_categories_programmer="url_categories_programmer"
                 v-bind:url_permissions_participant="url_permissions_participant"
+                v-bind:url_participant_categories="url_participant_categories"
                 v-bind:url_store_permissions_participant="url_store_permissions_participant"
+                v-bind:url_store_participants_categories="url_store_participants_categories"
                 v-bind:url_participant_update="url_participant_update"
             />
         </transition-group>
@@ -119,7 +121,9 @@ export default {
         'url_participants_programmer',
         'url_categories_programmer',
         'url_permissions_participant',
+        'url_participant_categories',
         'url_store_permissions_participant',
+        'url_store_participants_categories',
     ],
     data() {
         return {

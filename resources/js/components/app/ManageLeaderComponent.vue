@@ -175,7 +175,9 @@ export default {
         'url_participants_programmer',
         'url_categories_programmer',
         'url_permissions_participant',
+        'url_participant_categories',
         'url_store_permissions_participant',
+        'url_store_participants_categories',
         'url_participant_update'
     ],
     data() {
@@ -240,8 +242,9 @@ export default {
                                 },
                         },
             categories: [],
-            categoriesSelected: null,
+            categoriesSelected: [],
             associate_leader: false,
+            isAssociatedLeader: false,
             programmer: {},
             fields: [],
             PROFILE_LEADER: 2, //ID Profile leader
@@ -322,6 +325,7 @@ export default {
         },
         onSelectParticipantChanged(){
             this.resetPermissions();
+            this.categoriesSelected = [];
             if( this.participantSelected !== null)
             {
                 this.getPermissions( this.participantSelected.id );
@@ -340,7 +344,8 @@ export default {
                     if( response.data.status === 200 )
                     {
                         const permissions = response.data.permissions;
-                        if( !validate.isEmpty(permissions) ){
+                        if( !validate.isEmpty(permissions) )
+                        {
                             //Load permissions
                             permissions.forEach( permi => {
                                 if( permi.permissions_id !== 6 )
@@ -348,6 +353,8 @@ export default {
                                     this.permissions[ permi.permissions_id ].value = true;
                                 }
                             });
+                            //load categories
+                            this.getCategoriesParticipant( id_participant );
                         }else{
                             this.resetPermissions();
                         }
@@ -360,12 +367,42 @@ export default {
                     this.isLoading = false;
                 });
         },
+        getCategoriesParticipant(id_participant){
+            this.isLoading = true;
+            axios.post(this.url_participant_categories, { participants_id : id_participant })
+                .then( response => {
+                    this.showErrors({});
+                    if( response.data.status === 200 )
+                    {
+                        const categories = response.data.categories;
+                        if( !validate.isEmpty(categories) )
+                        {
+                            //Load categories
+                            categories.forEach( cat => {
+                                this.categories.forEach( categorie => {
+                                    if( cat.categories_id === categorie.meta.id ){
+                                        this.categoriesSelected.push( categorie.meta );
+                                    }
+                                });
+                            });
+                        }else{
+                            this.categoriesSelected = [];
+                        }
+                    }
+                },
+                error => {
+                    this.showErrors(error);
+                })
+                .then( () => {
+                    this.isLoading = false;
+                });
+        },
         clickApply(){
+            this.isAssociatedLeader = this.associate_leader;
             var permissions_ids = [];
-            var associated_leader = this.associate_leader;
             Object.keys( this.permissions ).forEach( k => {
                 const permi = this.permissions[k];
-                associated_leader = permi.value ? permi.value : associated_leader;
+                this.isAssociatedLeader = permi.value ? permi.value : this.isAssociatedLeader;
                 if( validate.isArray( permi.id ) )
                 {
                     permi.id.forEach( id => {
@@ -382,36 +419,8 @@ export default {
                         this.showErrors({});
                         if( response.data.status === 200 )
                         {
-                            //Change profile to Leader
-                            if( associated_leader && this.participantSelected.profiles_participants_id !== this.PROFILE_LEADER )
-                            {
-                                const param = {
-                                    profiles_participants_id: this.PROFILE_LEADER,
-                                    id: this.participantSelected.id
-                                };
-                                axios.post( this.url_participant_update, param )
-                                    .then( response => {
-                                        this.showErrors({});
-                                        if( response.data.status === 200 )
-                                        {
-                                            this.getParticipants();
-
-                                        }else if( response.data.status === 204 )
-                                        {
-                                            this.showErrors( response.data.data );
-                                        }
-                                    },
-                                    error => {
-                                        this.showErrors(error);
-                                    } );
-                            }
-
-                            success({
-                                        title: this.text_success,
-                                        text: this.text_updated_participant
-                                    });
-
-
+                            //Save categories
+                            this.setCategories();
                         }
                     },
                     error => {
@@ -420,6 +429,60 @@ export default {
                 .then( () => {
                     this.isLoading = false;
                 });
+        },
+        setCategories(){
+            var categories_ids = [];
+            this.categoriesSelected.forEach( categorie => {
+                categories_ids.push( categorie.id );
+            });
+            this.isLoading = true;
+            axios.post(this.url_store_participants_categories, { participants_id: this.participantSelected.id, categories_ids: categories_ids })
+                    .then( response => {
+                        this.showErrors({});
+                        if( response.data.status === 200 )
+                        {
+                            //Change profile to Leader
+                            this.setProfileAsLeader();
+                        }
+                    },
+                    error => {
+                        this.showErrors(error);
+                    } )
+                .then( () => {
+                    this.isLoading = false;
+                });
+        },
+        setProfileAsLeader(){
+            if( this.isAssociatedLeader && this.participantSelected.profiles_participants_id !== this.PROFILE_LEADER )
+            {
+                const param = {
+                    profiles_participants_id: this.PROFILE_LEADER,
+                    id: this.participantSelected.id
+                };
+                axios.post( this.url_participant_update, param )
+                    .then( response => {
+                        this.showErrors({});
+                        if( response.data.status === 200 )
+                        {
+                            success({
+                                title: this.text_success,
+                                text: this.text_updated_participant
+                            });
+
+                        }else if( response.data.status === 204 )
+                        {
+                            this.showErrors( response.data.data );
+                        }
+                    },
+                    error => {
+                        this.showErrors(error);
+                    } );
+            }else{
+                success({
+                    title: this.text_success,
+                    text: this.text_updated_participant
+                });
+            }
         }
     }
 }
