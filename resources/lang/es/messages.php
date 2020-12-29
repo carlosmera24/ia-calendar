@@ -16,9 +16,10 @@ return [
     'no_options'            =>  'No hay opciones disponibles.',
 
     //Errors
-    'bad_request'       =>  'Solicitud incorrecta',
-    'error_saving'      =>  'Error al guardar :attribute en la base de datos',
-    'error_updating'    =>  'Error al actualizar :attribute en la base de datos',
-    'no_content'        =>  'Sin contenido',
-    'no_found'          =>  'No se encontró :attribute con ID :id'
+    'bad_request'               =>  'Solicitud incorrecta',
+    'error_saving'              =>  'Error al guardar :attribute en la base de datos',
+    'error_updating'            =>  'Error al actualizar :attribute en la base de datos',
+    'no_content'                =>  'Sin contenido',
+    'no_found'                  =>  'No se encontró :attribute con ID :id',
+    'empty_categories_required' =>  'Actualmente no tiene categorías creadas, por favor cree una para continuar.'
 ];

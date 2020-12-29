@@ -127,6 +127,7 @@
             v-bind:numbers_emailes="'{{ $numMailes }}'"
             v-bind:numbers_mobiles="'{{ $numMobiles }}'"
             v-bind:programmer_json="'{{ str_replace("'", "\'",json_encode($programmer)) }}'"
+            v-bind:text_field_required='"{{ __('validation.required', ['attribute' => '']) }} "'
             v-bind:text_success='"{{ __('messages.success') }} "'
             v-bind:text_no_options='"{{ __('messages.no_options') }} "'
             v-bind:text_wall_title='"{{ __('app.wall.title') }} "'
@@ -143,8 +144,9 @@
             v-bind:text_admin_leaders="'{{ __('app.menu.admin_leaders') }}'"
             v-bind:user_id="'{{ $user->id }}'"
             v-bind:text_search_participant="'{{ __('app.manage_leader.search_participant') }}'"
+            v-bind:text_empty_categories_required="'{{ __('messages.empty_categories_required') }}'"
             v-bind:text_associate_leader="'{{ __('app.manage_leader.associate_leader') }}'"
-            v-bind:text_consult_categories_events="'{{ __('app.manage_leader.consult_categories_events') }}'"
+            v-bind:text_consult_events="'{{ __('app.manage_leader.consult_events') }}'"
             v-bind:text_create_events="'{{ __('app.manage_leader.create_events') }}'"
             v-bind:text_modify_events="'{{ __('app.manage_leader.modify_events') }}'"
             v-bind:text_share_events="'{{ __('app.manage_leader.share_events') }}'"

@@ -41,13 +41,15 @@
                 v-bind:text_admin_leaders='text_admin_leaders'
                 v-bind:programmer_json="programmer_json"
                 v-bind:user_id="user_id"
+                v-bind:text_field_required='text_field_required'
                 v-bind:text_success='text_success'
                 v-bind:text_no_options='text_no_options'
                 v-bind:text_updated_participant='text_updated_participant'
                 v-bind:text_search_participant="text_search_participant"
                 v-bind:text_participant_fields_json="text_participant_fields_json"
                 v-bind:text_associate_leader="text_associate_leader"
-                v-bind:text_consult_categories_events="text_consult_categories_events"
+                v-bind:text_empty_categories_required="text_empty_categories_required"
+                v-bind:text_consult_events="text_consult_events"
                 v-bind:text_create_events="text_create_events"
                 v-bind:text_modify_events="text_modify_events"
                 v-bind:text_share_events="text_share_events"
@@ -90,6 +92,7 @@ export default {
         'numbers_mobiles',
         'programmer_json',
         'text_success',
+        'text_field_required',
         'text_no_options',
         'text_wall_title',
         'text_wall_trigger_events_soon_expire',
@@ -105,8 +108,9 @@ export default {
         'text_admin_leaders',
         'user_id',
         'text_search_participant',
+        'text_empty_categories_required',
         'text_associate_leader',
-        'text_consult_categories_events',
+        'text_consult_events',
         'text_create_events',
         'text_modify_events',
         'text_share_events',

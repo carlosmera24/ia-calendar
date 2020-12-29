@@ -20327,6 +20327,10 @@ textarea {
   margin: 23px 0;
 }
 
+.application .content-main .content .form_manage_leader .field.column {
+  margin-bottom: 0;
+}
+
 .application .content-main .content .form_manage_leader .vs__selected-options {
   padding-left: 30px;
 }
@@ -20354,6 +20358,14 @@ textarea {
 
 .application .content-main .content .form_manage_leader .data_permissions .content_categories .vs__selected-options {
   padding-left: 12px;
+}
+
+.application .content-main .content .form_manage_leader .content_categories .field-categories.control .icon i {
+  margin-right: 20px;
+}
+
+.application .content-main .content .form_manage_leader .content_categories .field-categories.control .is-danger.v-select .vs__dropdown-toggle {
+  border-color: #f14668;
 }
 
 .application .content-main .content .form_manage_leader .content_given_admin_permissions .is-grouped {

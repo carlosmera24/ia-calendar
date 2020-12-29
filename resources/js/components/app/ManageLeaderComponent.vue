@@ -95,7 +95,7 @@
                     <span class="is-size-5">&#9688;</span>
                 </b-button>
                 <div class="columns is-multiline" >
-                    <div class="field column is-12">
+                    <div class="field column is-12 mb-3">
                         <div class="field-label">
                             <label class="label label_associate_lader">
                                 {{ text_associate_leader }}
@@ -104,7 +104,7 @@
                     </div>
                     <div class="content_permissions column is-12">
                         <div class="field column is-12 is-horizontal"
-                            v-for="(permission, index) in permissions" :key="'permission.'+ index">
+                            v-for="(permission, index) in permissionsEvents" :key="'permission.'+ index">
                             <b-switch v-model="permission.value"
                                 :disabled="participantSelected ? false : true"
                                 type="is-success">
@@ -114,16 +114,23 @@
                     </div>
                 </div>
                 <div class="content_categories">
-                    <v-select v-model="categoriesSelected"
-                        multiple
-                        :disabled="participantSelected ? false : true"
-                        :options="categories"
-                        :reduce="categorie => categorie.meta"
-                        :placeholder="text_filter_categories"
-                        label="categorie"
-                        >
-                        <div slot="no-options">{{ text_no_options }}</div>
-                    </v-select>
+                    <div class="field-categories control has-icons-left has-icons-right">
+                        <v-select v-model="categoriesSelected"
+                            multiple
+                            :disabled="participantSelected ? false : true"
+                            :options="categories"
+                            :reduce="categorie => categorie.meta"
+                            :placeholder="text_filter_categories"
+                            label="categorie"
+                            :class="{ 'is-danger' : isCategoriesError }"
+                            >
+                            <template >
+                                <div slot="no-options">{{ text_no_options }}</div>
+                            </template>
+                        </v-select>
+                        <span v-if="isCategoriesError" class="icon is-right has-text-danger"><i class="fas fa-exclamation-circle"></i></span>
+                        <p v-if="isCategoriesError" class="help is-danger">{{ text_field_required }}</p>
+                    </div>
                 </div>
             </section>
             <section class="content_given_admin_permissions">
@@ -172,7 +179,7 @@ export default {
         'text_search_participant',
         'text_participant_fields_json',
         'text_associate_leader',
-        'text_consult_categories_events',
+        'text_consult_events',
         'text_create_events',
         'text_modify_events',
         'text_share_events',
@@ -186,8 +193,10 @@ export default {
         'text_apply',
         'text_cancel',
         'text_success',
+        'text_field_required',
         'text_no_options',
         'text_updated_participant',
+        'text_empty_categories_required',
         'url_participants_programmer',
         'url_categories_programmer',
         'url_permissions_participant',
@@ -205,15 +214,6 @@ export default {
             participants:[],
             participantSelected: null,
             permissions: {
-                            1: {
-                                    value: false,
-                                    label: this.text_consult_categories_events,
-                                    permission: [ 'categories.index', 'events.index' ],
-                                    id: [
-                                            1, //categories.index
-                                            6, //events.index
-                                        ]
-                                },
                             2: {
                                     value: false,
                                     label: this.text_create_categorie,
@@ -231,6 +231,12 @@ export default {
                                     label: this.text_delete_categorie,
                                     permission: 'categories.delete',
                                     id: 4
+                                },
+                            6: {
+                                    value: false,
+                                    label: this.text_consult_events,
+                                    permission: 'events.index',
+                                    id: 6
                                 },
                             7: {
                                     value: false,
@@ -257,6 +263,8 @@ export default {
                                     id: 9
                                 },
                         },
+            permissionsEvents: {},
+            permissionsCategories: {},
             categories: [],
             categoriesSelected: [],
             associate_leader: false,
@@ -264,12 +272,28 @@ export default {
             isPermissionsAdmin: [],
             programmer: {},
             fields: [],
+            isCategoriesError: false,
             PROFILE_LEADER: 2, //ID Profile leader
         }
     },
     created(){
         this.programmer = JSON.parse(this.programmer_json);
         this.fields = JSON.parse(this.text_participant_fields_json);
+        //create copy permission for events and categories with link to permissions (global)
+        Object.keys( this.permissions ).forEach( k => {
+            const permission = this.permissions[k];
+            //Events
+            if( permission.id >= 6 && permission.id <= 10 )
+            {
+                this.permissionsEvents[k] = permission;
+            }
+            //Categories
+            if( permission.id < 6 )
+            {
+                this.permissionsCategories[k] = permission;
+
+            }
+        });
     },
     mounted(){
         this.getParticipants();
@@ -322,15 +346,21 @@ export default {
                     this.showErrors({});
                     if( response.data.status === 200 )
                     {
-                        response.data.categories.forEach( element => {
-                            const name = element.name;
-                            const categorie = capitalize( name.toLocaleLowerCase() );
-                            const tmp = {
-                                categorie: categorie,
-                                meta: element
-                            }
-                            this.categories.push( tmp );
-                        });
+                        if( response.data.categories.length > 0 )
+                        {
+                            response.data.categories.forEach( element => {
+                                const name = element.name;
+                                const categorie = capitalize( name.toLocaleLowerCase() );
+                                const tmp = {
+                                    categorie: categorie,
+                                    meta: element
+                                }
+                                this.categories.push( tmp );
+                            });
+                        }else //Empty categories
+                        {
+                            this.showErrors( this.text_empty_categories_required );
+                        }
                     }
                 },
                 error => {
@@ -343,6 +373,7 @@ export default {
         onSelectParticipantChanged(){
             this.resetPermissions();
             this.categoriesSelected = [];
+            this.isCategoriesError = false;
             if( this.participantSelected !== null)
             {
                 this.getPermissions( this.participantSelected.id );
@@ -365,16 +396,16 @@ export default {
                         {
                             //Load permissions
                             permissions.forEach( permi => {
-                                if( permi.permissions_id !== 6 )
+                                if( this.permissions[ permi.permissions_id ] !== undefined )
                                 {
                                     this.permissions[ permi.permissions_id ].value = true;
                                 }
                             });
-                            //load categories
-                            this.getCategoriesParticipant( id_participant );
                         }else{
                             this.resetPermissions();
                         }
+                        //load categories
+                        this.getCategoriesParticipant( id_participant );
                     }
                 },
                 error => {
@@ -415,37 +446,43 @@ export default {
                 });
         },
         clickApply(){
-            this.isAssociatedLeader = this.associate_leader;
-            var permissions_ids = [];
-            Object.keys( this.permissions ).forEach( k => {
-                const permi = this.permissions[k];
-                this.isAssociatedLeader = permi.value ? permi.value : this.isAssociatedLeader;
-                if( validate.isArray( permi.id ) )
-                {
-                    permi.id.forEach( id => {
-                        permissions_ids.push( { id: id, value: permi.value } );
-                    });
-                }else{
+            this.isCategoriesError = validate.isEmpty(this.categoriesSelected);
+            //empty categories
+            if( this.categories.length === 0)
+            {
+                this.showErrors( this.text_empty_categories_required );
+
+            }else if( !validate.isEmpty(this.categoriesSelected) )
+            {
+                this.isAssociatedLeader = this.associate_leader;
+                var permissions_ids = [];
+                Object.keys( this.permissions ).forEach( k => {
+                    const permi = this.permissions[k];
+                    //Associated with leader from events permission
+                    if( permi.id >= 6 && permi.id <= 10 )
+                    {
+                        this.isAssociatedLeader = permi.value ? permi.value : this.isAssociatedLeader;
+                    }
                     permissions_ids.push( { id: permi.id, value: permi.value } );
-                }
-            } );
-            //Save permissions as leader
-            this.isLoading = true;
-            axios.post(this.url_store_permissions_participant, { participants_id: this.participantSelected.id, permissions_ids: permissions_ids })
-                    .then( response => {
-                        this.showErrors({});
-                        if( response.data.status === 200 )
-                        {
-                            //Save categories
-                            this.setCategories();
-                        }
-                    },
-                    error => {
-                        this.showErrors(error);
-                    } )
-                .then( () => {
-                    this.isLoading = false;
-                });
+                } );
+                //Save permissions as leader
+                this.isLoading = true;
+                axios.post(this.url_store_permissions_participant, { participants_id: this.participantSelected.id, permissions_ids: permissions_ids })
+                        .then( response => {
+                            this.showErrors({});
+                            if( response.data.status === 200 )
+                            {
+                                //Save categories
+                                this.setCategories();
+                            }
+                        },
+                        error => {
+                            this.showErrors(error);
+                        } )
+                    .then( () => {
+                        this.isLoading = false;
+                    });
+            }
         },
         setCategories(){
             var categories_ids = [];

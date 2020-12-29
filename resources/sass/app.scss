@@ -457,6 +457,9 @@ body, h2, button, input, select, textarea {
                 margin: 23px 0;
             }
             .form_manage_leader{
+                .field.column{
+                    margin-bottom: 0;
+                }
                 .vs__selected-options{
                     padding-left: 30px;
                 }
@@ -479,6 +482,20 @@ body, h2, button, input, select, textarea {
                         width: 70%;
                         .vs__selected-options{
                             padding-left: 12px;
+                        }
+                    }
+                }
+                .content_categories{
+                    .field-categories.control{
+                        .icon{
+                            i{
+                                margin-right: 20px
+                            }
+                        }
+                        .is-danger.v-select{
+                            .vs__dropdown-toggle{
+                                border-color: #f14668;
+                            }
                         }
                     }
                 }

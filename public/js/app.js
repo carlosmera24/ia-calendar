@@ -2296,8 +2296,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_breadcrumbs_init', 'text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'text_filter_categories', 'text_give_admin_categories_events', 'text_back_to_participant', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_no_options', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_updated_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'text_search_participant', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_create_categorie', 'text_modify_categorie', 'text_delete_categorie', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'url_participant_update', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories'],
+  props: ['text_breadcrumbs_init', 'text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'text_filter_categories', 'text_give_admin_categories_events', 'text_back_to_participant', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_field_required', 'text_no_options', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_updated_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'text_search_participant', 'text_empty_categories_required', 'text_associate_leader', 'text_consult_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_create_categorie', 'text_modify_categorie', 'text_delete_categorie', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'url_participant_update', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories'],
   data: function data() {
     return {
       contentActive: {}
@@ -2820,6 +2822,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -2832,7 +2841,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_breadcrumbs_init', 'text_admin_leaders', 'programmer_json', 'user_id', 'text_search_participant', 'text_participant_fields_json', 'text_associate_leader', 'text_consult_categories_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_create_categorie', 'text_modify_categorie', 'text_delete_categorie', 'text_filter_categories', 'text_give_admin_categories_events', 'text_back_to_participant', 'text_apply', 'text_cancel', 'text_success', 'text_no_options', 'text_updated_participant', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories', 'url_participant_update'],
+  props: ['text_breadcrumbs_init', 'text_admin_leaders', 'programmer_json', 'user_id', 'text_search_participant', 'text_participant_fields_json', 'text_associate_leader', 'text_consult_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_create_categorie', 'text_modify_categorie', 'text_delete_categorie', 'text_filter_categories', 'text_give_admin_categories_events', 'text_back_to_participant', 'text_apply', 'text_cancel', 'text_success', 'text_field_required', 'text_no_options', 'text_updated_participant', 'text_empty_categories_required', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories', 'url_participant_update'],
   data: function data() {
     return {
       isLoading: false,
@@ -2842,14 +2851,6 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       participants: [],
       participantSelected: null,
       permissions: {
-        1: {
-          value: false,
-          label: this.text_consult_categories_events,
-          permission: ['categories.index', 'events.index'],
-          id: [1, //categories.index
-          6 //events.index
-          ]
-        },
         2: {
           value: false,
           label: this.text_create_categorie,
@@ -2867,6 +2868,12 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
           label: this.text_delete_categorie,
           permission: 'categories.delete',
           id: 4
+        },
+        6: {
+          value: false,
+          label: this.text_consult_events,
+          permission: 'events.index',
+          id: 6
         },
         7: {
           value: false,
@@ -2893,6 +2900,8 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
           id: 9
         }
       },
+      permissionsEvents: {},
+      permissionsCategories: {},
       categories: [],
       categoriesSelected: [],
       associate_leader: false,
@@ -2900,13 +2909,29 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       isPermissionsAdmin: [],
       programmer: {},
       fields: [],
+      isCategoriesError: false,
       PROFILE_LEADER: 2 //ID Profile leader
 
     };
   },
   created: function created() {
+    var _this = this;
+
     this.programmer = JSON.parse(this.programmer_json);
-    this.fields = JSON.parse(this.text_participant_fields_json);
+    this.fields = JSON.parse(this.text_participant_fields_json); //create copy permission for events and categories with link to permissions (global)
+
+    Object.keys(this.permissions).forEach(function (k) {
+      var permission = _this.permissions[k]; //Events
+
+      if (permission.id >= 6 && permission.id <= 10) {
+        _this.permissionsEvents[k] = permission;
+      } //Categories
+
+
+      if (permission.id < 6) {
+        _this.permissionsCategories[k] = permission;
+      }
+    });
   },
   mounted: function mounted() {
     this.getParticipants();
@@ -2920,22 +2945,22 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       this.hasErrors = this.errors.errors.length > 0;
     },
     clickAssociateLeader: function clickAssociateLeader() {
-      var _this = this;
+      var _this2 = this;
 
       this.associate_leader = !this.associate_leader;
       Object.keys(this.permissions).forEach(function (k, index) {
-        _this.permissions[k].value = _this.associate_leader;
+        _this2.permissions[k].value = _this2.associate_leader;
       });
     },
     getParticipants: function getParticipants() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.isLoading = true;
       axios.post(this.url_participants_programmer, {
         programmers_id: this.programmer.id,
         users_id: this.user_id
       }).then(function (response) {
-        _this2.showErrors({});
+        _this3.showErrors({});
 
         if (response.data.status === 200) {
           response.data.participants.forEach(function (element) {
@@ -2946,37 +2971,10 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
               meta: element
             };
 
-            _this2.participants.push(tmp);
+            _this3.participants.push(tmp);
           }); //Get categories
 
-          _this2.getCategories();
-        }
-      }, function (error) {
-        _this2.showErrors(error);
-      }).then(function () {
-        _this2.isLoading = false;
-      });
-    },
-    getCategories: function getCategories() {
-      var _this3 = this;
-
-      this.isLoading = true;
-      axios.post(this.url_categories_programmer, {
-        programmers_id: this.programmer.id
-      }).then(function (response) {
-        _this3.showErrors({});
-
-        if (response.data.status === 200) {
-          response.data.categories.forEach(function (element) {
-            var name = element.name;
-            var categorie = Object(_functions_js__WEBPACK_IMPORTED_MODULE_0__["capitalize"])(name.toLocaleLowerCase());
-            var tmp = {
-              categorie: categorie,
-              meta: element
-            };
-
-            _this3.categories.push(tmp);
-          });
+          _this3.getCategories();
         }
       }, function (error) {
         _this3.showErrors(error);
@@ -2984,29 +2982,62 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         _this3.isLoading = false;
       });
     },
+    getCategories: function getCategories() {
+      var _this4 = this;
+
+      this.isLoading = true;
+      axios.post(this.url_categories_programmer, {
+        programmers_id: this.programmer.id
+      }).then(function (response) {
+        _this4.showErrors({});
+
+        if (response.data.status === 200) {
+          if (response.data.categories.length > 0) {
+            response.data.categories.forEach(function (element) {
+              var name = element.name;
+              var categorie = Object(_functions_js__WEBPACK_IMPORTED_MODULE_0__["capitalize"])(name.toLocaleLowerCase());
+              var tmp = {
+                categorie: categorie,
+                meta: element
+              };
+
+              _this4.categories.push(tmp);
+            });
+          } else //Empty categories
+            {
+              _this4.showErrors(_this4.text_empty_categories_required);
+            }
+        }
+      }, function (error) {
+        _this4.showErrors(error);
+      }).then(function () {
+        _this4.isLoading = false;
+      });
+    },
     onSelectParticipantChanged: function onSelectParticipantChanged() {
       this.resetPermissions();
       this.categoriesSelected = [];
+      this.isCategoriesError = false;
 
       if (this.participantSelected !== null) {
         this.getPermissions(this.participantSelected.id);
       }
     },
     resetPermissions: function resetPermissions() {
-      var _this4 = this;
+      var _this5 = this;
 
       Object.keys(this.permissions).forEach(function (k, index) {
-        _this4.permissions[k].value = false;
+        _this5.permissions[k].value = false;
       });
     },
     getPermissions: function getPermissions(id_participant) {
-      var _this5 = this;
+      var _this6 = this;
 
       this.isLoading = true;
       axios.post(this.url_permissions_participant, {
         participants_id: id_participant
       }).then(function (response) {
-        _this5.showErrors({});
+        _this6.showErrors({});
 
         if (response.data.status === 200) {
           var permissions = response.data.permissions;
@@ -3014,46 +3045,16 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
           if (!validate.isEmpty(permissions)) {
             //Load permissions
             permissions.forEach(function (permi) {
-              if (permi.permissions_id !== 6) {
-                _this5.permissions[permi.permissions_id].value = true;
+              if (_this6.permissions[permi.permissions_id] !== undefined) {
+                _this6.permissions[permi.permissions_id].value = true;
               }
-            }); //load categories
-
-            _this5.getCategoriesParticipant(id_participant);
-          } else {
-            _this5.resetPermissions();
-          }
-        }
-      }, function (error) {
-        _this5.showErrors(error);
-      }).then(function () {
-        _this5.isLoading = false;
-      });
-    },
-    getCategoriesParticipant: function getCategoriesParticipant(id_participant) {
-      var _this6 = this;
-
-      this.isLoading = true;
-      axios.post(this.url_participant_categories, {
-        participants_id: id_participant
-      }).then(function (response) {
-        _this6.showErrors({});
-
-        if (response.data.status === 200) {
-          var categories = response.data.categories;
-
-          if (!validate.isEmpty(categories)) {
-            //Load categories
-            categories.forEach(function (cat) {
-              _this6.categories.forEach(function (categorie) {
-                if (cat.categories_id === categorie.meta.id) {
-                  _this6.categoriesSelected.push(categorie.meta);
-                }
-              });
             });
           } else {
-            _this6.categoriesSelected = [];
-          }
+            _this6.resetPermissions();
+          } //load categories
+
+
+          _this6.getCategoriesParticipant(id_participant);
         }
       }, function (error) {
         _this6.showErrors(error);
@@ -3061,40 +3062,30 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         _this6.isLoading = false;
       });
     },
-    clickApply: function clickApply() {
+    getCategoriesParticipant: function getCategoriesParticipant(id_participant) {
       var _this7 = this;
 
-      this.isAssociatedLeader = this.associate_leader;
-      var permissions_ids = [];
-      Object.keys(this.permissions).forEach(function (k) {
-        var permi = _this7.permissions[k];
-        _this7.isAssociatedLeader = permi.value ? permi.value : _this7.isAssociatedLeader;
-
-        if (validate.isArray(permi.id)) {
-          permi.id.forEach(function (id) {
-            permissions_ids.push({
-              id: id,
-              value: permi.value
-            });
-          });
-        } else {
-          permissions_ids.push({
-            id: permi.id,
-            value: permi.value
-          });
-        }
-      }); //Save permissions as leader
-
       this.isLoading = true;
-      axios.post(this.url_store_permissions_participant, {
-        participants_id: this.participantSelected.id,
-        permissions_ids: permissions_ids
+      axios.post(this.url_participant_categories, {
+        participants_id: id_participant
       }).then(function (response) {
         _this7.showErrors({});
 
         if (response.data.status === 200) {
-          //Save categories
-          _this7.setCategories();
+          var categories = response.data.categories;
+
+          if (!validate.isEmpty(categories)) {
+            //Load categories
+            categories.forEach(function (cat) {
+              _this7.categories.forEach(function (categorie) {
+                if (cat.categories_id === categorie.meta.id) {
+                  _this7.categoriesSelected.push(categorie.meta);
+                }
+              });
+            });
+          } else {
+            _this7.categoriesSelected = [];
+          }
         }
       }, function (error) {
         _this7.showErrors(error);
@@ -3102,8 +3093,49 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         _this7.isLoading = false;
       });
     },
-    setCategories: function setCategories() {
+    clickApply: function clickApply() {
       var _this8 = this;
+
+      this.isCategoriesError = validate.isEmpty(this.categoriesSelected); //empty categories
+
+      if (this.categories.length === 0) {
+        this.showErrors(this.text_empty_categories_required);
+      } else if (!validate.isEmpty(this.categoriesSelected)) {
+        this.isAssociatedLeader = this.associate_leader;
+        var permissions_ids = [];
+        Object.keys(this.permissions).forEach(function (k) {
+          var permi = _this8.permissions[k]; //Associated with leader from events permission
+
+          if (permi.id >= 6 && permi.id <= 10) {
+            _this8.isAssociatedLeader = permi.value ? permi.value : _this8.isAssociatedLeader;
+          }
+
+          permissions_ids.push({
+            id: permi.id,
+            value: permi.value
+          });
+        }); //Save permissions as leader
+
+        this.isLoading = true;
+        axios.post(this.url_store_permissions_participant, {
+          participants_id: this.participantSelected.id,
+          permissions_ids: permissions_ids
+        }).then(function (response) {
+          _this8.showErrors({});
+
+          if (response.data.status === 200) {
+            //Save categories
+            _this8.setCategories();
+          }
+        }, function (error) {
+          _this8.showErrors(error);
+        }).then(function () {
+          _this8.isLoading = false;
+        });
+      }
+    },
+    setCategories: function setCategories() {
+      var _this9 = this;
 
       var categories_ids = [];
       this.categoriesSelected.forEach(function (categorie) {
@@ -3114,20 +3146,20 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         participants_id: this.participantSelected.id,
         categories_ids: categories_ids
       }).then(function (response) {
-        _this8.showErrors({});
+        _this9.showErrors({});
 
         if (response.data.status === 200) {
           //Change profile to Leader
-          _this8.setProfileAsLeader();
+          _this9.setProfileAsLeader();
         }
       }, function (error) {
-        _this8.showErrors(error);
+        _this9.showErrors(error);
       }).then(function () {
-        _this8.isLoading = false;
+        _this9.isLoading = false;
       });
     },
     setProfileAsLeader: function setProfileAsLeader() {
-      var _this9 = this;
+      var _this10 = this;
 
       if (this.isAssociatedLeader && this.participantSelected.profiles_participants_id !== this.PROFILE_LEADER) {
         var param = {
@@ -3135,18 +3167,18 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
           id: this.participantSelected.id
         };
         axios.post(this.url_participant_update, param).then(function (response) {
-          _this9.showErrors({});
+          _this10.showErrors({});
 
           if (response.data.status === 200) {
             Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_2__["success"])({
-              title: _this9.text_success,
-              text: _this9.text_updated_participant
+              title: _this10.text_success,
+              text: _this10.text_updated_participant
             });
           } else if (response.data.status === 204) {
-            _this9.showErrors(response.data.data);
+            _this10.showErrors(response.data.data);
           }
         }, function (error) {
-          _this9.showErrors(error);
+          _this10.showErrors(error);
         });
       } else {
         Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_2__["success"])({
@@ -65142,6 +65174,7 @@ var render = function() {
                   text_admin_leaders: _vm.text_admin_leaders,
                   programmer_json: _vm.programmer_json,
                   user_id: _vm.user_id,
+                  text_field_required: _vm.text_field_required,
                   text_success: _vm.text_success,
                   text_no_options: _vm.text_no_options,
                   text_updated_participant: _vm.text_updated_participant,
@@ -65149,8 +65182,9 @@ var render = function() {
                   text_participant_fields_json:
                     _vm.text_participant_fields_json,
                   text_associate_leader: _vm.text_associate_leader,
-                  text_consult_categories_events:
-                    _vm.text_consult_categories_events,
+                  text_empty_categories_required:
+                    _vm.text_empty_categories_required,
+                  text_consult_events: _vm.text_consult_events,
                   text_create_events: _vm.text_create_events,
                   text_modify_events: _vm.text_modify_events,
                   text_share_events: _vm.text_share_events,
@@ -65985,7 +66019,7 @@ var render = function() {
             ),
             _vm._v(" "),
             _c("div", { staticClass: "columns is-multiline" }, [
-              _c("div", { staticClass: "field column is-12" }, [
+              _c("div", { staticClass: "field column is-12 mb-3" }, [
                 _c("div", { staticClass: "field-label" }, [
                   _c("label", { staticClass: "label label_associate_lader" }, [
                     _vm._v(
@@ -66000,7 +66034,7 @@ var render = function() {
               _c(
                 "div",
                 { staticClass: "content_permissions column is-12" },
-                _vm._l(_vm.permissions, function(permission, index) {
+                _vm._l(_vm.permissionsEvents, function(permission, index) {
                   return _c(
                     "div",
                     {
@@ -66039,42 +66073,65 @@ var render = function() {
               )
             ]),
             _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "content_categories" },
-              [
-                _c(
-                  "v-select",
-                  {
-                    attrs: {
-                      multiple: "",
-                      disabled: _vm.participantSelected ? false : true,
-                      options: _vm.categories,
-                      reduce: function(categorie) {
-                        return categorie.meta
+            _c("div", { staticClass: "content_categories" }, [
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "field-categories control has-icons-left has-icons-right"
+                },
+                [
+                  _c(
+                    "v-select",
+                    {
+                      class: { "is-danger": _vm.isCategoriesError },
+                      attrs: {
+                        multiple: "",
+                        disabled: _vm.participantSelected ? false : true,
+                        options: _vm.categories,
+                        reduce: function(categorie) {
+                          return categorie.meta
+                        },
+                        placeholder: _vm.text_filter_categories,
+                        label: "categorie"
                       },
-                      placeholder: _vm.text_filter_categories,
-                      label: "categorie"
+                      model: {
+                        value: _vm.categoriesSelected,
+                        callback: function($$v) {
+                          _vm.categoriesSelected = $$v
+                        },
+                        expression: "categoriesSelected"
+                      }
                     },
-                    model: {
-                      value: _vm.categoriesSelected,
-                      callback: function($$v) {
-                        _vm.categoriesSelected = $$v
-                      },
-                      expression: "categoriesSelected"
-                    }
-                  },
-                  [
-                    _c(
-                      "div",
-                      { attrs: { slot: "no-options" }, slot: "no-options" },
-                      [_vm._v(_vm._s(_vm.text_no_options))]
-                    )
-                  ]
-                )
-              ],
-              1
-            )
+                    [
+                      [
+                        _c(
+                          "div",
+                          { attrs: { slot: "no-options" }, slot: "no-options" },
+                          [_vm._v(_vm._s(_vm.text_no_options))]
+                        )
+                      ]
+                    ],
+                    2
+                  ),
+                  _vm._v(" "),
+                  _vm.isCategoriesError
+                    ? _c(
+                        "span",
+                        { staticClass: "icon is-right has-text-danger" },
+                        [_c("i", { staticClass: "fas fa-exclamation-circle" })]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.isCategoriesError
+                    ? _c("p", { staticClass: "help is-danger" }, [
+                        _vm._v(_vm._s(_vm.text_field_required))
+                      ])
+                    : _vm._e()
+                ],
+                1
+              )
+            ])
           ],
           1
         ),
