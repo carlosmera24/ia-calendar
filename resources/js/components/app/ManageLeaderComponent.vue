@@ -137,14 +137,27 @@
                 <div class="is-grouped">
                     <div class="button btn-main">
                         <b-checkbox-button
-                            v-model="isPermissionsAdmin"
+                            v-model="permissionsAdmin"
                             :disabled="participantSelected ? false : true"
                             native-value="true"
+                            @input="onChangedPermissionsAdmin"
                             type="is-success">
                             <span class="is-size-5">&#9688;</span>
                         </b-checkbox-button>
                     </div>
                     <span class="control-label">{{ text_give_admin_categories_events }}</span>
+                </div>
+                <div v-if="isPermissionsAdmin" class="columns is-multiline">
+                    <div class="content_permissions column is-12">
+                        <div class="field column is-12 is-horizontal"
+                            v-for="(permission, index) in permissionsCategories" :key="'permission_categorie.'+ index">
+                            <b-switch v-model="permission.value"
+                                :disabled="participantSelected ? false : true"
+                                type="is-success">
+                                {{ permission.label }}
+                            </b-switch>
+                        </div>
+                    </div>
                 </div>
             </section>
             <div class="btn-actions has-text-centered">
@@ -269,7 +282,8 @@ export default {
             categoriesSelected: [],
             associate_leader: false,
             isAssociatedLeader: false,
-            isPermissionsAdmin: [],
+            permissionsAdmin: [],
+            isPermissionsAdmin: false,
             programmer: {},
             fields: [],
             isCategoriesError: false,
@@ -309,8 +323,24 @@ export default {
         clickAssociateLeader(){
             this.associate_leader = !this.associate_leader;
             Object.keys(this.permissions).forEach( (k,index) => {
-                this.permissions[k].value = this.associate_leader;
+                //Events
+                if( k >= 6 && k <= 10 )
+                {
+                    this.permissions[k].value = this.associate_leader;
+                }
             });
+        },
+        onChangedPermissionsAdmin(){
+            this.isPermissionsAdmin = !this.isPermissionsAdmin;
+            Object.keys( this.permissions ).forEach( k => {
+                const permission = this.permissions[k];
+                //Categories
+                if( permission.id < 6 )
+                {
+                    this.permissionsCategories[k].value = this.isPermissionsAdmin ? true : false;
+                }
+            });
+            //TODO
         },
         getParticipants(){
             this.isLoading = true;

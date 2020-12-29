@@ -20382,6 +20382,10 @@ textarea {
   padding-left: calc(0.75em - 1px);
 }
 
+.application .content-main .content .form_manage_leader .content_given_admin_permissions .content_permissions {
+  padding-left: 47px;
+}
+
 .animated_delay {
   -webkit-animation-delay: 0.45s;
           animation-delay: 0.45s;
