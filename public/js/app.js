@@ -2913,19 +2913,25 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
           id: 9
         }
       },
+      copyPermissions: [],
       permissionsEvents: {},
       permissionsCategories: {},
       categories: [],
       categoriesSelected: [],
-      associate_leader: false,
+      isEnabledAssociateLeader: false,
       isAssociatedLeader: false,
       permissionsAdmin: [],
       isPermissionsAdmin: false,
       programmer: {},
       fields: [],
       isCategoriesError: false,
-      PROFILE_LEADER: 2 //ID Profile leader
-
+      newProfile: null,
+      OPTIONS: {
+        EVENTS: 1,
+        CATEGORIES: 2,
+        PROFILE_LEADER: 2,
+        PROFILE_SUPLE_ADMIN: 4
+      }
     };
   },
   created: function created() {
@@ -2961,25 +2967,66 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
     clickAssociateLeader: function clickAssociateLeader() {
       var _this2 = this;
 
-      this.associate_leader = !this.associate_leader;
-      Object.keys(this.permissions).forEach(function (k, index) {
-        //Events
-        if (k >= 6 && k <= 10) {
-          _this2.permissions[k].value = _this2.associate_leader;
+      this.isAssociatedLeader = !this.isAssociatedLeader; //Change associated with leader
+
+      this.newProfile = this.isAssociatedLeader ? this.OPTIONS.PROFILE_LEADER : null; //Change new profile
+
+      if (this.isAssociatedLeader) {
+        //Disable permissions admin
+        this.permissionsAdmin = [];
+        this.isPermissionsAdmin = false; //Reset categories permissions
+
+        this.resetPermissions(this.OPTIONS.CATEGORIES); //Enable all events permissions
+
+        Object.keys(this.permissions).forEach(function (k, index) {
+          //Events
+          if (k >= 6 && k <= 10) {
+            _this2.permissions[k].value = _this2.isAssociatedLeader;
+          }
+        });
+      } else //Back all events permissions
+        {
+          this.resetPermissions(this.OPTIONS.EVENTS);
+          this.copyPermissions.forEach(function (permi) {
+            //Events
+            if (permi.permissions_id >= 6 && permi.permissions_id <= 10) {
+              if (_this2.permissions[permi.permissions_id] !== undefined) {
+                _this2.permissions[permi.permissions_id].value = true;
+              }
+            }
+          });
         }
-      });
     },
-    onChangedPermissionsAdmin: function onChangedPermissionsAdmin() {
+    clickPermissionsAdmin: function clickPermissionsAdmin() {
       var _this3 = this;
 
-      this.isPermissionsAdmin = !this.isPermissionsAdmin;
+      this.isPermissionsAdmin = !this.isPermissionsAdmin; //change associated with admin
+
+      this.isAssociatedLeader = !this.isPermissionsAdmin; //Change associated with leader
+
+      this.isEnabledAssociateLeader = !this.isPermissionsAdmin; //Disable/Enable associate with leader
+
+      this.newProfile = this.isPermissionsAdmin ? this.OPTIONS.PROFILE_SUPLE_ADMIN : null; //Change new profile
+
       Object.keys(this.permissions).forEach(function (k) {
         var permission = _this3.permissions[k]; //Categories
 
         if (permission.id < 6) {
-          _this3.permissionsCategories[k].value = _this3.isPermissionsAdmin ? true : false;
+          _this3.permissionsCategories[k].value = _this3.isPermissionsAdmin;
+        } //Events
+
+
+        if (_this3.isPermissionsAdmin && permission.id >= 6 && permission.id <= 10) {
+          _this3.permissions[k].value = true;
         }
-      }); //TODO
+      }); //Restore permissions
+
+      if (!this.isPermissionsAdmin) {
+        this.loadPermissions();
+      }
+
+      console.log("lider", this.isAssociatedLeader);
+      console.log("adminsuple", this.isPermissionsAdmin);
     },
     getParticipants: function getParticipants() {
       var _this4 = this;
@@ -3047,74 +3094,86 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       this.resetPermissions();
       this.categoriesSelected = [];
       this.isCategoriesError = false;
+      this.permissionsAdmin = [];
+      this.isAssociatedLeader = false;
+      this.isPermissionsAdmin = false;
+      this.isEnabledAssociateLeader = false;
+      this.newProfile = null;
 
       if (this.participantSelected !== null) {
-        this.getPermissions(this.participantSelected.id);
+        this.isEnabledAssociateLeader = true;
+        this.getPermissions(this.participantSelected.id); //Validate profile for show admin permissions
+
+        if (this.participantSelected.profiles_participants_id === this.OPTIONS.PROFILE_SUPLE_ADMIN) {
+          this.isPermissionsAdmin = true;
+          this.permissionsAdmin = ['true'];
+          this.isEnabledAssociateLeader = false;
+        }
+      } else {
+        this.copyPermissions = [];
       }
     },
     resetPermissions: function resetPermissions() {
       var _this6 = this;
 
-      Object.keys(this.permissions).forEach(function (k, index) {
-        _this6.permissions[k].value = false;
-      });
+      var opc = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+
+      switch (opc) {
+        case 1:
+          //Events
+          Object.keys(this.permissions).forEach(function (k, index) {
+            if (k >= 6 && k <= 10) {
+              _this6.permissions[k].value = false;
+            }
+          });
+          break;
+
+        case 2:
+          //Categories
+          Object.keys(this.permissions).forEach(function (k, index) {
+            if (k < 6) {
+              _this6.permissions[k].value = false;
+            }
+          });
+          break;
+
+        default:
+          //All
+          Object.keys(this.permissions).forEach(function (k, index) {
+            _this6.permissions[k].value = false;
+          });
+          break;
+      }
+    },
+    loadPermissions: function loadPermissions() {
+      var _this7 = this;
+
+      this.resetPermissions();
+
+      if (!validate.isEmpty(this.copyPermissions)) {
+        this.copyPermissions.forEach(function (permi) {
+          if (_this7.permissions[permi.permissions_id] !== undefined) {
+            _this7.permissions[permi.permissions_id].value = true;
+          }
+        });
+      }
     },
     getPermissions: function getPermissions(id_participant) {
-      var _this7 = this;
+      var _this8 = this;
 
       this.isLoading = true;
       axios.post(this.url_permissions_participant, {
         participants_id: id_participant
       }).then(function (response) {
-        _this7.showErrors({});
-
-        if (response.data.status === 200) {
-          var permissions = response.data.permissions;
-
-          if (!validate.isEmpty(permissions)) {
-            //Load permissions
-            permissions.forEach(function (permi) {
-              if (_this7.permissions[permi.permissions_id] !== undefined) {
-                _this7.permissions[permi.permissions_id].value = true;
-              }
-            });
-          } else {
-            _this7.resetPermissions();
-          } //load categories
-
-
-          _this7.getCategoriesParticipant(id_participant);
-        }
-      }, function (error) {
-        _this7.showErrors(error);
-      }).then(function () {
-        _this7.isLoading = false;
-      });
-    },
-    getCategoriesParticipant: function getCategoriesParticipant(id_participant) {
-      var _this8 = this;
-
-      this.isLoading = true;
-      axios.post(this.url_participant_categories, {
-        participants_id: id_participant
-      }).then(function (response) {
         _this8.showErrors({});
 
         if (response.data.status === 200) {
-          var categories = response.data.categories;
+          _this8.copyPermissions = response.data.permissions; //load permissions
 
-          if (!validate.isEmpty(categories)) {
-            //Load categories
-            categories.forEach(function (cat) {
-              _this8.categories.forEach(function (categorie) {
-                if (cat.categories_id === categorie.meta.id) {
-                  _this8.categoriesSelected.push(categorie.meta);
-                }
-              });
-            });
-          } else {
-            _this8.categoriesSelected = [];
-          }
+          _this8.loadPermissions(); //load categories
+
+
+          _this8.getCategoriesParticipant(id_participant);
         }
       }, function (error) {
         _this8.showErrors(error);
@@ -3122,49 +3181,81 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         _this8.isLoading = false;
       });
     },
-    clickApply: function clickApply() {
+    getCategoriesParticipant: function getCategoriesParticipant(id_participant) {
       var _this9 = this;
+
+      this.isLoading = true;
+      axios.post(this.url_participant_categories, {
+        participants_id: id_participant
+      }).then(function (response) {
+        _this9.showErrors({});
+
+        if (response.data.status === 200) {
+          var categories = response.data.categories;
+
+          if (!validate.isEmpty(categories)) {
+            //Load categories
+            categories.forEach(function (cat) {
+              _this9.categories.forEach(function (categorie) {
+                if (cat.categories_id === categorie.meta.id) {
+                  _this9.categoriesSelected.push(categorie.meta);
+                }
+              });
+            });
+          } else {
+            _this9.categoriesSelected = [];
+          }
+        }
+      }, function (error) {
+        _this9.showErrors(error);
+      }).then(function () {
+        _this9.isLoading = false;
+      });
+    },
+    clickApply: function clickApply() {
+      var _this10 = this;
 
       this.isCategoriesError = validate.isEmpty(this.categoriesSelected); //empty categories
 
       if (this.categories.length === 0) {
         this.showErrors(this.text_empty_categories_required);
       } else if (!validate.isEmpty(this.categoriesSelected)) {
-        this.isAssociatedLeader = this.associate_leader;
         var permissions_ids = [];
         Object.keys(this.permissions).forEach(function (k) {
-          var permi = _this9.permissions[k]; //Associated with leader from events permission
+          var permi = _this10.permissions[k]; //Associated with leader from events permission
 
           if (permi.id >= 6 && permi.id <= 10) {
-            _this9.isAssociatedLeader = permi.value ? permi.value : _this9.isAssociatedLeader;
+            _this10.isAssociatedLeader = permi.value ? permi.value : _this10.isAssociatedLeader;
           }
 
           permissions_ids.push({
             id: permi.id,
             value: permi.value
           });
-        }); //Save permissions as leader
+        }); //Change new profile from Associated with leader and your permissions
+
+        this.newProfile = this.isAssociatedLeader && !this.isPermissionsAdmin ? this.OPTIONS.PROFILE_LEADER : this.newProfile; //Save permissions
 
         this.isLoading = true;
         axios.post(this.url_store_permissions_participant, {
           participants_id: this.participantSelected.id,
           permissions_ids: permissions_ids
         }).then(function (response) {
-          _this9.showErrors({});
+          _this10.showErrors({});
 
           if (response.data.status === 200) {
             //Save categories
-            _this9.setCategories();
+            _this10.setCategories();
           }
         }, function (error) {
-          _this9.showErrors(error);
+          _this10.showErrors(error);
         }).then(function () {
-          _this9.isLoading = false;
+          _this10.isLoading = false;
         });
       }
     },
     setCategories: function setCategories() {
-      var _this10 = this;
+      var _this11 = this;
 
       var categories_ids = [];
       this.categoriesSelected.forEach(function (categorie) {
@@ -3175,39 +3266,40 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         participants_id: this.participantSelected.id,
         categories_ids: categories_ids
       }).then(function (response) {
-        _this10.showErrors({});
+        _this11.showErrors({});
 
         if (response.data.status === 200) {
           //Change profile to Leader
-          _this10.setProfileAsLeader();
+          _this11.setProfile();
         }
       }, function (error) {
-        _this10.showErrors(error);
+        _this11.showErrors(error);
       }).then(function () {
-        _this10.isLoading = false;
+        _this11.isLoading = false;
       });
     },
-    setProfileAsLeader: function setProfileAsLeader() {
-      var _this11 = this;
+    setProfile: function setProfile() {
+      var _this12 = this;
 
-      if (this.isAssociatedLeader && this.participantSelected.profiles_participants_id !== this.PROFILE_LEADER) {
+      //Update the profile if there is a change or is different from the current one
+      if (this.newProfile && this.participantSelected.profiles_participants_id !== this.newProfile) {
         var param = {
-          profiles_participants_id: this.PROFILE_LEADER,
+          profiles_participants_id: this.newProfile,
           id: this.participantSelected.id
         };
         axios.post(this.url_participant_update, param).then(function (response) {
-          _this11.showErrors({});
+          _this12.showErrors({});
 
           if (response.data.status === 200) {
             Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_2__["success"])({
-              title: _this11.text_success,
-              text: _this11.text_updated_participant
+              title: _this12.text_success,
+              text: _this12.text_updated_participant
             });
           } else if (response.data.status === 204) {
-            _this11.showErrors(response.data.data);
+            _this12.showErrors(response.data.data);
           }
         }, function (error) {
-          _this11.showErrors(error);
+          _this12.showErrors(error);
         });
       } else {
         Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_2__["success"])({
@@ -66036,7 +66128,9 @@ var render = function() {
             _c(
               "b-button",
               {
-                attrs: { disabled: _vm.participantSelected ? false : true },
+                attrs: {
+                  disabled: _vm.isEnabledAssociateLeader ? false : true
+                },
                 on: {
                   click: function($event) {
                     $event.preventDefault()
@@ -66075,7 +66169,9 @@ var render = function() {
                         "b-switch",
                         {
                           attrs: {
-                            disabled: _vm.participantSelected ? false : true,
+                            disabled: _vm.isEnabledAssociateLeader
+                              ? false
+                              : true,
                             type: "is-success"
                           },
                           model: {
@@ -66179,7 +66275,7 @@ var render = function() {
                       "native-value": "true",
                       type: "is-success"
                     },
-                    on: { input: _vm.onChangedPermissionsAdmin },
+                    on: { input: _vm.clickPermissionsAdmin },
                     model: {
                       value: _vm.permissionsAdmin,
                       callback: function($$v) {

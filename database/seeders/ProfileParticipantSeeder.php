@@ -30,5 +30,11 @@ class ProfileParticipantSeeder extends Seeder
             'name' => 'Invitado',
             'description' => 'Invitado del programador',
         ]);
+
+        DB::table('profiles_participants')->insert([
+            'id' => 4,
+            'name' => 'Administrador Suplente',
+            'description' => 'Administrador suplente del programador',
+        ]);
     }
 }

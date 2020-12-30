@@ -285,7 +285,11 @@ class ParticipantController extends Controller
                 $participant->profiles_participants_id = $request->profiles_participants_id;
             }
 
-            $participant->description = $request->profiles_participants_id;
+            if( isset( $request->description ) )
+            {
+                $participant->description = $request->description;
+            }
+
             $participant->users_id = $request->users_id;
 
             if( $participant->update() )

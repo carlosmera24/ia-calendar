@@ -89,7 +89,7 @@
             </section>
             <section class="data_permissions">
                 <b-button
-                    :disabled="participantSelected ? false : true"
+                    :disabled="isEnabledAssociateLeader ? false : true"
                     v-on:click.prevent="clickAssociateLeader"
                     >
                     <span class="is-size-5">&#9688;</span>
@@ -106,7 +106,7 @@
                         <div class="field column is-12 is-horizontal"
                             v-for="(permission, index) in permissionsEvents" :key="'permission.'+ index">
                             <b-switch v-model="permission.value"
-                                :disabled="participantSelected ? false : true"
+                                :disabled="isEnabledAssociateLeader ? false : true"
                                 type="is-success">
                                 {{ permission.label }}
                             </b-switch>
@@ -140,7 +140,7 @@
                             v-model="permissionsAdmin"
                             :disabled="participantSelected ? false : true"
                             native-value="true"
-                            @input="onChangedPermissionsAdmin"
+                            @input="clickPermissionsAdmin"
                             type="is-success">
                             <span class="is-size-5">&#9688;</span>
                         </b-checkbox-button>
@@ -276,18 +276,25 @@ export default {
                                     id: 9
                                 },
                         },
+            copyPermissions: [],
             permissionsEvents: {},
             permissionsCategories: {},
             categories: [],
             categoriesSelected: [],
-            associate_leader: false,
+            isEnabledAssociateLeader: false,
             isAssociatedLeader: false,
             permissionsAdmin: [],
             isPermissionsAdmin: false,
             programmer: {},
             fields: [],
             isCategoriesError: false,
-            PROFILE_LEADER: 2, //ID Profile leader
+            newProfile: null,
+            OPTIONS: {
+                        EVENTS: 1,
+                        CATEGORIES: 2,
+                        PROFILE_LEADER: 2,
+                        PROFILE_SUPLE_ADMIN: 4,
+                    }
         }
     },
     created(){
@@ -321,26 +328,64 @@ export default {
             this.hasErrors = this.errors.errors.length > 0;
         },
         clickAssociateLeader(){
-            this.associate_leader = !this.associate_leader;
-            Object.keys(this.permissions).forEach( (k,index) => {
-                //Events
-                if( k >= 6 && k <= 10 )
-                {
-                    this.permissions[k].value = this.associate_leader;
-                }
-            });
+            this.isAssociatedLeader = !this.isAssociatedLeader;//Change associated with leader
+            this.newProfile = this.isAssociatedLeader ? this.OPTIONS.PROFILE_LEADER : null; //Change new profile
+            if( this.isAssociatedLeader )
+            {
+                //Disable permissions admin
+                this.permissionsAdmin = [];
+                this.isPermissionsAdmin = false;
+                //Reset categories permissions
+                this.resetPermissions( this.OPTIONS.CATEGORIES );
+                //Enable all events permissions
+                Object.keys(this.permissions).forEach( (k,index) => {
+                    //Events
+                    if( k >= 6 && k <= 10 )
+                    {
+                        this.permissions[k].value = this.isAssociatedLeader;
+                    }
+                });
+            }else //Back all events permissions
+            {
+                this.resetPermissions( this.OPTIONS.EVENTS );
+                this.copyPermissions.forEach( permi => {
+                    //Events
+                    if( permi.permissions_id >= 6 && permi.permissions_id <= 10 )
+                    {
+                        if( this.permissions[ permi.permissions_id ] !== undefined )
+                        {
+                            this.permissions[ permi.permissions_id ].value = true;
+                        }
+                    }
+                });
+            }
         },
-        onChangedPermissionsAdmin(){
-            this.isPermissionsAdmin = !this.isPermissionsAdmin;
+        clickPermissionsAdmin(){
+            this.isPermissionsAdmin = !this.isPermissionsAdmin; //change associated with admin
+            this.isAssociatedLeader = !this.isPermissionsAdmin; //Change associated with leader
+            this.isEnabledAssociateLeader = !this.isPermissionsAdmin; //Disable/Enable associate with leader
+            this.newProfile = this.isPermissionsAdmin ? this.OPTIONS.PROFILE_SUPLE_ADMIN : null; //Change new profile
             Object.keys( this.permissions ).forEach( k => {
                 const permission = this.permissions[k];
                 //Categories
                 if( permission.id < 6 )
                 {
-                    this.permissionsCategories[k].value = this.isPermissionsAdmin ? true : false;
+                    this.permissionsCategories[k].value = this.isPermissionsAdmin;
+                }
+                //Events
+                if( this.isPermissionsAdmin && permission.id >=6 && permission.id <= 10 )
+                {
+                    this.permissions[k].value = true;
                 }
             });
-            //TODO
+
+            //Restore permissions
+            if( !this.isPermissionsAdmin )
+            {
+                this.loadPermissions();
+            }
+            console.log("lider", this.isAssociatedLeader );
+            console.log("adminsuple", this.isPermissionsAdmin );
         },
         getParticipants(){
             this.isLoading = true;
@@ -404,15 +449,64 @@ export default {
             this.resetPermissions();
             this.categoriesSelected = [];
             this.isCategoriesError = false;
+            this.permissionsAdmin = []
+            this.isAssociatedLeader = false;
+            this.isPermissionsAdmin = false;
+            this.isEnabledAssociateLeader = false;
+            this.newProfile = null;
             if( this.participantSelected !== null)
             {
+                this.isEnabledAssociateLeader = true;
                 this.getPermissions( this.participantSelected.id );
+                //Validate profile for show admin permissions
+                if( this.participantSelected.profiles_participants_id === this.OPTIONS.PROFILE_SUPLE_ADMIN )
+                {
+                    this.isPermissionsAdmin = true;
+                    this.permissionsAdmin = [ 'true' ];
+                    this.isEnabledAssociateLeader = false;
+                }
+
+            }else{
+                this.copyPermissions = [];
             }
         },
-        resetPermissions(){
-            Object.keys(this.permissions).forEach( (k,index) => {
-                this.permissions[k].value = false;
-            });
+        resetPermissions( opc = 0 ){
+            switch(opc) {
+                case 1: //Events
+                    Object.keys(this.permissions).forEach( (k,index) => {
+                        if( k >= 6 && k <= 10 )
+                        {
+                            this.permissions[k].value = false;
+                        }
+                    });
+                    break;
+                case 2: //Categories
+                    Object.keys(this.permissions).forEach( (k,index) => {
+                        if( k < 6 )
+                        {
+                            this.permissions[k].value = false;
+                        }
+                    });
+                    break;
+                default: //All
+                    Object.keys(this.permissions).forEach( (k,index) => {
+                        this.permissions[k].value = false;
+                    });
+                    break;
+            }
+
+        },
+        loadPermissions(){
+            this.resetPermissions();
+            if( !validate.isEmpty(this.copyPermissions) )
+            {
+                this.copyPermissions.forEach( permi => {
+                    if( this.permissions[ permi.permissions_id ] !== undefined )
+                    {
+                        this.permissions[ permi.permissions_id ].value = true;
+                    }
+                });
+            }
         },
         getPermissions( id_participant ){
             this.isLoading = true;
@@ -421,19 +515,9 @@ export default {
                     this.showErrors({});
                     if( response.data.status === 200 )
                     {
-                        const permissions = response.data.permissions;
-                        if( !validate.isEmpty(permissions) )
-                        {
-                            //Load permissions
-                            permissions.forEach( permi => {
-                                if( this.permissions[ permi.permissions_id ] !== undefined )
-                                {
-                                    this.permissions[ permi.permissions_id ].value = true;
-                                }
-                            });
-                        }else{
-                            this.resetPermissions();
-                        }
+                        this.copyPermissions = response.data.permissions;
+                        //load permissions
+                        this.loadPermissions();
                         //load categories
                         this.getCategoriesParticipant( id_participant );
                     }
@@ -484,7 +568,6 @@ export default {
 
             }else if( !validate.isEmpty(this.categoriesSelected) )
             {
-                this.isAssociatedLeader = this.associate_leader;
                 var permissions_ids = [];
                 Object.keys( this.permissions ).forEach( k => {
                     const permi = this.permissions[k];
@@ -495,7 +578,9 @@ export default {
                     }
                     permissions_ids.push( { id: permi.id, value: permi.value } );
                 } );
-                //Save permissions as leader
+                //Change new profile from Associated with leader and your permissions
+                this.newProfile = this.isAssociatedLeader && !this.isPermissionsAdmin ? this.OPTIONS.PROFILE_LEADER : this.newProfile;
+                //Save permissions
                 this.isLoading = true;
                 axios.post(this.url_store_permissions_participant, { participants_id: this.participantSelected.id, permissions_ids: permissions_ids })
                         .then( response => {
@@ -526,7 +611,7 @@ export default {
                         if( response.data.status === 200 )
                         {
                             //Change profile to Leader
-                            this.setProfileAsLeader();
+                            this.setProfile();
                         }
                     },
                     error => {
@@ -536,11 +621,12 @@ export default {
                     this.isLoading = false;
                 });
         },
-        setProfileAsLeader(){
-            if( this.isAssociatedLeader && this.participantSelected.profiles_participants_id !== this.PROFILE_LEADER )
+        setProfile(){
+            //Update the profile if there is a change or is different from the current one
+            if( this.newProfile && this.participantSelected.profiles_participants_id !== this.newProfile )
             {
                 const param = {
-                    profiles_participants_id: this.PROFILE_LEADER,
+                    profiles_participants_id: this.newProfile,
                     id: this.participantSelected.id
                 };
                 axios.post( this.url_participant_update, param )
