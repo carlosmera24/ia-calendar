@@ -2298,8 +2298,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_breadcrumbs_init', 'text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'text_filter_categories', 'text_give_admin_categories_events', 'text_back_to_participant', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_field_required', 'text_no_options', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_updated_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'text_search_participant', 'text_empty_categories_required', 'text_associate_leader', 'text_consult_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_create_categorie', 'text_modify_categorie', 'text_delete_categorie', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'url_participant_update', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories'],
+  props: ['text_breadcrumbs_init', 'text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'text_filter_categories', 'text_give_admin_categories_events', 'text_back_to_participant', 'text_back_to_participant_confirm', 'text_back_to_participant_warning', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_field_required', 'text_no_options', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_updated_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_not', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'text_search_participant', 'text_empty_categories_required', 'text_associate_leader', 'text_consult_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_create_categorie', 'text_modify_categorie', 'text_delete_categorie', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'url_participant_update', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories'],
   data: function data() {
     return {
       contentActive: {}
@@ -2849,6 +2852,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -2861,7 +2885,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_breadcrumbs_init', 'text_admin_leaders', 'programmer_json', 'user_id', 'text_search_participant', 'text_participant_fields_json', 'text_associate_leader', 'text_consult_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_create_categorie', 'text_modify_categorie', 'text_delete_categorie', 'text_filter_categories', 'text_give_admin_categories_events', 'text_back_to_participant', 'text_apply', 'text_cancel', 'text_success', 'text_field_required', 'text_no_options', 'text_updated_participant', 'text_empty_categories_required', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories', 'url_participant_update'],
+  props: ['text_breadcrumbs_init', 'text_admin_leaders', 'programmer_json', 'user_id', 'text_search_participant', 'text_participant_fields_json', 'text_associate_leader', 'text_consult_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_create_categorie', 'text_modify_categorie', 'text_delete_categorie', 'text_filter_categories', 'text_give_admin_categories_events', 'text_back_to_participant', 'text_back_to_participant_confirm', 'text_back_to_participant_warning', 'text_apply', 'text_cancel', 'text_not', 'text_success', 'text_field_required', 'text_no_options', 'text_updated_participant', 'text_empty_categories_required', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories', 'url_participant_update'],
   data: function data() {
     return {
       isLoading: false,
@@ -2930,6 +2954,8 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       isAssociatedLeader: false,
       permissionsAdmin: [],
       isPermissionsAdmin: false,
+      backParticipant: [],
+      isBackParticipant: false,
       programmer: {},
       fields: [],
       isCategoriesError: false,
@@ -2938,6 +2964,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         EVENTS: 1,
         CATEGORIES: 2,
         PROFILE_LEADER: 2,
+        PROFILE_PARTICIPANT: 3,
         PROFILE_SUPLE_ADMIN: 4
       }
     };
@@ -2976,6 +3003,10 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       var _this2 = this;
 
       this.isAssociatedLeader = !this.isAssociatedLeader; //Change associated with leader
+
+      this.backParticipant = []; //Disabled back to participant
+
+      this.isBackParticipant = false; //Disabled back to participant
 
       this.newProfile = this.isAssociatedLeader ? this.OPTIONS.PROFILE_LEADER : null; //Change new profile
 
@@ -3020,6 +3051,10 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
 
       this.permissionsAssociateLeader = this.isPermissionsAdmin ? [] : ['true']; //Disable/Enable associate with leader
 
+      this.backParticipant = []; //Disabled back to participant
+
+      this.isBackParticipant = false; //Disabled back to participant
+
       this.newProfile = this.isPermissionsAdmin ? this.OPTIONS.PROFILE_SUPLE_ADMIN : null; //Change new profile
 
       Object.keys(this.permissions).forEach(function (k) {
@@ -3039,15 +3074,47 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         this.loadPermissions(true, false);
       }
     },
-    getParticipants: function getParticipants() {
+    clickBackToParticipant: function clickBackToParticipant() {
       var _this4 = this;
+
+      this.$buefy.dialog.confirm({
+        title: this.text_back_to_participant,
+        message: this.text_back_to_participant_confirm,
+        cancelText: this.text_not,
+        confirmText: this.text_back_to_participant,
+        type: 'is-warning',
+        hasIcon: true,
+        onCancel: function onCancel() {
+          _this4.backParticipant = [];
+          _this4.isBackParticipant = false; //Restore permissions
+
+          _this4.onSelectParticipantChanged();
+        },
+        onConfirm: function onConfirm() {
+          _this4.backParticipant = ['true'];
+          _this4.isBackParticipant = true;
+
+          _this4.resetPermissions();
+
+          _this4.categoriesSelected = [];
+          _this4.isCategoriesError = false;
+          _this4.permissionsAdmin = [];
+          _this4.permissionsAssociateLeader = [];
+          _this4.isAssociatedLeader = false;
+          _this4.isPermissionsAdmin = false;
+          _this4.newProfile = _this4.OPTIONS.PROFILE_PARTICIPANT;
+        }
+      });
+    },
+    getParticipants: function getParticipants() {
+      var _this5 = this;
 
       this.isLoading = true;
       axios.post(this.url_participants_programmer, {
         programmers_id: this.programmer.id,
         users_id: this.user_id
       }).then(function (response) {
-        _this4.showErrors({});
+        _this5.showErrors({});
 
         if (response.data.status === 200) {
           response.data.participants.forEach(function (element) {
@@ -3058,25 +3125,25 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
               meta: element
             };
 
-            _this4.participants.push(tmp);
+            _this5.participants.push(tmp);
           }); //Get categories
 
-          _this4.getCategories();
+          _this5.getCategories();
         }
       }, function (error) {
-        _this4.showErrors(error);
+        _this5.showErrors(error);
       }).then(function () {
-        _this4.isLoading = false;
+        _this5.isLoading = false;
       });
     },
     getCategories: function getCategories() {
-      var _this5 = this;
+      var _this6 = this;
 
       this.isLoading = true;
       axios.post(this.url_categories_programmer, {
         programmers_id: this.programmer.id
       }).then(function (response) {
-        _this5.showErrors({});
+        _this6.showErrors({});
 
         if (response.data.status === 200) {
           if (response.data.categories.length > 0) {
@@ -3088,17 +3155,17 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
                 meta: element
               };
 
-              _this5.categories.push(tmp);
+              _this6.categories.push(tmp);
             });
           } else //Empty categories
             {
-              _this5.showErrors(_this5.text_empty_categories_required);
+              _this6.showErrors(_this6.text_empty_categories_required);
             }
         }
       }, function (error) {
-        _this5.showErrors(error);
+        _this6.showErrors(error);
       }).then(function () {
-        _this5.isLoading = false;
+        _this6.isLoading = false;
       });
     },
     onSelectParticipantChanged: function onSelectParticipantChanged() {
@@ -3110,7 +3177,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       this.isAssociatedLeader = false;
       this.isPermissionsAdmin = false;
       this.isEnabledAssociateLeader = false;
-      this.newProfile = null;
+      this.backParticipant = [], this.isBackParticipant = false, this.newProfile = null;
 
       if (this.participantSelected !== null) {
         this.isEnabledAssociateLeader = true;
@@ -3129,7 +3196,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       }
     },
     resetPermissions: function resetPermissions() {
-      var _this6 = this;
+      var _this7 = this;
 
       var opc = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
 
@@ -3138,7 +3205,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
           //Events
           Object.keys(this.permissions).forEach(function (k, index) {
             if (k >= 6 && k <= 10) {
-              _this6.permissions[k].value = false;
+              _this7.permissions[k].value = false;
             }
           });
           break;
@@ -3147,7 +3214,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
           //Categories
           Object.keys(this.permissions).forEach(function (k, index) {
             if (k < 6) {
-              _this6.permissions[k].value = false;
+              _this7.permissions[k].value = false;
             }
           });
           break;
@@ -3155,13 +3222,13 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         default:
           //All
           Object.keys(this.permissions).forEach(function (k, index) {
-            _this6.permissions[k].value = false;
+            _this7.permissions[k].value = false;
           });
           break;
       }
     },
     loadPermissions: function loadPermissions() {
-      var _this7 = this;
+      var _this8 = this;
 
       var disableCategories = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
       var disableEvents = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
@@ -3169,8 +3236,8 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
 
       if (!validate.isEmpty(this.copyPermissions)) {
         this.copyPermissions.forEach(function (permi) {
-          if (_this7.permissions[permi.permissions_id] !== undefined) {
-            _this7.permissions[permi.permissions_id].value = true;
+          if (_this8.permissions[permi.permissions_id] !== undefined) {
+            _this8.permissions[permi.permissions_id].value = true;
           }
         });
       }
@@ -3184,52 +3251,21 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       }
     },
     getPermissions: function getPermissions(id_participant) {
-      var _this8 = this;
+      var _this9 = this;
 
       this.isLoading = true;
       axios.post(this.url_permissions_participant, {
         participants_id: id_participant
       }).then(function (response) {
-        _this8.showErrors({});
-
-        if (response.data.status === 200) {
-          _this8.copyPermissions = response.data.permissions; //load permissions
-
-          _this8.loadPermissions(); //load categories
-
-
-          _this8.getCategoriesParticipant(id_participant);
-        }
-      }, function (error) {
-        _this8.showErrors(error);
-      }).then(function () {
-        _this8.isLoading = false;
-      });
-    },
-    getCategoriesParticipant: function getCategoriesParticipant(id_participant) {
-      var _this9 = this;
-
-      this.isLoading = true;
-      axios.post(this.url_participant_categories, {
-        participants_id: id_participant
-      }).then(function (response) {
         _this9.showErrors({});
 
         if (response.data.status === 200) {
-          var categories = response.data.categories;
+          _this9.copyPermissions = response.data.permissions; //load permissions
 
-          if (!validate.isEmpty(categories)) {
-            //Load categories
-            categories.forEach(function (cat) {
-              _this9.categories.forEach(function (categorie) {
-                if (cat.categories_id === categorie.meta.id) {
-                  _this9.categoriesSelected.push(categorie.meta);
-                }
-              });
-            });
-          } else {
-            _this9.categoriesSelected = [];
-          }
+          _this9.loadPermissions(); //load categories
+
+
+          _this9.getCategoriesParticipant(id_participant);
         }
       }, function (error) {
         _this9.showErrors(error);
@@ -3237,20 +3273,53 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         _this9.isLoading = false;
       });
     },
-    clickApply: function clickApply() {
+    getCategoriesParticipant: function getCategoriesParticipant(id_participant) {
       var _this10 = this;
 
-      this.isCategoriesError = validate.isEmpty(this.categoriesSelected); //empty categories
+      this.isLoading = true;
+      axios.post(this.url_participant_categories, {
+        participants_id: id_participant
+      }).then(function (response) {
+        _this10.showErrors({});
 
-      if (this.categories.length === 0) {
+        if (response.data.status === 200) {
+          var categories = response.data.categories;
+
+          if (!validate.isEmpty(categories)) {
+            //Load categories
+            categories.forEach(function (cat) {
+              _this10.categories.forEach(function (categorie) {
+                if (cat.categories_id === categorie.meta.id) {
+                  _this10.categoriesSelected.push(categorie.meta);
+                }
+              });
+            });
+          } else {
+            _this10.categoriesSelected = [];
+          }
+        }
+      }, function (error) {
+        _this10.showErrors(error);
+      }).then(function () {
+        _this10.isLoading = false;
+      });
+    },
+    clickApply: function clickApply() {
+      var _this11 = this;
+
+      this.isCategoriesError = false; //empty categories
+
+      if (this.categories.length === 0 && !this.isBackParticipant) {
         this.showErrors(this.text_empty_categories_required);
-      } else if (!validate.isEmpty(this.categoriesSelected)) {
+      } else if (validate.isEmpty(this.categoriesSelected) && !this.isBackParticipant) {
+        this.isCategoriesError = true;
+      } else {
         var permissions_ids = [];
         Object.keys(this.permissions).forEach(function (k) {
-          var permi = _this10.permissions[k]; //Associated with leader from events permission
+          var permi = _this11.permissions[k]; //Associated with leader from events permission
 
           if (permi.id >= 6 && permi.id <= 10) {
-            _this10.isAssociatedLeader = permi.value ? permi.value : _this10.isAssociatedLeader;
+            _this11.isAssociatedLeader = permi.value ? permi.value : _this11.isAssociatedLeader;
           }
 
           permissions_ids.push({
@@ -3266,21 +3335,21 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
           participants_id: this.participantSelected.id,
           permissions_ids: permissions_ids
         }).then(function (response) {
-          _this10.showErrors({});
+          _this11.showErrors({});
 
           if (response.data.status === 200) {
             //Save categories
-            _this10.setCategories();
+            _this11.setCategories();
           }
         }, function (error) {
-          _this10.showErrors(error);
+          _this11.showErrors(error);
         }).then(function () {
-          _this10.isLoading = false;
+          _this11.isLoading = false;
         });
       }
     },
     setCategories: function setCategories() {
-      var _this11 = this;
+      var _this12 = this;
 
       var categories_ids = [];
       this.categoriesSelected.forEach(function (categorie) {
@@ -3291,20 +3360,20 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         participants_id: this.participantSelected.id,
         categories_ids: categories_ids
       }).then(function (response) {
-        _this11.showErrors({});
+        _this12.showErrors({});
 
         if (response.data.status === 200) {
           //Change profile to Leader
-          _this11.setProfile();
+          _this12.setProfile();
         }
       }, function (error) {
-        _this11.showErrors(error);
+        _this12.showErrors(error);
       }).then(function () {
-        _this11.isLoading = false;
+        _this12.isLoading = false;
       });
     },
     setProfile: function setProfile() {
-      var _this12 = this;
+      var _this13 = this;
 
       //Update the profile if there is a change or is different from the current one
       if (this.newProfile && this.participantSelected.profiles_participants_id !== this.newProfile) {
@@ -3313,20 +3382,20 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
           id: this.participantSelected.id
         };
         axios.post(this.url_participant_update, param).then(function (response) {
-          _this12.showErrors({});
+          _this13.showErrors({});
 
           if (response.data.status === 200) {
             //change profile local for the selected participant
-            _this12.participantSelected.profiles_participants_id = _this12.newProfile;
+            _this13.participantSelected.profiles_participants_id = _this13.newProfile;
             Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_2__["success"])({
-              title: _this12.text_success,
-              text: _this12.text_updated_participant
+              title: _this13.text_success,
+              text: _this13.text_updated_participant
             });
           } else if (response.data.status === 204) {
-            _this12.showErrors(response.data.data);
+            _this13.showErrors(response.data.data);
           }
         }, function (error) {
-          _this12.showErrors(error);
+          _this13.showErrors(error);
         });
       } else {
         Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_2__["success"])({
@@ -65344,8 +65413,13 @@ var render = function() {
                   text_give_admin_categories_events:
                     _vm.text_give_admin_categories_events,
                   text_back_to_participant: _vm.text_back_to_participant,
+                  text_back_to_participant_confirm:
+                    _vm.text_back_to_participant_confirm,
+                  text_back_to_participant_warning:
+                    _vm.text_back_to_participant_warning,
                   text_apply: _vm.text_apply,
                   text_cancel: _vm.text_cancel,
+                  text_not: _vm.text_not,
                   url_participants_programmer: _vm.url_participants_programmer,
                   url_categories_programmer: _vm.url_categories_programmer,
                   url_permissions_participant: _vm.url_permissions_participant,
@@ -66377,7 +66451,72 @@ var render = function() {
             : _vm._e()
         ]),
         _vm._v(" "),
-        _c("p", { staticClass: "text" }, [_vm._v(_vm._s(_vm.newProfile))]),
+        _c("section", { staticClass: "content_back_participant" }, [
+          _c("div", { staticClass: "is-grouped" }, [
+            _c(
+              "div",
+              { staticClass: "button btn-main" },
+              [
+                _c(
+                  "b-checkbox-button",
+                  {
+                    attrs: {
+                      disabled: _vm.participantSelected ? false : true,
+                      "native-value": "true",
+                      type: "is-warning"
+                    },
+                    on: { input: _vm.clickBackToParticipant },
+                    model: {
+                      value: _vm.backParticipant,
+                      callback: function($$v) {
+                        _vm.backParticipant = $$v
+                      },
+                      expression: "backParticipant"
+                    }
+                  },
+                  [
+                    _c("span", { staticClass: "icon" }, [
+                      _c("i", { staticClass: "fas fa-retweet" })
+                    ])
+                  ]
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("span", { staticClass: "control-label" }, [
+              _vm._v(_vm._s(_vm.text_back_to_participant))
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "section",
+            { staticClass: "alert-section" },
+            [
+              _c(
+                "b-notification",
+                {
+                  attrs: { type: "is-warning", hasIcon: "", role: "alert" },
+                  model: {
+                    value: _vm.isBackParticipant,
+                    callback: function($$v) {
+                      _vm.isBackParticipant = $$v
+                    },
+                    expression: "isBackParticipant"
+                  }
+                },
+                [
+                  _c("p", {
+                    domProps: {
+                      innerHTML: _vm._s(_vm.text_back_to_participant_warning)
+                    }
+                  })
+                ]
+              )
+            ],
+            1
+          )
+        ]),
         _vm._v(" "),
         _c(
           "div",

@@ -166,7 +166,28 @@
                     </div>
                 </div>
             </section>
-            <p class="text">{{ newProfile }}</p>
+            <section class="content_back_participant">
+                <div class="is-grouped">
+                    <div class="button btn-main">
+                        <b-checkbox-button
+                            v-model="backParticipant"
+                            :disabled="participantSelected ? false : true"
+                            native-value="true"
+                            @input="clickBackToParticipant"
+                            type="is-warning">
+                            <span class="icon">
+                                <i class="fas fa-retweet"></i>
+                            </span>
+                        </b-checkbox-button>
+                    </div>
+                    <span class="control-label">{{ text_back_to_participant }}</span>
+                </div>
+                 <section class="alert-section">
+                    <b-notification v-model="isBackParticipant" type="is-warning" hasIcon role="alert">
+                        <p v-html="text_back_to_participant_warning"></p>
+                    </b-notification>
+                </section>
+            </section>
             <div class="btn-actions has-text-centered">
                 <b-button  class="btn-cancel is-capitalized" v-on:click.prevent="clickCancel">{{ text_cancel }}</b-button>
                 <b-button
@@ -210,8 +231,11 @@ export default {
         'text_filter_categories',
         'text_give_admin_categories_events',
         'text_back_to_participant',
+        'text_back_to_participant_confirm',
+        'text_back_to_participant_warning',
         'text_apply',
         'text_cancel',
+        'text_not',
         'text_success',
         'text_field_required',
         'text_no_options',
@@ -293,6 +317,8 @@ export default {
             isAssociatedLeader: false,
             permissionsAdmin: [],
             isPermissionsAdmin: false,
+            backParticipant: [],
+            isBackParticipant: false,
             programmer: {},
             fields: [],
             isCategoriesError: false,
@@ -301,6 +327,7 @@ export default {
                         EVENTS: 1,
                         CATEGORIES: 2,
                         PROFILE_LEADER: 2,
+                        PROFILE_PARTICIPANT: 3,
                         PROFILE_SUPLE_ADMIN: 4,
                     }
         }
@@ -320,7 +347,6 @@ export default {
             if( permission.id < 6 )
             {
                 this.permissionsCategories[k] = permission;
-
             }
         });
     },
@@ -337,6 +363,8 @@ export default {
         },
         clickAssociateLeader(){
             this.isAssociatedLeader = !this.isAssociatedLeader;//Change associated with leader
+            this.backParticipant = []; //Disabled back to participant
+            this.isBackParticipant = false; //Disabled back to participant
             this.newProfile = this.isAssociatedLeader ? this.OPTIONS.PROFILE_LEADER : null; //Change new profile
             if( this.isAssociatedLeader )
             {
@@ -377,6 +405,8 @@ export default {
             this.isAssociatedLeader = !this.isPermissionsAdmin; //Change associated with leader
             this.isEnabledAssociateLeader = !this.isPermissionsAdmin; //Disable/Enable associate with leader
             this.permissionsAssociateLeader = this.isPermissionsAdmin ? [] : ['true']; //Disable/Enable associate with leader
+            this.backParticipant = []; //Disabled back to participant
+            this.isBackParticipant = false; //Disabled back to participant
             this.newProfile = this.isPermissionsAdmin ? this.OPTIONS.PROFILE_SUPLE_ADMIN : null; //Change new profile
             Object.keys( this.permissions ).forEach( k => {
                 const permission = this.permissions[k];
@@ -397,6 +427,36 @@ export default {
             {
                 this.loadPermissions( true, false );
             }
+        },
+        clickBackToParticipant(){
+            this.$buefy.dialog.confirm(
+                                        {
+                                            title: this.text_back_to_participant,
+                                            message: this.text_back_to_participant_confirm,
+                                            cancelText: this.text_not,
+                                            confirmText: this.text_back_to_participant,
+                                            type: 'is-warning',
+                                            hasIcon: true,
+                                            onCancel: () => {
+                                                this.backParticipant = [ ];
+                                                this.isBackParticipant = false;
+                                                //Restore permissions
+                                                this.onSelectParticipantChanged();
+                                            },
+                                            onConfirm: () => {
+                                                this.backParticipant = [ 'true' ];
+                                                this.isBackParticipant = true;
+                                                this.resetPermissions();
+                                                this.categoriesSelected = [];
+                                                this.isCategoriesError = false;
+                                                this.permissionsAdmin = []
+                                                this.permissionsAssociateLeader = [];
+                                                this.isAssociatedLeader = false;
+                                                this.isPermissionsAdmin = false;
+                                                this.newProfile = this.OPTIONS.PROFILE_PARTICIPANT;
+                                            }
+                                        }
+                                    );
         },
         getParticipants(){
             this.isLoading = true;
@@ -465,6 +525,8 @@ export default {
             this.isAssociatedLeader = false;
             this.isPermissionsAdmin = false;
             this.isEnabledAssociateLeader = false;
+            this.backParticipant= [],
+            this.isBackParticipant= false,
             this.newProfile = null;
             if( this.participantSelected !== null)
             {
@@ -583,13 +645,16 @@ export default {
                 });
         },
         clickApply(){
-            this.isCategoriesError = validate.isEmpty(this.categoriesSelected);
+            this.isCategoriesError = false;
             //empty categories
-            if( this.categories.length === 0)
+            if( this.categories.length === 0 && !this.isBackParticipant  )
             {
                 this.showErrors( this.text_empty_categories_required );
 
-            }else if( !validate.isEmpty(this.categoriesSelected) )
+            }else if( validate.isEmpty(this.categoriesSelected) && !this.isBackParticipant )
+            {
+                this.isCategoriesError = true;
+            }else
             {
                 var permissions_ids = [];
                 Object.keys( this.permissions ).forEach( k => {

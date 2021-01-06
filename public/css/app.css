@@ -20400,6 +20400,40 @@ textarea {
   padding-left: 47px;
 }
 
+.application .content-main .content .form_manage_leader .content_back_participant {
+  margin-top: 15px;
+}
+
+.application .content-main .content .form_manage_leader .content_back_participant .is-grouped {
+  display: flex;
+  align-items: center;
+}
+
+.application .content-main .content .form_manage_leader .content_back_participant .is-grouped .button .icon {
+  margin-left: 0;
+  margin-right: 0;
+  width: auto;
+  height: auto;
+}
+
+.application .content-main .content .form_manage_leader .content_back_participant .is-grouped .button.btn-main {
+  border: none;
+  padding: 0;
+}
+
+.application .content-main .content .form_manage_leader .content_back_participant .is-grouped .control-label {
+  padding-left: calc(0.75em - 1px);
+}
+
+.application .content-main .content .form_manage_leader .content_back_participant .alert-section {
+  margin: 15px 0px 15px 47px;
+  width: 67%;
+}
+
+.application .content-main .content .form_manage_leader .content_back_participant .alert-section .notification .media {
+  align-items: center;
+}
+
 .animated_delay {
   -webkit-animation-delay: 0.45s;
           animation-delay: 0.45s;

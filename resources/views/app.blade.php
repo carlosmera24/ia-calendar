@@ -140,6 +140,7 @@
             v-bind:text_accept='"{{ __('validation.attributes.accept') }}"'
             v-bind:text_apply='"{{ __('validation.attributes.apply') }}"'
             v-bind:text_cancel='"{{ __('validation.attributes.cancel') }}"'
+            v-bind:text_not='"{{ __('validation.attributes.not') }}"'
             v-bind:text_participant_fields_json="' {{ json_encode($fields_participant) }} '"
             v-bind:text_admin_leaders="'{{ __('app.menu.admin_leaders') }}'"
             v-bind:user_id="'{{ $user->id }}'"
@@ -157,6 +158,8 @@
             v-bind:text_filter_categories="'{{ __('app.manage_leader.filter_categories') }}'"
             v-bind:text_give_admin_categories_events="'{{ __('app.manage_leader.give_admin_categories_events') }}'"
             v-bind:text_back_to_participant="'{{ __('app.manage_leader.back_to_participant') }}'"
+            v-bind:text_back_to_participant_confirm="'{{ __('messages.back_to_participant_confirm') }}'"
+            v-bind:text_back_to_participant_warning="'{{ __('messages.back_to_participant_warning') }}'"
             v-bind:url_person_ui_avatar='"{{ route('participant_generate_avatar') }}"'
             v-bind:url_person_store='"{{ route('person_store') }}"'
             v-bind:url_participant_store='"{{ route('participant_store') }}"'

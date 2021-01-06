@@ -60,8 +60,11 @@
                 v-bind:text_filter_categories="text_filter_categories"
                 v-bind:text_give_admin_categories_events="text_give_admin_categories_events"
                 v-bind:text_back_to_participant="text_back_to_participant"
+                v-bind:text_back_to_participant_confirm="text_back_to_participant_confirm"
+                v-bind:text_back_to_participant_warning="text_back_to_participant_warning"
                 v-bind:text_apply='text_apply'
                 v-bind:text_cancel='text_cancel'
+                v-bind:text_not='text_not'
                 v-bind:url_participants_programmer="url_participants_programmer"
                 v-bind:url_categories_programmer="url_categories_programmer"
                 v-bind:url_permissions_participant="url_permissions_participant"
@@ -88,6 +91,8 @@ export default {
         'text_filter_categories',
         'text_give_admin_categories_events',
         'text_back_to_participant',
+        'text_back_to_participant_confirm',
+        'text_back_to_participant_warning',
         'numbers_emailes',
         'numbers_mobiles',
         'programmer_json',
@@ -104,6 +109,7 @@ export default {
         'text_accept',
         'text_apply',
         'text_cancel',
+        'text_not',
         'text_participant_fields_json',
         'text_admin_leaders',
         'user_id',

@@ -15,7 +15,7 @@ class ParticipantCategorieController extends Controller
                                         ];
     protected $rules_store = [
                                 'participants_id'   =>  'required|integer|exists:participants,id',
-                                'categories_ids'    =>  'nullable|array||min:1',
+                                'categories_ids'    =>  'nullable|array|',
                                 'categories_ids.*'  =>  'required|integer|exists:permissions,id',
                             ];
 

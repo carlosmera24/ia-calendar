@@ -192,10 +192,12 @@ return [
         'birth_date'            => 'fecha nacido',
         'date_join_company'     => 'fecha ingreso',
         'profile_image'         => 'Avatar',
-        'accept'                =>  'aceptar',
-        'apply'                 =>  'aplicar',
-        'cancel'                =>  'cancelar',
-        'participant'           =>  'partícipe'
+        'accept'                => 'aceptar',
+        'apply'                 => 'aplicar',
+        'yes'                   => 'Sí',
+        'not'                   => 'No',
+        'cancel'                => 'cancelar',
+        'participant'           => 'partícipe'
     ],
 
 ];

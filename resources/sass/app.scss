@@ -526,6 +526,37 @@ body, h2, button, input, select, textarea {
                         padding-left: 47px;
                     }
                 }
+                .content_back_participant{
+                    margin-top: 15px;
+                    .is-grouped{
+                        display: flex;
+                        align-items: center;
+                        .button{
+                            .icon{
+                                margin-left: 0;
+                                margin-right: 0;
+                                width: auto;
+                                height: auto;
+                            }
+                        }
+                        .button.btn-main{
+                            border: none;
+                            padding: 0;
+                        }
+                        .control-label{
+                            padding-left: calc(0.75em - 1px);
+                        }
+                    }
+                    .alert-section{
+                        margin: 15px 0px 15px 47px;
+                        width: 67%;
+                        .notification{
+                            .media{
+                                align-items: center;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
