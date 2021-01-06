@@ -23,7 +23,7 @@
             </b-notification>
         </section>
         <form class="form_manage_leader" action="">
-            <div class="field">
+            <div class="field field-select-participant">
                 <div class="control has-icons-left">
                     <v-select v-model="participantSelected"
                         :options="participants"
@@ -88,12 +88,18 @@
                 </div>
             </section>
             <section class="data_permissions">
-                <b-button
-                    :disabled="isEnabledAssociateLeader ? false : true"
-                    v-on:click.prevent="clickAssociateLeader"
-                    >
-                    <span class="is-size-5">&#9688;</span>
-                </b-button>
+                <div class="is-grouped">
+                    <div class="button btn-main">
+                        <b-checkbox-button
+                            v-model="permissionsAssociateLeader"
+                            :disabled="isEnabledAssociateLeader ? false : true"
+                            native-value="true"
+                            @input="clickAssociateLeader"
+                            type="is-success">
+                            <span class="is-size-5">&#9688;</span>
+                        </b-checkbox-button>
+                    </div>
+                </div>
                 <div class="columns is-multiline" >
                     <div class="field column is-12 mb-3">
                         <div class="field-label">
@@ -160,6 +166,7 @@
                     </div>
                 </div>
             </section>
+            <p class="text">{{ newProfile }}</p>
             <div class="btn-actions has-text-centered">
                 <b-button  class="btn-cancel is-capitalized" v-on:click.prevent="clickCancel">{{ text_cancel }}</b-button>
                 <b-button
@@ -282,6 +289,7 @@ export default {
             categories: [],
             categoriesSelected: [],
             isEnabledAssociateLeader: false,
+            permissionsAssociateLeader: [],
             isAssociatedLeader: false,
             permissionsAdmin: [],
             isPermissionsAdmin: false,
@@ -345,8 +353,10 @@ export default {
                         this.permissions[k].value = this.isAssociatedLeader;
                     }
                 });
+                this.permissionsAssociateLeader = ['true'];
             }else //Back all events permissions
             {
+                var hasPermissionsEvents = false;
                 this.resetPermissions( this.OPTIONS.EVENTS );
                 this.copyPermissions.forEach( permi => {
                     //Events
@@ -355,15 +365,18 @@ export default {
                         if( this.permissions[ permi.permissions_id ] !== undefined )
                         {
                             this.permissions[ permi.permissions_id ].value = true;
+                            hasPermissionsEvents = true;
                         }
                     }
                 });
+                this.permissionsAssociateLeader = hasPermissionsEvents ? ['true'] : []
             }
         },
         clickPermissionsAdmin(){
             this.isPermissionsAdmin = !this.isPermissionsAdmin; //change associated with admin
             this.isAssociatedLeader = !this.isPermissionsAdmin; //Change associated with leader
             this.isEnabledAssociateLeader = !this.isPermissionsAdmin; //Disable/Enable associate with leader
+            this.permissionsAssociateLeader = this.isPermissionsAdmin ? [] : ['true']; //Disable/Enable associate with leader
             this.newProfile = this.isPermissionsAdmin ? this.OPTIONS.PROFILE_SUPLE_ADMIN : null; //Change new profile
             Object.keys( this.permissions ).forEach( k => {
                 const permission = this.permissions[k];
@@ -382,10 +395,8 @@ export default {
             //Restore permissions
             if( !this.isPermissionsAdmin )
             {
-                this.loadPermissions();
+                this.loadPermissions( true, false );
             }
-            console.log("lider", this.isAssociatedLeader );
-            console.log("adminsuple", this.isPermissionsAdmin );
         },
         getParticipants(){
             this.isLoading = true;
@@ -450,6 +461,7 @@ export default {
             this.categoriesSelected = [];
             this.isCategoriesError = false;
             this.permissionsAdmin = []
+            this.permissionsAssociateLeader = [];
             this.isAssociatedLeader = false;
             this.isPermissionsAdmin = false;
             this.isEnabledAssociateLeader = false;
@@ -464,6 +476,9 @@ export default {
                     this.isPermissionsAdmin = true;
                     this.permissionsAdmin = [ 'true' ];
                     this.isEnabledAssociateLeader = false;
+                }else if(  this.participantSelected.profiles_participants_id === this.OPTIONS.PROFILE_LEADER )//Validate profile for leader
+                {
+                    this.permissionsAssociateLeader = ['true'];
                 }
 
             }else{
@@ -496,7 +511,7 @@ export default {
             }
 
         },
-        loadPermissions(){
+        loadPermissions( disableCategories = false, disableEvents = false ){
             this.resetPermissions();
             if( !validate.isEmpty(this.copyPermissions) )
             {
@@ -506,6 +521,14 @@ export default {
                         this.permissions[ permi.permissions_id ].value = true;
                     }
                 });
+            }
+            if( disableCategories )
+            {
+               this.resetPermissions(2);
+            }
+            if( disableEvents )
+            {
+               this.resetPermissions(1);
             }
         },
         getPermissions( id_participant ){
@@ -634,6 +657,9 @@ export default {
                         this.showErrors({});
                         if( response.data.status === 200 )
                         {
+                            //change profile local for the selected participant
+                            this.participantSelected.profiles_participants_id = this.newProfile;
+
                             success({
                                 title: this.text_success,
                                 text: this.text_updated_participant

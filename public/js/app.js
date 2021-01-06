@@ -2842,6 +2842,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -2919,6 +2926,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       categories: [],
       categoriesSelected: [],
       isEnabledAssociateLeader: false,
+      permissionsAssociateLeader: [],
       isAssociatedLeader: false,
       permissionsAdmin: [],
       isPermissionsAdmin: false,
@@ -2984,17 +2992,21 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
             _this2.permissions[k].value = _this2.isAssociatedLeader;
           }
         });
+        this.permissionsAssociateLeader = ['true'];
       } else //Back all events permissions
         {
+          var hasPermissionsEvents = false;
           this.resetPermissions(this.OPTIONS.EVENTS);
           this.copyPermissions.forEach(function (permi) {
             //Events
             if (permi.permissions_id >= 6 && permi.permissions_id <= 10) {
               if (_this2.permissions[permi.permissions_id] !== undefined) {
                 _this2.permissions[permi.permissions_id].value = true;
+                hasPermissionsEvents = true;
               }
             }
           });
+          this.permissionsAssociateLeader = hasPermissionsEvents ? ['true'] : [];
         }
     },
     clickPermissionsAdmin: function clickPermissionsAdmin() {
@@ -3005,6 +3017,8 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       this.isAssociatedLeader = !this.isPermissionsAdmin; //Change associated with leader
 
       this.isEnabledAssociateLeader = !this.isPermissionsAdmin; //Disable/Enable associate with leader
+
+      this.permissionsAssociateLeader = this.isPermissionsAdmin ? [] : ['true']; //Disable/Enable associate with leader
 
       this.newProfile = this.isPermissionsAdmin ? this.OPTIONS.PROFILE_SUPLE_ADMIN : null; //Change new profile
 
@@ -3022,11 +3036,8 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       }); //Restore permissions
 
       if (!this.isPermissionsAdmin) {
-        this.loadPermissions();
+        this.loadPermissions(true, false);
       }
-
-      console.log("lider", this.isAssociatedLeader);
-      console.log("adminsuple", this.isPermissionsAdmin);
     },
     getParticipants: function getParticipants() {
       var _this4 = this;
@@ -3095,6 +3106,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       this.categoriesSelected = [];
       this.isCategoriesError = false;
       this.permissionsAdmin = [];
+      this.permissionsAssociateLeader = [];
       this.isAssociatedLeader = false;
       this.isPermissionsAdmin = false;
       this.isEnabledAssociateLeader = false;
@@ -3108,7 +3120,10 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
           this.isPermissionsAdmin = true;
           this.permissionsAdmin = ['true'];
           this.isEnabledAssociateLeader = false;
-        }
+        } else if (this.participantSelected.profiles_participants_id === this.OPTIONS.PROFILE_LEADER) //Validate profile for leader
+          {
+            this.permissionsAssociateLeader = ['true'];
+          }
       } else {
         this.copyPermissions = [];
       }
@@ -3148,6 +3163,8 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
     loadPermissions: function loadPermissions() {
       var _this7 = this;
 
+      var disableCategories = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+      var disableEvents = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
       this.resetPermissions();
 
       if (!validate.isEmpty(this.copyPermissions)) {
@@ -3156,6 +3173,14 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
             _this7.permissions[permi.permissions_id].value = true;
           }
         });
+      }
+
+      if (disableCategories) {
+        this.resetPermissions(2);
+      }
+
+      if (disableEvents) {
+        this.resetPermissions(1);
       }
     },
     getPermissions: function getPermissions(id_participant) {
@@ -3291,6 +3316,8 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
           _this12.showErrors({});
 
           if (response.data.status === 200) {
+            //change profile local for the selected participant
+            _this12.participantSelected.profiles_participants_id = _this12.newProfile;
             Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_2__["success"])({
               title: _this12.text_success,
               text: _this12.text_updated_participant
@@ -65943,7 +65970,7 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("form", { staticClass: "form_manage_leader", attrs: { action: "" } }, [
-        _c("div", { staticClass: "field" }, [
+        _c("div", { staticClass: "field field-select-participant" }, [
           _c(
             "div",
             { staticClass: "control has-icons-left" },
@@ -66121,145 +66148,151 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _c(
-          "section",
-          { staticClass: "data_permissions" },
-          [
+        _c("section", { staticClass: "data_permissions" }, [
+          _c("div", { staticClass: "is-grouped" }, [
             _c(
-              "b-button",
-              {
-                attrs: {
-                  disabled: _vm.isEnabledAssociateLeader ? false : true
-                },
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    return _vm.clickAssociateLeader($event)
-                  }
-                }
-              },
-              [_c("span", { staticClass: "is-size-5" }, [_vm._v("◘")])]
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "columns is-multiline" }, [
-              _c("div", { staticClass: "field column is-12 mb-3" }, [
-                _c("div", { staticClass: "field-label" }, [
-                  _c("label", { staticClass: "label label_associate_lader" }, [
-                    _vm._v(
-                      "\n                            " +
-                        _vm._s(_vm.text_associate_leader) +
-                        "\n                        "
-                    )
-                  ])
-                ])
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "content_permissions column is-12" },
-                _vm._l(_vm.permissionsEvents, function(permission, index) {
-                  return _c(
-                    "div",
-                    {
-                      key: "permission." + index,
-                      staticClass: "field column is-12 is-horizontal"
+              "div",
+              { staticClass: "button btn-main" },
+              [
+                _c(
+                  "b-checkbox-button",
+                  {
+                    attrs: {
+                      disabled: _vm.isEnabledAssociateLeader ? false : true,
+                      "native-value": "true",
+                      type: "is-success"
                     },
-                    [
-                      _c(
-                        "b-switch",
-                        {
-                          attrs: {
-                            disabled: _vm.isEnabledAssociateLeader
-                              ? false
-                              : true,
-                            type: "is-success"
-                          },
-                          model: {
-                            value: permission.value,
-                            callback: function($$v) {
-                              _vm.$set(permission, "value", $$v)
-                            },
-                            expression: "permission.value"
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                            " +
-                              _vm._s(permission.label) +
-                              "\n                        "
-                          )
-                        ]
-                      )
-                    ],
-                    1
+                    on: { input: _vm.clickAssociateLeader },
+                    model: {
+                      value: _vm.permissionsAssociateLeader,
+                      callback: function($$v) {
+                        _vm.permissionsAssociateLeader = $$v
+                      },
+                      expression: "permissionsAssociateLeader"
+                    }
+                  },
+                  [_c("span", { staticClass: "is-size-5" }, [_vm._v("◘")])]
+                )
+              ],
+              1
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "columns is-multiline" }, [
+            _c("div", { staticClass: "field column is-12 mb-3" }, [
+              _c("div", { staticClass: "field-label" }, [
+                _c("label", { staticClass: "label label_associate_lader" }, [
+                  _vm._v(
+                    "\n                            " +
+                      _vm._s(_vm.text_associate_leader) +
+                      "\n                        "
                   )
-                }),
-                0
-              )
+                ])
+              ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "content_categories" }, [
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "field-categories control has-icons-left has-icons-right"
-                },
-                [
-                  _c(
-                    "v-select",
-                    {
-                      class: { "is-danger": _vm.isCategoriesError },
-                      attrs: {
-                        multiple: "",
-                        disabled: _vm.participantSelected ? false : true,
-                        options: _vm.categories,
-                        reduce: function(categorie) {
-                          return categorie.meta
+            _c(
+              "div",
+              { staticClass: "content_permissions column is-12" },
+              _vm._l(_vm.permissionsEvents, function(permission, index) {
+                return _c(
+                  "div",
+                  {
+                    key: "permission." + index,
+                    staticClass: "field column is-12 is-horizontal"
+                  },
+                  [
+                    _c(
+                      "b-switch",
+                      {
+                        attrs: {
+                          disabled: _vm.isEnabledAssociateLeader ? false : true,
+                          type: "is-success"
                         },
-                        placeholder: _vm.text_filter_categories,
-                        label: "categorie"
+                        model: {
+                          value: permission.value,
+                          callback: function($$v) {
+                            _vm.$set(permission, "value", $$v)
+                          },
+                          expression: "permission.value"
+                        }
                       },
-                      model: {
-                        value: _vm.categoriesSelected,
-                        callback: function($$v) {
-                          _vm.categoriesSelected = $$v
-                        },
-                        expression: "categoriesSelected"
-                      }
-                    },
-                    [
                       [
-                        _c(
-                          "div",
-                          { attrs: { slot: "no-options" }, slot: "no-options" },
-                          [_vm._v(_vm._s(_vm.text_no_options))]
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(permission.label) +
+                            "\n                        "
                         )
                       ]
-                    ],
-                    2
-                  ),
-                  _vm._v(" "),
-                  _vm.isCategoriesError
-                    ? _c(
-                        "span",
-                        { staticClass: "icon is-right has-text-danger" },
-                        [_c("i", { staticClass: "fas fa-exclamation-circle" })]
+                    )
+                  ],
+                  1
+                )
+              }),
+              0
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "content_categories" }, [
+            _c(
+              "div",
+              {
+                staticClass:
+                  "field-categories control has-icons-left has-icons-right"
+              },
+              [
+                _c(
+                  "v-select",
+                  {
+                    class: { "is-danger": _vm.isCategoriesError },
+                    attrs: {
+                      multiple: "",
+                      disabled: _vm.participantSelected ? false : true,
+                      options: _vm.categories,
+                      reduce: function(categorie) {
+                        return categorie.meta
+                      },
+                      placeholder: _vm.text_filter_categories,
+                      label: "categorie"
+                    },
+                    model: {
+                      value: _vm.categoriesSelected,
+                      callback: function($$v) {
+                        _vm.categoriesSelected = $$v
+                      },
+                      expression: "categoriesSelected"
+                    }
+                  },
+                  [
+                    [
+                      _c(
+                        "div",
+                        { attrs: { slot: "no-options" }, slot: "no-options" },
+                        [_vm._v(_vm._s(_vm.text_no_options))]
                       )
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _vm.isCategoriesError
-                    ? _c("p", { staticClass: "help is-danger" }, [
-                        _vm._v(_vm._s(_vm.text_field_required))
-                      ])
-                    : _vm._e()
-                ],
-                1
-              )
-            ])
-          ],
-          1
-        ),
+                    ]
+                  ],
+                  2
+                ),
+                _vm._v(" "),
+                _vm.isCategoriesError
+                  ? _c(
+                      "span",
+                      { staticClass: "icon is-right has-text-danger" },
+                      [_c("i", { staticClass: "fas fa-exclamation-circle" })]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.isCategoriesError
+                  ? _c("p", { staticClass: "help is-danger" }, [
+                      _vm._v(_vm._s(_vm.text_field_required))
+                    ])
+                  : _vm._e()
+              ],
+              1
+            )
+          ])
+        ]),
         _vm._v(" "),
         _c("section", { staticClass: "content_given_admin_permissions" }, [
           _c("div", { staticClass: "is-grouped" }, [
@@ -66343,6 +66376,8 @@ var render = function() {
               ])
             : _vm._e()
         ]),
+        _vm._v(" "),
+        _c("p", { staticClass: "text" }, [_vm._v(_vm._s(_vm.newProfile))]),
         _vm._v(" "),
         _c(
           "div",

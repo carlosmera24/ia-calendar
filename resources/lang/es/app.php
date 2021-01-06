@@ -46,7 +46,7 @@ return [
         'modify_categorie'              =>  'Categorías Modificar',
         'delete_categorie'              =>  'Categorías Eliminar',
         'filter_categories'             =>  'Filtrar categorías, para asociar como líder',
-        'give_admin_categories_events'  =>  'Dar credenciales al líder en las categorías y eventos del Administrador/Administrador suplente',
+        'give_admin_categories_events'  =>  'Convertir Líder como Administrador suplente, dar credenciales',
         'back_to_participant'           =>  'Volver a ser únicamente participe',
     ],
 

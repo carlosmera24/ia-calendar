@@ -20327,6 +20327,10 @@ textarea {
   margin: 23px 0;
 }
 
+.application .content-main .content .form_manage_leader .field-select-participant {
+  width: 70%;
+}
+
 .application .content-main .content .form_manage_leader .field.column {
   margin-bottom: 0;
 }
@@ -20337,6 +20341,16 @@ textarea {
 
 .application .content-main .content .form_manage_leader label::first-letter {
   text-transform: uppercase;
+}
+
+.application .content-main .content .form_manage_leader .data_permissions .is-grouped {
+  display: flex;
+  align-items: center;
+}
+
+.application .content-main .content .form_manage_leader .data_permissions .is-grouped .button.btn-main {
+  border: none;
+  padding: 0;
 }
 
 .application .content-main .content .form_manage_leader .data_permissions .label_associate_lader {

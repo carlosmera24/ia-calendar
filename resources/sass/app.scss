@@ -457,6 +457,9 @@ body, h2, button, input, select, textarea {
                 margin: 23px 0;
             }
             .form_manage_leader{
+                .field-select-participant{
+                    width: 70%;
+                }
                 .field.column{
                     margin-bottom: 0;
                 }
@@ -467,6 +470,14 @@ body, h2, button, input, select, textarea {
                     text-transform: uppercase;
                 }
                 .data_permissions{
+                    .is-grouped{
+                        display: flex;
+                        align-items: center;
+                        .button.btn-main{
+                            border: none;
+                            padding: 0;
+                        }
+                    }
                     .label_associate_lader{
                         text-align: left;
                         padding-left: 30px;
