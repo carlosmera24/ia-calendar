@@ -71,6 +71,8 @@
                                         'msg'           =>  __('validation.required', ['attribute' => ''])
                                     ],
             ];
+
+            $text_general_setting = __('app.menu.general_setting');
         @endphp
         {{-- Header --}}
         <div class="header level is-mobile has-text-white is-size-7 mb-0 px-5 py-4">
@@ -99,7 +101,7 @@
                                         v-bind:url_home="'{{ route('home') }}'"
                                         v-bind:text_menu_dark="'{{ __('app.menu.activate_dark_mode') }}'"
                                         v-bind:text_admin_leaders="'{{ __('app.menu.admin_leaders') }}'"
-                                        v-bind:text_general_setting="'{{ __('app.menu.general_setting') }}'"
+                                        v-bind:text_general_setting="'{{ $text_general_setting }}'"
                                         v-bind:text_frequent_questions="'{{ __('app.menu.frequent_questions') }}'"
                                         v-bind:text_logout="'{{ __('app.menu.logout') }}'"
                                         v-bind:text_close="'{{ __('app.menu.close') }}'"
@@ -160,6 +162,7 @@
             v-bind:text_back_to_participant="'{{ __('app.manage_leader.back_to_participant') }}'"
             v-bind:text_back_to_participant_confirm="'{{ __('messages.back_to_participant_confirm') }}'"
             v-bind:text_back_to_participant_warning="'{{ __('messages.back_to_participant_warning') }}'"
+            v-bind:text_general_setting="'{{ $text_general_setting }}'"
             v-bind:url_person_ui_avatar='"{{ route('participant_generate_avatar') }}"'
             v-bind:url_person_store='"{{ route('person_store') }}"'
             v-bind:url_participant_store='"{{ route('participant_store') }}"'

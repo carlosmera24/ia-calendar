@@ -73,6 +73,12 @@
                 v-bind:url_store_participants_categories="url_store_participants_categories"
                 v-bind:url_participant_update="url_participant_update"
             />
+            <general-settings v-else-if="contentActive.settingAdmin"
+                v-bind:key="3"
+                v-on:activeMainSection="setActiveSection"
+                v-bind:text_breadcrumbs_init='text_breadcrumbs_init'
+                v-bind:text_general_setting='text_general_setting'
+                 />
         </transition-group>
     </div>
 </template>
@@ -124,6 +130,7 @@ export default {
         'text_create_categorie',
         'text_modify_categorie',
         'text_delete_categorie',
+        'text_general_setting',
         'url_person_ui_avatar',
         'url_person_store',
         'url_participant_store',

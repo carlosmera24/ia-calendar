@@ -201,7 +201,7 @@
     </div>
 </template>
 <script>
-import { procesarErroresRequest, capitalize } from '../../functions.js';
+import { procesarErroresRequest, capitalize } from '../../../functions.js';
 var validate = require('validate.js');
 //Import vue-select
 import vSelect from 'vue-select'

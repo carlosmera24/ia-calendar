@@ -24,7 +24,8 @@ Vue.component('banner-info', require('./components/welcome/BannerInfoComponent.v
 Vue.component('banner-carusel', require('./components/welcome/BannerCaruselComponent.vue').default);
 // App components
 Vue.component('content-main', require('./components/app/ContentMainComponent.vue').default);
-Vue.component('manage-leader', require('./components/app/ManageLeaderComponent.vue').default);
+Vue.component('manage-leader', require('./components/app/settings/ManageLeaderComponent.vue').default);
+Vue.component('general-settings', require('./components/app/settings/GeneralSettingsComponent.vue').default);
 Vue.component('main-section', require('./components/app/MainComponent.vue').default);
 Vue.component('login-form', require('./components/app/LoginFormComponent.vue').default);
 Vue.component('dropdown-menu-setting', require('./components/app/DropDownMenuSettingComponent.vue').default);
