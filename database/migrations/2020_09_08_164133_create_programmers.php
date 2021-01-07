@@ -16,9 +16,10 @@ class CreateProgrammers extends Migration
     {
         Schema::create('programmers', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->integer('id')->autoIncrement();
+            $table->integer('id');
             $table->string('entity_name',120);
-            $table->string('NIT',100);
+            $table->integer('identifications_types_id');
+            $table->string('identification',100);
             $table->text('logo')->comment('Logo in format String64')->nullable();
             $table->tinyInteger('activated_birthday',false)->default(0)->comment('0: InActive, 1:Active');
             $table->tinyInteger('activated_date_join_company',false)->default('0')->comment('0: InActive, 1:Active');
@@ -28,8 +29,18 @@ class CreateProgrammers extends Migration
             $table->datetime('created_at')->default(new Expression('CURRENT_TIMESTAMP'));
             $table->datetime('updated_at')->default(new Expression('CURRENT_TIMESTAMP'));
 
+            $table->primary([ 'id', 'identifications_types_id' ]);
+
+            $table->foreign('identifications_types_id')->references('id')->on('identifications_types')
+                    ->onUpdate('NO ACTION')
+                    ->onDelete('NO ACTION');
+
+            $table->index('identifications_types_id');
+
+
         });
 
+        DB::statement("ALTER TABLE programmers MODIFY id INT AUTO_INCREMENT");
         DB::statement("ALTER TABLE programmers comment 'Programador'");
     }
 

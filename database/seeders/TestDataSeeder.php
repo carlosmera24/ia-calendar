@@ -42,7 +42,9 @@ class TestDataSeeder extends Seeder
         DB::table('programmers')->insert([
             'id' => 1,
             'entity_name' => "Demo IA Calendar's",
-            'NIT' => '23112020-1',
+            'identifications_types_id' => 8,
+            'activated_birthday' => 1,
+            'identification' => '23112020-1',
             'activated_birthday' => 1,
             'activated_date_join_company' => 1,
             'activated_tax_calendar' => 1,
