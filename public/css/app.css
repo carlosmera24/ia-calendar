@@ -20434,6 +20434,15 @@ textarea {
   align-items: center;
 }
 
+.application .content-main .content .form_general_settings .programer_data h3 {
+  font-size: 1.25em;
+}
+
+.application .content-main .content .form_general_settings .programer_data h3 .numerator {
+  font-weight: 200;
+  margin-right: 10px;
+}
+
 .animated_delay {
   -webkit-animation-delay: 0.45s;
           animation-delay: 0.45s;

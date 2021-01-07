@@ -2293,24 +2293,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_breadcrumbs_init', 'text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'text_filter_categories', 'text_give_admin_categories_events', 'text_back_to_participant', 'text_back_to_participant_confirm', 'text_back_to_participant_warning', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_field_required', 'text_no_options', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_updated_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_not', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'profile_participant', 'text_search_participant', 'text_empty_categories_required', 'text_associate_leader', 'text_consult_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_create_categorie', 'text_modify_categorie', 'text_delete_categorie', 'text_general_setting', 'profiles_participants_names_json', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'url_participant_update', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories'],
+  props: ['text_breadcrumbs_init', 'text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_field_required', 'text_no_options', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_updated_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_not', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'profile_participant', 'texts_manage_leader_json', 'texts_general_settings_json', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'url_participant_update', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories'],
   data: function data() {
     return {
       contentActive: {}
@@ -3294,17 +3278,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['profile_participant', 'text_breadcrumbs_init', 'text_general_setting', 'profiles_participants_names_json'],
+  props: ['profile_participant', 'text_breadcrumbs_init', 'texts_general_settings_json'],
   data: function data() {
     return {
       isLoading: false,
-      profilesParticipants: []
+      textsGeneralSettings: []
     };
   },
   created: function created() {
-    this.profilesParticipants = JSON.parse(this.profiles_participants_names_json);
-    console.log(this.profilesParticipants);
+    this.textsGeneralSettings = JSON.parse(this.texts_general_settings_json);
   },
   methods: {
     clickCancel: function clickCancel() {
@@ -3547,65 +3534,17 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_breadcrumbs_init', 'text_admin_leaders', 'programmer_json', 'user_id', 'text_search_participant', 'text_participant_fields_json', 'text_associate_leader', 'text_consult_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_create_categorie', 'text_modify_categorie', 'text_delete_categorie', 'text_filter_categories', 'text_give_admin_categories_events', 'text_back_to_participant', 'text_back_to_participant_confirm', 'text_back_to_participant_warning', 'text_apply', 'text_cancel', 'text_not', 'text_success', 'text_field_required', 'text_no_options', 'text_updated_participant', 'text_empty_categories_required', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories', 'url_participant_update'],
+  props: ['text_breadcrumbs_init', 'texts_manage_leader_json', 'text_admin_leaders', 'programmer_json', 'user_id', 'text_participant_fields_json', 'text_apply', 'text_cancel', 'text_not', 'text_success', 'text_field_required', 'text_no_options', 'text_updated_participant', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories', 'url_participant_update'],
   data: function data() {
     return {
+      textsManageLeader: [],
       isLoading: false,
       hasErrors: false,
       errors: {},
       participanError: false,
       participants: [],
       participantSelected: null,
-      permissions: {
-        2: {
-          value: false,
-          label: this.text_create_categorie,
-          permission: 'categories.create',
-          id: 2
-        },
-        3: {
-          value: false,
-          label: this.text_modify_categorie,
-          permission: 'categories.edit',
-          id: 3
-        },
-        4: {
-          value: false,
-          label: this.text_delete_categorie,
-          permission: 'categories.delete',
-          id: 4
-        },
-        6: {
-          value: false,
-          label: this.text_consult_events,
-          permission: 'events.index',
-          id: 6
-        },
-        7: {
-          value: false,
-          label: this.text_create_events,
-          permission: 'events.create',
-          id: 7
-        },
-        8: {
-          value: false,
-          label: this.text_modify_events,
-          permission: 'events.edit',
-          id: 8
-        },
-        10: {
-          value: false,
-          label: this.text_share_events,
-          permission: 'events.share',
-          id: 10
-        },
-        9: {
-          value: false,
-          label: this.text_delete_events,
-          permission: 'events.delete',
-          id: 9
-        }
-      },
+      permissions: {},
       copyPermissions: [],
       permissionsEvents: {},
       permissionsCategories: {},
@@ -3634,9 +3573,60 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
   created: function created() {
     var _this = this;
 
+    this.textsManageLeader = JSON.parse(this.texts_manage_leader_json);
     this.programmer = JSON.parse(this.programmer_json);
-    this.fields = JSON.parse(this.text_participant_fields_json); //create copy permission for events and categories with link to permissions (global)
+    this.fields = JSON.parse(this.text_participant_fields_json); //Init permissions
 
+    this.permissions = {
+      2: {
+        value: false,
+        label: this.textsManageLeader.create_categorie,
+        permission: 'categories.create',
+        id: 2
+      },
+      3: {
+        value: false,
+        label: this.textsManageLeader.modify_categorie,
+        permission: 'categories.edit',
+        id: 3
+      },
+      4: {
+        value: false,
+        label: this.textsManageLeader.delete_categorie,
+        permission: 'categories.delete',
+        id: 4
+      },
+      6: {
+        value: false,
+        label: this.textsManageLeader.consult_events,
+        permission: 'events.index',
+        id: 6
+      },
+      7: {
+        value: false,
+        label: this.textsManageLeader.create_events,
+        permission: 'events.create',
+        id: 7
+      },
+      8: {
+        value: false,
+        label: this.textsManageLeader.modify_events,
+        permission: 'events.edit',
+        id: 8
+      },
+      10: {
+        value: false,
+        label: this.textsManageLeader.share_events,
+        permission: 'events.share',
+        id: 10
+      },
+      9: {
+        value: false,
+        label: this.textsManageLeader.delete_events,
+        permission: 'events.delete',
+        id: 9
+      }
+    }, //create copy permission for events and categories with link to permissions (global)
     Object.keys(this.permissions).forEach(function (k) {
       var permission = _this.permissions[k]; //Events
 
@@ -3740,10 +3730,10 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       var _this4 = this;
 
       this.$buefy.dialog.confirm({
-        title: this.text_back_to_participant,
-        message: this.text_back_to_participant_confirm,
+        title: this.textsManageLeader.back_to_participant,
+        message: this.textsManageLeader.back_to_participant_confirm,
         cancelText: this.text_not,
-        confirmText: this.text_back_to_participant,
+        confirmText: this.textsManageLeader.back_to_participant,
         type: 'is-warning',
         hasIcon: true,
         onCancel: function onCancel() {
@@ -3821,7 +3811,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
             });
           } else //Empty categories
             {
-              _this6.showErrors(_this6.text_empty_categories_required);
+              _this6.showErrors(_this6.textsManageLeader.empty_categories_required);
             }
         }
       }, function (error) {
@@ -3972,7 +3962,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       this.isCategoriesError = false; //empty categories
 
       if (this.categories.length === 0 && !this.isBackParticipant) {
-        this.showErrors(this.text_empty_categories_required);
+        this.showErrors(this.textsManageLeader.empty_categories_required);
       } else if (validate.isEmpty(this.categoriesSelected) && !this.isBackParticipant) {
         this.isCategoriesError = true;
       } else {
@@ -65459,28 +65449,9 @@ var render = function() {
                   text_success: _vm.text_success,
                   text_no_options: _vm.text_no_options,
                   text_updated_participant: _vm.text_updated_participant,
-                  text_search_participant: _vm.text_search_participant,
+                  texts_manage_leader_json: _vm.texts_manage_leader_json,
                   text_participant_fields_json:
                     _vm.text_participant_fields_json,
-                  text_associate_leader: _vm.text_associate_leader,
-                  text_empty_categories_required:
-                    _vm.text_empty_categories_required,
-                  text_consult_events: _vm.text_consult_events,
-                  text_create_events: _vm.text_create_events,
-                  text_modify_events: _vm.text_modify_events,
-                  text_share_events: _vm.text_share_events,
-                  text_delete_events: _vm.text_delete_events,
-                  text_create_categorie: _vm.text_create_categorie,
-                  text_modify_categorie: _vm.text_modify_categorie,
-                  text_delete_categorie: _vm.text_delete_categorie,
-                  text_filter_categories: _vm.text_filter_categories,
-                  text_give_admin_categories_events:
-                    _vm.text_give_admin_categories_events,
-                  text_back_to_participant: _vm.text_back_to_participant,
-                  text_back_to_participant_confirm:
-                    _vm.text_back_to_participant_confirm,
-                  text_back_to_participant_warning:
-                    _vm.text_back_to_participant_warning,
                   text_apply: _vm.text_apply,
                   text_cancel: _vm.text_cancel,
                   text_not: _vm.text_not,
@@ -65501,10 +65472,8 @@ var render = function() {
                 key: 3,
                 attrs: {
                   profile_participant: _vm.profile_participant,
-                  text_breadcrumbs_init: _vm.text_breadcrumbs_init,
-                  text_general_setting: _vm.text_general_setting,
-                  profiles_participants_names_json:
-                    _vm.profiles_participants_names_json
+                  texts_general_settings_json: _vm.texts_general_settings_json,
+                  text_breadcrumbs_init: _vm.text_breadcrumbs_init
                 },
                 on: { activeMainSection: _vm.setActiveSection }
               })
@@ -66661,13 +66630,28 @@ var render = function() {
       _vm._v(" "),
       _c("h2", [
         _vm._v(
-          _vm._s(_vm.text_general_setting) +
+          _vm._s(_vm.textsGeneralSettings.text_general_setting) +
             " " +
-            _vm._s(_vm.profilesParticipants[_vm.profile_participant])
+            _vm._s(
+              _vm.textsGeneralSettings.names_profiles_participants[
+                _vm.profile_participant
+              ]
+            )
         )
       ]),
       _vm._v(" "),
-      _c("p", [_vm._v("Agregar menú activo al menú de configuración")])
+      _c(
+        "form",
+        { staticClass: "form_general_settings", attrs: { action: "" } },
+        [
+          _c("section", { staticClass: "programer_data" }, [
+            _c("h3", [
+              _c("span", { staticClass: "numerator" }, [_vm._v("1")]),
+              _vm._v(_vm._s(_vm.textsGeneralSettings.programmer_data))
+            ])
+          ])
+        ]
+      )
     ],
     1
   )
@@ -66796,7 +66780,7 @@ var render = function() {
                     reduce: function(participant) {
                       return participant.meta
                     },
-                    placeholder: _vm.text_search_participant,
+                    placeholder: _vm.textsManageLeader.search_participant,
                     label: "participant"
                   },
                   on: { input: _vm.onSelectParticipantChanged },
@@ -66997,7 +66981,7 @@ var render = function() {
                 _c("label", { staticClass: "label label_associate_lader" }, [
                   _vm._v(
                     "\n                            " +
-                      _vm._s(_vm.text_associate_leader) +
+                      _vm._s(_vm.textsManageLeader.associate_leader) +
                       "\n                        "
                   )
                 ])
@@ -67065,7 +67049,7 @@ var render = function() {
                       reduce: function(categorie) {
                         return categorie.meta
                       },
-                      placeholder: _vm.text_filter_categories,
+                      placeholder: _vm.textsManageLeader.filter_categories,
                       label: "categorie"
                     },
                     model: {
@@ -67137,7 +67121,7 @@ var render = function() {
             ),
             _vm._v(" "),
             _c("span", { staticClass: "control-label" }, [
-              _vm._v(_vm._s(_vm.text_give_admin_categories_events))
+              _vm._v(_vm._s(_vm.textsManageLeader.give_admin_categories_events))
             ])
           ]),
           _vm._v(" "),
@@ -67224,7 +67208,7 @@ var render = function() {
             ),
             _vm._v(" "),
             _c("span", { staticClass: "control-label" }, [
-              _vm._v(_vm._s(_vm.text_back_to_participant))
+              _vm._v(_vm._s(_vm.textsManageLeader.back_to_participant))
             ])
           ]),
           _vm._v(" "),
@@ -67247,7 +67231,9 @@ var render = function() {
                 [
                   _c("p", {
                     domProps: {
-                      innerHTML: _vm._s(_vm.text_back_to_participant_warning)
+                      innerHTML: _vm._s(
+                        _vm.textsManageLeader.back_to_participant_warning
+                      )
                     }
                   })
                 ]

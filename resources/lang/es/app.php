@@ -51,6 +51,17 @@ return [
     ],
 
     /**
+     * General settings
+     */
+    'general_settings'  =>  [
+        'programmer_data'       =>  'Datos del programador',
+        'administrator_data'    =>  'Datos del administrador',
+        'administrator_data'    =>  'Datos del administrador',
+        'membership_data'       =>  'Datos de la membresía',
+        'leaders_login'         =>  'Inicio de sesión para Líderes',
+    ],
+
+    /**
      * Wall section
      */
     'wall'  =>  [

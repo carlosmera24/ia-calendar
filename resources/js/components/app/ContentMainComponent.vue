@@ -45,23 +45,8 @@
                 v-bind:text_success='text_success'
                 v-bind:text_no_options='text_no_options'
                 v-bind:text_updated_participant='text_updated_participant'
-                v-bind:text_search_participant="text_search_participant"
+                v-bind:texts_manage_leader_json="texts_manage_leader_json"
                 v-bind:text_participant_fields_json="text_participant_fields_json"
-                v-bind:text_associate_leader="text_associate_leader"
-                v-bind:text_empty_categories_required="text_empty_categories_required"
-                v-bind:text_consult_events="text_consult_events"
-                v-bind:text_create_events="text_create_events"
-                v-bind:text_modify_events="text_modify_events"
-                v-bind:text_share_events="text_share_events"
-                v-bind:text_delete_events="text_delete_events"
-                v-bind:text_create_categorie="text_create_categorie"
-                v-bind:text_modify_categorie="text_modify_categorie"
-                v-bind:text_delete_categorie="text_delete_categorie"
-                v-bind:text_filter_categories="text_filter_categories"
-                v-bind:text_give_admin_categories_events="text_give_admin_categories_events"
-                v-bind:text_back_to_participant="text_back_to_participant"
-                v-bind:text_back_to_participant_confirm="text_back_to_participant_confirm"
-                v-bind:text_back_to_participant_warning="text_back_to_participant_warning"
                 v-bind:text_apply='text_apply'
                 v-bind:text_cancel='text_cancel'
                 v-bind:text_not='text_not'
@@ -77,9 +62,8 @@
                 v-bind:key="3"
                 v-on:activeMainSection="setActiveSection"
                 v-bind:profile_participant='profile_participant'
+                v-bind:texts_general_settings_json='texts_general_settings_json'
                 v-bind:text_breadcrumbs_init='text_breadcrumbs_init'
-                v-bind:text_general_setting='text_general_setting'
-                v-bind:profiles_participants_names_json='profiles_participants_names_json'
             />
         </transition-group>
     </div>
@@ -96,11 +80,6 @@ export default {
         'text_programmer',
         'text_category',
         'text_event',
-        'text_filter_categories',
-        'text_give_admin_categories_events',
-        'text_back_to_participant',
-        'text_back_to_participant_confirm',
-        'text_back_to_participant_warning',
         'numbers_emailes',
         'numbers_mobiles',
         'programmer_json',
@@ -122,19 +101,8 @@ export default {
         'text_admin_leaders',
         'user_id',
         'profile_participant',
-        'text_search_participant',
-        'text_empty_categories_required',
-        'text_associate_leader',
-        'text_consult_events',
-        'text_create_events',
-        'text_modify_events',
-        'text_share_events',
-        'text_delete_events',
-        'text_create_categorie',
-        'text_modify_categorie',
-        'text_delete_categorie',
-        'text_general_setting',
-        'profiles_participants_names_json',
+        'texts_manage_leader_json',
+        'texts_general_settings_json',
         'url_person_ui_avatar',
         'url_person_store',
         'url_participant_store',

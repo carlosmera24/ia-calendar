@@ -71,6 +71,9 @@
                                         'msg'           =>  __('validation.required', ['attribute' => ''])
                                     ],
             ];
+            $fields_programmer = [
+
+            ];
 
             $text_general_setting = __('app.menu.general_setting');
             //Text/name for prifles ID => Name
@@ -80,6 +83,15 @@
                                                 3 => __('app.profiles_participants.guest'),
                                                 4 => __('app.profiles_participants.alternate_administrator'),
                                             ];
+            //Texts for manage leader
+            $texts_manage_leader = __('app.manage_leader');
+            $texts_manage_leader['empty_categories_required'] = __('messages.empty_categories_required');
+            $texts_manage_leader['back_to_participant_confirm'] = __('messages.back_to_participant_confirm');
+            $texts_manage_leader['back_to_participant_warning'] = __('messages.back_to_participant_warning');
+            //Texts for general settings
+            $texts_general_settings = __('app.general_settings');
+            $texts_general_settings['text_general_setting'] = $text_general_setting;
+            $texts_general_settings['names_profiles_participants'] = $names_profiles_participants;
         @endphp
         {{-- Header --}}
         <div class="header level is-mobile has-text-white is-size-7 mb-0 px-5 py-4">
@@ -154,23 +166,8 @@
             v-bind:text_admin_leaders="'{{ __('app.menu.admin_leaders') }}'"
             v-bind:user_id="'{{ $user->id }}'"
             v-bind:profile_participant="'{{ $profile_participant }}'"
-            v-bind:text_search_participant="'{{ __('app.manage_leader.search_participant') }}'"
-            v-bind:text_empty_categories_required="'{{ __('messages.empty_categories_required') }}'"
-            v-bind:text_associate_leader="'{{ __('app.manage_leader.associate_leader') }}'"
-            v-bind:text_consult_events="'{{ __('app.manage_leader.consult_events') }}'"
-            v-bind:text_create_events="'{{ __('app.manage_leader.create_events') }}'"
-            v-bind:text_modify_events="'{{ __('app.manage_leader.modify_events') }}'"
-            v-bind:text_share_events="'{{ __('app.manage_leader.share_events') }}'"
-            v-bind:text_delete_events="'{{ __('app.manage_leader.delete_events') }}'"
-            v-bind:text_create_categorie="'{{ __('app.manage_leader.create_categorie') }}'"
-            v-bind:text_modify_categorie="'{{ __('app.manage_leader.modify_categorie') }}'"
-            v-bind:text_delete_categorie="'{{ __('app.manage_leader.delete_categorie') }}'"
-            v-bind:text_filter_categories="'{{ __('app.manage_leader.filter_categories') }}'"
-            v-bind:text_give_admin_categories_events="'{{ __('app.manage_leader.give_admin_categories_events') }}'"
-            v-bind:text_back_to_participant="'{{ __('app.manage_leader.back_to_participant') }}'"
-            v-bind:text_back_to_participant_confirm="'{{ __('messages.back_to_participant_confirm') }}'"
-            v-bind:text_back_to_participant_warning="'{{ __('messages.back_to_participant_warning') }}'"
-            v-bind:text_general_setting="'{{ $text_general_setting }}'"
+            v-bind:texts_manage_leader_json="'{{ json_encode($texts_manage_leader) }}'"
+            v-bind:texts_general_settings_json="'{{ json_encode($texts_general_settings) }}'"
             v-bind:profiles_participants_names_json="'{{ json_encode($names_profiles_participants) }}'"
             v-bind:url_person_ui_avatar='"{{ route('participant_generate_avatar') }}"'
             v-bind:url_person_store='"{{ route('person_store') }}"'

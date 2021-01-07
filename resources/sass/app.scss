@@ -558,6 +558,17 @@ body, h2, button, input, select, textarea {
                     }
                 }
             }
+            .form_general_settings{
+                .programer_data{
+                    h3{
+                        font-size: 1.25em;
+                        .numerator{
+                            font-weight: 200;
+                            margin-right: 10px;
+                        }
+                    }
+                }
+            }
         }
     }
 }

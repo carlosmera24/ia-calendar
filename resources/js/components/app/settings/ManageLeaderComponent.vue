@@ -28,7 +28,7 @@
                     <v-select v-model="participantSelected"
                         :options="participants"
                         :reduce="participant => participant.meta"
-                        :placeholder="text_search_participant"
+                        :placeholder="textsManageLeader.search_participant"
                         label="participant"
                         @input="onSelectParticipantChanged"
                     >
@@ -104,7 +104,7 @@
                     <div class="field column is-12 mb-3">
                         <div class="field-label">
                             <label class="label label_associate_lader">
-                                {{ text_associate_leader }}
+                                {{ textsManageLeader.associate_leader }}
                             </label>
                         </div>
                     </div>
@@ -126,7 +126,7 @@
                             :disabled="participantSelected ? false : true"
                             :options="categories"
                             :reduce="categorie => categorie.meta"
-                            :placeholder="text_filter_categories"
+                            :placeholder="textsManageLeader.filter_categories"
                             label="categorie"
                             :class="{ 'is-danger' : isCategoriesError }"
                             >
@@ -151,7 +151,7 @@
                             <span class="is-size-5">&#9688;</span>
                         </b-checkbox-button>
                     </div>
-                    <span class="control-label">{{ text_give_admin_categories_events }}</span>
+                    <span class="control-label">{{ textsManageLeader.give_admin_categories_events }}</span>
                 </div>
                 <div v-if="isPermissionsAdmin" class="columns is-multiline">
                     <div class="content_permissions column is-12">
@@ -180,11 +180,11 @@
                             </span>
                         </b-checkbox-button>
                     </div>
-                    <span class="control-label">{{ text_back_to_participant }}</span>
+                    <span class="control-label">{{ textsManageLeader.back_to_participant }}</span>
                 </div>
                  <section class="alert-section">
                     <b-notification v-model="isBackParticipant" type="is-warning" hasIcon role="alert">
-                        <p v-html="text_back_to_participant_warning"></p>
+                        <p v-html="textsManageLeader.back_to_participant_warning"></p>
                     </b-notification>
                 </section>
             </section>
@@ -214,25 +214,11 @@ import '@pnotify/core/dist/BrightTheme.css';
 export default {
     props: [
         'text_breadcrumbs_init',
+        'texts_manage_leader_json',
         'text_admin_leaders',
         'programmer_json',
         'user_id',
-        'text_search_participant',
         'text_participant_fields_json',
-        'text_associate_leader',
-        'text_consult_events',
-        'text_create_events',
-        'text_modify_events',
-        'text_share_events',
-        'text_delete_events',
-        'text_create_categorie',
-        'text_modify_categorie',
-        'text_delete_categorie',
-        'text_filter_categories',
-        'text_give_admin_categories_events',
-        'text_back_to_participant',
-        'text_back_to_participant_confirm',
-        'text_back_to_participant_warning',
         'text_apply',
         'text_cancel',
         'text_not',
@@ -240,7 +226,6 @@ export default {
         'text_field_required',
         'text_no_options',
         'text_updated_participant',
-        'text_empty_categories_required',
         'url_participants_programmer',
         'url_categories_programmer',
         'url_permissions_participant',
@@ -251,62 +236,14 @@ export default {
     ],
     data() {
         return {
+            textsManageLeader: [],
             isLoading: false,
             hasErrors: false,
             errors: {},
             participanError: false,
             participants:[],
             participantSelected: null,
-            permissions: {
-                            2: {
-                                    value: false,
-                                    label: this.text_create_categorie,
-                                    permission: 'categories.create',
-                                    id: 2
-                                },
-                            3: {
-                                    value: false,
-                                    label: this.text_modify_categorie,
-                                    permission: 'categories.edit',
-                                    id: 3
-                                },
-                            4: {
-                                    value: false,
-                                    label: this.text_delete_categorie,
-                                    permission: 'categories.delete',
-                                    id: 4
-                                },
-                            6: {
-                                    value: false,
-                                    label: this.text_consult_events,
-                                    permission: 'events.index',
-                                    id: 6
-                                },
-                            7: {
-                                    value: false,
-                                    label: this.text_create_events,
-                                    permission: 'events.create',
-                                    id: 7
-                                },
-                            8: {
-                                    value: false,
-                                    label: this.text_modify_events,
-                                    permission: 'events.edit',
-                                    id: 8
-                                },
-                            10: {
-                                    value: false,
-                                    label: this.text_share_events,
-                                    permission: 'events.share',
-                                    id: 10
-                                },
-                            9: {
-                                    value: false,
-                                    label: this.text_delete_events,
-                                    permission: 'events.delete',
-                                    id: 9
-                                },
-                        },
+            permissions: {},
             copyPermissions: [],
             permissionsEvents: {},
             permissionsCategories: {},
@@ -333,8 +270,60 @@ export default {
         }
     },
     created(){
+        this.textsManageLeader = JSON.parse(this.texts_manage_leader_json);
         this.programmer = JSON.parse(this.programmer_json);
         this.fields = JSON.parse(this.text_participant_fields_json);
+        //Init permissions
+        this.permissions = {
+                                2: {
+                                        value: false,
+                                        label: this.textsManageLeader.create_categorie,
+                                        permission: 'categories.create',
+                                        id: 2
+                                    },
+                                3: {
+                                        value: false,
+                                        label: this.textsManageLeader.modify_categorie,
+                                        permission: 'categories.edit',
+                                        id: 3
+                                    },
+                                4: {
+                                        value: false,
+                                        label: this.textsManageLeader.delete_categorie,
+                                        permission: 'categories.delete',
+                                        id: 4
+                                    },
+                                6: {
+                                        value: false,
+                                        label: this.textsManageLeader.consult_events,
+                                        permission: 'events.index',
+                                        id: 6
+                                    },
+                                7: {
+                                        value: false,
+                                        label: this.textsManageLeader.create_events,
+                                        permission: 'events.create',
+                                        id: 7
+                                    },
+                                8: {
+                                        value: false,
+                                        label: this.textsManageLeader.modify_events,
+                                        permission: 'events.edit',
+                                        id: 8
+                                    },
+                                10: {
+                                        value: false,
+                                        label: this.textsManageLeader.share_events,
+                                        permission: 'events.share',
+                                        id: 10
+                                    },
+                                9: {
+                                        value: false,
+                                        label: this.textsManageLeader.delete_events,
+                                        permission: 'events.delete',
+                                        id: 9
+                                    },
+                            },
         //create copy permission for events and categories with link to permissions (global)
         Object.keys( this.permissions ).forEach( k => {
             const permission = this.permissions[k];
@@ -431,10 +420,10 @@ export default {
         clickBackToParticipant(){
             this.$buefy.dialog.confirm(
                                         {
-                                            title: this.text_back_to_participant,
-                                            message: this.text_back_to_participant_confirm,
+                                            title: this.textsManageLeader.back_to_participant,
+                                            message: this.textsManageLeader.back_to_participant_confirm,
                                             cancelText: this.text_not,
-                                            confirmText: this.text_back_to_participant,
+                                            confirmText: this.textsManageLeader.back_to_participant,
                                             type: 'is-warning',
                                             hasIcon: true,
                                             onCancel: () => {
@@ -505,7 +494,7 @@ export default {
                             });
                         }else //Empty categories
                         {
-                            this.showErrors( this.text_empty_categories_required );
+                            this.showErrors( this.textsManageLeader.empty_categories_required );
                         }
                     }
                 },
@@ -649,7 +638,7 @@ export default {
             //empty categories
             if( this.categories.length === 0 && !this.isBackParticipant  )
             {
-                this.showErrors( this.text_empty_categories_required );
+                this.showErrors( this.textsManageLeader.empty_categories_required );
 
             }else if( validate.isEmpty(this.categoriesSelected) && !this.isBackParticipant )
             {

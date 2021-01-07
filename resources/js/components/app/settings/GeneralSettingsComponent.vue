@@ -13,7 +13,12 @@
                 </li>
             </ul>
         </div>
-        <h2>{{ text_general_setting }} {{ profilesParticipants[profile_participant] }}</h2>
+        <h2>{{ textsGeneralSettings.text_general_setting }} {{ textsGeneralSettings.names_profiles_participants[profile_participant] }}</h2>
+        <form action="" class="form_general_settings">
+            <section class="programer_data">
+                <h3><span class="numerator">1</span>{{ textsGeneralSettings.programmer_data }}</h3>
+            </section>
+        </form>
     </div>
 </template>
 <script>
@@ -21,18 +26,16 @@
         props: [
             'profile_participant',
             'text_breadcrumbs_init',
-            'text_general_setting',
-            'profiles_participants_names_json',
+            'texts_general_settings_json',
         ],
         data() {
             return {
                 isLoading: false,
-                profilesParticipants: []
+                textsGeneralSettings: []
             }
         },
         created(){
-            this.profilesParticipants = JSON.parse(this.profiles_participants_names_json);
-            console.log(this.profilesParticipants);
+            this.textsGeneralSettings = JSON.parse(this.texts_general_settings_json);
         },
         methods: {
             clickCancel(){
