@@ -76,9 +76,11 @@
             <general-settings v-else-if="contentActive.settingAdmin"
                 v-bind:key="3"
                 v-on:activeMainSection="setActiveSection"
+                v-bind:profile_participant='profile_participant'
                 v-bind:text_breadcrumbs_init='text_breadcrumbs_init'
                 v-bind:text_general_setting='text_general_setting'
-                 />
+                v-bind:profiles_participants_names_json='profiles_participants_names_json'
+            />
         </transition-group>
     </div>
 </template>
@@ -119,6 +121,7 @@ export default {
         'text_participant_fields_json',
         'text_admin_leaders',
         'user_id',
+        'profile_participant',
         'text_search_participant',
         'text_empty_categories_required',
         'text_associate_leader',
@@ -131,6 +134,7 @@ export default {
         'text_modify_categorie',
         'text_delete_categorie',
         'text_general_setting',
+        'profiles_participants_names_json',
         'url_person_ui_avatar',
         'url_person_store',
         'url_participant_store',

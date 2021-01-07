@@ -13,20 +13,26 @@
                 </li>
             </ul>
         </div>
-        <h2>{{ text_general_setting }} falta agregar el perfil</h2>
-        <p>Agregar menú activo al menú de configuración</p>
+        <h2>{{ text_general_setting }} {{ profilesParticipants[profile_participant] }}</h2>
     </div>
 </template>
 <script>
     export default {
         props: [
+            'profile_participant',
             'text_breadcrumbs_init',
             'text_general_setting',
+            'profiles_participants_names_json',
         ],
         data() {
             return {
                 isLoading: false,
+                profilesParticipants: []
             }
+        },
+        created(){
+            this.profilesParticipants = JSON.parse(this.profiles_participants_names_json);
+            console.log(this.profilesParticipants);
         },
         methods: {
             clickCancel(){

@@ -16,7 +16,7 @@ return [
     'programmer'            =>  'Programador<br>Empresa',
     'category'              =>  'Categoría',
     'event'                 =>  'Evento',
-    'breadcrumbs_init'       =>  'Volver al inicio',
+    'breadcrumbs_init'      =>  'Volver al inicio',
 
     /**
      * DropDown Menu section
@@ -68,4 +68,15 @@ return [
             'title'                     =>  'Partícipe nuevo',
             'description_placeholder'   =>  'Detalla brevemente el el cargo y funciones a realizar',
      ],
+
+     /**
+      * Profile participants
+      */
+
+      'profiles_participants'   =>  [
+            'administrator'             =>  'administrador',
+            'leader'                    =>  'líder',
+            'guest'                     =>  'invitado',
+            'alternate_administrator'   =>  'administrador suplente',
+      ],
 ];

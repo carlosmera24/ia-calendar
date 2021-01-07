@@ -5,11 +5,11 @@
         @php
             $user = Auth::user();
             $programmer = null;
-            $profile = null;
+            $profile_participant = null;
             if(  $user->participants() != null )
             {
                 $participant = $user->participants()->get()[0];
-                $profile = isset( $participant ) ? $participant->profiles_participants_id : null;
+                $profile_participant = isset( $participant ) ? $participant->profiles_participants_id : null;
                 if( $participant->programmer() != null )
                 {
                     $programmer = $participant->programmer()->get()[0];
@@ -73,6 +73,13 @@
             ];
 
             $text_general_setting = __('app.menu.general_setting');
+            //Text/name for prifles ID => Name
+            $names_profiles_participants = [
+                                                1 => __('app.profiles_participants.administrator'),
+                                                2 => __('app.profiles_participants.leader'),
+                                                3 => __('app.profiles_participants.guest'),
+                                                4 => __('app.profiles_participants.alternate_administrator'),
+                                            ];
         @endphp
         {{-- Header --}}
         <div class="header level is-mobile has-text-white is-size-7 mb-0 px-5 py-4">
@@ -96,7 +103,7 @@
                             <div class="column is-full py-1 px-1">
                                 {{-- DropDown --}}
                                     <dropdown-menu-setting
-                                        v-bind:profile="'{{ $profile }}'"
+                                        v-bind:profile_participant="'{{ $profile_participant }}'"
                                         v-bind:url_logout="'{{ route('logout') }}'"
                                         v-bind:url_home="'{{ route('home') }}'"
                                         v-bind:text_menu_dark="'{{ __('app.menu.activate_dark_mode') }}'"
@@ -146,6 +153,7 @@
             v-bind:text_participant_fields_json="' {{ json_encode($fields_participant) }} '"
             v-bind:text_admin_leaders="'{{ __('app.menu.admin_leaders') }}'"
             v-bind:user_id="'{{ $user->id }}'"
+            v-bind:profile_participant="'{{ $profile_participant }}'"
             v-bind:text_search_participant="'{{ __('app.manage_leader.search_participant') }}'"
             v-bind:text_empty_categories_required="'{{ __('messages.empty_categories_required') }}'"
             v-bind:text_associate_leader="'{{ __('app.manage_leader.associate_leader') }}'"
@@ -163,6 +171,7 @@
             v-bind:text_back_to_participant_confirm="'{{ __('messages.back_to_participant_confirm') }}'"
             v-bind:text_back_to_participant_warning="'{{ __('messages.back_to_participant_warning') }}'"
             v-bind:text_general_setting="'{{ $text_general_setting }}'"
+            v-bind:profiles_participants_names_json="'{{ json_encode($names_profiles_participants) }}'"
             v-bind:url_person_ui_avatar='"{{ route('participant_generate_avatar') }}"'
             v-bind:url_person_store='"{{ route('person_store') }}"'
             v-bind:url_participant_store='"{{ route('participant_store') }}"'

@@ -15,12 +15,15 @@
                     {{ text_menu_dark }}
                 </a>
                 <!-- If profiles is Admin or Secondary/Alternate Admin  -->
-                <a class="dropdown-item"
-                    v-if="profile === '1'"
+                <a href="#" class="dropdown-item"
+                    v-if="profile_participant === '1' || profile_participant === '4'"
+                    :class="{'is-active' : contentActive.adminLeaders }"
                     v-on:click="clickItem('adminLeaders')">
                     {{ text_admin_leaders }}
                 </a>
-                <a href="#" class="dropdown-item" v-on:click="clickItem(settingGeneral)">
+                <a href="#" class="dropdown-item"
+                    :class="{'is-active' : contentActive.settingAdmin }"
+                    v-on:click="clickItem(settingGeneral)">
                     {{ text_general_setting }}
                 </a>
                 <a href="#" class="dropdown-item">
@@ -42,10 +45,11 @@ export default {
         return {
             isActiveDropdown: false,
             settingGeneral: 'settingAdmin',
+            contentActive: {},
         }
     },
     props: [
-        'profile',
+        'profile_participant',
         'url_logout',
         'url_home',
         'text_company_name',
@@ -57,8 +61,8 @@ export default {
         'text_close'
     ],
     created(){
-        //Set general settings from profile
-        switch(this.profile)
+        //Set general settings from profile_participant
+        switch(this.profile_participant)
         {
             case '1': //Admin
                 this.settingGeneral = 'settingAdmin';
@@ -72,6 +76,8 @@ export default {
             default:
                 break;
         }
+        //Get contentActive setting menu
+        this.contentActive = this.$root.contentActive;
     },
     methods: {
         clickDropdown(){

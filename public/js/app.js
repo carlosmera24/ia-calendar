@@ -2307,8 +2307,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_breadcrumbs_init', 'text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'text_filter_categories', 'text_give_admin_categories_events', 'text_back_to_participant', 'text_back_to_participant_confirm', 'text_back_to_participant_warning', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_field_required', 'text_no_options', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_updated_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_not', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'text_search_participant', 'text_empty_categories_required', 'text_associate_leader', 'text_consult_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_create_categorie', 'text_modify_categorie', 'text_delete_categorie', 'text_general_setting', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'url_participant_update', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories'],
+  props: ['text_breadcrumbs_init', 'text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'text_filter_categories', 'text_give_admin_categories_events', 'text_back_to_participant', 'text_back_to_participant_confirm', 'text_back_to_participant_warning', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_field_required', 'text_no_options', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_updated_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_not', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'profile_participant', 'text_search_participant', 'text_empty_categories_required', 'text_associate_leader', 'text_consult_events', 'text_create_events', 'text_modify_events', 'text_share_events', 'text_delete_events', 'text_create_categorie', 'text_modify_categorie', 'text_delete_categorie', 'text_general_setting', 'profiles_participants_names_json', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'url_participant_update', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories'],
   data: function data() {
     return {
       contentActive: {}
@@ -2373,17 +2375,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       isActiveDropdown: false,
-      settingGeneral: 'settingAdmin'
+      settingGeneral: 'settingAdmin',
+      contentActive: {}
     };
   },
-  props: ['profile', 'url_logout', 'url_home', 'text_company_name', 'text_menu_dark', 'text_admin_leaders', 'text_general_setting', 'text_frequent_questions', 'text_logout', 'text_close'],
+  props: ['profile_participant', 'url_logout', 'url_home', 'text_company_name', 'text_menu_dark', 'text_admin_leaders', 'text_general_setting', 'text_frequent_questions', 'text_logout', 'text_close'],
   created: function created() {
-    //Set general settings from profile
-    switch (this.profile) {
+    //Set general settings from profile_participant
+    switch (this.profile_participant) {
       case '1':
         //Admin
         this.settingGeneral = 'settingAdmin';
@@ -2401,7 +2407,10 @@ __webpack_require__.r(__webpack_exports__);
 
       default:
         break;
-    }
+    } //Get contentActive setting menu
+
+
+    this.contentActive = this.$root.contentActive;
   },
   methods: {
     clickDropdown: function clickDropdown() {
@@ -3286,11 +3295,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_breadcrumbs_init', 'text_general_setting'],
+  props: ['profile_participant', 'text_breadcrumbs_init', 'text_general_setting', 'profiles_participants_names_json'],
   data: function data() {
     return {
-      isLoading: false
+      isLoading: false,
+      profilesParticipants: []
     };
+  },
+  created: function created() {
+    this.profilesParticipants = JSON.parse(this.profiles_participants_names_json);
+    console.log(this.profilesParticipants);
   },
   methods: {
     clickCancel: function clickCancel() {
@@ -65486,8 +65500,11 @@ var render = function() {
             ? _c("general-settings", {
                 key: 3,
                 attrs: {
+                  profile_participant: _vm.profile_participant,
                   text_breadcrumbs_init: _vm.text_breadcrumbs_init,
-                  text_general_setting: _vm.text_general_setting
+                  text_general_setting: _vm.text_general_setting,
+                  profiles_participants_names_json:
+                    _vm.profiles_participants_names_json
                 },
                 on: { activeMainSection: _vm.setActiveSection }
               })
@@ -65565,11 +65582,13 @@ var render = function() {
               )
             ]),
             _vm._v(" "),
-            _vm.profile === "1"
+            _vm.profile_participant === "1" || _vm.profile_participant === "4"
               ? _c(
                   "a",
                   {
                     staticClass: "dropdown-item",
+                    class: { "is-active": _vm.contentActive.adminLeaders },
+                    attrs: { href: "#" },
                     on: {
                       click: function($event) {
                         return _vm.clickItem("adminLeaders")
@@ -65590,6 +65609,7 @@ var render = function() {
               "a",
               {
                 staticClass: "dropdown-item",
+                class: { "is-active": _vm.contentActive.settingAdmin },
                 attrs: { href: "#" },
                 on: {
                   click: function($event) {
@@ -66640,7 +66660,11 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("h2", [
-        _vm._v(_vm._s(_vm.text_general_setting) + " falta agregar el perfil")
+        _vm._v(
+          _vm._s(_vm.text_general_setting) +
+            " " +
+            _vm._s(_vm.profilesParticipants[_vm.profile_participant])
+        )
       ]),
       _vm._v(" "),
       _c("p", [_vm._v("Agregar menú activo al menú de configuración")])
