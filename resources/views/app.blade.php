@@ -19,62 +19,95 @@
             $numMailes = 3;
             $numMobiles = 3;
 
-            $fields_participant = [
-                'first_name'    =>  [
-                                        'label' =>  __('validation.attributes.first_name'),
-                                        'error' => false,
-                                        'msg'   =>  __('validation.required', ['attribute' => ''])
-                                    ],
-                'last_name'     =>  [
-                                        'label' =>  __('validation.attributes.last_name'),
-                                        'error' => false,
-                                        'msg'   =>  __('validation.required', ['attribute' => ''])
-                                    ],
-                'email'         =>  [
-                                        'label'             =>  __('validation.attributes.email'),
-                                        'error'             => false,
-                                        'msg'               =>  __('validation.required', ['attribute' => '']),
-                                        'msg_validate'      =>  __('validation.email', ['attribute' => '']),
-                                        'msg_exist'         =>  __('validation.custom.email.unique', ['attribute' => __('validation.attributes.email')])
-                                    ],
-                'mobile'        =>  [
-                                        'label' =>  __('validation.attributes.mobile'),
-                                        'error' => false,
-                                        'msg'   =>  __('validation.required', ['attribute' => '']),
-                                        'msg_validate'   =>  __('validation.mobile', ['attribute' => '']),
-                                        'msg_exist'   =>  __('validation.custom.mobile.unique', ['attribute' => __('validation.attributes.mobile')])
-                                    ],
-                'position'      =>  [
-                                        'label' =>  __('validation.attributes.position_company'),
-                                        'error' => false,
-                                        'msg'   =>  __('validation.required', ['attribute' => ''])
-                                    ],
-                'date_join'     =>  [
-                                        'label' =>  __('validation.attributes.date_join_company'),
-                                        'error' => false,
-                                        'msg'   =>  __('validation.required', ['attribute' => ''])
-                                    ],
-                'birth_date'    =>  [
-                                        'label' =>  __('validation.attributes.birth_date'),
-                                        'error' => false,
-                                        'msg'   =>  __('validation.required', ['attribute' => ''])
-                                    ],
-                'profile_image' =>  [
-                                        'label' =>  __('validation.attributes.profile_image'),
-                                        'error' => false,
-                                        'msg'   =>  __('validation.required', ['attribute' => ''])
-                                    ],
-                'description'   =>  [
-                                        'label'         =>  __('validation.attributes.description'),
-                                        'placeholder'   =>  __('app.participant_new.description_placeholder'),
-                                        'error'         => false,
-                                        'msg'           =>  __('validation.required', ['attribute' => ''])
-                                    ],
-            ];
-            $fields_programmer = [
+            $fields_participant =   [
+                                        'first_name'    =>  [
+                                                                'label' =>  __('validation.attributes.first_name'),
+                                                                'error' => false,
+                                                                'msg'   =>  __('validation.required', ['attribute' => ''])
+                                                            ],
+                                        'last_name'     =>  [
+                                                                'label' =>  __('validation.attributes.last_name'),
+                                                                'error' => false,
+                                                                'msg'   =>  __('validation.required', ['attribute' => ''])
+                                                            ],
+                                        'email'         =>  [
+                                                                'label'             =>  __('validation.attributes.email'),
+                                                                'error'             => false,
+                                                                'msg'               =>  __('validation.required', ['attribute' => '']),
+                                                                'msg_validate'      =>  __('validation.email', ['attribute' => '']),
+                                                                'msg_exist'         =>  __('validation.custom.email.unique', ['attribute' => __('validation.attributes.email')])
+                                                            ],
+                                        'mobile'        =>  [
+                                                                'label' =>  __('validation.attributes.mobile'),
+                                                                'error' => false,
+                                                                'msg'   =>  __('validation.required', ['attribute' => '']),
+                                                                'msg_validate'   =>  __('validation.mobile', ['attribute' => '']),
+                                                                'msg_exist'   =>  __('validation.custom.mobile.unique', ['attribute' => __('validation.attributes.mobile')])
+                                                            ],
+                                        'position'      =>  [
+                                                                'label' =>  __('validation.attributes.position_company'),
+                                                                'error' => false,
+                                                                'msg'   =>  __('validation.required', ['attribute' => ''])
+                                                            ],
+                                        'date_join'     =>  [
+                                                                'label' =>  __('validation.attributes.date_join_company'),
+                                                                'error' => false,
+                                                                'msg'   =>  __('validation.required', ['attribute' => ''])
+                                                            ],
+                                        'birth_date'    =>  [
+                                                                'label' =>  __('validation.attributes.birth_date'),
+                                                                'error' => false,
+                                                                'msg'   =>  __('validation.required', ['attribute' => ''])
+                                                            ],
+                                        'profile_image' =>  [
+                                                                'label' =>  __('validation.attributes.profile_image'),
+                                                                'error' => false,
+                                                                'msg'   =>  __('validation.required', ['attribute' => ''])
+                                                            ],
+                                        'description'   =>  [
+                                                                'label'         =>  __('validation.attributes.description'),
+                                                                'placeholder'   =>  __('app.participant_new.description_placeholder'),
+                                                                'error'         => false,
+                                                                'msg'           =>  __('validation.required', ['attribute' => ''])
+                                                            ],
+                                    ];
+            $fields_programmer =    [
+                                        'entity_name'               =>  [
+                                                                            'label'     =>  __('validation.attributes.entity_name'),
+                                                                            'error'     => false,
+                                                                            'edited'    => false,
+                                                                            'msg'       =>  __('validation.required', ['attribute' => ''])
+                                                                        ],
+                                        'identifications_types_id'  =>  [
+                                                                            'label'     =>  __('app.general_settings.filter_identification'),
+                                                                            'error'     => false,
+                                                                            'edited'    => false,
+                                                                            'msg'       =>  __('validation.required', ['attribute' => ''])
+                                                                        ],
+                                                                        'identification'            =>  [
+                                                                            'label'     =>  __('validation.attributes.identification'),
+                                                                            'error'     => false,
+                                                                            'edited'    => false,
+                                                                            'msg'       =>  __('validation.required', ['attribute' => ''])
+                                                                        ],
+                                        'logo'                      =>  [
+                                                                            'label'     =>  __('validation.attributes.logo'),
+                                                                            'error'     => false,
+                                                                            'edited'    => false,
+                                                                            'msg'       =>  __('validation.required', ['attribute' => ''])
+                                                                        ],
+                                    ];
 
-            ];
-
+            $texts_main =  [
+                                'create_participant'    =>  __('app.create_participant'),
+                                'create_category'       =>  __('app.create_category'),
+                                'see_calendar'          =>  __('app.see_calendar'),
+                                'annual_fiscal'         =>  __('app.annual_fiscal'),
+                                'create_your_event' => __('app.create_your_event'),
+                                'programmer'        => __('app.programmer'),
+                                'category'          => __('app.category'),
+                                'event'             => __('app.event'),
+                            ];
             $text_general_setting = __('app.menu.general_setting');
             //Text/name for prifles ID => Name
             $names_profiles_participants = [
@@ -136,14 +169,7 @@
         {{-- /Header --}}
         {{-- Content Main --}}
         <content-main
-            v-bind:text_create_participant='"{{ __('app.create_participant') }}"'
-            v-bind:text_create_category='"{{ __('app.create_category') }}"'
-            v-bind:text_see_calendar='"{{ __('app.see_calendar') }}"'
-            v-bind:text_anual_fiscal='"{{ __('app.annual_fiscal') }}"'
-            v-bind:text_create_your_event='"{{ __('app.create_your_event') }}"'
-            v-bind:text_programmer='"{{ __('app.programmer') }}"'
-            v-bind:text_category='"{{ __('app.category') }}"'
-            v-bind:text_event='"{{ __('app.event') }}"'
+            v-bind:texts_main_json="'{{ json_encode($texts_main) }}'"
             v-bind:text_breadcrumbs_init='"{{ __('app.breadcrumbs_init') }}"'
             v-bind:numbers_emailes="'{{ $numMailes }}'"
             v-bind:numbers_mobiles="'{{ $numMobiles }}'"
@@ -169,6 +195,7 @@
             v-bind:texts_manage_leader_json="'{{ json_encode($texts_manage_leader) }}'"
             v-bind:texts_general_settings_json="'{{ json_encode($texts_general_settings) }}'"
             v-bind:profiles_participants_names_json="'{{ json_encode($names_profiles_participants) }}'"
+            v-bind:fields_programmer_json="'{{ json_encode($fields_programmer) }}'"
             v-bind:url_person_ui_avatar='"{{ route('participant_generate_avatar') }}"'
             v-bind:url_person_store='"{{ route('person_store') }}"'
             v-bind:url_participant_store='"{{ route('participant_store') }}"'

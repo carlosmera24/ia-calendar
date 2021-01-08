@@ -197,7 +197,10 @@ return [
         'yes'                   => 'Sí',
         'not'                   => 'No',
         'cancel'                => 'cancelar',
-        'participant'           => 'partícipe'
+        'participant'           => 'partícipe',
+        'entity_name'           => 'nombre de la entidad',
+        'identification'        => 'nit de la entidad',
+        'logo'                  =>  'logo',
     ],
 
 ];

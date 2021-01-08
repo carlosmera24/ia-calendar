@@ -4,14 +4,8 @@
         <section class="action-section px-5 py-5">
             <main-menu-section
                 v-on:activeMenu="setActiveMenu"
-                v-bind:text_create_participant='text_create_participant'
-                v-bind:text_create_category='text_create_category'
-                v-bind:text_see_calendar='text_see_calendar'
-                v-bind:text_anual_fiscal='text_anual_fiscal'
-                v-bind:text_create_your_event='text_create_your_event'
-                v-bind:text_programmer='text_programmer'
-                v-bind:text_category='text_category'
-                v-bind:text_event='text_event' />
+                v-bind:texts_main_json='texts_main_json'
+            />
         </section>
         <!-- /Menu Section -->
         <!-- Banner Section -->
@@ -61,14 +55,7 @@
 <script>
 export default {
     props:[
-        'text_create_participant',
-        'text_create_category',
-        'text_see_calendar',
-        'text_anual_fiscal',
-        'text_create_your_event',
-        'text_programmer',
-        'text_category',
-        'text_event',
+        'texts_main_json',
         'showTitle',
         'text_success',
         'text_wall_title',

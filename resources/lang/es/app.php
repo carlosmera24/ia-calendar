@@ -59,6 +59,7 @@ return [
         'administrator_data'    =>  'Datos del administrador',
         'membership_data'       =>  'Datos de la membresía',
         'leaders_login'         =>  'Inicio de sesión para Líderes',
+        'filter_identification' =>  'Filtro tipo de documento',
     ],
 
     /**

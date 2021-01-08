@@ -2287,14 +2287,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_breadcrumbs_init', 'text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_field_required', 'text_no_options', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_updated_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_not', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'profile_participant', 'texts_manage_leader_json', 'texts_general_settings_json', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'url_participant_update', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories'],
+  props: ['text_breadcrumbs_init', 'texts_main_json', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_field_required', 'text_no_options', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_updated_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_not', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'profile_participant', 'texts_manage_leader_json', 'texts_general_settings_json', 'fields_programmer_json', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'url_participant_update', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories'],
   data: function data() {
     return {
       contentActive: {}
@@ -2559,14 +2553,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event', 'showTitle', 'text_success', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_created_participant', 'text_participant_title', 'text_participant_fields_json', 'text_accept', 'text_cancel', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'programmer_json', 'numbers_emailes', 'numbers_mobiles'],
+  props: ['texts_main_json', 'showTitle', 'text_success', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_created_participant', 'text_participant_title', 'text_participant_fields_json', 'text_accept', 'text_cancel', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'programmer_json', 'numbers_emailes', 'numbers_mobiles'],
   data: function data() {
     return {
       activeMenu: {
@@ -2634,14 +2622,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_create_participant', 'text_create_category', 'text_see_calendar', 'text_anual_fiscal', 'text_create_your_event', 'text_programmer', 'text_category', 'text_event'],
+  props: ['texts_main_json'],
   data: function data() {
     return {
-      activeMenu: {}
+      activeMenu: {},
+      textsMain: []
     };
   },
   created: function created() {
     this.activeMenu = this.$parent.activeMenu;
+    this.textsMain = JSON.parse(this.texts_main_json);
   },
   methods: {
     clickMenu: function clickMenu(name) {
@@ -3282,16 +3272,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['profile_participant', 'text_breadcrumbs_init', 'texts_general_settings_json'],
+  props: ['profile_participant', 'text_breadcrumbs_init', 'texts_general_settings_json', 'fields_programmer_json'],
   data: function data() {
     return {
       isLoading: false,
-      textsGeneralSettings: []
+      textsGeneralSettings: [],
+      fieldsProgrammer: []
     };
   },
   created: function created() {
     this.textsGeneralSettings = JSON.parse(this.texts_general_settings_json);
+    this.fieldsProgrammer = JSON.parse(this.fields_programmer_json);
   },
   methods: {
     clickCancel: function clickCancel() {
@@ -65405,14 +65398,7 @@ var render = function() {
             ? _c("main-section", {
                 key: 1,
                 attrs: {
-                  text_create_participant: _vm.text_create_participant,
-                  text_create_category: _vm.text_create_category,
-                  text_see_calendar: _vm.text_see_calendar,
-                  text_anual_fiscal: _vm.text_anual_fiscal,
-                  text_create_your_event: _vm.text_create_your_event,
-                  text_programmer: _vm.text_programmer,
-                  text_category: _vm.text_category,
-                  text_event: _vm.text_event,
+                  texts_main_json: _vm.texts_main_json,
                   numbers_emailes: _vm.numbers_emailes,
                   numbers_mobiles: _vm.numbers_mobiles,
                   programmer_json: _vm.programmer_json,
@@ -65473,6 +65459,7 @@ var render = function() {
                 attrs: {
                   profile_participant: _vm.profile_participant,
                   texts_general_settings_json: _vm.texts_general_settings_json,
+                  fields_programmer_json: _vm.fields_programmer_json,
                   text_breadcrumbs_init: _vm.text_breadcrumbs_init
                 },
                 on: { activeMainSection: _vm.setActiveSection }
@@ -65795,16 +65782,7 @@ var render = function() {
       { staticClass: "action-section px-5 py-5" },
       [
         _c("main-menu-section", {
-          attrs: {
-            text_create_participant: _vm.text_create_participant,
-            text_create_category: _vm.text_create_category,
-            text_see_calendar: _vm.text_see_calendar,
-            text_anual_fiscal: _vm.text_anual_fiscal,
-            text_create_your_event: _vm.text_create_your_event,
-            text_programmer: _vm.text_programmer,
-            text_category: _vm.text_category,
-            text_event: _vm.text_event
-          },
+          attrs: { texts_main_json: _vm.texts_main_json },
           on: { activeMenu: _vm.setActiveMenu }
         })
       ],
@@ -65928,7 +65906,9 @@ var render = function() {
             [
               _c("i", { staticClass: "fas fa-plus is-size-7" }),
               _vm._v(
-                " " + _vm._s(_vm.text_create_participant) + "\n                "
+                " " +
+                  _vm._s(_vm.textsMain.create_participant) +
+                  "\n                "
               )
             ]
           )
@@ -65936,12 +65916,12 @@ var render = function() {
         _vm._v(" "),
         _c("li", [
           _c("i", { staticClass: "fas fa-plus is-size-7" }),
-          _vm._v(" " + _vm._s(_vm.text_create_category))
+          _vm._v(" " + _vm._s(_vm.textsMain.create_category))
         ]),
         _vm._v(" "),
-        _c("li", [_vm._v(_vm._s(_vm.text_see_calendar))]),
+        _c("li", [_vm._v(_vm._s(_vm.textsMain.see_calendar))]),
         _vm._v(" "),
-        _c("li", [_vm._v(_vm._s(_vm.text_anual_fiscal))])
+        _c("li", [_vm._v(_vm._s(_vm.textsMain.see_calendar))])
       ])
     ]),
     _vm._v(" "),
@@ -65954,7 +65934,7 @@ var render = function() {
           },
           [
             _c("button", { staticClass: "btn-primary" }, [
-              _vm._v(_vm._s(_vm.text_create_your_event))
+              _vm._v(_vm._s(_vm.textsMain.create_your_event))
             ])
           ]
         ),
@@ -65967,20 +65947,20 @@ var render = function() {
               _c("button", { staticClass: "column is-3 btn-secundary mr-6" }, [
                 _c("div", { staticClass: "btn-rotated" }, [
                   _c("span", {
-                    domProps: { innerHTML: _vm._s(_vm.text_programmer) }
+                    domProps: { innerHTML: _vm._s(_vm.textsMain.programmer) }
                   })
                 ])
               ]),
               _vm._v(" "),
               _c("button", { staticClass: "column is-3 btn-secundary mr-6" }, [
                 _c("div", { staticClass: "btn-rotated" }, [
-                  _vm._v(_vm._s(_vm.text_category))
+                  _vm._v(_vm._s(_vm.textsMain.category))
                 ])
               ]),
               _vm._v(" "),
               _c("button", { staticClass: "column is-3 btn-secundary mr-6" }, [
                 _c("div", { staticClass: "btn-rotated" }, [
-                  _vm._v(_vm._s(_vm.text_event))
+                  _vm._v(_vm._s(_vm.textsMain.event))
                 ])
               ])
             ]
@@ -66648,7 +66628,9 @@ var render = function() {
             _c("h3", [
               _c("span", { staticClass: "numerator" }, [_vm._v("1")]),
               _vm._v(_vm._s(_vm.textsGeneralSettings.programmer_data))
-            ])
+            ]),
+            _vm._v(" "),
+            _c("p", [_vm._v(_vm._s(_vm.fieldsProgrammer))])
           ])
         ]
       )

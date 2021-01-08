@@ -17,6 +17,7 @@
         <form action="" class="form_general_settings">
             <section class="programer_data">
                 <h3><span class="numerator">1</span>{{ textsGeneralSettings.programmer_data }}</h3>
+                <p>{{ fieldsProgrammer }}</p>
             </section>
         </form>
     </div>
@@ -27,15 +28,18 @@
             'profile_participant',
             'text_breadcrumbs_init',
             'texts_general_settings_json',
+            'fields_programmer_json',
         ],
         data() {
             return {
                 isLoading: false,
-                textsGeneralSettings: []
+                textsGeneralSettings: [],
+                fieldsProgrammer: []
             }
         },
         created(){
             this.textsGeneralSettings = JSON.parse(this.texts_general_settings_json);
+            this.fieldsProgrammer = JSON.parse(this.fields_programmer_json);
         },
         methods: {
             clickCancel(){

@@ -5,14 +5,7 @@
                     leave-active-class="animate__animated animate__backOutRight">
             <main-section v-if="contentActive.main"
                 v-bind:key="1"
-                v-bind:text_create_participant='text_create_participant'
-                v-bind:text_create_category='text_create_category'
-                v-bind:text_see_calendar='text_see_calendar'
-                v-bind:text_anual_fiscal='text_anual_fiscal'
-                v-bind:text_create_your_event='text_create_your_event'
-                v-bind:text_programmer='text_programmer'
-                v-bind:text_category='text_category'
-                v-bind:text_event='text_event'
+                v-bind:texts_main_json='texts_main_json'
                 v-bind:numbers_emailes="numbers_emailes"
                 v-bind:numbers_mobiles="numbers_mobiles"
                 v-bind:programmer_json="programmer_json"
@@ -63,6 +56,7 @@
                 v-on:activeMainSection="setActiveSection"
                 v-bind:profile_participant='profile_participant'
                 v-bind:texts_general_settings_json='texts_general_settings_json'
+                v-bind:fields_programmer_json='fields_programmer_json'
                 v-bind:text_breadcrumbs_init='text_breadcrumbs_init'
             />
         </transition-group>
@@ -72,14 +66,7 @@
 export default {
     props: [
         'text_breadcrumbs_init',
-        'text_create_participant',
-        'text_create_category',
-        'text_see_calendar',
-        'text_anual_fiscal',
-        'text_create_your_event',
-        'text_programmer',
-        'text_category',
-        'text_event',
+        'texts_main_json',
         'numbers_emailes',
         'numbers_mobiles',
         'programmer_json',
@@ -103,6 +90,7 @@ export default {
         'profile_participant',
         'texts_manage_leader_json',
         'texts_general_settings_json',
+        'fields_programmer_json',
         'url_person_ui_avatar',
         'url_person_store',
         'url_participant_store',
