@@ -75,26 +75,24 @@
                                         'entity_name'               =>  [
                                                                             'label'     =>  __('validation.attributes.entity_name'),
                                                                             'error'     => false,
-                                                                            'edited'    => false,
                                                                             'msg'       =>  __('validation.required', ['attribute' => ''])
                                                                         ],
                                         'identifications_types_id'  =>  [
-                                                                            'label'     =>  __('app.general_settings.filter_identification'),
-                                                                            'error'     => false,
-                                                                            'edited'    => false,
-                                                                            'msg'       =>  __('validation.required', ['attribute' => ''])
+                                                                            'label'         =>  __('validation.attributes.identification_type'),
+                                                                            'placeholder'   =>  __('app.general_settings.filter_identification'),
+                                                                            'error'         => false,
+                                                                            'msg'           =>  __('validation.required', ['attribute' => ''])
                                                                         ],
-                                                                        'identification'            =>  [
+                                        'identification'            =>  [
                                                                             'label'     =>  __('validation.attributes.identification'),
                                                                             'error'     => false,
-                                                                            'edited'    => false,
                                                                             'msg'       =>  __('validation.required', ['attribute' => ''])
                                                                         ],
                                         'logo'                      =>  [
-                                                                            'label'     =>  __('validation.attributes.logo'),
-                                                                            'error'     => false,
-                                                                            'edited'    => false,
-                                                                            'msg'       =>  __('validation.required', ['attribute' => ''])
+                                                                            'label'         =>  __('validation.attributes.logo'),
+                                                                            'placeholder'   =>  __('app.general_settings.logo_placeholder'),
+                                                                            'error'         => false,
+                                                                            'msg'           =>  __('validation.required', ['attribute' => ''])
                                                                         ],
                                     ];
 
@@ -210,6 +208,7 @@
             v-bind:url_store_permissions_participant='"{{ route('permissions_participants_store') }}"'
             v-bind:url_participant_categories='"{{ route('list_participant_categories') }}"'
             v-bind:url_store_participants_categories='"{{ route('participants_categories_store') }}"'
+            v-bind:url_identifications_types='"{{ route('list_identifications_types') }}"'
         />
         {{-- /Content Main --}}
     </div>

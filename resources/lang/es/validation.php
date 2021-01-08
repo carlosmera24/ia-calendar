@@ -199,6 +199,7 @@ return [
         'cancel'                => 'cancelar',
         'participant'           => 'partícipe',
         'entity_name'           => 'nombre de la entidad',
+        'identification_type'   => 'tipo de identificación',
         'identification'        => 'nit de la entidad',
         'logo'                  =>  'logo',
     ],

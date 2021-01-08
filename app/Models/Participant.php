@@ -33,6 +33,7 @@ class Participant extends Model
     {
         return $this->hasMany(PermissionParticipant::class,'participants_id');
     }
+
     public function partiipantsCategories()
     {
         return $this->hasMany(ParticipantCategorie::class,'participants_id');

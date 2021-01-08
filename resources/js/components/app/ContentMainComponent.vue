@@ -55,9 +55,12 @@
                 v-bind:key="3"
                 v-on:activeMainSection="setActiveSection"
                 v-bind:profile_participant='profile_participant'
+                v-bind:programmer_json="programmer_json"
                 v-bind:texts_general_settings_json='texts_general_settings_json'
                 v-bind:fields_programmer_json='fields_programmer_json'
                 v-bind:text_breadcrumbs_init='text_breadcrumbs_init'
+                v-bind:text_no_options='text_no_options'
+                v-bind:url_identifications_types='url_identifications_types'
             />
         </transition-group>
     </div>
@@ -105,6 +108,7 @@ export default {
         'url_participant_categories',
         'url_store_permissions_participant',
         'url_store_participants_categories',
+        'url_identifications_types',
     ],
     data() {
         return {

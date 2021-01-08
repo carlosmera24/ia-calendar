@@ -204,8 +204,8 @@
 import { procesarErroresRequest, capitalize } from '../../../functions.js';
 var validate = require('validate.js');
 //Import vue-select
-import vSelect from 'vue-select'
-Vue.component('v-select', vSelect)
+import vSelect from 'vue-select';
+Vue.component('v-select', vSelect);
 //Import PNotify
 import { success } from '@pnotify/core';
 import '@pnotify/core/dist/PNotify.css';

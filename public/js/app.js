@@ -2287,8 +2287,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_breadcrumbs_init', 'texts_main_json', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_field_required', 'text_no_options', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_updated_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_not', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'profile_participant', 'texts_manage_leader_json', 'texts_general_settings_json', 'fields_programmer_json', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'url_participant_update', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories'],
+  props: ['text_breadcrumbs_init', 'texts_main_json', 'numbers_emailes', 'numbers_mobiles', 'programmer_json', 'text_success', 'text_field_required', 'text_no_options', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_participant_title', 'text_created_participant', 'text_updated_participant', 'text_accept', 'text_apply', 'text_cancel', 'text_not', 'text_participant_fields_json', 'text_admin_leaders', 'user_id', 'profile_participant', 'texts_manage_leader_json', 'texts_general_settings_json', 'fields_programmer_json', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'url_participant_update', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'url_participants_programmer', 'url_categories_programmer', 'url_permissions_participant', 'url_participant_categories', 'url_store_permissions_participant', 'url_store_participants_categories', 'url_identifications_types'],
   data: function data() {
     return {
       contentActive: {}
@@ -3249,6 +3252,15 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _functions_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../functions.js */ "./resources/js/functions.js");
+/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-select */ "./node_modules/vue-select/dist/vue-select.js");
+/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_select__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _pnotify_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @pnotify/core */ "./node_modules/@pnotify/core/dist/PNotify.js");
+/* harmony import */ var _pnotify_core__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_pnotify_core__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _pnotify_core_dist_PNotify_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @pnotify/core/dist/PNotify.css */ "./node_modules/@pnotify/core/dist/PNotify.css");
+/* harmony import */ var _pnotify_core_dist_PNotify_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_pnotify_core_dist_PNotify_css__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _pnotify_core_dist_BrightTheme_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @pnotify/core/dist/BrightTheme.css */ "./node_modules/@pnotify/core/dist/BrightTheme.css");
+/* harmony import */ var _pnotify_core_dist_BrightTheme_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_pnotify_core_dist_BrightTheme_css__WEBPACK_IMPORTED_MODULE_4__);
 //
 //
 //
@@ -3273,22 +3285,125 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
+
+
+
+Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //Import PNotify
+
+
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['profile_participant', 'text_breadcrumbs_init', 'texts_general_settings_json', 'fields_programmer_json'],
+  props: ['profile_participant', 'text_breadcrumbs_init', 'programmer_json', 'texts_general_settings_json', 'fields_programmer_json', 'text_no_options', 'url_identifications_types'],
   data: function data() {
     return {
       isLoading: false,
+      hasErrors: false,
+      errors: {},
+      programmer: new Object(),
       textsGeneralSettings: [],
-      fieldsProgrammer: []
+      fieldsProgrammer: [],
+      identificationTypeSelected: null,
+      identificationsTypes: []
     };
   },
   created: function created() {
+    var _this = this;
+
+    //Create/load programmer data
+    var initProgrammer = JSON.parse(this.programmer_json);
+    Object.keys(initProgrammer).forEach(function (key) {
+      var val = {
+        'value': initProgrammer[key],
+        'edited': false,
+        'editing': false
+      };
+      _this.programmer[key] = val;
+    });
     this.textsGeneralSettings = JSON.parse(this.texts_general_settings_json);
     this.fieldsProgrammer = JSON.parse(this.fields_programmer_json);
+  },
+  mounted: function mounted() {
+    this.getIdentificationsTypes();
   },
   methods: {
     clickCancel: function clickCancel() {
       this.$emit('activeMainSection', 'main');
+    },
+    showErrors: function showErrors(resError) {
+      this.errors = Object(_functions_js__WEBPACK_IMPORTED_MODULE_0__["procesarErroresRequest"])(resError);
+      this.hasErrors = this.errors.errors.length > 0;
+    },
+    getIdentificationsTypes: function getIdentificationsTypes() {
+      var _this2 = this;
+
+      this.isLoading = true;
+      axios.post(this.url_identifications_types).then(function (response) {
+        _this2.showErrors({});
+
+        if (response.data.status === 200) {
+          response.data.identifications_types.forEach(function (element) {
+            var name = element.abrevation + (element.translation ? '-' + element.translation.name : '');
+            var tmp = {
+              identification_type: name,
+              meta: element
+            };
+
+            _this2.identificationsTypes.push(tmp);
+          });
+        }
+      }, function (error) {
+        _this2.showErrors(error);
+      }).then(function () {
+        _this2.isLoading = false;
+      });
     }
   }
 });
@@ -65458,9 +65573,12 @@ var render = function() {
                 key: 3,
                 attrs: {
                   profile_participant: _vm.profile_participant,
+                  programmer_json: _vm.programmer_json,
                   texts_general_settings_json: _vm.texts_general_settings_json,
                   fields_programmer_json: _vm.fields_programmer_json,
-                  text_breadcrumbs_init: _vm.text_breadcrumbs_init
+                  text_breadcrumbs_init: _vm.text_breadcrumbs_init,
+                  text_no_options: _vm.text_no_options,
+                  url_identifications_types: _vm.url_identifications_types
                 },
                 on: { activeMainSection: _vm.setActiveSection }
               })
@@ -66621,6 +66739,40 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c(
+        "section",
+        { staticClass: "alert-section mt-4" },
+        [
+          _c(
+            "b-notification",
+            {
+              attrs: { type: "is-danger", hasIcon: "", role: "alert" },
+              model: {
+                value: _vm.hasErrors,
+                callback: function($$v) {
+                  _vm.hasErrors = $$v
+                },
+                expression: "hasErrors"
+              }
+            },
+            [
+              _c("h4", { staticClass: "has-text-white" }, [
+                _vm._v(_vm._s(_vm.errors.text))
+              ]),
+              _vm._v(" "),
+              _c(
+                "ul",
+                _vm._l(_vm.errors.errors, function(error, index) {
+                  return _c("li", { key: index }, [_vm._v(_vm._s(error))])
+                }),
+                0
+              )
+            ]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
         "form",
         { staticClass: "form_general_settings", attrs: { action: "" } },
         [
@@ -66630,7 +66782,103 @@ var render = function() {
               _vm._v(_vm._s(_vm.textsGeneralSettings.programmer_data))
             ]),
             _vm._v(" "),
-            _c("p", [_vm._v(_vm._s(_vm.fieldsProgrammer))])
+            _c("div", { staticClass: "columns is-multiline" }, [
+              _c("div", { staticClass: "column is-12" }, [
+                _c("div", { staticClass: "columns" }, [
+                  _c("div", { staticClass: "column is-2" }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "column is-10" }, [
+                    _c("span", [
+                      _vm._v(
+                        _vm._s(
+                          _vm.programmer.entity_name.value
+                            ? _vm.programmer.entity_name.value
+                            : _vm.fieldsProgrammer.entity_name.label
+                        )
+                      )
+                    ])
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "column is-12" }, [
+                _c("div", { staticClass: "columns" }, [
+                  _c(
+                    "div",
+                    { staticClass: "column is-2" },
+                    [
+                      _c(
+                        "v-select",
+                        {
+                          attrs: {
+                            options: _vm.identificationsTypes,
+                            reduce: function(identification_type) {
+                              return identification_type.meta
+                            },
+                            placeholder:
+                              _vm.fieldsProgrammer.identifications_types_id
+                                .placeholder,
+                            label: "identification_type"
+                          },
+                          model: {
+                            value: _vm.identificationTypeSelected,
+                            callback: function($$v) {
+                              _vm.identificationTypeSelected = $$v
+                            },
+                            expression: "identificationTypeSelected"
+                          }
+                        },
+                        [
+                          _c(
+                            "div",
+                            {
+                              attrs: { slot: "no-options" },
+                              slot: "no-options"
+                            },
+                            [_vm._v(_vm._s(_vm.text_no_options))]
+                          )
+                        ]
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "column is-10" }, [
+                    _c("span", [
+                      _vm._v(
+                        _vm._s(
+                          _vm.programmer.identification.value
+                            ? _vm.programmer.identification.value
+                            : _vm.fieldsProgrammer.identification.label
+                        )
+                      )
+                    ])
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "column is-12" }, [
+                _c("div", { staticClass: "columns" }, [
+                  _c("div", { staticClass: "column is-2" }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "column is-10" }, [
+                    _c("span", [
+                      _vm._v(
+                        _vm._s(
+                          _vm.programmer.logo.value
+                            ? _vm.programmer.logo.value
+                            : _vm.fieldsProgrammer.logo.placeholder
+                        )
+                      )
+                    ])
+                  ])
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("p", [_vm._v(_vm._s(_vm.fieldsProgrammer))]),
+            _vm._v(" "),
+            _c("p", [_vm._v(_vm._s(_vm.programmer))])
           ])
         ]
       )
