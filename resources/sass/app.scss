@@ -392,7 +392,8 @@ body, h2, button, input, select, textarea {
                             color: #6797a3;
                         }
                         .textarea::placeholder{
-                            color: #FFF;
+                            color: #666;
+                            font-style: oblique;
                         }
                         .field_avatar{
                             margin: 15px 40px 10px;

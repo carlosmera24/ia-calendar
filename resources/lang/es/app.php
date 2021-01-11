@@ -45,7 +45,7 @@ return [
         'create_categorie'              =>  'Categorías Crear',
         'modify_categorie'              =>  'Categorías Modificar',
         'delete_categorie'              =>  'Categorías Eliminar',
-        'filter_categories'             =>  'Filtrar categorías, para asociar como líder',
+        'filter_categories'             =>  'Filtrar categoría(s) para asociar',
         'give_admin_categories_events'  =>  'Convertir Líder como Administrador suplente, dar credenciales',
         'back_to_participant'           =>  'Volver a ser únicamente participe',
     ],

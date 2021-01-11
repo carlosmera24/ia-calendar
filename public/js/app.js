@@ -2801,6 +2801,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
@@ -2863,6 +2865,35 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
         default:
           break;
       }
+    },
+    capitalizeText: function capitalizeText(event, inputModel) {
+      if (event.keyCode >= 65 && event.keyCode <= 90) //A-Z
+        {
+          var phrase = event.target.value.trimStart();
+          var phrasesArray = phrase.split(" ");
+          var txtEnd = "";
+
+          if (phrasesArray.length > 1) {
+            phrasesArray.forEach(function (item) {
+              txtEnd += Object(_functions_js__WEBPACK_IMPORTED_MODULE_0__["capitalize"])(item) + " ";
+            });
+          } else {
+            txtEnd = Object(_functions_js__WEBPACK_IMPORTED_MODULE_0__["capitalize"])(phrase);
+          }
+
+          switch (inputModel) {
+            case 'fname':
+              this.fname = txtEnd.trim();
+              break;
+
+            case 'lname':
+              this.lname = txtEnd.trim();
+              break;
+
+            default:
+              break;
+          }
+        }
     },
     createArraysInputs: function createArraysInputs() {
       //create inputs for e-mails
@@ -66208,6 +66239,11 @@ var render = function() {
                       expanded: ""
                     },
                     on: { blur: _vm.getAvatar },
+                    nativeOn: {
+                      keyup: function($event) {
+                        return _vm.capitalizeText($event, "fname")
+                      }
+                    },
                     model: {
                       value: _vm.fname,
                       callback: function($$v) {
@@ -66241,6 +66277,11 @@ var render = function() {
                       expanded: ""
                     },
                     on: { blur: _vm.getAvatar },
+                    nativeOn: {
+                      keyup: function($event) {
+                        return _vm.capitalizeText($event, "lname")
+                      }
+                    },
                     model: {
                       value: _vm.lname,
                       callback: function($$v) {

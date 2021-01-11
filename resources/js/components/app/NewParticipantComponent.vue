@@ -26,6 +26,7 @@
                     <b-input
                         name="first_name"
                         v-model="fname"
+                        v-on:keyup.native="capitalizeText($event, 'fname')"
                         v-on:blur="getAvatar"
                         maxlength="100"
                         expanded>
@@ -38,6 +39,7 @@
                     <b-input
                         name="last_name"
                         v-model="lname"
+                        v-on:keyup.native="capitalizeText($event, 'lname')"
                         v-on:blur="getAvatar"
                         maxlength="100"
                         expanded>
@@ -139,7 +141,7 @@
     </div>
 </template>
 <script>
-import { procesarErroresRequest } from '../../functions.js';
+import { procesarErroresRequest,capitalize } from '../../functions.js';
 var moment = require('moment');
 var validate = require('validate.js');
 
@@ -212,6 +214,33 @@ export default{
                     break;
                 default:
                     break;
+            }
+        },
+        capitalizeText( event, inputModel ){
+            if( event.keyCode >= 65 && event.keyCode <= 90 ) //A-Z
+            {
+                var phrase = event.target.value.trimStart();
+                const phrasesArray = phrase.split(" ");
+                var txtEnd = "";
+                if( phrasesArray.length > 1 )
+                {
+                    phrasesArray.forEach( item => {
+                        txtEnd += capitalize( item ) +" ";
+                    });
+                }else{
+                    txtEnd = capitalize( phrase );
+                }
+                switch( inputModel)
+                {
+                    case 'fname':
+                        this.fname = txtEnd.trim();
+                        break;
+                    case 'lname':
+                        this.lname = txtEnd.trim();
+                        break;
+                    default:
+                        break;
+                }
             }
         },
         createArraysInputs(){

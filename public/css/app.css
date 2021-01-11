@@ -20247,15 +20247,18 @@ textarea {
 }
 
 .application .content-main .main .content .new-participant .form_new_participant .textarea::-moz-placeholder {
-  color: #FFF;
+  color: #666;
+  font-style: oblique;
 }
 
 .application .content-main .main .content .new-participant .form_new_participant .textarea:-ms-input-placeholder {
-  color: #FFF;
+  color: #666;
+  font-style: oblique;
 }
 
 .application .content-main .main .content .new-participant .form_new_participant .textarea::placeholder {
-  color: #FFF;
+  color: #666;
+  font-style: oblique;
 }
 
 .application .content-main .main .content .new-participant .form_new_participant .field_avatar {
