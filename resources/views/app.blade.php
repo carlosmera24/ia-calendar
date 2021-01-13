@@ -70,6 +70,17 @@
                                                                 'error'         => false,
                                                                 'msg'           =>  __('validation.required', ['attribute' => ''])
                                                             ],
+                                        'state'         =>  [
+                                                                'label'         =>  __('validation.attributes.state'),
+                                                                'error'         => false,
+                                                                'msg'           =>  __('validation.required', ['attribute' => ''])
+                                                            ],
+                                        'reason_change_state'   =>  [
+                                                                        'label'         =>  __('validation.attributes.reason_change_state'),
+                                                                        'placeholder'   =>  __('app.participant_new.description_placeholder'),
+                                                                        'error'         => false,
+                                                                        'msg'           =>  __('validation.required', ['attribute' => ''])
+                                                                    ],
                                     ];
             $fields_programmer =    [
                                         'entity_name'               =>  [
@@ -114,11 +125,19 @@
                                                 3 => __('app.profiles_participants.guest'),
                                                 4 => __('app.profiles_participants.alternate_administrator'),
                                             ];
+            //Text/name for status participants ID => Name
+            $names_status_participants =    [
+                                                1 => __('app.states_participants.active'),
+                                                2 => __('app.states_participants.disable'),
+                                                3 => __('app.states_participants.blocked'),
+                                                4 => __('app.states_participants.discontinued'),
+                                            ];
             //Texts for manage leader
             $texts_manage_leader = __('app.manage_leader');
             $texts_manage_leader['empty_categories_required'] = __('messages.empty_categories_required');
             $texts_manage_leader['back_to_participant_confirm'] = __('messages.back_to_participant_confirm');
             $texts_manage_leader['back_to_participant_warning'] = __('messages.back_to_participant_warning');
+            $texts_manage_leader['names_status_participants'] = $names_status_participants;
             //Texts for general settings
             $texts_general_settings = __('app.general_settings');
             $texts_general_settings['text_general_setting'] = $text_general_setting;

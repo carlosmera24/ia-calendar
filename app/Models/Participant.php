@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Programmer;
+use App\Models\StateParticipant;
+use App\Models\LogStateParticipant;
 use App\Models\ParticipantCategorie;
 use App\Models\PermissionParticipant;
 use Illuminate\Database\Eloquent\Model;
@@ -34,9 +36,19 @@ class Participant extends Model
         return $this->hasMany(PermissionParticipant::class,'participants_id');
     }
 
-    public function partiipantsCategories()
+    public function partipantsCategories()
     {
         return $this->hasMany(ParticipantCategorie::class,'participants_id');
+    }
+
+    public function stateParticipant()
+    {
+        return $this->belongsTo(StateParticipant::class,'status_participants_id');
+    }
+
+    public function logsStatesParticipants()
+    {
+        return $this->hasMany(LogStateParticipant::class,'participants_id');
     }
 
 }

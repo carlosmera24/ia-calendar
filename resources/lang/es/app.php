@@ -77,19 +77,28 @@ return [
      * New Participant Section
      */
 
-     'participant_new'  =>  [
-            'title'                     =>  'Partícipe nuevo',
-            'description_placeholder'   =>  'Detalla brevemente el el cargo y funciones a realizar',
-     ],
+    'participant_new'  =>  [
+        'title'                     =>  'Partícipe nuevo',
+        'description_placeholder'   =>  'Detalla brevemente el el cargo y funciones a realizar',
+    ],
 
-     /**
-      * Profile participants
-      */
+    /**
+     * Profile participants
+    */
+    'profiles_participants'   =>  [
+        'administrator'             =>  'administrador',
+        'leader'                    =>  'líder',
+        'guest'                     =>  'invitado',
+        'alternate_administrator'   =>  'administrador suplente',
+    ],
 
-      'profiles_participants'   =>  [
-            'administrator'             =>  'administrador',
-            'leader'                    =>  'líder',
-            'guest'                     =>  'invitado',
-            'alternate_administrator'   =>  'administrador suplente',
-      ],
+    /**
+     * States participants
+     */
+    'states_participants'   =>  [
+        'active'        =>  'activo',
+        'disable'       =>  'inactivo',
+        'blocked'       =>  'bloqueado',
+        'discontinued'  =>  'suspendido',
+    ],
 ];

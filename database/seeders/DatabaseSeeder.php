@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
                         PaymentMethodSeeder::class,
                         PaymentStateSeeder::class,
                         ProfileParticipantSeeder::class,
+                        StateParticipantSeeder::class,
                         PermissionSeeder::class,
                         StateProgrammerMembershipSeeder::class,
                         StateNoteSeeder::class,

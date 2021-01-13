@@ -24,12 +24,14 @@ class CreateParticipantsTable extends Migration
             $table->text('description')->nullable();
             $table->datetime('created_at')->default(new Expression('CURRENT_TIMESTAMP'));
             $table->datetime('updated_at')->default(new Expression('CURRENT_TIMESTAMP'));
+            $table->integer('status_participants_id')->default(1);
 
             $table->primary([
                                 'id',
                                 'persons_id',
                                 'programmers_id',
-                                'profiles_participants_id'
+                                'profiles_participants_id',
+                                'status_participants_id'
                             ],
                             'participants_id_primaries'
                         );
@@ -50,12 +52,17 @@ class CreateParticipantsTable extends Migration
                 ->references('id')->on('profiles_participants')
                 ->onUpdate('NO ACTION')
                 ->onDelete('NO ACTION');
+            $table->foreign('status_participants_id')
+                ->references('id')->on('status_participants')
+                ->onUpdate('NO ACTION')
+                ->onDelete('NO ACTION');
 
             $table->index([
                             'persons_id',
                             'programmers_id',
                             'users_id',
-                            'profiles_participants_id'
+                            'profiles_participants_id',
+                            'status_participants_id'
                         ],
                             'participants_id_indexes'
                         );

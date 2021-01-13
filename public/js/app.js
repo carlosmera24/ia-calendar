@@ -3661,6 +3661,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -3781,6 +3790,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
   },
   mounted: function mounted() {
     this.getParticipants();
+    this.getCategories();
   },
   methods: {
     clickCancel: function clickCancel() {
@@ -3897,14 +3907,29 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         }
       });
     },
+    onSearchParticipants: function onSearchParticipants(search, loading) {
+      if (search.length) {
+        loading(true);
+        this.getParticipants(loading, search);
+      }
+    },
     getParticipants: function getParticipants() {
       var _this5 = this;
 
+      var loading = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+      var search = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      this.participants = [];
       this.isLoading = true;
-      axios.post(this.url_participants_programmer, {
+      var params = {
         programmers_id: this.programmer.id,
         users_id: this.user_id
-      }).then(function (response) {
+      };
+
+      if (search && search.length) {
+        params['search'] = search;
+      }
+
+      axios.post(this.url_participants_programmer, params).then(function (response) {
         _this5.showErrors({});
 
         if (response.data.status === 200) {
@@ -3917,9 +3942,11 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
             };
 
             _this5.participants.push(tmp);
-          }); //Get categories
 
-          _this5.getCategories();
+            if (loading) {
+              loading(false);
+            }
+          });
         }
       }, function (error) {
         _this5.showErrors(error);
@@ -67054,7 +67081,10 @@ var render = function() {
                     placeholder: _vm.textsManageLeader.search_participant,
                     label: "participant"
                   },
-                  on: { input: _vm.onSelectParticipantChanged },
+                  on: {
+                    input: _vm.onSelectParticipantChanged,
+                    search: _vm.onSearchParticipants
+                  },
                   model: {
                     value: _vm.participantSelected,
                     callback: function($$v) {
@@ -67210,7 +67240,55 @@ var render = function() {
                     )
                   ])
                 ]
-              )
+              ),
+              _vm._v(" "),
+              _c(
+                "b-field",
+                {
+                  staticClass: "column is-12",
+                  attrs: { horizontal: "", label: _vm.fields.state.label }
+                },
+                [
+                  _c("span", { staticClass: "is-capitalized" }, [
+                    _vm._v(
+                      _vm._s(
+                        _vm.participantSelected
+                          ? _vm.textsManageLeader.names_status_participants[
+                              _vm.participantSelected.status_participants_id
+                            ]
+                          : ""
+                      )
+                    )
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _vm.participantSelected &&
+              _vm.participantSelected.status_participants_id !== 1
+                ? _c(
+                    "b-field",
+                    {
+                      staticClass: "column is-12",
+                      attrs: {
+                        horizontal: "",
+                        label: _vm.fields.reason_change_state.label
+                      }
+                    },
+                    [
+                      _c("span", { staticClass: "is-capitalized" }, [
+                        _vm._v(
+                          _vm._s(
+                            _vm.participantSelected
+                              ? _vm.participantSelected.log_status
+                                ? _vm.participantSelected.log_status.description
+                                : ""
+                              : ""
+                          )
+                        )
+                      ])
+                    ]
+                  )
+                : _vm._e()
             ],
             1
           )
@@ -67525,7 +67603,7 @@ var render = function() {
                 on: {
                   click: function($event) {
                     $event.preventDefault()
-                    return _vm.clickCancel($event)
+                    return _vm.onSelectParticipantChanged($event)
                   }
                 }
               },

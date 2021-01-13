@@ -8,6 +8,8 @@ use App\Models\PersonEmail;
 use Laravolt\Avatar\Avatar;
 use Illuminate\Http\Request;
 use App\Models\PersonCellphone;
+use Illuminate\Support\Facades\DB;
+use App\Models\LogStateParticipant;
 
 class ParticipantController extends Controller
 {
@@ -30,6 +32,7 @@ class ParticipantController extends Controller
     protected $rules_list_participants = [
                                             'programmers_id'    =>  'required|integer|exists:programmers,id',
                                             'users_id'          =>  'nullable|integer|exists:users,id',
+                                            'search'            =>  'nullable|min:1',
                                         ];
     protected $rules_avatar =   [
                                     'name' => 'required|min:1'
@@ -104,10 +107,12 @@ class ParticipantController extends Controller
         }else
         {
             $user_id = $request->users_id;
+            $search = $request->search;
             $participants = Participant::leftJoin('persons','persons_id','persons.id')
                                         ->select(
                                                     'participants.id','participants.programmers_id','participants.users_id',
                                                     'participants.profiles_participants_id','participants.description',
+                                                    'participants.status_participants_id',
                                                     'persons.id AS persons_id','persons.first_name','persons.last_name',
                                                     'persons.birth_date','persons.position_company','persons.date_join_company',
                                                 )
@@ -116,17 +121,29 @@ class ParticipantController extends Controller
                                             return $query->whereNull('participants.users_id')
                                                         ->orWhere('participants.users_id','!=', $user_id);
                                         } )
+                                        ->when( $search, function( $query, $search ){
+                                            return $query->where(
+                                                                    DB::raw('CONCAT(persons.first_name," ",persons.last_name)'),'LIKE', '%'. $search .'%'
+                                                                );
+                                        } )
                                         ->get();
-            //Search emails and cellphones
+            //Search logs status participants, emails and cellphones
             foreach($participants as $index => $participant)
             {
+
+                //logs status participants
+                $log = LogStateParticipant::where('participants_id',$participant->id)
+                                            ->latest()
+                                            ->first();
+                $participant['log_status'] = $log;
+                $participants[ $index ] = $participant;
                 //Search emails
-               $emails = PersonEmail::where('persons_id', $participant->persons_id )
+                $emails = PersonEmail::where('persons_id', $participant->persons_id )
                                     ->get();
                 $participant['emails'] = $emails;
                 $participants[ $index ] = $participant;
                 //Search cellphones
-               $mobiles = PersonCellphone::where('persons_id', $participant->persons_id )
+                $mobiles = PersonCellphone::where('persons_id', $participant->persons_id )
                                     ->get();
                 $participant['cellphones'] = $mobiles;
                 $participants[ $index ] = $participant;

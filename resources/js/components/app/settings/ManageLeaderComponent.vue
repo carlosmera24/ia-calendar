@@ -31,6 +31,7 @@
                         :placeholder="textsManageLeader.search_participant"
                         label="participant"
                         @input="onSelectParticipantChanged"
+                        @search="onSearchParticipants"
                     >
                         <div slot="no-options">{{ text_no_options }}</div>
                     </v-select>
@@ -84,6 +85,14 @@
                     <b-field horizontal class="column is-12"
                         :label="fields.position.label">
                         <span class="is-capitalized">{{ participantSelected ? participantSelected.position_company : '' }}</span>
+                    </b-field>
+                    <b-field horizontal class="column is-12"
+                        :label="fields.state.label">
+                        <span class="is-capitalized">{{ participantSelected ? textsManageLeader.names_status_participants[participantSelected.status_participants_id] : '' }}</span>
+                    </b-field>
+                    <b-field v-if="participantSelected && participantSelected.status_participants_id !== 1" horizontal class="column is-12"
+                        :label="fields.reason_change_state.label">
+                        <span class="is-capitalized">{{ participantSelected ? ( participantSelected.log_status ? participantSelected.log_status.description : '' ) : '' }}</span>
                     </b-field>
                 </div>
             </section>
@@ -189,7 +198,7 @@
                 </section>
             </section>
             <div class="btn-actions has-text-centered">
-                <b-button  class="btn-cancel is-capitalized" v-on:click.prevent="clickCancel">{{ text_cancel }}</b-button>
+                <b-button  class="btn-cancel is-capitalized" v-on:click.prevent="onSelectParticipantChanged">{{ text_cancel }}</b-button>
                 <b-button
                     class="btn-accept is-capitalized"
                     v-on:click.prevent="clickApply"
@@ -341,6 +350,7 @@ export default {
     },
     mounted(){
         this.getParticipants();
+        this.getCategories();
     },
     methods: {
         clickCancel(){
@@ -447,9 +457,25 @@ export default {
                                         }
                                     );
         },
-        getParticipants(){
+        onSearchParticipants(search, loading){
+            if( search.length )
+            {
+                loading(true);
+                this.getParticipants(loading, search);
+            }
+        },
+        getParticipants(loading = null, search = null ){
+            this.participants = [];
             this.isLoading = true;
-            axios.post(this.url_participants_programmer, { programmers_id : this.programmer.id, users_id: this.user_id })
+            var params = {
+                programmers_id : this.programmer.id,
+                users_id: this.user_id
+            };
+            if( search && search.length )
+            {
+                params['search'] = search;
+            }
+            axios.post(this.url_participants_programmer, params)
                 .then( response => {
                     this.showErrors({});
                     if( response.data.status === 200 )
@@ -462,9 +488,11 @@ export default {
                                 meta: element
                             }
                             this.participants.push( tmp );
+                            if( loading )
+                            {
+                                loading(false);
+                            }
                         });
-                        //Get categories
-                        this.getCategories();
                     }
                 },
                 error => {

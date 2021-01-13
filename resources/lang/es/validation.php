@@ -202,6 +202,8 @@ return [
         'identification_type'   => 'tipo de identificación',
         'identification'        => 'nit de la entidad',
         'logo'                  =>  'logo',
+        'reason_change_state'   =>  'motivo',
+        'state'                 =>  'estado',
     ],
 
 ];
