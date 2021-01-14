@@ -457,13 +457,13 @@ export default {
                                         }
                                     );
         },
-        onSearchParticipants(search, loading){
+        onSearchParticipants: _.debounce( function(search, loading){
             if( search.length )
             {
                 loading(true);
                 this.getParticipants(loading, search);
             }
-        },
+        }, 500),
         getParticipants(loading = null, search = null ){
             this.participants = [];
             this.isLoading = true;

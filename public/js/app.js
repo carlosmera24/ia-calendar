@@ -3907,12 +3907,12 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         }
       });
     },
-    onSearchParticipants: function onSearchParticipants(search, loading) {
+    onSearchParticipants: _.debounce(function (search, loading) {
       if (search.length) {
         loading(true);
         this.getParticipants(loading, search);
       }
-    },
+    }, 500),
     getParticipants: function getParticipants() {
       var _this5 = this;
 
