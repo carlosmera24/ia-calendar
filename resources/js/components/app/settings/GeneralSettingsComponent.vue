@@ -1,4 +1,4 @@
-<template lang="">
+<template>
     <div class="content px-5 py-5">
         <b-loading :is-full-page="true" v-model="isLoading" :can-cancel="false"></b-loading>
         <div class="breadcrumb" aria-label="breadcrumbs">
@@ -77,15 +77,36 @@
     import '@pnotify/core/dist/PNotify.css';
     import '@pnotify/core/dist/BrightTheme.css';
     export default {
-        props: [
-            'profile_participant',
-            'text_breadcrumbs_init',
-            'programmer_json',
-            'texts_general_settings_json',
-            'fields_programmer_json',
-            'text_no_options',
-            'url_identifications_types',
-        ],
+        props: {
+            profile_participant: {
+                type: String,
+                require: true,
+            },
+            text_breadcrumbs_init: {
+                type: String,
+                require: true,
+            },
+            programmer_json: {
+                type: String,
+                require: true,
+            },
+            texts_general_settings_json: {
+                type: String,
+                require: true,
+            },
+            fields_programmer_json: {
+                type: String,
+                require: true,
+            },
+            text_no_options: {
+                type: String,
+                require: true,
+            },
+            url_identifications_types: {
+                type: String,
+                require: true,
+            },
+        },
         data() {
             return {
                 isLoading: false,

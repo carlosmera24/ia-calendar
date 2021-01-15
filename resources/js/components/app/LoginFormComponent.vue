@@ -23,12 +23,24 @@
 </template>
 <script>
 export default {
-    props:[
-        'url_login',
-        'url_home',
-        'csrf_token',
-        'fields_json'
-    ],
+    props:{
+        url_login: {
+            type: String,
+            require: true
+        },
+        url_home: {
+            type: String,
+            require: true
+        },
+        csrf_token: {
+            type: String,
+            require: true
+        },
+        fields_json: {
+            type: String,
+            require: true
+        }
+    },
     data() {
         return {
             user: '',

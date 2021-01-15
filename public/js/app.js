@@ -2549,7 +2549,48 @@ __webpack_require__.r(__webpack_exports__);
       contentActive: {}
     };
   },
-  props: ['profile_participant', 'url_logout', 'url_home', 'text_company_name', 'text_menu_dark', 'text_admin_leaders', 'text_general_setting', 'text_frequent_questions', 'text_logout', 'text_close'],
+  props: {
+    profile_participant: {
+      type: String,
+      require: true
+    },
+    url_logout: {
+      type: String,
+      require: true
+    },
+    url_home: {
+      type: String,
+      require: true
+    },
+    text_company_name: {
+      type: String,
+      require: true
+    },
+    text_menu_dark: {
+      type: String,
+      require: true
+    },
+    text_admin_leaders: {
+      type: String,
+      require: true
+    },
+    text_general_setting: {
+      type: String,
+      require: true
+    },
+    text_frequent_questions: {
+      type: String,
+      require: true
+    },
+    text_logout: {
+      type: String,
+      require: true
+    },
+    text_close: {
+      type: String,
+      require: true
+    }
+  },
   created: function created() {
     //Set general settings from profile_participant
     switch (this.profile_participant) {
@@ -2630,7 +2671,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['url_login', 'url_home', 'csrf_token', 'fields_json'],
+  props: {
+    url_login: {
+      type: String,
+      require: true
+    },
+    url_home: {
+      type: String,
+      require: true
+    },
+    csrf_token: {
+      type: String,
+      require: true
+    },
+    fields_json: {
+      type: String,
+      require: true
+    }
+  },
   data: function data() {
     return {
       user: '',
@@ -2739,7 +2797,96 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['texts_main_json', 'showTitle', 'text_success', 'text_wall_title', 'text_wall_trigger_events_soon_expire', 'text_wall_add_categories', 'text_wall_add_notes', 'text_created_participant', 'text_participant_title', 'text_participant_fields_json', 'text_accept', 'text_cancel', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'programmer_json', 'numbers_emailes', 'numbers_mobiles'],
+  props: {
+    texts_main_json: {
+      type: String,
+      require: true
+    },
+    showTitle: {
+      type: String,
+      require: true
+    },
+    text_success: {
+      type: String,
+      require: true
+    },
+    text_wall_title: {
+      type: String,
+      require: true
+    },
+    text_wall_trigger_events_soon_expire: {
+      type: String,
+      require: true
+    },
+    text_wall_add_categories: {
+      type: String,
+      require: true
+    },
+    text_wall_add_notes: {
+      type: String,
+      require: true
+    },
+    text_created_participant: {
+      type: String,
+      require: true
+    },
+    text_participant_title: {
+      type: String,
+      require: true
+    },
+    text_participant_fields_json: {
+      type: String,
+      require: true
+    },
+    text_accept: {
+      type: String,
+      require: true
+    },
+    text_cancel: {
+      type: String,
+      require: true
+    },
+    url_person_ui_avatar: {
+      type: String,
+      require: true
+    },
+    url_person_store: {
+      type: String,
+      require: true
+    },
+    url_participant_store: {
+      type: String,
+      require: true
+    },
+    urls_emails_store: {
+      type: String,
+      require: true
+    },
+    urls_mobiles_store: {
+      type: String,
+      require: true
+    },
+    url_person_email_exist: {
+      type: String,
+      require: true
+    },
+    url_person_cellphone_exist: {
+      type: String,
+      require: true
+    },
+    programmer_json: {
+      type: String,
+      require: true
+    },
+    numbers_emailes: {
+      type: String,
+      require: true
+    },
+    numbers_mobiles: {
+      type: String,
+      require: true
+    }
+  },
   data: function data() {
     return {
       activeMenu: {
@@ -2807,7 +2954,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['texts_main_json'],
+  props: {
+    texts_main_json: {
+      type: String,
+      require: true
+    }
+  },
   data: function data() {
     return {
       activeMenu: {},
@@ -2996,7 +3148,72 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_title', 'text_success', 'text_created_participant', 'text_fields_json', 'text_accept', 'text_cancel', 'url_person_ui_avatar', 'url_person_store', 'url_participant_store', 'urls_emails_store', 'urls_mobiles_store', 'url_person_email_exist', 'url_person_cellphone_exist', 'programmer_json', 'numbers_emailes', 'numbers_mobiles'],
+  props: {
+    text_title: {
+      type: String,
+      require: true
+    },
+    text_success: {
+      type: String,
+      require: true
+    },
+    text_created_participant: {
+      type: String,
+      require: true
+    },
+    text_fields_json: {
+      type: String,
+      require: true
+    },
+    text_accept: {
+      type: String,
+      require: true
+    },
+    text_cancel: {
+      type: String,
+      require: true
+    },
+    url_person_ui_avatar: {
+      type: String,
+      require: true
+    },
+    url_person_store: {
+      type: String,
+      require: true
+    },
+    url_participant_store: {
+      type: String,
+      require: true
+    },
+    urls_emails_store: {
+      type: String,
+      require: true
+    },
+    urls_mobiles_store: {
+      type: String,
+      require: true
+    },
+    url_person_email_exist: {
+      type: String,
+      require: true
+    },
+    url_person_cellphone_exist: {
+      type: String,
+      require: true
+    },
+    programmer_json: {
+      type: String,
+      require: true
+    },
+    numbers_emailes: {
+      type: [String, Number],
+      require: true
+    },
+    numbers_mobiles: {
+      type: [String, Number],
+      require: true
+    }
+  },
   data: function data() {
     return {
       isLoading: false,
@@ -3451,7 +3668,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['text_trigger_events_soon_expire', 'text_add_categories', 'text_add_notes']
+  props: {
+    text_trigger_events_soon_expire: {
+      type: String,
+      require: true
+    },
+    text_add_categories: {
+      type: String,
+      require: true
+    },
+    text_add_notes: {
+      type: String,
+      require: true
+    }
+  }
 });
 
 /***/ }),
@@ -3554,7 +3784,36 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['profile_participant', 'text_breadcrumbs_init', 'programmer_json', 'texts_general_settings_json', 'fields_programmer_json', 'text_no_options', 'url_identifications_types'],
+  props: {
+    profile_participant: {
+      type: String,
+      require: true
+    },
+    text_breadcrumbs_init: {
+      type: String,
+      require: true
+    },
+    programmer_json: {
+      type: String,
+      require: true
+    },
+    texts_general_settings_json: {
+      type: String,
+      require: true
+    },
+    fields_programmer_json: {
+      type: String,
+      require: true
+    },
+    text_no_options: {
+      type: String,
+      require: true
+    },
+    url_identifications_types: {
+      type: String,
+      require: true
+    }
+  },
   data: function data() {
     return {
       isLoading: false,
@@ -67913,10 +68172,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/app/settings/GeneralSettingsComponent.vue?vue&type=template&id=4bca84f5&lang=true&":
-/*!**************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/app/settings/GeneralSettingsComponent.vue?vue&type=template&id=4bca84f5&lang=true& ***!
-  \**************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/app/settings/GeneralSettingsComponent.vue?vue&type=template&id=4bca84f5&":
+/*!****************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/app/settings/GeneralSettingsComponent.vue?vue&type=template&id=4bca84f5& ***!
+  \****************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -81834,7 +82093,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _GeneralSettingsComponent_vue_vue_type_template_id_4bca84f5_lang_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GeneralSettingsComponent.vue?vue&type=template&id=4bca84f5&lang=true& */ "./resources/js/components/app/settings/GeneralSettingsComponent.vue?vue&type=template&id=4bca84f5&lang=true&");
+/* harmony import */ var _GeneralSettingsComponent_vue_vue_type_template_id_4bca84f5___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GeneralSettingsComponent.vue?vue&type=template&id=4bca84f5& */ "./resources/js/components/app/settings/GeneralSettingsComponent.vue?vue&type=template&id=4bca84f5&");
 /* harmony import */ var _GeneralSettingsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./GeneralSettingsComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/app/settings/GeneralSettingsComponent.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
@@ -81846,8 +82105,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
   _GeneralSettingsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _GeneralSettingsComponent_vue_vue_type_template_id_4bca84f5_lang_true___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _GeneralSettingsComponent_vue_vue_type_template_id_4bca84f5_lang_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _GeneralSettingsComponent_vue_vue_type_template_id_4bca84f5___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _GeneralSettingsComponent_vue_vue_type_template_id_4bca84f5___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -81876,19 +82135,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/app/settings/GeneralSettingsComponent.vue?vue&type=template&id=4bca84f5&lang=true&":
-/*!********************************************************************************************************************!*\
-  !*** ./resources/js/components/app/settings/GeneralSettingsComponent.vue?vue&type=template&id=4bca84f5&lang=true& ***!
-  \********************************************************************************************************************/
+/***/ "./resources/js/components/app/settings/GeneralSettingsComponent.vue?vue&type=template&id=4bca84f5&":
+/*!**********************************************************************************************************!*\
+  !*** ./resources/js/components/app/settings/GeneralSettingsComponent.vue?vue&type=template&id=4bca84f5& ***!
+  \**********************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GeneralSettingsComponent_vue_vue_type_template_id_4bca84f5_lang_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./GeneralSettingsComponent.vue?vue&type=template&id=4bca84f5&lang=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/app/settings/GeneralSettingsComponent.vue?vue&type=template&id=4bca84f5&lang=true&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GeneralSettingsComponent_vue_vue_type_template_id_4bca84f5_lang_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GeneralSettingsComponent_vue_vue_type_template_id_4bca84f5___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./GeneralSettingsComponent.vue?vue&type=template&id=4bca84f5& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/app/settings/GeneralSettingsComponent.vue?vue&type=template&id=4bca84f5&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GeneralSettingsComponent_vue_vue_type_template_id_4bca84f5___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GeneralSettingsComponent_vue_vue_type_template_id_4bca84f5_lang_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GeneralSettingsComponent_vue_vue_type_template_id_4bca84f5___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

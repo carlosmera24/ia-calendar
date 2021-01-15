@@ -32,9 +32,12 @@
 </template>
 <script>
 export default{
-    props: [
-        'texts_main_json',
-    ],
+    props: {
+        texts_main_json: {
+            type: String,
+            require: true
+        }
+    },
     data() {
         return {
             activeMenu: {},

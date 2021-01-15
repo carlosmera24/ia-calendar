@@ -31,10 +31,19 @@
 </template>
 <script>
 export default {
-    props:[
-        'text_trigger_events_soon_expire',
-        'text_add_categories',
-        'text_add_notes'
-    ],
+    props:{
+        text_trigger_events_soon_expire:{
+            type: String,
+            require: true
+        },
+        text_add_categories:{
+            type: String,
+            require: true
+        },
+        text_add_notes:{
+            type: String,
+            require: true
+        }
+    },
 }
 </script>

@@ -48,18 +48,48 @@ export default {
             contentActive: {},
         }
     },
-    props: [
-        'profile_participant',
-        'url_logout',
-        'url_home',
-        'text_company_name',
-        'text_menu_dark',
-        'text_admin_leaders',
-        'text_general_setting',
-        'text_frequent_questions',
-        'text_logout',
-        'text_close'
-    ],
+    props: {
+        profile_participant: {
+            type: String,
+            require: true
+        },
+        url_logout: {
+            type: String,
+            require: true
+        },
+        url_home: {
+            type: String,
+            require: true
+        },
+        text_company_name: {
+            type: String,
+            require: true
+        },
+        text_menu_dark: {
+            type: String,
+            require: true
+        },
+        text_admin_leaders: {
+            type: String,
+            require: true
+        },
+        text_general_setting: {
+            type: String,
+            require: true
+        },
+        text_frequent_questions: {
+            type: String,
+            require: true
+        },
+        text_logout: {
+            type: String,
+            require: true
+        },
+        text_close: {
+            type: String,
+            require: true
+        }
+    },
     created(){
         //Set general settings from profile_participant
         switch(this.profile_participant)

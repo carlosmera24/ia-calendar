@@ -151,24 +151,72 @@ import '@pnotify/core/dist/PNotify.css';
 import '@pnotify/core/dist/BrightTheme.css';
 
 export default{
-    props: [
-        'text_title',
-        'text_success',
-        'text_created_participant',
-        'text_fields_json',
-        'text_accept',
-        'text_cancel',
-        'url_person_ui_avatar',
-        'url_person_store',
-        'url_participant_store',
-        'urls_emails_store',
-        'urls_mobiles_store',
-        'url_person_email_exist',
-        'url_person_cellphone_exist',
-        'programmer_json',
-        'numbers_emailes',
-        'numbers_mobiles',
-    ],
+    props: {
+        text_title: {
+            type: String,
+            require: true
+        },
+        text_success: {
+            type: String,
+            require: true
+        },
+        text_created_participant: {
+            type: String,
+            require: true
+        },
+        text_fields_json: {
+            type: String,
+            require: true
+        },
+        text_accept: {
+            type: String,
+            require: true
+        },
+        text_cancel: {
+            type: String,
+            require: true
+        },
+        url_person_ui_avatar: {
+            type: String,
+            require: true
+        },
+        url_person_store: {
+            type: String,
+            require: true
+        },
+        url_participant_store: {
+            type: String,
+            require: true
+        },
+        urls_emails_store: {
+            type: String,
+            require: true
+        },
+        urls_mobiles_store: {
+            type: String,
+            require: true
+        },
+        url_person_email_exist: {
+            type: String,
+            require: true
+        },
+        url_person_cellphone_exist: {
+            type: String,
+            require: true
+        },
+        programmer_json: {
+            type: String,
+            require: true
+        },
+        numbers_emailes: {
+            type: [String, Number],
+            require: true
+        },
+        numbers_mobiles: {
+            type: [String, Number],
+            require: true
+        },
+    },
     data() {
         return {
             isLoading: false,
