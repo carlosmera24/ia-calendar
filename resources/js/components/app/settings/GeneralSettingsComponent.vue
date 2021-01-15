@@ -1,18 +1,10 @@
 <template>
     <div class="content px-5 py-5">
         <b-loading :is-full-page="true" v-model="isLoading" :can-cancel="false"></b-loading>
-        <div class="breadcrumb" aria-label="breadcrumbs">
-            <ul>
-                <li>
-                    <a href="#" v-on:click.prevent="clickCancel">
-                        <span class="icon is-small">
-                            <i class="fas fa-home" aria-hidden="true"></i>
-                        </span>
-                        <span>{{ text_breadcrumbs_init }}</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
+
+        <breadcrumb-to-main
+            v-on:clickCancel="clickCancel"
+            v-bind:text_breacrumbs="text_breadcrumbs_init"/>
         <h2>{{ textsGeneralSettings.text_general_setting }} {{ textsGeneralSettings.names_profiles_participants[profile_participant] }}</h2>
         <section class="alert-section mt-4">
             <b-notification v-model="hasErrors" type="is-danger" hasIcon role="alert">
@@ -30,14 +22,41 @@
                         <div class="columns">
                             <div class="column is-2"></div>
                             <div class="column is-10">
-                                <span>{{ programmer.entity_name.value ? programmer.entity_name.value : fieldsProgrammer.entity_name.label }}</span>
+                                <div class="columns">
+                                    <div class="columns column is-12" v-if="programmer.entity_name.editing">
+                                        <div class="column is-6">Editando</div>
+                                        <div class="column is-6">
+                                            <b-button
+                                                class="btn-edit"
+                                                size="is-small"
+                                                icon-left="save"
+                                                v-on:click.prevent="clickUpdate(1)"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="columns column is-12" v-else>
+                                        <div class="column is-6">
+                                            <span>{{ programmer.entity_name.value ? programmer.entity_name.value : fieldsProgrammer.entity_name.label }}</span>
+                                        </div>
+                                        <div class="column is-6">
+                                            <b-button
+                                                class="btn-edit"
+                                                size="is-small"
+                                                icon-left="pen"
+                                                v-on:click.prevent="clickEdit(programmer.entity_name)"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="column is-12">
                         <div class="columns">
                             <div class="column is-2">
-                                <v-select v-model="identificationTypeSelected"
+                                <v-select
+                                    v-if="programmer.identification.editing"
+                                    v-model="identificationTypeSelected"
                                     :options="identificationsTypes"
                                     :reduce="identification_type => identification_type.meta"
                                     :placeholder="fieldsProgrammer.identifications_types_id.placeholder"
@@ -45,6 +64,7 @@
                                 >
                                     <div slot="no-options">{{ text_no_options }}</div>
                                 </v-select>
+                                <span v-else>{{ programmer.identifications_types_id.value ? identificationsTypesIdName[programmer.identifications_types_id.value] : fieldsProgrammer.identifications_types_id.placeholder }}</span>
                             </div>
                             <div class="column is-10">
                                 <span>{{ programmer.identification.value ? programmer.identification.value : fieldsProgrammer.identification.label }}</span>
@@ -117,6 +137,7 @@
                 fieldsProgrammer: [],
                 identificationTypeSelected: null,
                 identificationsTypes: [],
+                identificationsTypesIdName: {}, // ID => name
             }
         },
         created(){
@@ -128,7 +149,7 @@
                                 'edited':   false,
                                 'editing':  false,
                             };
-                this.programmer[key] = val;
+                Vue.set(this.programmer,key,val);
             });
             this.textsGeneralSettings = JSON.parse(this.texts_general_settings_json);
             this.fieldsProgrammer = JSON.parse(this.fields_programmer_json);
@@ -139,6 +160,9 @@
         methods: {
             clickCancel(){
                 this.$emit('activeMainSection','main')
+            },
+            clickEdit( obj ){
+                obj.editing = !obj.editing;
             },
             showErrors(resError){
                 this.errors = procesarErroresRequest( resError );
@@ -157,6 +181,7 @@
                                     identification_type: name,
                                     meta: element
                                 }
+                                this.identificationsTypesIdName[ element.id ] = name;
                                 this.identificationsTypes.push( tmp );
                             });
                         }
