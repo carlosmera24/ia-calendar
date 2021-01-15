@@ -27,7 +27,6 @@
                 <div class="control has-icons-left">
                     <v-select v-model="participantSelected"
                         :options="participants"
-                        :reduce="participant => participant.meta"
                         :placeholder="textsManageLeader.search_participant"
                         :filterable="false"
                         label="participant"
@@ -38,8 +37,8 @@
                     >
                         <div slot="no-options">{{ text_no_options }}</div>
                         <template #list-footer>
-                            <li ref="load" v-show="hasNextPageParticipant">
-                                Loading more options...
+                            <li ref="load" class="v-secelet-loading" v-show="hasNextPageParticipant">
+                                <span><i class="fas fa-spinner fa-pulse"></i>{{ text_loading }}</span>
                             </li>
                         </template>
                     </v-select>
@@ -52,17 +51,17 @@
                 <div class="columns is-multiline">
                     <b-field horizontal class="column is-12"
                         :label="fields.first_name.label">
-                        <span class="is-capitalized">{{ participantSelected ? participantSelected.first_name : '' }}</span>
+                        <span class="is-capitalized">{{ participantSelected ? participantSelected.meta.first_name : '' }}</span>
                     </b-field>
                     <b-field horizontal class="column is-12"
                         :label="fields.last_name.label">
-                        <span class="is-capitalized">{{ participantSelected ? participantSelected.last_name : '' }}</span>
+                        <span class="is-capitalized">{{ participantSelected ? participantSelected.meta.last_name : '' }}</span>
                     </b-field>
                     <!-- Emails group -->
                     <div class="column is-12" v-if="participantSelected !== null">
                         <div class="columns is-multiline" >
                             <b-field horizontal class="column is-12"
-                                v-for="(email, index) in participantSelected.emails" :key="'email.'+index"
+                                v-for="(email, index) in participantSelected.meta.emails" :key="'email.'+index"
                                 :label="fields.email.label">
                                 <span>{{ email.email }}</span>
                             </b-field>
@@ -78,7 +77,7 @@
                     <div class="column is-12" v-if="participantSelected !== null">
                         <div class="columns is-multiline" >
                             <b-field horizontal class="column is-12"
-                                v-for="(mobile, index) in participantSelected.cellphones" :key="'mobile.'+index"
+                                v-for="(mobile, index) in participantSelected.meta.cellphones" :key="'mobile.'+index"
                                 :label="fields.mobile.label">
                                 <span>{{ mobile.cellphone_number }}</span>
                             </b-field>
@@ -92,15 +91,15 @@
                     <!-- /Cellphones group -->
                     <b-field horizontal class="column is-12"
                         :label="fields.position.label">
-                        <span class="is-capitalized">{{ participantSelected ? participantSelected.position_company : '' }}</span>
+                        <span class="is-capitalized">{{ participantSelected ? participantSelected.meta.position_company : '' }}</span>
                     </b-field>
                     <b-field horizontal class="column is-12"
                         :label="fields.state.label">
-                        <span class="is-capitalized">{{ participantSelected ? textsManageLeader.names_status_participants[participantSelected.status_participants_id] : '' }}</span>
+                        <span class="is-capitalized">{{ participantSelected ? textsManageLeader.names_status_participants[participantSelected.meta.status_participants_id] : '' }}</span>
                     </b-field>
-                    <b-field v-if="participantSelected && participantSelected.status_participants_id !== 1" horizontal class="column is-12"
+                    <b-field v-if="participantSelected && participantSelected.meta.status_participants_id !== 1" horizontal class="column is-12"
                         :label="fields.reason_change_state.label">
-                        <span class="is-capitalized">{{ participantSelected ? ( participantSelected.log_status ? participantSelected.log_status.description : '' ) : '' }}</span>
+                        <span class="is-capitalized">{{ participantSelected ? ( participantSelected.meta.log_status ? participantSelected.meta.log_status.description : '' ) : '' }}</span>
                     </b-field>
                 </div>
             </section>
@@ -280,6 +279,11 @@ export default {
             require: true
 
         },
+        text_loading: {
+            type: String,
+            require: true
+
+        },
         text_field_required: {
             type: String,
             require: true
@@ -338,7 +342,7 @@ export default {
             hasErrors: false,
             errors: {},
             participanError: false,
-            perPageParticipants: 5,
+            perPageParticipants: 10,
             currentPageParticipants: 1,
             observerParticipants: null,
             totalParticipants: 0,
@@ -376,7 +380,6 @@ export default {
             return Math.ceil( this.participants.length / this.totalParticipants );
         },
         hasNextPageParticipant(){
-            console.log("currentPage", this.currentPageParticipants);
             return this.participants.length < this.totalParticipants;
         }
     },
@@ -452,7 +455,6 @@ export default {
     },
     mounted(){
         this.observerParticipants = new IntersectionObserver(this.participantsInfinityScroll);
-        // this.getParticipants();
         this.getCategories();
     },
     methods: {
@@ -560,18 +562,26 @@ export default {
                                         }
                                     );
         },
-        onSearchParticipants: _.debounce( function(search, loading){
+        onSearchParticipants: _.debounce( async function(search, loading){
             //_.debounce is used to wait for the user to finish typing and thus send the query request
             loading(true);
+            this.searchParticipant = search.length ? search : null;
             this.participants = [];
             this.currentPageParticipants = 1;
-            this.searchParticipant = search;
-            this.getParticipants(loading);
-
+            await this.getParticipants(loading);
+            if(this.hasNextPageParticipant)
+            {
+                await this.$nextTick();
+                //When v-select is closed with search in empty
+                //avoid adding observer
+                if( this.$refs.load ){
+                    this.observerParticipants.observe(this.$refs.load);
+                }
+            }
         }, 500),
         async onOpenParticipant(){
             if( this.participants.length === 0 ){
-                this.getParticipants();
+                await this.getParticipants();
             }
             if(this.hasNextPageParticipant)
             {
@@ -582,19 +592,12 @@ export default {
         onCloseParticipant(){
             this.observerParticipants.disconnect();
         },
-        async participantsInfinityScroll([{isIntersecting, target}]){
-            console.log("intersecting", isIntersecting)
-            if( isIntersecting )
-            {
-                const ul = target.offsetParent;
-                const scrollTop = target.offsetParent.scrollTop;
-                this.currentPageParticipants++;
-                await this.$nextTick();
-                this.getParticipants();
-                ul.scrollTop = scrollTop;
-            }
+        async participantsInfinityScroll(){
+            this.currentPageParticipants++;
+            await this.$nextTick();
+            await this.getParticipants();
         },
-        getParticipants(loading = null){
+        async getParticipants(loading = null){
             this.isLoading = true;
             var params = {
                 programmers_id : this.programmer.id,
@@ -606,7 +609,7 @@ export default {
             {
                 params['search'] = this.searchParticipant;
             }
-            axios.post(this.url_participants_programmer, params)
+            await axios.post(this.url_participants_programmer, params)
                 .then( response => {
                     this.showErrors({});
                     if( response.data.status === 200 )
@@ -619,12 +622,18 @@ export default {
                                 participant: participant,
                                 meta: element
                             }
-                            this.participants.push( tmp );
-                            if( loading )
+                            //search element
+                            const pos = this.participants.indexOf( tmp );
+                            if( pos > 0 )
                             {
-                                loading(false);
+                                this.participants.splice(pos, 1);
                             }
+                            this.participants.push( tmp );
                         });
+                        if( loading )
+                        {
+                            loading(false);
+                        }
                     }
                 },
                 error => {
@@ -680,14 +689,14 @@ export default {
             if( this.participantSelected !== null)
             {
                 this.isEnabledAssociateLeader = true;
-                this.getPermissions( this.participantSelected.id );
+                this.getPermissions( this.participantSelected.meta.id );
                 //Validate profile for show admin permissions
-                if( this.participantSelected.profiles_participants_id === this.OPTIONS.PROFILE_SUPLE_ADMIN )
+                if( this.participantSelected.meta.profiles_participants_id === this.OPTIONS.PROFILE_SUPLE_ADMIN )
                 {
                     this.isPermissionsAdmin = true;
                     this.permissionsAdmin = [ 'true' ];
                     this.isEnabledAssociateLeader = false;
-                }else if(  this.participantSelected.profiles_participants_id === this.OPTIONS.PROFILE_LEADER )//Validate profile for leader
+                }else if(  this.participantSelected.meta.profiles_participants_id === this.OPTIONS.PROFILE_LEADER )//Validate profile for leader
                 {
                     this.permissionsAssociateLeader = ['true'];
                 }
@@ -819,7 +828,7 @@ export default {
                 this.newProfile = this.isAssociatedLeader && !this.isPermissionsAdmin ? this.OPTIONS.PROFILE_LEADER : this.newProfile;
                 //Save permissions
                 this.isLoading = true;
-                axios.post(this.url_store_permissions_participant, { participants_id: this.participantSelected.id, permissions_ids: permissions_ids })
+                axios.post(this.url_store_permissions_participant, { participants_id: this.participantSelected.meta.id, permissions_ids: permissions_ids })
                         .then( response => {
                             this.showErrors({});
                             if( response.data.status === 200 )
@@ -842,7 +851,7 @@ export default {
                 categories_ids.push( categorie.id );
             });
             this.isLoading = true;
-            axios.post(this.url_store_participants_categories, { participants_id: this.participantSelected.id, categories_ids: categories_ids })
+            axios.post(this.url_store_participants_categories, { participants_id: this.participantSelected.meta.id, categories_ids: categories_ids })
                     .then( response => {
                         this.showErrors({});
                         if( response.data.status === 200 )
@@ -860,11 +869,11 @@ export default {
         },
         setProfile(){
             //Update the profile if there is a change or is different from the current one
-            if( this.newProfile && this.participantSelected.profiles_participants_id !== this.newProfile )
+            if( this.newProfile && this.participantSelected.meta.profiles_participants_id !== this.newProfile )
             {
                 const param = {
                     profiles_participants_id: this.newProfile,
-                    id: this.participantSelected.id
+                    id: this.participantSelected.meta.id
                 };
                 axios.post( this.url_participant_update, param )
                     .then( response => {
@@ -872,7 +881,7 @@ export default {
                         if( response.data.status === 200 )
                         {
                             //change profile local for the selected participant
-                            this.participantSelected.profiles_participants_id = this.newProfile;
+                            this.participantSelected.meta.profiles_participants_id = this.newProfile;
 
                             success({
                                 title: this.text_success,

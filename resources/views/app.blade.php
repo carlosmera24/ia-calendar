@@ -194,6 +194,7 @@
             v-bind:text_field_required='"{{ __('validation.required', ['attribute' => '']) }} "'
             v-bind:text_success='"{{ __('messages.success') }} "'
             v-bind:text_no_options='"{{ __('messages.no_options') }} "'
+            v-bind:text_loading='"{{ __('messages.loading') }} "'
             v-bind:text_wall_title='"{{ __('app.wall.title') }} "'
             v-bind:text_wall_trigger_events_soon_expire='"{{ __('app.wall.trigger_events_soon_expire') }}"'
             v-bind:text_wall_add_categories='"{{ __('app.wall.add_categories') }}"'

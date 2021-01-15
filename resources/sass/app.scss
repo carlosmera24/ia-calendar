@@ -467,6 +467,15 @@ body, h2, button, input, select, textarea {
                 .vs__selected-options{
                     padding-left: 30px;
                 }
+                .v-secelet-loading{
+                    color:#999;
+                    padding-left: 15px;
+                    span{
+                        .fas{
+                            margin-right: 10px;
+                        }
+                    }
+                }
                 label::first-letter{
                     text-transform: uppercase;
                 }

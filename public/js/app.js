@@ -2302,6 +2302,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     text_breadcrumbs_init: {
@@ -2325,6 +2326,10 @@ __webpack_require__.r(__webpack_exports__);
       require: true
     },
     text_success: {
+      type: String,
+      require: true
+    },
+    text_loading: {
       type: String,
       require: true
     },
@@ -3640,23 +3645,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pnotify_core_dist_BrightTheme_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_pnotify_core_dist_BrightTheme_css__WEBPACK_IMPORTED_MODULE_5__);
 
 
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-//
 //
 //
 //
@@ -3928,6 +3920,10 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       type: String,
       require: true
     },
+    text_loading: {
+      type: String,
+      require: true
+    },
     text_field_required: {
       type: String,
       require: true
@@ -3976,7 +3972,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       hasErrors: false,
       errors: {},
       participanError: false,
-      perPageParticipants: 5,
+      perPageParticipants: 10,
       currentPageParticipants: 1,
       observerParticipants: null,
       totalParticipants: 0,
@@ -4014,7 +4010,6 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       return Math.ceil(this.participants.length / this.totalParticipants);
     },
     hasNextPageParticipant: function hasNextPageParticipant() {
-      console.log("currentPage", this.currentPageParticipants);
       return this.participants.length < this.totalParticipants;
     }
   },
@@ -4089,8 +4084,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
     });
   },
   mounted: function mounted() {
-    this.observerParticipants = new IntersectionObserver(this.participantsInfinityScroll); // this.getParticipants();
-
+    this.observerParticipants = new IntersectionObserver(this.participantsInfinityScroll);
     this.getCategories();
   },
   methods: {
@@ -4208,78 +4202,77 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }
       });
     },
-    onSearchParticipants: _.debounce(function (search, loading) {
-      //_.debounce is used to wait for the user to finish typing and thus send the query request
-      loading(true);
-      this.participants = [];
-      this.currentPageParticipants = 1;
-      this.searchParticipant = search;
-      this.getParticipants(loading);
-    }, 500),
-    onOpenParticipant: function onOpenParticipant() {
-      var _this5 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+    onSearchParticipants: _.debounce( /*#__PURE__*/function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(search, loading) {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                if (_this5.participants.length === 0) {
-                  _this5.getParticipants();
-                }
+                //_.debounce is used to wait for the user to finish typing and thus send the query request
+                loading(true);
+                this.searchParticipant = search.length ? search : null;
+                this.participants = [];
+                this.currentPageParticipants = 1;
+                _context.next = 6;
+                return this.getParticipants(loading);
 
-                if (!_this5.hasNextPageParticipant) {
-                  _context.next = 5;
+              case 6:
+                if (!this.hasNextPageParticipant) {
+                  _context.next = 10;
                   break;
                 }
 
-                _context.next = 4;
-                return _this5.$nextTick();
+                _context.next = 9;
+                return this.$nextTick();
 
-              case 4:
-                _this5.observerParticipants.observe(_this5.$refs.load);
+              case 9:
+                //When v-select is closed with search in empty
+                //avoid adding observer
+                if (this.$refs.load) {
+                  this.observerParticipants.observe(this.$refs.load);
+                }
 
-              case 5:
+              case 10:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee);
-      }))();
-    },
-    onCloseParticipant: function onCloseParticipant() {
-      this.observerParticipants.disconnect();
-    },
-    participantsInfinityScroll: function participantsInfinityScroll(_ref) {
-      var _this6 = this;
+        }, _callee, this);
+      }));
+
+      return function (_x, _x2) {
+        return _ref.apply(this, arguments);
+      };
+    }(), 500),
+    onOpenParticipant: function onOpenParticipant() {
+      var _this5 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var _ref2, _ref2$, isIntersecting, target, ul, scrollTop;
-
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _ref2 = _slicedToArray(_ref, 1), _ref2$ = _ref2[0], isIntersecting = _ref2$.isIntersecting, target = _ref2$.target;
-                console.log("intersecting", isIntersecting);
-
-                if (!isIntersecting) {
-                  _context2.next = 10;
+                if (!(_this5.participants.length === 0)) {
+                  _context2.next = 3;
                   break;
                 }
 
-                ul = target.offsetParent;
-                scrollTop = target.offsetParent.scrollTop;
-                _this6.currentPageParticipants++;
-                _context2.next = 8;
-                return _this6.$nextTick();
+                _context2.next = 3;
+                return _this5.getParticipants();
 
-              case 8:
-                _this6.getParticipants();
+              case 3:
+                if (!_this5.hasNextPageParticipant) {
+                  _context2.next = 7;
+                  break;
+                }
 
-                ul.scrollTop = scrollTop;
+                _context2.next = 6;
+                return _this5.$nextTick();
 
-              case 10:
+              case 6:
+                _this5.observerParticipants.observe(_this5.$refs.load);
+
+              case 7:
               case "end":
                 return _context2.stop();
             }
@@ -4287,47 +4280,96 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }, _callee2);
       }))();
     },
-    getParticipants: function getParticipants() {
-      var _this7 = this;
+    onCloseParticipant: function onCloseParticipant() {
+      this.observerParticipants.disconnect();
+    },
+    participantsInfinityScroll: function participantsInfinityScroll() {
+      var _this6 = this;
 
-      var loading = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-      this.isLoading = true;
-      var params = {
-        programmers_id: this.programmer.id,
-        users_id: this.user_id,
-        perPage: this.perPageParticipants,
-        page: this.currentPageParticipants
-      };
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _this6.currentPageParticipants++;
+                _context3.next = 3;
+                return _this6.$nextTick();
 
-      if (this.searchParticipant && this.searchParticipant.length) {
-        params['search'] = this.searchParticipant;
-      }
+              case 3:
+                _context3.next = 5;
+                return _this6.getParticipants();
 
-      axios.post(this.url_participants_programmer, params).then(function (response) {
-        _this7.showErrors({});
-
-        if (response.data.status === 200) {
-          _this7.totalParticipants = response.data.recordsTotal;
-          response.data.participants.forEach(function (element) {
-            var name = element.first_name + " " + element.last_name;
-            var participant = Object(_functions_js__WEBPACK_IMPORTED_MODULE_1__["capitalize"])(name.toLocaleLowerCase());
-            var tmp = {
-              participant: participant,
-              meta: element
-            };
-
-            _this7.participants.push(tmp);
-
-            if (loading) {
-              loading(false);
+              case 5:
+              case "end":
+                return _context3.stop();
             }
-          });
-        }
-      }, function (error) {
-        _this7.showErrors(error);
-      }).then(function () {
-        _this7.isLoading = false;
-      });
+          }
+        }, _callee3);
+      }))();
+    },
+    getParticipants: function getParticipants() {
+      var _arguments = arguments,
+          _this7 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        var loading, params;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                loading = _arguments.length > 0 && _arguments[0] !== undefined ? _arguments[0] : null;
+                _this7.isLoading = true;
+                params = {
+                  programmers_id: _this7.programmer.id,
+                  users_id: _this7.user_id,
+                  perPage: _this7.perPageParticipants,
+                  page: _this7.currentPageParticipants
+                };
+
+                if (_this7.searchParticipant && _this7.searchParticipant.length) {
+                  params['search'] = _this7.searchParticipant;
+                }
+
+                _context4.next = 6;
+                return axios.post(_this7.url_participants_programmer, params).then(function (response) {
+                  _this7.showErrors({});
+
+                  if (response.data.status === 200) {
+                    _this7.totalParticipants = response.data.recordsTotal;
+                    response.data.participants.forEach(function (element) {
+                      var name = element.first_name + " " + element.last_name;
+                      var participant = Object(_functions_js__WEBPACK_IMPORTED_MODULE_1__["capitalize"])(name.toLocaleLowerCase());
+                      var tmp = {
+                        participant: participant,
+                        meta: element
+                      }; //search element
+
+                      var pos = _this7.participants.indexOf(tmp);
+
+                      if (pos > 0) {
+                        _this7.participants.splice(pos, 1);
+                      }
+
+                      _this7.participants.push(tmp);
+                    });
+
+                    if (loading) {
+                      loading(false);
+                    }
+                  }
+                }, function (error) {
+                  _this7.showErrors(error);
+                }).then(function () {
+                  _this7.isLoading = false;
+                });
+
+              case 6:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
     },
     getCategories: function getCategories() {
       var _this8 = this;
@@ -4374,13 +4416,13 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
 
       if (this.participantSelected !== null) {
         this.isEnabledAssociateLeader = true;
-        this.getPermissions(this.participantSelected.id); //Validate profile for show admin permissions
+        this.getPermissions(this.participantSelected.meta.id); //Validate profile for show admin permissions
 
-        if (this.participantSelected.profiles_participants_id === this.OPTIONS.PROFILE_SUPLE_ADMIN) {
+        if (this.participantSelected.meta.profiles_participants_id === this.OPTIONS.PROFILE_SUPLE_ADMIN) {
           this.isPermissionsAdmin = true;
           this.permissionsAdmin = ['true'];
           this.isEnabledAssociateLeader = false;
-        } else if (this.participantSelected.profiles_participants_id === this.OPTIONS.PROFILE_LEADER) //Validate profile for leader
+        } else if (this.participantSelected.meta.profiles_participants_id === this.OPTIONS.PROFILE_LEADER) //Validate profile for leader
           {
             this.permissionsAssociateLeader = ['true'];
           }
@@ -4525,7 +4567,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
 
         this.isLoading = true;
         axios.post(this.url_store_permissions_participant, {
-          participants_id: this.participantSelected.id,
+          participants_id: this.participantSelected.meta.id,
           permissions_ids: permissions_ids
         }).then(function (response) {
           _this13.showErrors({});
@@ -4550,7 +4592,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       });
       this.isLoading = true;
       axios.post(this.url_store_participants_categories, {
-        participants_id: this.participantSelected.id,
+        participants_id: this.participantSelected.meta.id,
         categories_ids: categories_ids
       }).then(function (response) {
         _this14.showErrors({});
@@ -4569,17 +4611,17 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       var _this15 = this;
 
       //Update the profile if there is a change or is different from the current one
-      if (this.newProfile && this.participantSelected.profiles_participants_id !== this.newProfile) {
+      if (this.newProfile && this.participantSelected.meta.profiles_participants_id !== this.newProfile) {
         var param = {
           profiles_participants_id: this.newProfile,
-          id: this.participantSelected.id
+          id: this.participantSelected.meta.id
         };
         axios.post(this.url_participant_update, param).then(function (response) {
           _this15.showErrors({});
 
           if (response.data.status === 200) {
             //change profile local for the selected participant
-            _this15.participantSelected.profiles_participants_id = _this15.newProfile;
+            _this15.participantSelected.meta.profiles_participants_id = _this15.newProfile;
             Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
               title: _this15.text_success,
               text: _this15.text_updated_participant
@@ -66740,6 +66782,7 @@ var render = function() {
                   user_id: _vm.user_id,
                   text_field_required: _vm.text_field_required,
                   text_success: _vm.text_success,
+                  text_loading: _vm.text_loading,
                   text_no_options: _vm.text_no_options,
                   text_updated_participant: _vm.text_updated_participant,
                   texts_manage_leader_json: _vm.texts_manage_leader_json,
@@ -68209,9 +68252,6 @@ var render = function() {
                 {
                   attrs: {
                     options: _vm.participants,
-                    reduce: function(participant) {
-                      return participant.meta
-                    },
                     placeholder: _vm.textsManageLeader.search_participant,
                     filterable: false,
                     label: "participant"
@@ -68238,12 +68278,16 @@ var render = function() {
                                   expression: "hasNextPageParticipant"
                                 }
                               ],
-                              ref: "load"
+                              ref: "load",
+                              staticClass: "v-secelet-loading"
                             },
                             [
-                              _vm._v(
-                                "\n                            Loading more options...\n                        "
-                              )
+                              _c("span", [
+                                _c("i", {
+                                  staticClass: "fas fa-spinner fa-pulse"
+                                }),
+                                _vm._v(_vm._s(_vm.text_loading))
+                              ])
                             ]
                           )
                         ]
@@ -68290,7 +68334,7 @@ var render = function() {
                     _vm._v(
                       _vm._s(
                         _vm.participantSelected
-                          ? _vm.participantSelected.first_name
+                          ? _vm.participantSelected.meta.first_name
                           : ""
                       )
                     )
@@ -68309,7 +68353,7 @@ var render = function() {
                     _vm._v(
                       _vm._s(
                         _vm.participantSelected
-                          ? _vm.participantSelected.last_name
+                          ? _vm.participantSelected.meta.last_name
                           : ""
                       )
                     )
@@ -68322,7 +68366,7 @@ var render = function() {
                     _c(
                       "div",
                       { staticClass: "columns is-multiline" },
-                      _vm._l(_vm.participantSelected.emails, function(
+                      _vm._l(_vm.participantSelected.meta.emails, function(
                         email,
                         index
                       ) {
@@ -68356,7 +68400,7 @@ var render = function() {
                     _c(
                       "div",
                       { staticClass: "columns is-multiline" },
-                      _vm._l(_vm.participantSelected.cellphones, function(
+                      _vm._l(_vm.participantSelected.meta.cellphones, function(
                         mobile,
                         index
                       ) {
@@ -68400,7 +68444,7 @@ var render = function() {
                     _vm._v(
                       _vm._s(
                         _vm.participantSelected
-                          ? _vm.participantSelected.position_company
+                          ? _vm.participantSelected.meta.position_company
                           : ""
                       )
                     )
@@ -68420,7 +68464,8 @@ var render = function() {
                       _vm._s(
                         _vm.participantSelected
                           ? _vm.textsManageLeader.names_status_participants[
-                              _vm.participantSelected.status_participants_id
+                              _vm.participantSelected.meta
+                                .status_participants_id
                             ]
                           : ""
                       )
@@ -68430,7 +68475,7 @@ var render = function() {
               ),
               _vm._v(" "),
               _vm.participantSelected &&
-              _vm.participantSelected.status_participants_id !== 1
+              _vm.participantSelected.meta.status_participants_id !== 1
                 ? _c(
                     "b-field",
                     {
@@ -68445,8 +68490,9 @@ var render = function() {
                         _vm._v(
                           _vm._s(
                             _vm.participantSelected
-                              ? _vm.participantSelected.log_status
-                                ? _vm.participantSelected.log_status.description
+                              ? _vm.participantSelected.meta.log_status
+                                ? _vm.participantSelected.meta.log_status
+                                    .description
                                 : ""
                               : ""
                           )

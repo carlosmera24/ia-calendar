@@ -146,6 +146,7 @@ class ParticipantController extends Controller
                                             return $query->whereNull('participants.users_id')
                                                         ->orWhere('participants.users_id','!=', $user_id);
                                         } )
+                                        ->orderBy('persons.first_name')
                                         ->offset($start)
                                         ->limit($limit)
                                         ->get();

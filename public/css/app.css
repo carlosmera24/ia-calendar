@@ -20342,6 +20342,15 @@ textarea {
   padding-left: 30px;
 }
 
+.application .content-main .content .form_manage_leader .v-secelet-loading {
+  color: #999;
+  padding-left: 15px;
+}
+
+.application .content-main .content .form_manage_leader .v-secelet-loading span .fas {
+  margin-right: 10px;
+}
+
 .application .content-main .content .form_manage_leader label::first-letter {
   text-transform: uppercase;
 }

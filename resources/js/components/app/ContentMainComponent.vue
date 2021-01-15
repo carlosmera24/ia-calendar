@@ -36,6 +36,7 @@
                 v-bind:user_id="user_id"
                 v-bind:text_field_required='text_field_required'
                 v-bind:text_success='text_success'
+                v-bind:text_loading='text_loading'
                 v-bind:text_no_options='text_no_options'
                 v-bind:text_updated_participant='text_updated_participant'
                 v-bind:texts_manage_leader_json="texts_manage_leader_json"
@@ -72,32 +73,30 @@ export default {
         text_breadcrumbs_init: {
             type: String,
             require: true
-
         },
         texts_main_json: {
             type: String,
             require: true
-
         },
         numbers_emailes: {
             type: String,
             require: true
-
         },
         numbers_mobiles: {
             type: String,
             require: true
-
         },
         programmer_json: {
             type: String,
             require: true
-
         },
         text_success: {
             type: String,
             require: true
-
+        },
+        text_loading: {
+            type: String,
+            require: true
         },
         text_field_required: {
             type: String,
@@ -107,92 +106,74 @@ export default {
         text_no_options: {
             type: String,
             require: true
-
         },
         text_wall_title: {
             type: String,
             require: true
-
         },
         text_wall_trigger_events_soon_expire: {
             type: String,
             require: true
-
         },
         text_wall_add_categories: {
             type: String,
             require: true
-
         },
         text_wall_add_notes: {
             type: String,
             require: true
-
         },
         text_participant_title: {
             type: String,
             require: true
-
         },
         text_created_participant: {
             type: String,
             require: true
-
         },
         text_updated_participant: {
             type: String,
             require: true
-
         },
         text_accept: {
             type: String,
             require: true
-
         },
         text_apply: {
             type: String,
             require: true
-
         },
         text_cancel: {
             type: String,
             require: true
-
         },
         text_not: {
             type: String,
             require: true
-
         },
         text_participant_fields_json: {
             type: String,
             require: true
-
         },
         text_admin_leaders: {
             type: String,
             require: true
-
         },
         user_id: {
             type: String,
             require: true
-
         },
         profile_participant: {
             type: String,
             require: true
-
         },
         texts_manage_leader_json: {
             type: String,
             require: true
-
         },
         texts_general_settings_json: {
             type: String,
             require: true
-
         },
         fields_programmer_json: {
             type: String,
@@ -202,52 +183,42 @@ export default {
         url_person_ui_avatar: {
             type: String,
             require: true
-
         },
         url_person_store: {
             type: String,
             require: true
-
         },
         url_participant_store: {
             type: String,
             require: true
-
         },
         url_participant_update: {
             type: String,
             require: true
-
         },
         urls_emails_store: {
             type: String,
             require: true
-
         },
         urls_mobiles_store: {
             type: String,
             require: true
-
         },
         url_person_email_exist: {
             type: String,
             require: true
-
         },
         url_person_cellphone_exist: {
             type: String,
             require: true
-
         },
         url_participants_programmer: {
             type: String,
             require: true
-
         },
         url_categories_programmer: {
             type: String,
             require: true
-
         },
         url_permissions_participant: {
             type: String,
@@ -257,22 +228,18 @@ export default {
         url_participant_categories: {
             type: String,
             require: true
-
         },
         url_store_permissions_participant: {
             type: String,
             require: true
-
         },
         url_store_participants_categories: {
             type: String,
             require: true
-
         },
         url_identifications_types: {
             type: String,
             require: true
-
         },
     },
     data() {

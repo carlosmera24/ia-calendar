@@ -14,6 +14,7 @@ return [
     'created_participant'   =>  'Partícipe creado satisfactoriamente.',
     'updated_participant'   =>  'Partícipe actualizado satisfactoriamente.',
     'no_options'            =>  'No hay opciones disponibles.',
+    'loading'               =>  'Cargando...',
 
     //Errors
     'bad_request'               =>  'Solicitud incorrecta',
