@@ -33,6 +33,8 @@ class ParticipantController extends Controller
                                             'programmers_id'    =>  'required|integer|exists:programmers,id',
                                             'users_id'          =>  'nullable|integer|exists:users,id',
                                             'search'            =>  'nullable|min:1',
+                                            'page'              =>  'required|integer|min:1',
+                                            'perPage'           =>  'required|integer|min:1',
                                         ];
     protected $rules_avatar =   [
                                     'name' => 'required|min:1'
@@ -108,6 +110,24 @@ class ParticipantController extends Controller
         {
             $user_id = $request->users_id;
             $search = $request->search;
+
+            $totalData = Participant::leftJoin('persons','persons_id','persons.id')
+                                        ->where('participants.programmers_id', $request->programmers_id)
+                                        ->when( $search, function( $query, $search ){
+                                            return $query->where(
+                                                                    DB::raw('CONCAT(persons.first_name," ",persons.last_name)'),'LIKE', '%'. $search .'%'
+                                                                );
+                                        } )
+                                        ->when( $user_id, function( $query, $user_id ){
+                                            return $query->whereNull('participants.users_id')
+                                                        ->orWhere('participants.users_id','!=', $user_id);
+                                        } )
+                                        ->count();
+
+            $totalFiltered = $totalData;
+            $limit = $request->perPage;
+            $start = ($request->page - 1) * $limit;
+
             $participants = Participant::leftJoin('persons','persons_id','persons.id')
                                         ->select(
                                                     'participants.id','participants.programmers_id','participants.users_id',
@@ -117,16 +137,19 @@ class ParticipantController extends Controller
                                                     'persons.birth_date','persons.position_company','persons.date_join_company',
                                                 )
                                         ->where('participants.programmers_id', $request->programmers_id)
-                                        ->when( $user_id, function( $query, $user_id ){
-                                            return $query->whereNull('participants.users_id')
-                                                        ->orWhere('participants.users_id','!=', $user_id);
-                                        } )
                                         ->when( $search, function( $query, $search ){
                                             return $query->where(
                                                                     DB::raw('CONCAT(persons.first_name," ",persons.last_name)'),'LIKE', '%'. $search .'%'
                                                                 );
                                         } )
+                                        ->when( $user_id, function( $query, $user_id ){
+                                            return $query->whereNull('participants.users_id')
+                                                        ->orWhere('participants.users_id','!=', $user_id);
+                                        } )
+                                        ->offset($start)
+                                        ->limit($limit)
                                         ->get();
+
             //Search logs status participants, emails and cellphones
             foreach($participants as $index => $participant)
             {
@@ -150,8 +173,9 @@ class ParticipantController extends Controller
             }
             return response()->json(
                                         array(
-                                                'status'        =>  200,
-                                                'participants'  =>  $participants
+                                                'status'            =>  200,
+                                                'recordsTotal'      => intval($totalData),
+                                                'participants'      =>  $participants
                                             ),
                                         200
                                     );

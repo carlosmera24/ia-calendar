@@ -29,11 +29,19 @@
                         :options="participants"
                         :reduce="participant => participant.meta"
                         :placeholder="textsManageLeader.search_participant"
+                        :filterable="false"
                         label="participant"
+                        @open="onOpenParticipant"
+                        @close="onCloseParticipant"
                         @input="onSelectParticipantChanged"
                         @search="onSearchParticipants"
                     >
                         <div slot="no-options">{{ text_no_options }}</div>
+                        <template #list-footer>
+                            <li ref="load" v-show="hasNextPageParticipant">
+                                Loading more options...
+                            </li>
+                        </template>
                     </v-select>
                     <div class="icon is-small is-left">
                         <i class="fas fa-search"></i>
@@ -221,28 +229,108 @@ import '@pnotify/core/dist/PNotify.css';
 import '@pnotify/core/dist/BrightTheme.css';
 
 export default {
-    props: [
-        'text_breadcrumbs_init',
-        'texts_manage_leader_json',
-        'text_admin_leaders',
-        'programmer_json',
-        'user_id',
-        'text_participant_fields_json',
-        'text_apply',
-        'text_cancel',
-        'text_not',
-        'text_success',
-        'text_field_required',
-        'text_no_options',
-        'text_updated_participant',
-        'url_participants_programmer',
-        'url_categories_programmer',
-        'url_permissions_participant',
-        'url_participant_categories',
-        'url_store_permissions_participant',
-        'url_store_participants_categories',
-        'url_participant_update'
-    ],
+    props: {
+        text_breadcrumbs_init: {
+            type: String,
+            require: true
+
+        },
+        texts_manage_leader_json: {
+            type: String,
+            require: true
+
+        },
+        text_admin_leaders: {
+            type: String,
+            require: true
+
+        },
+        programmer_json: {
+            type: String,
+            require: true
+
+        },
+        user_id: {
+            type: String,
+            require: true
+
+        },
+        text_participant_fields_json: {
+            type: String,
+            require: true
+
+        },
+        text_apply: {
+            type: String,
+            require: true
+
+        },
+        text_cancel: {
+            type: String,
+            require: true
+
+        },
+        text_not: {
+            type: String,
+            require: true
+
+        },
+        text_success: {
+            type: String,
+            require: true
+
+        },
+        text_field_required: {
+            type: String,
+            require: true
+
+        },
+        text_no_options: {
+            type: String,
+            require: true
+
+        },
+        text_updated_participant: {
+            type: String,
+            require: true
+
+        },
+        url_participants_programmer: {
+            type: String,
+            require: true
+
+        },
+        url_categories_programmer: {
+            type: String,
+            require: true
+
+        },
+        url_permissions_participant: {
+            type: String,
+            require: true
+
+        },
+        url_participant_categories: {
+            type: String,
+            require: true
+
+        },
+        url_store_permissions_participant: {
+            type: String,
+            require: true
+
+        },
+        url_store_participants_categories: {
+            type: String,
+            require: true
+
+        },
+        url_participant_update: {
+            type: String,
+            require: true
+
+        }
+    },
     data() {
         return {
             textsManageLeader: [],
@@ -250,6 +338,11 @@ export default {
             hasErrors: false,
             errors: {},
             participanError: false,
+            perPageParticipants: 5,
+            currentPageParticipants: 1,
+            observerParticipants: null,
+            totalParticipants: 0,
+            searchParticipant: null,
             participants:[],
             participantSelected: null,
             permissions: {},
@@ -276,6 +369,15 @@ export default {
                         PROFILE_PARTICIPANT: 3,
                         PROFILE_SUPLE_ADMIN: 4,
                     }
+        }
+    },
+    computed: {
+        numPagesParticipants(){
+            return Math.ceil( this.participants.length / this.totalParticipants );
+        },
+        hasNextPageParticipant(){
+            console.log("currentPage", this.currentPageParticipants);
+            return this.participants.length < this.totalParticipants;
         }
     },
     created(){
@@ -349,7 +451,8 @@ export default {
         });
     },
     mounted(){
-        this.getParticipants();
+        this.observerParticipants = new IntersectionObserver(this.participantsInfinityScroll);
+        // this.getParticipants();
         this.getCategories();
     },
     methods: {
@@ -458,28 +561,57 @@ export default {
                                     );
         },
         onSearchParticipants: _.debounce( function(search, loading){
-            if( search.length )
-            {
-                loading(true);
-                this.getParticipants(loading, search);
-            }
-        }, 500),
-        getParticipants(loading = null, search = null ){
+            //_.debounce is used to wait for the user to finish typing and thus send the query request
+            loading(true);
             this.participants = [];
+            this.currentPageParticipants = 1;
+            this.searchParticipant = search;
+            this.getParticipants(loading);
+
+        }, 500),
+        async onOpenParticipant(){
+            if( this.participants.length === 0 ){
+                this.getParticipants();
+            }
+            if(this.hasNextPageParticipant)
+            {
+                await this.$nextTick();
+                this.observerParticipants.observe(this.$refs.load);
+            }
+        },
+        onCloseParticipant(){
+            this.observerParticipants.disconnect();
+        },
+        async participantsInfinityScroll([{isIntersecting, target}]){
+            console.log("intersecting", isIntersecting)
+            if( isIntersecting )
+            {
+                const ul = target.offsetParent;
+                const scrollTop = target.offsetParent.scrollTop;
+                this.currentPageParticipants++;
+                await this.$nextTick();
+                this.getParticipants();
+                ul.scrollTop = scrollTop;
+            }
+        },
+        getParticipants(loading = null){
             this.isLoading = true;
             var params = {
                 programmers_id : this.programmer.id,
-                users_id: this.user_id
+                users_id: this.user_id,
+                perPage: this.perPageParticipants,
+                page: this.currentPageParticipants,
             };
-            if( search && search.length )
+            if( this.searchParticipant && this.searchParticipant.length )
             {
-                params['search'] = search;
+                params['search'] = this.searchParticipant;
             }
             axios.post(this.url_participants_programmer, params)
                 .then( response => {
                     this.showErrors({});
                     if( response.data.status === 200 )
                     {
+                        this.totalParticipants = response.data.recordsTotal;
                         response.data.participants.forEach( element => {
                             const name = element.first_name +" "+ element.last_name;
                             const participant = capitalize( name.toLocaleLowerCase() );

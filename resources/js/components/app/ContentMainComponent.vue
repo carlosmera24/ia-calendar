@@ -67,49 +67,214 @@
 </template>
 <script>
 export default {
-    props: [
-        'text_breadcrumbs_init',
-        'texts_main_json',
-        'numbers_emailes',
-        'numbers_mobiles',
-        'programmer_json',
-        'text_success',
-        'text_field_required',
-        'text_no_options',
-        'text_wall_title',
-        'text_wall_trigger_events_soon_expire',
-        'text_wall_add_categories',
-        'text_wall_add_notes',
-        'text_participant_title',
-        'text_created_participant',
-        'text_updated_participant',
-        'text_accept',
-        'text_apply',
-        'text_cancel',
-        'text_not',
-        'text_participant_fields_json',
-        'text_admin_leaders',
-        'user_id',
-        'profile_participant',
-        'texts_manage_leader_json',
-        'texts_general_settings_json',
-        'fields_programmer_json',
-        'url_person_ui_avatar',
-        'url_person_store',
-        'url_participant_store',
-        'url_participant_update',
-        'urls_emails_store',
-        'urls_mobiles_store',
-        'url_person_email_exist',
-        'url_person_cellphone_exist',
-        'url_participants_programmer',
-        'url_categories_programmer',
-        'url_permissions_participant',
-        'url_participant_categories',
-        'url_store_permissions_participant',
-        'url_store_participants_categories',
-        'url_identifications_types',
-    ],
+    props: {
+
+        text_breadcrumbs_init: {
+            type: String,
+            require: true
+
+        },
+        texts_main_json: {
+            type: String,
+            require: true
+
+        },
+        numbers_emailes: {
+            type: String,
+            require: true
+
+        },
+        numbers_mobiles: {
+            type: String,
+            require: true
+
+        },
+        programmer_json: {
+            type: String,
+            require: true
+
+        },
+        text_success: {
+            type: String,
+            require: true
+
+        },
+        text_field_required: {
+            type: String,
+            require: true
+
+        },
+        text_no_options: {
+            type: String,
+            require: true
+
+        },
+        text_wall_title: {
+            type: String,
+            require: true
+
+        },
+        text_wall_trigger_events_soon_expire: {
+            type: String,
+            require: true
+
+        },
+        text_wall_add_categories: {
+            type: String,
+            require: true
+
+        },
+        text_wall_add_notes: {
+            type: String,
+            require: true
+
+        },
+        text_participant_title: {
+            type: String,
+            require: true
+
+        },
+        text_created_participant: {
+            type: String,
+            require: true
+
+        },
+        text_updated_participant: {
+            type: String,
+            require: true
+
+        },
+        text_accept: {
+            type: String,
+            require: true
+
+        },
+        text_apply: {
+            type: String,
+            require: true
+
+        },
+        text_cancel: {
+            type: String,
+            require: true
+
+        },
+        text_not: {
+            type: String,
+            require: true
+
+        },
+        text_participant_fields_json: {
+            type: String,
+            require: true
+
+        },
+        text_admin_leaders: {
+            type: String,
+            require: true
+
+        },
+        user_id: {
+            type: String,
+            require: true
+
+        },
+        profile_participant: {
+            type: String,
+            require: true
+
+        },
+        texts_manage_leader_json: {
+            type: String,
+            require: true
+
+        },
+        texts_general_settings_json: {
+            type: String,
+            require: true
+
+        },
+        fields_programmer_json: {
+            type: String,
+            require: true
+
+        },
+        url_person_ui_avatar: {
+            type: String,
+            require: true
+
+        },
+        url_person_store: {
+            type: String,
+            require: true
+
+        },
+        url_participant_store: {
+            type: String,
+            require: true
+
+        },
+        url_participant_update: {
+            type: String,
+            require: true
+
+        },
+        urls_emails_store: {
+            type: String,
+            require: true
+
+        },
+        urls_mobiles_store: {
+            type: String,
+            require: true
+
+        },
+        url_person_email_exist: {
+            type: String,
+            require: true
+
+        },
+        url_person_cellphone_exist: {
+            type: String,
+            require: true
+
+        },
+        url_participants_programmer: {
+            type: String,
+            require: true
+
+        },
+        url_categories_programmer: {
+            type: String,
+            require: true
+
+        },
+        url_permissions_participant: {
+            type: String,
+            require: true
+
+        },
+        url_participant_categories: {
+            type: String,
+            require: true
+
+        },
+        url_store_permissions_participant: {
+            type: String,
+            require: true
+
+        },
+        url_store_participants_categories: {
+            type: String,
+            require: true
+
+        },
+        url_identifications_types: {
+            type: String,
+            require: true
+
+        },
+    },
     data() {
         return {
             contentActive: {}

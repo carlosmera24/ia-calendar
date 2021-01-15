@@ -79,4 +79,8 @@ Desarrollo creado bajo la empresa [Infracounter](https://infracounter.com) por *
     ```
     php artisan migrate:fresh --seed
     ```
+    >Adicionalmente puede agregar datos de prueba para los participantes así:
+    ```
+    php artisan db:seed --class=TestDataParticipantsSeeder
+    ```
 
