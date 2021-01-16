@@ -212,6 +212,7 @@
             v-bind:profile_participant="'{{ $profile_participant }}'"
             v-bind:texts_manage_leader_json="'{{ json_encode($texts_manage_leader) }}'"
             v-bind:texts_general_settings_json="'{{ json_encode($texts_general_settings) }}'"
+            v-bind:text_updated_programmer='" {{ __('messages.updated_programmer') }}"'
             v-bind:profiles_participants_names_json="'{{ json_encode($names_profiles_participants) }}'"
             v-bind:fields_programmer_json="'{{ json_encode($fields_programmer) }}'"
             v-bind:url_person_ui_avatar='"{{ route('participant_generate_avatar') }}"'
@@ -229,6 +230,7 @@
             v-bind:url_participant_categories='"{{ route('list_participant_categories') }}"'
             v-bind:url_store_participants_categories='"{{ route('participants_categories_store') }}"'
             v-bind:url_identifications_types='"{{ route('list_identifications_types') }}"'
+            v-bind:url_update_programmer='"{{ route('programmer_update') }}"'
         />
         {{-- /Content Main --}}
     </div>

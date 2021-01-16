@@ -3,7 +3,7 @@
         <b-loading :is-full-page="true" v-model="isLoading" :can-cancel="false"></b-loading>
 
         <breadcrumb-to-main
-            v-on:clickCancel="clickCancel"
+            v-on:clickCancel="clickCancelToHome"
             v-bind:text_breacrumbs="text_breadcrumbs_init"/>
         <h2>{{ textsGeneralSettings.text_general_setting }} {{ textsGeneralSettings.names_profiles_participants[profile_participant] }}</h2>
         <section class="alert-section mt-4">
@@ -24,13 +24,26 @@
                             <div class="column is-10">
                                 <div class="columns">
                                     <div class="columns column is-12" v-if="programmer.entity_name.editing">
-                                        <div class="column is-6">Editando</div>
                                         <div class="column is-6">
+                                            <b-input
+                                                name="first_name"
+                                                v-model="programmer.entity_name.value"
+                                                maxlength="120"
+                                                expanded>
+                                            </b-input>
+                                        </div>
+                                        <div class="column is-6 content-buttons">
                                             <b-button
                                                 class="btn-edit"
                                                 size="is-small"
                                                 icon-left="save"
-                                                v-on:click.prevent="clickUpdate(1)"
+                                                v-on:click.prevent="clickUpdate( 'entity_name' )"
+                                            />
+                                            <b-button
+                                                class="btn-edit"
+                                                size="is-small"
+                                                icon-left="window-close"
+                                                v-on:click.prevent="clickCancel('entity_name')"
                                             />
                                         </div>
                                     </div>
@@ -118,11 +131,24 @@
                 type: String,
                 require: true,
             },
+            text_updated_programmer: {
+                type: String,
+                require: true,
+            },
             text_no_options: {
                 type: String,
                 require: true,
             },
+            text_success: {
+                type: String,
+                require: true
+
+            },
             url_identifications_types: {
+                type: String,
+                require: true,
+            },
+            url_update_programmer: {
                 type: String,
                 require: true,
             },
@@ -133,6 +159,7 @@
                 hasErrors: false,
                 errors: {},
                 programmer: new Object(),
+                programmerCopy: new Object(),
                 textsGeneralSettings: [],
                 fieldsProgrammer: [],
                 identificationTypeSelected: null,
@@ -149,8 +176,10 @@
                                 'edited':   false,
                                 'editing':  false,
                             };
-                Vue.set(this.programmer,key,val);
+                Vue.set(this.programmer,key,val); //Reactive objects and values
+                this.programmerCopy[key] = Object.assign({}, val); //Non-reactive copy
             });
+            //Crete programmer copy
             this.textsGeneralSettings = JSON.parse(this.texts_general_settings_json);
             this.fieldsProgrammer = JSON.parse(this.fields_programmer_json);
         },
@@ -158,11 +187,25 @@
             this.getIdentificationsTypes();
         },
         methods: {
-            clickCancel(){
+            clickCancelToHome(){
                 this.$emit('activeMainSection','main')
             },
             clickEdit( obj ){
                 obj.editing = !obj.editing;
+            },
+            clickCancel( key ){
+                this.programmer[ key ].value = this.programmerCopy[ key ].value;
+                this.programmer[ key ].editing = false;
+            },
+            clickUpdate( key ){
+                //Compare values
+                if( this.programmer[ key ].value !== this.programmerCopy[ key ].value )//Edited
+                {
+                    this.programmer[ key ].edited = true;
+
+                    //TODO validation
+                    this.updateProgrammer( key );
+                }
             },
             showErrors(resError){
                 this.errors = procesarErroresRequest( resError );
@@ -192,6 +235,40 @@
                     .then( () => {
                         this.isLoading = false;
                     });
+            },
+            updateProgrammer( key )
+            {
+                const obj = this.programmer[ key ];
+                if( obj.edited )
+                {
+                    this.isLoading = true;
+                    const params = {
+                        id: this.programmer.id.value,
+                    };
+                    params[key] = obj.value;
+                    axios.post(this.url_update_programmer, params)
+                        .then( response => {
+                            this.showErrors({});
+                            if( response.data.status === 200 )
+                            {
+                                //update value copy
+                                this.programmerCopy[ key ].value = obj.value;
+                                obj.edited = false; //restore
+                                obj.editing = false; //restore
+
+                                success({
+                                    title: this.text_success,
+                                    text: this.text_updated_programmer
+                                });
+                            }
+                        },
+                        error => {
+                            this.showErrors(error);
+                        })
+                        .then( () => {
+                            this.isLoading = false;
+                        });
+                }
             }
         }
     }

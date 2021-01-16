@@ -20455,6 +20455,10 @@ textarea {
   margin-right: 10px;
 }
 
+.application .content-main .content .form_general_settings .programer_data .content-buttons .button {
+  font-size: 1rem;
+}
+
 .animated_delay {
   -webkit-animation-delay: 0.45s;
           animation-delay: 0.45s;

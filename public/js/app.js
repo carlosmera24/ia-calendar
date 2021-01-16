@@ -2303,6 +2303,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     text_breadcrumbs_init: {
@@ -2409,6 +2412,10 @@ __webpack_require__.r(__webpack_exports__);
       type: String,
       require: true
     },
+    text_updated_programmer: {
+      type: String,
+      require: true
+    },
     fields_programmer_json: {
       type: String,
       require: true
@@ -2470,6 +2477,10 @@ __webpack_require__.r(__webpack_exports__);
       require: true
     },
     url_identifications_types: {
+      type: String,
+      require: true
+    },
+    url_update_programmer: {
       type: String,
       require: true
     }
@@ -3834,6 +3845,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -3867,11 +3891,23 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       type: String,
       require: true
     },
+    text_updated_programmer: {
+      type: String,
+      require: true
+    },
     text_no_options: {
       type: String,
       require: true
     },
+    text_success: {
+      type: String,
+      require: true
+    },
     url_identifications_types: {
+      type: String,
+      require: true
+    },
+    url_update_programmer: {
       type: String,
       require: true
     }
@@ -3882,6 +3918,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       hasErrors: false,
       errors: {},
       programmer: new Object(),
+      programmerCopy: new Object(),
       textsGeneralSettings: [],
       fieldsProgrammer: [],
       identificationTypeSelected: null,
@@ -3901,8 +3938,11 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         'edited': false,
         'editing': false
       };
-      Vue.set(_this.programmer, key, val);
-    });
+      Vue.set(_this.programmer, key, val); //Reactive objects and values
+
+      _this.programmerCopy[key] = Object.assign({}, val); //Non-reactive copy
+    }); //Crete programmer copy
+
     this.textsGeneralSettings = JSON.parse(this.texts_general_settings_json);
     this.fieldsProgrammer = JSON.parse(this.fields_programmer_json);
   },
@@ -3910,11 +3950,24 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
     this.getIdentificationsTypes();
   },
   methods: {
-    clickCancel: function clickCancel() {
+    clickCancelToHome: function clickCancelToHome() {
       this.$emit('activeMainSection', 'main');
     },
     clickEdit: function clickEdit(obj) {
       obj.editing = !obj.editing;
+    },
+    clickCancel: function clickCancel(key) {
+      this.programmer[key].value = this.programmerCopy[key].value;
+      this.programmer[key].editing = false;
+    },
+    clickUpdate: function clickUpdate(key) {
+      //Compare values
+      if (this.programmer[key].value !== this.programmerCopy[key].value) //Edited
+        {
+          this.programmer[key].edited = true; //TODO validation
+
+          this.updateProgrammer(key);
+        }
     },
     showErrors: function showErrors(resError) {
       this.errors = Object(_functions_js__WEBPACK_IMPORTED_MODULE_0__["procesarErroresRequest"])(resError);
@@ -3944,6 +3997,39 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       }).then(function () {
         _this2.isLoading = false;
       });
+    },
+    updateProgrammer: function updateProgrammer(key) {
+      var _this3 = this;
+
+      var obj = this.programmer[key];
+
+      if (obj.edited) {
+        this.isLoading = true;
+        var params = {
+          id: this.programmer.id.value
+        };
+        params[key] = obj.value;
+        axios.post(this.url_update_programmer, params).then(function (response) {
+          _this3.showErrors({});
+
+          if (response.data.status === 200) {
+            //update value copy
+            _this3.programmerCopy[key].value = obj.value;
+            obj.edited = false; //restore
+
+            obj.editing = false; //restore
+
+            Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_2__["success"])({
+              title: _this3.text_success,
+              text: _this3.text_updated_programmer
+            });
+          }
+        }, function (error) {
+          _this3.showErrors(error);
+        }).then(function () {
+          _this3.isLoading = false;
+        });
+      }
     }
   }
 });
@@ -67128,10 +67214,13 @@ var render = function() {
                   profile_participant: _vm.profile_participant,
                   programmer_json: _vm.programmer_json,
                   texts_general_settings_json: _vm.texts_general_settings_json,
+                  text_success: _vm.text_success,
+                  text_updated_programmer: _vm.text_updated_programmer,
                   fields_programmer_json: _vm.fields_programmer_json,
                   text_breadcrumbs_init: _vm.text_breadcrumbs_init,
                   text_no_options: _vm.text_no_options,
-                  url_identifications_types: _vm.url_identifications_types
+                  url_identifications_types: _vm.url_identifications_types,
+                  url_update_programmer: _vm.url_update_programmer
                 },
                 on: { activeMainSection: _vm.setActiveSection }
               })
@@ -68322,7 +68411,7 @@ var render = function() {
       _vm._v(" "),
       _c("breadcrumb-to-main", {
         attrs: { text_breacrumbs: _vm.text_breadcrumbs_init },
-        on: { clickCancel: _vm.clickCancel }
+        on: { clickCancel: _vm.clickCancelToHome }
       }),
       _vm._v(" "),
       _c("h2", [
@@ -68390,13 +68479,35 @@ var render = function() {
                     _c("div", { staticClass: "columns" }, [
                       _vm.programmer.entity_name.editing
                         ? _c("div", { staticClass: "columns column is-12" }, [
-                            _c("div", { staticClass: "column is-6" }, [
-                              _vm._v("Editando")
-                            ]),
-                            _vm._v(" "),
                             _c(
                               "div",
                               { staticClass: "column is-6" },
+                              [
+                                _c("b-input", {
+                                  attrs: {
+                                    name: "first_name",
+                                    maxlength: "120",
+                                    expanded: ""
+                                  },
+                                  model: {
+                                    value: _vm.programmer.entity_name.value,
+                                    callback: function($$v) {
+                                      _vm.$set(
+                                        _vm.programmer.entity_name,
+                                        "value",
+                                        $$v
+                                      )
+                                    },
+                                    expression: "programmer.entity_name.value"
+                                  }
+                                })
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "column is-6 content-buttons" },
                               [
                                 _c("b-button", {
                                   staticClass: "btn-edit",
@@ -68407,7 +68518,21 @@ var render = function() {
                                   on: {
                                     click: function($event) {
                                       $event.preventDefault()
-                                      return _vm.clickUpdate(1)
+                                      return _vm.clickUpdate("entity_name")
+                                    }
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("b-button", {
+                                  staticClass: "btn-edit",
+                                  attrs: {
+                                    size: "is-small",
+                                    "icon-left": "window-close"
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      $event.preventDefault()
+                                      return _vm.clickCancel("entity_name")
                                     }
                                   }
                                 })

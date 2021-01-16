@@ -22,6 +22,7 @@ class ParticipantController extends Controller
 
                             ];
     protected $rules_update = [
+                                'id'                        =>  'required|integer|exists:participants,id',
                                 'persons_id'                =>  'nullable|integer|exists:persons,id',
                                 'programmers_id'            =>  'nullable|integer|exists:programmers,id',
                                 'users_id'                  =>  'nullable|integer|exists:users,id',

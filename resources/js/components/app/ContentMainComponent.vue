@@ -58,10 +58,13 @@
                 v-bind:profile_participant='profile_participant'
                 v-bind:programmer_json="programmer_json"
                 v-bind:texts_general_settings_json='texts_general_settings_json'
+                v-bind:text_success='text_success'
+                v-bind:text_updated_programmer='text_updated_programmer'
                 v-bind:fields_programmer_json='fields_programmer_json'
                 v-bind:text_breadcrumbs_init='text_breadcrumbs_init'
                 v-bind:text_no_options='text_no_options'
                 v-bind:url_identifications_types='url_identifications_types'
+                v-bind:url_update_programmer='url_update_programmer'
             />
         </transition-group>
     </div>
@@ -175,6 +178,11 @@ export default {
             type: String,
             require: true
         },
+        text_updated_programmer: {
+            type: String,
+            require: true
+
+        },
         fields_programmer_json: {
             type: String,
             require: true
@@ -238,6 +246,10 @@ export default {
             require: true
         },
         url_identifications_types: {
+            type: String,
+            require: true
+        },
+        url_update_programmer: {
             type: String,
             require: true
         },

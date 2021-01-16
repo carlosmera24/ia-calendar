@@ -15,6 +15,7 @@ return [
     'updated_participant'   =>  'Partícipe actualizado satisfactoriamente.',
     'no_options'            =>  'No hay opciones disponibles.',
     'loading'               =>  'Cargando...',
+    'updated_programmer'    =>  'Programador actualizado satisfactoriamente.',
 
     //Errors
     'bad_request'               =>  'Solicitud incorrecta',
