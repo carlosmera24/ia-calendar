@@ -3923,6 +3923,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -3993,6 +3994,11 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
 
     };
   },
+  computed: {
+    nitDV: function nitDV() {
+      return this.generateDV(this.programmer.identification.value);
+    }
+  },
   created: function created() {
     var _this = this;
 
@@ -4014,6 +4020,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
   },
   mounted: function mounted() {
     this.getIdentificationsTypes();
+    console.log("DV", this.generateDV(this.programmer.identification.value));
   },
   methods: {
     clickCancelToHome: function clickCancelToHome() {
@@ -4166,6 +4173,27 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
           _this4.isLoading = false;
         });
       }
+    },
+    generateDV: function generateDV(num) {
+      var serie = [71, 67, 59, 53, 47, 43, 41, 37, 29, 23, 19, 17, 13, 7, 3];
+      var numArray = Array.from(num.toString().replace(/\D/g, '').trim()); //Equality numArray with serie
+
+      var diff = serie.length - numArray.length; //Add 0
+
+      if (diff > 0) {
+        for (var n = 0; n < diff; n++) {
+          numArray.unshift(0);
+        }
+      } //Generate DV
+
+
+      var sum = 0;
+      serie.forEach(function (num, i) {
+        sum += num * parseInt(numArray[i]);
+      });
+      var arg11 = sum % 11;
+      var dv = arg11 === 0 || arg11 === 1 ? arg11 : 11 - arg11;
+      return dv;
     }
   }
 });
@@ -68886,7 +68914,11 @@ var render = function() {
                                     })
                                   ],
                                   1
-                                )
+                                ),
+                                _vm._v(" "),
+                                _c("span", { staticClass: "dv-content" }, [
+                                  _vm._v("- " + _vm._s(_vm.nitDV))
+                                ])
                               ],
                               1
                             ),
@@ -68937,7 +68969,9 @@ var render = function() {
                                           .label
                                   )
                                 )
-                              ])
+                              ]),
+                              _vm._v(" "),
+                              _c("span", [_vm._v("- " + _vm._s(_vm.nitDV))])
                             ]),
                             _vm._v(" "),
                             _c(

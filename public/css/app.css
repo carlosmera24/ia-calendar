@@ -20459,12 +20459,28 @@ textarea {
   display: none;
 }
 
+.application .content-main .content .form_general_settings .programer_data .field-identification-type.control .v-select .vs__dropdown-toggle .vs__selected-options {
+  padding: 0;
+}
+
+.application .content-main .content .form_general_settings .programer_data .field-identification-type.control .v-select .vs__dropdown-toggle .vs__selected-options .vs__selected {
+  font-size: 14px;
+}
+
 .application .content-main .content .form_general_settings .programer_data .field-identification-type.control .icon i {
   margin-right: 20px;
 }
 
 .application .content-main .content .form_general_settings .programer_data .field-identification-type.control .is-danger.v-select .vs__dropdown-toggle {
   border-color: #f14668;
+}
+
+.application .content-main .content .form_general_settings .programer_data .dv-content {
+  float: right;
+  position: relative;
+  top: -63px;
+  right: 15px;
+  font-weight: bold;
 }
 
 .application .content-main .content .form_general_settings .programer_data .content-buttons .button {

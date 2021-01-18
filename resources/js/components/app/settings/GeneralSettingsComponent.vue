@@ -110,7 +110,7 @@
                                                     expanded>
                                                 </b-input>
                                             </b-field>
-
+                                            <span class="dv-content">- {{ nitDV }}</span>
                                         </div>
                                         <div class="column is-6 content-buttons">
                                             <b-button
@@ -130,6 +130,7 @@
                                     <div class="columns column is-12" v-else>
                                         <div class="column is-6">
                                             <span>{{ programmer.identification.value ? programmer.identification.value : fieldsProgrammer.identification.label }}</span>
+                                            <span>- {{ nitDV }}</span>
                                         </div>
                                         <div class="column is-6">
                                             <b-button
@@ -233,6 +234,11 @@
                 identificationsTypesIdName: {}, // ID => name
             }
         },
+        computed: {
+            nitDV(){
+                return this.generateDV(this.programmer.identification.value);
+            }
+        },
         created(){
             //Create/load programmer data
             const initProgrammer = JSON.parse(this.programmer_json);
@@ -251,6 +257,7 @@
         },
         mounted(){
             this.getIdentificationsTypes();
+            console.log("DV", this.generateDV(this.programmer.identification.value) );
         },
         methods: {
             clickCancelToHome(){
@@ -404,6 +411,33 @@
                             this.isLoading = false;
                         });
                 }
+            },
+            generateDV(num)
+            {
+                const serie = [71,67,59,53,47,43,41,37,29,23,19,17,13,7,3];
+                const numArray = Array.from( num.toString().replace(/\D/g, '').trim() );
+
+                //Equality numArray with serie
+                const diff = serie.length - numArray.length;
+                //Add 0
+                if( diff > 0 )
+                {
+                    for(var n=0; n < diff; n++ )
+                    {
+                        numArray.unshift(0);
+                    }
+                }
+
+                //Generate DV
+                var sum = 0;
+                serie.forEach( (num, i) =>{
+                    sum += num * parseInt(numArray[i]);
+                });
+
+                const arg11 = sum % 11;
+                const dv = ( arg11 === 0 || arg11 === 1) ? arg11 : 11 - arg11;
+
+                return dv;
             }
         }
     }

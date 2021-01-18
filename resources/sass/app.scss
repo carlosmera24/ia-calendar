@@ -583,6 +583,16 @@ body, h2, button, input, select, textarea {
                         }
                     }
                     .field-identification-type.control{
+                        .v-select{
+                            .vs__dropdown-toggle{
+                                .vs__selected-options{
+                                    padding: 0;
+                                    .vs__selected{
+                                        font-size: 14px;
+                                    }
+                                }
+                            }
+                        }
                         .icon{
                             i{
                                 margin-right: 20px
@@ -593,6 +603,13 @@ body, h2, button, input, select, textarea {
                                 border-color: #f14668;
                             }
                         }
+                    }
+                    .dv-content{
+                        float: right;
+                        position: relative;
+                        top: -63px;
+                        right: 15px;
+                        font-weight: bold;
                     }
                     .content-buttons{
                         .button{
