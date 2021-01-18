@@ -3858,6 +3858,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -3939,10 +3946,10 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         'editing': false
       };
       Vue.set(_this.programmer, key, val); //Reactive objects and values
+      //Crete programmer copy
 
       _this.programmerCopy[key] = Object.assign({}, val); //Non-reactive copy
-    }); //Crete programmer copy
-
+    });
     this.textsGeneralSettings = JSON.parse(this.texts_general_settings_json);
     this.fieldsProgrammer = JSON.parse(this.fields_programmer_json);
   },
@@ -3953,8 +3960,14 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
     clickCancelToHome: function clickCancelToHome() {
       this.$emit('activeMainSection', 'main');
     },
-    clickEdit: function clickEdit(obj) {
-      obj.editing = !obj.editing;
+    clickEdit: function clickEdit(key) {
+      var _this2 = this;
+
+      this.programmer[key].editing = !this.programmer[key].editing; //wait for the input to load
+
+      this.$nextTick(function () {
+        _this2.$refs[key].focus();
+      });
     },
     clickCancel: function clickCancel(key) {
       this.programmer[key].value = this.programmerCopy[key].value;
@@ -3964,9 +3977,22 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       //Compare values
       if (this.programmer[key].value !== this.programmerCopy[key].value) //Edited
         {
-          this.programmer[key].edited = true; //TODO validation
+          this.programmer[key].edited = true; //validation
 
-          this.updateProgrammer(key);
+          var value = this.programmer[key].value;
+          var constraints = {
+            presence: {
+              allowEmpty: false
+            }
+          };
+
+          if (validate.single(value, constraints) === undefined) //Not errors
+            {
+              this.fieldsProgrammer[key].error = false;
+              this.updateProgrammer(key);
+            } else {
+            this.fieldsProgrammer[key].error = true;
+          }
         }
     },
     showErrors: function showErrors(resError) {
@@ -3974,11 +4000,11 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       this.hasErrors = this.errors.errors.length > 0;
     },
     getIdentificationsTypes: function getIdentificationsTypes() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.isLoading = true;
       axios.post(this.url_identifications_types).then(function (response) {
-        _this2.showErrors({});
+        _this3.showErrors({});
 
         if (response.data.status === 200) {
           response.data.identifications_types.forEach(function (element) {
@@ -3987,19 +4013,20 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
               identification_type: name,
               meta: element
             };
-            _this2.identificationsTypesIdName[element.id] = name;
+            _this3.identificationsTypesIdName[element.id] = name;
 
-            _this2.identificationsTypes.push(tmp);
+            _this3.identificationsTypes.push(tmp);
           });
         }
       }, function (error) {
-        _this2.showErrors(error);
+        _this3.showErrors(error);
       }).then(function () {
-        _this2.isLoading = false;
+        _this3.isLoading = false;
       });
     },
+    validateProgrammer: function validateProgrammer(key) {},
     updateProgrammer: function updateProgrammer(key) {
-      var _this3 = this;
+      var _this4 = this;
 
       var obj = this.programmer[key];
 
@@ -4010,24 +4037,24 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         };
         params[key] = obj.value;
         axios.post(this.url_update_programmer, params).then(function (response) {
-          _this3.showErrors({});
+          _this4.showErrors({});
 
           if (response.data.status === 200) {
             //update value copy
-            _this3.programmerCopy[key].value = obj.value;
+            _this4.programmerCopy[key].value = obj.value;
             obj.edited = false; //restore
 
             obj.editing = false; //restore
 
             Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_2__["success"])({
-              title: _this3.text_success,
-              text: _this3.text_updated_programmer
+              title: _this4.text_success,
+              text: _this4.text_updated_programmer
             });
           }
         }, function (error) {
-          _this3.showErrors(error);
+          _this4.showErrors(error);
         }).then(function () {
-          _this3.isLoading = false;
+          _this4.isLoading = false;
         });
       }
     }
@@ -68483,24 +68510,46 @@ var render = function() {
                               "div",
                               { staticClass: "column is-6" },
                               [
-                                _c("b-input", {
-                                  attrs: {
-                                    name: "first_name",
-                                    maxlength: "120",
-                                    expanded: ""
+                                _c(
+                                  "b-field",
+                                  {
+                                    staticClass: "label_not-show",
+                                    attrs: {
+                                      horizontal: "",
+                                      type: {
+                                        "is-danger":
+                                          _vm.fieldsProgrammer.entity_name.error
+                                      },
+                                      message: _vm.fieldsProgrammer.entity_name
+                                        .error
+                                        ? _vm.fieldsProgrammer.entity_name.msg
+                                        : ""
+                                    }
                                   },
-                                  model: {
-                                    value: _vm.programmer.entity_name.value,
-                                    callback: function($$v) {
-                                      _vm.$set(
-                                        _vm.programmer.entity_name,
-                                        "value",
-                                        $$v
-                                      )
-                                    },
-                                    expression: "programmer.entity_name.value"
-                                  }
-                                })
+                                  [
+                                    _c("b-input", {
+                                      ref: "entity_name",
+                                      attrs: {
+                                        name: "entity_name",
+                                        maxlength: "120",
+                                        expanded: ""
+                                      },
+                                      model: {
+                                        value: _vm.programmer.entity_name.value,
+                                        callback: function($$v) {
+                                          _vm.$set(
+                                            _vm.programmer.entity_name,
+                                            "value",
+                                            $$v
+                                          )
+                                        },
+                                        expression:
+                                          "programmer.entity_name.value"
+                                      }
+                                    })
+                                  ],
+                                  1
+                                )
                               ],
                               1
                             ),
@@ -68566,9 +68615,7 @@ var render = function() {
                                   on: {
                                     click: function($event) {
                                       $event.preventDefault()
-                                      return _vm.clickEdit(
-                                        _vm.programmer.entity_name
-                                      )
+                                      return _vm.clickEdit("entity_name")
                                     }
                                   }
                                 })

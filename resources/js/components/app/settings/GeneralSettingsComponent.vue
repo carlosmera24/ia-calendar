@@ -25,12 +25,19 @@
                                 <div class="columns">
                                     <div class="columns column is-12" v-if="programmer.entity_name.editing">
                                         <div class="column is-6">
-                                            <b-input
-                                                name="first_name"
-                                                v-model="programmer.entity_name.value"
-                                                maxlength="120"
-                                                expanded>
-                                            </b-input>
+                                            <b-field horizontal
+                                                class="label_not-show"
+                                                v-bind:type="{ 'is-danger' : fieldsProgrammer.entity_name.error }"
+                                                :message="fieldsProgrammer.entity_name.error ? fieldsProgrammer.entity_name.msg : ''">
+                                                <b-input
+                                                    ref="entity_name"
+                                                    name="entity_name"
+                                                    v-model="programmer.entity_name.value"
+                                                    maxlength="120"
+                                                    expanded>
+                                                </b-input>
+                                            </b-field>
+
                                         </div>
                                         <div class="column is-6 content-buttons">
                                             <b-button
@@ -56,7 +63,7 @@
                                                 class="btn-edit"
                                                 size="is-small"
                                                 icon-left="pen"
-                                                v-on:click.prevent="clickEdit(programmer.entity_name)"
+                                                v-on:click.prevent="clickEdit('entity_name')"
                                             />
                                         </div>
                                     </div>
@@ -177,9 +184,9 @@
                                 'editing':  false,
                             };
                 Vue.set(this.programmer,key,val); //Reactive objects and values
+                //Crete programmer copy
                 this.programmerCopy[key] = Object.assign({}, val); //Non-reactive copy
             });
-            //Crete programmer copy
             this.textsGeneralSettings = JSON.parse(this.texts_general_settings_json);
             this.fieldsProgrammer = JSON.parse(this.fields_programmer_json);
         },
@@ -190,8 +197,12 @@
             clickCancelToHome(){
                 this.$emit('activeMainSection','main')
             },
-            clickEdit( obj ){
-                obj.editing = !obj.editing;
+            clickEdit( key ){
+                this.programmer[ key].editing = !this.programmer[ key].editing;
+                //wait for the input to load
+                this.$nextTick(() => {
+                    this.$refs[ key ].focus();
+                });
             },
             clickCancel( key ){
                 this.programmer[ key ].value = this.programmerCopy[ key ].value;
@@ -203,8 +214,21 @@
                 {
                     this.programmer[ key ].edited = true;
 
-                    //TODO validation
-                    this.updateProgrammer( key );
+                    //validation
+                    const value = this.programmer[key].value;
+                    const constraints = {
+                        presence: {
+                            allowEmpty: false,
+                        }
+                    };
+                    if( validate.single(value, constraints ) === undefined ) //Not errors
+                    {
+                        this.fieldsProgrammer[ key ].error = false;
+                        this.updateProgrammer( key );
+                    }else
+                    {
+                        this.fieldsProgrammer[ key ].error = true;
+                    }
                 }
             },
             showErrors(resError){
@@ -235,6 +259,9 @@
                     .then( () => {
                         this.isLoading = false;
                     });
+            },
+            validateProgrammer( key ){
+
             },
             updateProgrammer( key )
             {

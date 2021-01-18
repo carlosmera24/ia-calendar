@@ -577,6 +577,11 @@ body, h2, button, input, select, textarea {
                             margin-right: 10px;
                         }
                     }
+                    .field.label_not-show{
+                        .field-label{
+                            display: none;
+                        }
+                    }
                     .content-buttons{
                         .button{
                             font-size: 1rem;
