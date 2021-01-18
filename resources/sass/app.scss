@@ -582,6 +582,18 @@ body, h2, button, input, select, textarea {
                             display: none;
                         }
                     }
+                    .field-identification-type.control{
+                        .icon{
+                            i{
+                                margin-right: 20px
+                            }
+                        }
+                        .is-danger.v-select{
+                            .vs__dropdown-toggle{
+                                border-color: #f14668;
+                            }
+                        }
+                    }
                     .content-buttons{
                         .button{
                             font-size: 1rem;

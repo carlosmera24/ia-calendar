@@ -3865,6 +3865,64 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -3929,6 +3987,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       textsGeneralSettings: [],
       fieldsProgrammer: [],
       identificationTypeSelected: null,
+      identificationTypeSelectedOriginal: null,
       identificationsTypes: [],
       identificationsTypesIdName: {} // ID => name
 
@@ -3960,25 +4019,53 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
     clickCancelToHome: function clickCancelToHome() {
       this.$emit('activeMainSection', 'main');
     },
+    onlyNumber: function onlyNumber(event, obj) {
+      var regex = new RegExp(/[^\d]/g);
+      var val = event.target.value.replace(regex, "");
+
+      if (obj.value !== val) {
+        obj.value = val;
+      }
+    },
     clickEdit: function clickEdit(key) {
       var _this2 = this;
 
       this.programmer[key].editing = !this.programmer[key].editing; //wait for the input to load
 
       this.$nextTick(function () {
-        _this2.$refs[key].focus();
+        if (_this2.$refs[key]) {
+          _this2.$refs[key].focus();
+        }
       });
     },
     clickCancel: function clickCancel(key) {
+      //Clean error, change "editing" and restore values
       this.programmer[key].value = this.programmerCopy[key].value;
       this.programmer[key].editing = false;
+      this.fieldsProgrammer[key].error = false;
+
+      if (key === "identification") {
+        this.programmer.identifications_types_id.value = this.programmerCopy.identifications_types_id.value;
+        this.identificationTypeSelected = this.identificationTypeSelectedOriginal;
+        this.programmer.identifications_types_id.editing = false;
+        this.fieldsProgrammer.identifications_types_id.error = false;
+      }
     },
     clickUpdate: function clickUpdate(key) {
-      //Compare values
-      if (this.programmer[key].value !== this.programmerCopy[key].value) //Edited
+      //cleans errors
+      this.fieldsProgrammer[key].error = false;
+
+      if (key === "identification") //Is Identification, clean identifications types
+        {
+          this.fieldsProgrammer.identifications_types_id.error = false;
+        } //Compare values
+
+
+      if (this.programmer[key].value !== this.programmerCopy[key].value || key === "identification" && this.identificationTypeSelected !== this.identificationTypeSelectedOriginal) //Edited
         {
           this.programmer[key].edited = true; //validation
 
+          var valid = true;
           var value = this.programmer[key].value;
           var constraints = {
             presence: {
@@ -3986,13 +4073,21 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
             }
           };
 
-          if (validate.single(value, constraints) === undefined) //Not errors
-            {
-              this.fieldsProgrammer[key].error = false;
-              this.updateProgrammer(key);
-            } else {
+          if (validate.single(value, constraints) !== undefined) {
             this.fieldsProgrammer[key].error = true;
+            valid = false;
           }
+
+          if (key === "identification" && this.identificationTypeSelected === null) {
+            this.fieldsProgrammer.identifications_types_id.error = true;
+            valid = false;
+          }
+
+          if (valid) //Not errors
+            {
+              //update
+              this.updateProgrammer(key);
+            }
         }
     },
     showErrors: function showErrors(resError) {
@@ -4015,7 +4110,13 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
             };
             _this3.identificationsTypesIdName[element.id] = name;
 
-            _this3.identificationsTypes.push(tmp);
+            _this3.identificationsTypes.push(tmp); //selected
+
+
+            if (_this3.programmer.identifications_types_id.value === element.id) {
+              _this3.identificationTypeSelected = element;
+              _this3.identificationTypeSelectedOriginal = element;
+            }
           });
         }
       }, function (error) {
@@ -4024,7 +4125,6 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         _this3.isLoading = false;
       });
     },
-    validateProgrammer: function validateProgrammer(key) {},
     updateProgrammer: function updateProgrammer(key) {
       var _this4 = this;
 
@@ -4036,15 +4136,24 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
           id: this.programmer.id.value
         };
         params[key] = obj.value;
+
+        if (key === "identification" && this.identificationTypeSelected !== this.identificationTypeSelectedOriginal) {
+          params['identifications_types_id'] = this.identificationTypeSelected.id;
+        }
+
         axios.post(this.url_update_programmer, params).then(function (response) {
           _this4.showErrors({});
 
           if (response.data.status === 200) {
-            //update value copy
+            //update/restore value copy
             _this4.programmerCopy[key].value = obj.value;
             obj.edited = false; //restore
 
             obj.editing = false; //restore
+
+            if (key === "identification" && _this4.identificationTypeSelected !== _this4.identificationTypeSelectedOriginal) {
+              _this4.identificationTypeSelectedOriginal = _this4.identificationTypeSelected; //restore
+            }
 
             Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_2__["success"])({
               title: _this4.text_success,
@@ -68630,69 +68739,228 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "column is-12" }, [
                 _c("div", { staticClass: "columns" }, [
-                  _c(
-                    "div",
-                    { staticClass: "column is-2" },
-                    [
-                      _vm.programmer.identification.editing
-                        ? _c(
-                            "v-select",
-                            {
-                              attrs: {
-                                options: _vm.identificationsTypes,
-                                reduce: function(identification_type) {
-                                  return identification_type.meta
+                  _c("div", { staticClass: "column is-2" }, [
+                    _vm.programmer.identification.editing
+                      ? _c(
+                          "div",
+                          {
+                            staticClass:
+                              "field-identification-type control has-icons-left has-icons-right"
+                          },
+                          [
+                            _c(
+                              "v-select",
+                              {
+                                class: {
+                                  "is-danger":
+                                    _vm.fieldsProgrammer
+                                      .identifications_types_id.error
                                 },
-                                placeholder:
-                                  _vm.fieldsProgrammer.identifications_types_id
-                                    .placeholder,
-                                label: "identification_type"
+                                attrs: {
+                                  options: _vm.identificationsTypes,
+                                  reduce: function(identification_type) {
+                                    return identification_type.meta
+                                  },
+                                  placeholder:
+                                    _vm.fieldsProgrammer
+                                      .identifications_types_id.placeholder,
+                                  label: "identification_type"
+                                },
+                                model: {
+                                  value: _vm.identificationTypeSelected,
+                                  callback: function($$v) {
+                                    _vm.identificationTypeSelected = $$v
+                                  },
+                                  expression: "identificationTypeSelected"
+                                }
                               },
-                              model: {
-                                value: _vm.identificationTypeSelected,
-                                callback: function($$v) {
-                                  _vm.identificationTypeSelected = $$v
-                                },
-                                expression: "identificationTypeSelected"
-                              }
-                            },
-                            [
-                              _c(
-                                "div",
-                                {
-                                  attrs: { slot: "no-options" },
-                                  slot: "no-options"
-                                },
-                                [_vm._v(_vm._s(_vm.text_no_options))]
-                              )
-                            ]
-                          )
-                        : _c("span", [
-                            _vm._v(
-                              _vm._s(
-                                _vm.programmer.identifications_types_id.value
-                                  ? _vm.identificationsTypesIdName[
-                                      _vm.programmer.identifications_types_id
-                                        .value
-                                    ]
-                                  : _vm.fieldsProgrammer
-                                      .identifications_types_id.placeholder
-                              )
+                              [
+                                _c(
+                                  "div",
+                                  {
+                                    attrs: { slot: "no-options" },
+                                    slot: "no-options"
+                                  },
+                                  [_vm._v(_vm._s(_vm.text_no_options))]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _vm.fieldsProgrammer.identifications_types_id.error
+                              ? _c(
+                                  "span",
+                                  {
+                                    staticClass: "icon is-right has-text-danger"
+                                  },
+                                  [
+                                    _c("i", {
+                                      staticClass: "fas fa-exclamation-circle"
+                                    })
+                                  ]
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.fieldsProgrammer.identifications_types_id.error
+                              ? _c("p", { staticClass: "help is-danger" }, [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.fieldsProgrammer
+                                        .identifications_types_id.msg
+                                    )
+                                  )
+                                ])
+                              : _vm._e()
+                          ],
+                          1
+                        )
+                      : _c("span", [
+                          _vm._v(
+                            _vm._s(
+                              _vm.programmer.identifications_types_id.value
+                                ? _vm.identificationsTypesIdName[
+                                    _vm.programmer.identifications_types_id
+                                      .value
+                                  ]
+                                : _vm.fieldsProgrammer.identifications_types_id
+                                    .placeholder
                             )
-                          ])
-                    ],
-                    1
-                  ),
+                          )
+                        ])
+                  ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "column is-10" }, [
-                    _c("span", [
-                      _vm._v(
-                        _vm._s(
-                          _vm.programmer.identification.value
-                            ? _vm.programmer.identification.value
-                            : _vm.fieldsProgrammer.identification.label
-                        )
-                      )
+                    _c("div", { staticClass: "columns" }, [
+                      _vm.programmer.identification.editing
+                        ? _c("div", { staticClass: "columns column is-12" }, [
+                            _c(
+                              "div",
+                              { staticClass: "column is-6" },
+                              [
+                                _c(
+                                  "b-field",
+                                  {
+                                    staticClass: "label_not-show",
+                                    attrs: {
+                                      horizontal: "",
+                                      type: {
+                                        "is-danger":
+                                          _vm.fieldsProgrammer.identification
+                                            .error
+                                      },
+                                      message: _vm.fieldsProgrammer
+                                        .identification.error
+                                        ? _vm.fieldsProgrammer.identification
+                                            .msg
+                                        : ""
+                                    }
+                                  },
+                                  [
+                                    _c("b-input", {
+                                      ref: "identification",
+                                      attrs: {
+                                        name: "identification",
+                                        maxlength: "100",
+                                        expanded: ""
+                                      },
+                                      nativeOn: {
+                                        keyup: function($event) {
+                                          return _vm.onlyNumber(
+                                            $event,
+                                            _vm.programmer.identification
+                                          )
+                                        }
+                                      },
+                                      model: {
+                                        value:
+                                          _vm.programmer.identification.value,
+                                        callback: function($$v) {
+                                          _vm.$set(
+                                            _vm.programmer.identification,
+                                            "value",
+                                            $$v
+                                          )
+                                        },
+                                        expression:
+                                          "programmer.identification.value"
+                                      }
+                                    })
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "column is-6 content-buttons" },
+                              [
+                                _c("b-button", {
+                                  staticClass: "btn-edit",
+                                  attrs: {
+                                    size: "is-small",
+                                    "icon-left": "save"
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      $event.preventDefault()
+                                      return _vm.clickUpdate("identification")
+                                    }
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("b-button", {
+                                  staticClass: "btn-edit",
+                                  attrs: {
+                                    size: "is-small",
+                                    "icon-left": "window-close"
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      $event.preventDefault()
+                                      return _vm.clickCancel("identification")
+                                    }
+                                  }
+                                })
+                              ],
+                              1
+                            )
+                          ])
+                        : _c("div", { staticClass: "columns column is-12" }, [
+                            _c("div", { staticClass: "column is-6" }, [
+                              _c("span", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.programmer.identification.value
+                                      ? _vm.programmer.identification.value
+                                      : _vm.fieldsProgrammer.identification
+                                          .label
+                                  )
+                                )
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "column is-6" },
+                              [
+                                _c("b-button", {
+                                  staticClass: "btn-edit",
+                                  attrs: {
+                                    size: "is-small",
+                                    "icon-left": "pen"
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      $event.preventDefault()
+                                      return _vm.clickEdit("identification")
+                                    }
+                                  }
+                                })
+                              ],
+                              1
+                            )
+                          ])
                     ])
                   ])
                 ])
@@ -68717,9 +68985,25 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _c("p", [_vm._v(_vm._s(_vm.fieldsProgrammer))]),
+            _c("p", [
+              _c("b", [_vm._v("selected:")]),
+              _vm._v(" " + _vm._s(_vm.identificationTypeSelected))
+            ]),
             _vm._v(" "),
-            _c("p", [_vm._v(_vm._s(_vm.programmer))])
+            _c("p", [
+              _c("b", [_vm._v("selectedCopy:")]),
+              _vm._v(" " + _vm._s(_vm.identificationTypeSelectedOriginal))
+            ]),
+            _vm._v(" "),
+            _c("p", [
+              _c("b", [_vm._v("fieldsProgrammer:")]),
+              _vm._v(" " + _vm._s(_vm.fieldsProgrammer))
+            ]),
+            _vm._v(" "),
+            _c("p", [
+              _c("b", [_vm._v("programmer:")]),
+              _vm._v(" " + _vm._s(_vm.programmer))
+            ])
           ])
         ]
       )

@@ -20459,6 +20459,14 @@ textarea {
   display: none;
 }
 
+.application .content-main .content .form_general_settings .programer_data .field-identification-type.control .icon i {
+  margin-right: 20px;
+}
+
+.application .content-main .content .form_general_settings .programer_data .field-identification-type.control .is-danger.v-select .vs__dropdown-toggle {
+  border-color: #f14668;
+}
+
 .application .content-main .content .form_general_settings .programer_data .content-buttons .button {
   font-size: 1rem;
 }

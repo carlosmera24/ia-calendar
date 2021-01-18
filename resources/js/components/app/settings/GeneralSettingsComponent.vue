@@ -18,6 +18,7 @@
             <section class="programer_data">
                 <h3><span class="numerator">1</span>{{ textsGeneralSettings.programmer_data }}</h3>
                 <div class="columns is-multiline">
+                    <!-- Entity Name -->
                     <div class="column is-12">
                         <div class="columns">
                             <div class="column is-2"></div>
@@ -71,26 +72,80 @@
                             </div>
                         </div>
                     </div>
+                    <!-- /Entity Name -->
+                    <!-- Identification -->
                     <div class="column is-12">
                         <div class="columns">
                             <div class="column is-2">
-                                <v-select
-                                    v-if="programmer.identification.editing"
-                                    v-model="identificationTypeSelected"
-                                    :options="identificationsTypes"
-                                    :reduce="identification_type => identification_type.meta"
-                                    :placeholder="fieldsProgrammer.identifications_types_id.placeholder"
-                                    label="identification_type"
-                                >
-                                    <div slot="no-options">{{ text_no_options }}</div>
-                                </v-select>
+                                <div class="field-identification-type control has-icons-left has-icons-right" v-if="programmer.identification.editing">
+                                    <v-select
+                                        v-model="identificationTypeSelected"
+                                        :options="identificationsTypes"
+                                        :reduce="identification_type => identification_type.meta"
+                                        :placeholder="fieldsProgrammer.identifications_types_id.placeholder"
+                                        :class="{ 'is-danger' : fieldsProgrammer.identifications_types_id.error }"
+                                        label="identification_type"
+                                    >
+                                        <div slot="no-options">{{ text_no_options }}</div>
+                                    </v-select>
+                                    <span v-if="fieldsProgrammer.identifications_types_id.error" class="icon is-right has-text-danger"><i class="fas fa-exclamation-circle"></i></span>
+                                    <p v-if="fieldsProgrammer.identifications_types_id.error" class="help is-danger">{{ fieldsProgrammer.identifications_types_id.msg }}</p>
+                                </div>
                                 <span v-else>{{ programmer.identifications_types_id.value ? identificationsTypesIdName[programmer.identifications_types_id.value] : fieldsProgrammer.identifications_types_id.placeholder }}</span>
                             </div>
                             <div class="column is-10">
-                                <span>{{ programmer.identification.value ? programmer.identification.value : fieldsProgrammer.identification.label }}</span>
+                                <div class="columns">
+                                    <div class="columns column is-12" v-if="programmer.identification.editing">
+                                        <div class="column is-6">
+                                            <b-field horizontal
+                                                class="label_not-show"
+                                                v-bind:type="{ 'is-danger' : fieldsProgrammer.identification.error }"
+                                                :message="fieldsProgrammer.identification.error ? fieldsProgrammer.identification.msg : ''">
+                                                <b-input
+                                                    ref="identification"
+                                                    name="identification"
+                                                    v-model="programmer.identification.value"
+                                                    maxlength="100"
+                                                    v-on:keyup.native="onlyNumber($event, programmer.identification)"
+                                                    expanded>
+                                                </b-input>
+                                            </b-field>
+
+                                        </div>
+                                        <div class="column is-6 content-buttons">
+                                            <b-button
+                                                class="btn-edit"
+                                                size="is-small"
+                                                icon-left="save"
+                                                v-on:click.prevent="clickUpdate( 'identification' )"
+                                            />
+                                            <b-button
+                                                class="btn-edit"
+                                                size="is-small"
+                                                icon-left="window-close"
+                                                v-on:click.prevent="clickCancel('identification')"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="columns column is-12" v-else>
+                                        <div class="column is-6">
+                                            <span>{{ programmer.identification.value ? programmer.identification.value : fieldsProgrammer.identification.label }}</span>
+                                        </div>
+                                        <div class="column is-6">
+                                            <b-button
+                                                class="btn-edit"
+                                                size="is-small"
+                                                icon-left="pen"
+                                                v-on:click.prevent="clickEdit('identification')"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <!-- /Identification -->
+                    <!-- Logo company -->
                     <div class="column is-12">
                         <div class="columns">
                             <div class="column is-2"></div>
@@ -99,9 +154,12 @@
                             </div>
                         </div>
                     </div>
+                    <!-- /Logo company -->
                 </div>
-                <p>{{ fieldsProgrammer }}</p>
-                <p>{{ programmer }}</p>
+                <p><b>selected:</b> {{ identificationTypeSelected }}</p>
+                <p><b>selectedCopy:</b> {{ identificationTypeSelectedOriginal }}</p>
+                <p><b>fieldsProgrammer:</b> {{ fieldsProgrammer }}</p>
+                <p><b>programmer:</b> {{ programmer }}</p>
             </section>
         </form>
     </div>
@@ -170,6 +228,7 @@
                 textsGeneralSettings: [],
                 fieldsProgrammer: [],
                 identificationTypeSelected: null,
+                identificationTypeSelectedOriginal: null,
                 identificationsTypes: [],
                 identificationsTypesIdName: {}, // ID => name
             }
@@ -197,37 +256,75 @@
             clickCancelToHome(){
                 this.$emit('activeMainSection','main')
             },
+            onlyNumber(event, obj){
+                const regex = new RegExp(/[^\d]/g);
+                const val = event.target.value.replace(regex,"");
+                if( obj.value !== val )
+                {
+                    obj.value = val;
+                }
+            },
             clickEdit( key ){
                 this.programmer[ key].editing = !this.programmer[ key].editing;
                 //wait for the input to load
                 this.$nextTick(() => {
-                    this.$refs[ key ].focus();
+                    if( (this.$refs[ key ]) )
+                    {
+                        this.$refs[ key ].focus();
+                    }
                 });
             },
             clickCancel( key ){
+                //Clean error, change "editing" and restore values
                 this.programmer[ key ].value = this.programmerCopy[ key ].value;
                 this.programmer[ key ].editing = false;
+                this.fieldsProgrammer[ key ].error = false;
+                if( key === "identification" )
+                {
+                    this.programmer.identifications_types_id.value = this.programmerCopy.identifications_types_id.value;
+                    this.identificationTypeSelected = this.identificationTypeSelectedOriginal;
+                    this.programmer.identifications_types_id.editing = false;
+                    this.fieldsProgrammer.identifications_types_id.error = false;
+                }
             },
             clickUpdate( key ){
+                //cleans errors
+                this.fieldsProgrammer[ key ].error = false;
+                if( key === "identification" ) //Is Identification, clean identifications types
+                {
+                    this.fieldsProgrammer.identifications_types_id.error = false;
+                }
+
                 //Compare values
-                if( this.programmer[ key ].value !== this.programmerCopy[ key ].value )//Edited
+                if( this.programmer[ key ].value !== this.programmerCopy[ key ].value
+                    || ( key === "identification" && this.identificationTypeSelected !== this.identificationTypeSelectedOriginal) )//Edited
                 {
                     this.programmer[ key ].edited = true;
 
                     //validation
+                    var valid = true;
                     const value = this.programmer[key].value;
                     const constraints = {
                         presence: {
                             allowEmpty: false,
                         }
                     };
-                    if( validate.single(value, constraints ) === undefined ) //Not errors
-                    {
-                        this.fieldsProgrammer[ key ].error = false;
-                        this.updateProgrammer( key );
-                    }else
+
+                    if( validate.single(value, constraints ) !== undefined )
                     {
                         this.fieldsProgrammer[ key ].error = true;
+                        valid = false;
+                    }
+                    if( key === "identification" && this.identificationTypeSelected === null )
+                    {
+                        this.fieldsProgrammer.identifications_types_id.error = true;
+                        valid = false;
+                    }
+
+                    if( valid ) //Not errors
+                    {
+                        //update
+                        this.updateProgrammer( key );
                     }
                 }
             },
@@ -250,6 +347,12 @@
                                 }
                                 this.identificationsTypesIdName[ element.id ] = name;
                                 this.identificationsTypes.push( tmp );
+                                //selected
+                                if( this.programmer.identifications_types_id.value === element.id )
+                                {
+                                    this.identificationTypeSelected = element;
+                                    this.identificationTypeSelectedOriginal = element;
+                                }
                             });
                         }
                     },
@@ -259,9 +362,6 @@
                     .then( () => {
                         this.isLoading = false;
                     });
-            },
-            validateProgrammer( key ){
-
             },
             updateProgrammer( key )
             {
@@ -273,15 +373,23 @@
                         id: this.programmer.id.value,
                     };
                     params[key] = obj.value;
+                    if( key === "identification" && this.identificationTypeSelected !== this.identificationTypeSelectedOriginal )
+                    {
+                        params['identifications_types_id'] = this.identificationTypeSelected.id;
+                    }
                     axios.post(this.url_update_programmer, params)
                         .then( response => {
                             this.showErrors({});
                             if( response.data.status === 200 )
                             {
-                                //update value copy
+                                //update/restore value copy
                                 this.programmerCopy[ key ].value = obj.value;
                                 obj.edited = false; //restore
                                 obj.editing = false; //restore
+                                if( key === "identification" && this.identificationTypeSelected !== this.identificationTypeSelectedOriginal )
+                                {
+                                    this.identificationTypeSelectedOriginal = this.identificationTypeSelected;//restore
+                                }
 
                                 success({
                                     title: this.text_success,
