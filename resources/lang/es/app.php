@@ -61,6 +61,7 @@ return [
         'leaders_login'         =>  'Inicio de sesión para Líderes',
         'filter_identification' =>  'Filtro tipo de documento',
         'logo_placeholder'      =>  'Insertar logo entidad',
+        'upload_logo'           =>  'Subir logo',
     ],
 
     /**

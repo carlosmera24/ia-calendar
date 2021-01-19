@@ -102,6 +102,7 @@
                                         'logo'                      =>  [
                                                                             'label'         =>  __('validation.attributes.logo'),
                                                                             'placeholder'   =>  __('app.general_settings.logo_placeholder'),
+                                                                            'action_button' =>  __('app.general_settings.upload_logo'),
                                                                             'error'         => false,
                                                                             'msg'           =>  __('validation.required', ['attribute' => ''])
                                                                         ],

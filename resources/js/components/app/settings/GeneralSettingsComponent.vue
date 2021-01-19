@@ -151,7 +151,59 @@
                         <div class="columns">
                             <div class="column is-2"></div>
                             <div class="column is-10">
-                                <span>{{ programmer.logo.value ? programmer.logo.value : fieldsProgrammer.logo.placeholder }}</span>
+                                <div class="columns">
+                                    <div class="columns column is-12" v-if="programmer.logo.editing">
+                                        <div class="column is-6">
+                                            <b-field class="file is-primary" :class="{'has-name': !!fileLogo}">
+                                                <b-upload v-model="fileLogo"
+                                                    class="file-label"
+                                                    ref="inputFileLogo"
+                                                    :accept="aceptLogo"
+                                                    @input="onFileLogoSelected()"
+                                                    >
+                                                    <span class="file-cta">
+                                                        <b-icon class="file-icon" icon="upload"></b-icon>
+                                                        <span class="file-label">{{ fieldsProgrammer.logo.action_button }}</span>
+                                                    </span>
+                                                    <span class="file-name" v-if="fileLogo">
+                                                        {{ fileLogo.name }}
+                                                    </span>
+                                                </b-upload>
+                                            </b-field>
+                                            <figure v-if="logoBase64" class="image is-5by4">
+                                                <img :src="logoBase64">
+                                            </figure>
+                                        </div>
+                                        <div class="column is-6 content-buttons">
+                                            <b-button
+                                                class="btn-edit"
+                                                size="is-small"
+                                                icon-left="save"
+                                                :disabled="!enabledUploadLogo"
+                                                v-on:click.prevent="clickUpdate( 'logo' )"
+                                            />
+                                            <b-button
+                                                class="btn-edit"
+                                                size="is-small"
+                                                icon-left="window-close"
+                                                v-on:click.prevent="clickCancel('logo')"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="columns column is-12" v-else>
+                                        <div class="column is-6">
+                                            <span>{{ programmer.logo.value ? programmer.logo.value : fieldsProgrammer.logo.placeholder }}</span>
+                                        </div>
+                                        <div class="column is-6">
+                                            <b-button
+                                                class="btn-edit"
+                                                size="is-small"
+                                                icon-left="pen"
+                                                v-on:click.prevent="clickEdit('logo')"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -232,12 +284,23 @@
                 identificationTypeSelectedOriginal: null,
                 identificationsTypes: [],
                 identificationsTypesIdName: {}, // ID => name
+                fileLogo: null,
+                enabledUploadLogo: false,
+                aceptLogo: ".jpg,.png",
+                logoBase64: null,
             }
         },
         computed: {
             nitDV(){
                 return this.generateDV(this.programmer.identification.value);
-            }
+            },
+            logoType(){
+                if( this.fileLogo )
+                {
+                    return this.fileLogo.type;
+                }
+                return null;
+            },
         },
         created(){
             //Create/load programmer data
@@ -257,7 +320,6 @@
         },
         mounted(){
             this.getIdentificationsTypes();
-            console.log("DV", this.generateDV(this.programmer.identification.value) );
         },
         methods: {
             clickCancelToHome(){
@@ -292,6 +354,10 @@
                     this.identificationTypeSelected = this.identificationTypeSelectedOriginal;
                     this.programmer.identifications_types_id.editing = false;
                     this.fieldsProgrammer.identifications_types_id.error = false;
+                }
+                if( key === "logo" )
+                {
+                    this.fileLogo = null;
                 }
             },
             clickUpdate( key ){
@@ -438,6 +504,30 @@
                 const dv = ( arg11 === 0 || arg11 === 1) ? arg11 : 11 - arg11;
 
                 return dv;
+            },
+            async onFileLogoSelected(){
+                //validate format
+                if( this.fileLogo )
+                {
+                    this.enabledUploadLogo = true;
+                    const result = await this.imageToBase64(this.fileLogo).catch(e => Error(e));
+                    if(result instanceof Error) {
+                        this.showErrors( result.message )
+                        console.log('Error: ', result.message);
+                        return;
+                    }
+                    this.logoBase64 = result;
+                }else{
+                    this.enabledUploadLogo = false;
+                }
+            },
+            async imageToBase64(file){
+                return await new Promise( (resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = error => reject(error);
+                });
             }
         }
     }

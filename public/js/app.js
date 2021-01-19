@@ -3748,15 +3748,75 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _functions_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../functions.js */ "./resources/js/functions.js");
-/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-select */ "./node_modules/vue-select/dist/vue-select.js");
-/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_select__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _pnotify_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @pnotify/core */ "./node_modules/@pnotify/core/dist/PNotify.js");
-/* harmony import */ var _pnotify_core__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_pnotify_core__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _pnotify_core_dist_PNotify_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @pnotify/core/dist/PNotify.css */ "./node_modules/@pnotify/core/dist/PNotify.css");
-/* harmony import */ var _pnotify_core_dist_PNotify_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_pnotify_core_dist_PNotify_css__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _pnotify_core_dist_BrightTheme_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @pnotify/core/dist/BrightTheme.css */ "./node_modules/@pnotify/core/dist/BrightTheme.css");
-/* harmony import */ var _pnotify_core_dist_BrightTheme_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_pnotify_core_dist_BrightTheme_css__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _functions_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../functions.js */ "./resources/js/functions.js");
+/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-select */ "./node_modules/vue-select/dist/vue-select.js");
+/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue_select__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _pnotify_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @pnotify/core */ "./node_modules/@pnotify/core/dist/PNotify.js");
+/* harmony import */ var _pnotify_core__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _pnotify_core_dist_PNotify_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @pnotify/core/dist/PNotify.css */ "./node_modules/@pnotify/core/dist/PNotify.css");
+/* harmony import */ var _pnotify_core_dist_PNotify_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_pnotify_core_dist_PNotify_css__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _pnotify_core_dist_BrightTheme_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @pnotify/core/dist/BrightTheme.css */ "./node_modules/@pnotify/core/dist/BrightTheme.css");
+/* harmony import */ var _pnotify_core_dist_BrightTheme_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_pnotify_core_dist_BrightTheme_css__WEBPACK_IMPORTED_MODULE_5__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3930,7 +3990,7 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
 
 
 
-Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //Import PNotify
+Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //Import PNotify
 
 
 
@@ -3990,13 +4050,24 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       identificationTypeSelected: null,
       identificationTypeSelectedOriginal: null,
       identificationsTypes: [],
-      identificationsTypesIdName: {} // ID => name
-
+      identificationsTypesIdName: {},
+      // ID => name
+      fileLogo: null,
+      enabledUploadLogo: false,
+      aceptLogo: ".jpg,.png",
+      logoBase64: null
     };
   },
   computed: {
     nitDV: function nitDV() {
       return this.generateDV(this.programmer.identification.value);
+    },
+    logoType: function logoType() {
+      if (this.fileLogo) {
+        return this.fileLogo.type;
+      }
+
+      return null;
     }
   },
   created: function created() {
@@ -4020,7 +4091,6 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
   },
   mounted: function mounted() {
     this.getIdentificationsTypes();
-    console.log("DV", this.generateDV(this.programmer.identification.value));
   },
   methods: {
     clickCancelToHome: function clickCancelToHome() {
@@ -4056,6 +4126,10 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         this.identificationTypeSelected = this.identificationTypeSelectedOriginal;
         this.programmer.identifications_types_id.editing = false;
         this.fieldsProgrammer.identifications_types_id.error = false;
+      }
+
+      if (key === "logo") {
+        this.fileLogo = null;
       }
     },
     clickUpdate: function clickUpdate(key) {
@@ -4098,7 +4172,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         }
     },
     showErrors: function showErrors(resError) {
-      this.errors = Object(_functions_js__WEBPACK_IMPORTED_MODULE_0__["procesarErroresRequest"])(resError);
+      this.errors = Object(_functions_js__WEBPACK_IMPORTED_MODULE_1__["procesarErroresRequest"])(resError);
       this.hasErrors = this.errors.errors.length > 0;
     },
     getIdentificationsTypes: function getIdentificationsTypes() {
@@ -4162,7 +4236,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
               _this4.identificationTypeSelectedOriginal = _this4.identificationTypeSelected; //restore
             }
 
-            Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_2__["success"])({
+            Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
               title: _this4.text_success,
               text: _this4.text_updated_programmer
             });
@@ -4194,6 +4268,86 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       var arg11 = sum % 11;
       var dv = arg11 === 0 || arg11 === 1 ? arg11 : 11 - arg11;
       return dv;
+    },
+    onFileLogoSelected: function onFileLogoSelected() {
+      var _this5 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var result;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                if (!_this5.fileLogo) {
+                  _context.next = 12;
+                  break;
+                }
+
+                _this5.enabledUploadLogo = true;
+                _context.next = 4;
+                return _this5.imageToBase64(_this5.fileLogo)["catch"](function (e) {
+                  return Error(e);
+                });
+
+              case 4:
+                result = _context.sent;
+
+                if (!(result instanceof Error)) {
+                  _context.next = 9;
+                  break;
+                }
+
+                _this5.showErrors(result.message);
+
+                console.log('Error: ', result.message);
+                return _context.abrupt("return");
+
+              case 9:
+                _this5.logoBase64 = result;
+                _context.next = 13;
+                break;
+
+              case 12:
+                _this5.enabledUploadLogo = false;
+
+              case 13:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    },
+    imageToBase64: function imageToBase64(file) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return new Promise(function (resolve, reject) {
+                  var reader = new FileReader();
+                  reader.readAsDataURL(file);
+
+                  reader.onload = function () {
+                    return resolve(reader.result);
+                  };
+
+                  reader.onerror = function (error) {
+                    return reject(error);
+                  };
+                });
+
+              case 2:
+                return _context2.abrupt("return", _context2.sent);
+
+              case 3:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
     }
   }
 });
@@ -69005,14 +69159,169 @@ var render = function() {
                   _c("div", { staticClass: "column is-2" }),
                   _vm._v(" "),
                   _c("div", { staticClass: "column is-10" }, [
-                    _c("span", [
-                      _vm._v(
-                        _vm._s(
-                          _vm.programmer.logo.value
-                            ? _vm.programmer.logo.value
-                            : _vm.fieldsProgrammer.logo.placeholder
-                        )
-                      )
+                    _c("div", { staticClass: "columns" }, [
+                      _vm.programmer.logo.editing
+                        ? _c("div", { staticClass: "columns column is-12" }, [
+                            _c(
+                              "div",
+                              { staticClass: "column is-6" },
+                              [
+                                _c(
+                                  "b-field",
+                                  {
+                                    staticClass: "file is-primary",
+                                    class: { "has-name": !!_vm.fileLogo }
+                                  },
+                                  [
+                                    _c(
+                                      "b-upload",
+                                      {
+                                        ref: "inputFileLogo",
+                                        staticClass: "file-label",
+                                        attrs: { accept: _vm.aceptLogo },
+                                        on: {
+                                          input: function($event) {
+                                            return _vm.onFileLogoSelected()
+                                          }
+                                        },
+                                        model: {
+                                          value: _vm.fileLogo,
+                                          callback: function($$v) {
+                                            _vm.fileLogo = $$v
+                                          },
+                                          expression: "fileLogo"
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "span",
+                                          { staticClass: "file-cta" },
+                                          [
+                                            _c("b-icon", {
+                                              staticClass: "file-icon",
+                                              attrs: { icon: "upload" }
+                                            }),
+                                            _vm._v(" "),
+                                            _c(
+                                              "span",
+                                              { staticClass: "file-label" },
+                                              [
+                                                _vm._v(
+                                                  _vm._s(
+                                                    _vm.fieldsProgrammer.logo
+                                                      .action_button
+                                                  )
+                                                )
+                                              ]
+                                            )
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _vm.fileLogo
+                                          ? _c(
+                                              "span",
+                                              { staticClass: "file-name" },
+                                              [
+                                                _vm._v(
+                                                  "\n                                                    " +
+                                                    _vm._s(_vm.fileLogo.name) +
+                                                    "\n                                                "
+                                                )
+                                              ]
+                                            )
+                                          : _vm._e()
+                                      ]
+                                    )
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _vm.logoBase64
+                                  ? _c(
+                                      "figure",
+                                      { staticClass: "image is-5by4" },
+                                      [
+                                        _c("img", {
+                                          attrs: { src: _vm.logoBase64 }
+                                        })
+                                      ]
+                                    )
+                                  : _vm._e()
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "column is-6 content-buttons" },
+                              [
+                                _c("b-button", {
+                                  staticClass: "btn-edit",
+                                  attrs: {
+                                    size: "is-small",
+                                    "icon-left": "save",
+                                    disabled: !_vm.enabledUploadLogo
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      $event.preventDefault()
+                                      return _vm.clickUpdate("logo")
+                                    }
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("b-button", {
+                                  staticClass: "btn-edit",
+                                  attrs: {
+                                    size: "is-small",
+                                    "icon-left": "window-close"
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      $event.preventDefault()
+                                      return _vm.clickCancel("logo")
+                                    }
+                                  }
+                                })
+                              ],
+                              1
+                            )
+                          ])
+                        : _c("div", { staticClass: "columns column is-12" }, [
+                            _c("div", { staticClass: "column is-6" }, [
+                              _c("span", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.programmer.logo.value
+                                      ? _vm.programmer.logo.value
+                                      : _vm.fieldsProgrammer.logo.placeholder
+                                  )
+                                )
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "column is-6" },
+                              [
+                                _c("b-button", {
+                                  staticClass: "btn-edit",
+                                  attrs: {
+                                    size: "is-small",
+                                    "icon-left": "pen"
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      $event.preventDefault()
+                                      return _vm.clickEdit("logo")
+                                    }
+                                  }
+                                })
+                              ],
+                              1
+                            )
+                          ])
                     ])
                   ])
                 ])
