@@ -3984,6 +3984,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -4055,12 +4061,20 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       fileLogo: null,
       enabledUploadLogo: false,
       aceptLogo: ".jpg,.png",
-      logoBase64: null
+      sizeFieleUploadAllow: 1024 * 1024 * 5 //5MB
+
     };
   },
   computed: {
     nitDV: function nitDV() {
       return this.generateDV(this.programmer.identification.value);
+    },
+    classFile: function classFile() {
+      return {
+        'has-name': !!this.fileLogo,
+        'is-danger': this.fieldsProgrammer.logo.error,
+        'is-primary': !this.fieldsProgrammer.logo.error
+      };
     },
     logoType: function logoType() {
       if (this.fileLogo) {
@@ -4133,7 +4147,8 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       }
     },
     clickUpdate: function clickUpdate(key) {
-      //cleans errors
+      this.isLoading = true; //cleans errors
+
       this.fieldsProgrammer[key].error = false;
 
       if (key === "identification") //Is Identification, clean identifications types
@@ -4163,6 +4178,13 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
             this.fieldsProgrammer.identifications_types_id.error = true;
             valid = false;
           }
+
+          if (key === "logo" && this.fileLogo.size > this.sizeFieleUploadAllow) {
+            this.fieldsProgrammer.logo.error = true;
+            valid = false;
+          }
+
+          this.isLoading = false;
 
           if (valid) //Not errors
             {
@@ -4279,21 +4301,23 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
             switch (_context.prev = _context.next) {
               case 0:
                 if (!_this5.fileLogo) {
-                  _context.next = 12;
+                  _context.next = 15;
                   break;
                 }
 
+                _this5.isLoading = true;
+                _this5.fieldsProgrammer.logo.error = false;
                 _this5.enabledUploadLogo = true;
-                _context.next = 4;
+                _context.next = 6;
                 return _this5.imageToBase64(_this5.fileLogo)["catch"](function (e) {
                   return Error(e);
                 });
 
-              case 4:
+              case 6:
                 result = _context.sent;
 
                 if (!(result instanceof Error)) {
-                  _context.next = 9;
+                  _context.next = 11;
                   break;
                 }
 
@@ -4302,15 +4326,16 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 console.log('Error: ', result.message);
                 return _context.abrupt("return");
 
-              case 9:
-                _this5.logoBase64 = result;
-                _context.next = 13;
+              case 11:
+                _this5.programmer.logo.value = result;
+                _this5.isLoading = false;
+                _context.next = 16;
                 break;
 
-              case 12:
+              case 15:
                 _this5.enabledUploadLogo = false;
 
-              case 13:
+              case 16:
               case "end":
                 return _context.stop();
             }
@@ -69170,7 +69195,17 @@ var render = function() {
                                   "b-field",
                                   {
                                     staticClass: "file is-primary",
-                                    class: { "has-name": !!_vm.fileLogo }
+                                    class: _vm.classFile,
+                                    attrs: {
+                                      type: {
+                                        "is-danger":
+                                          _vm.fieldsProgrammer.logo.error
+                                      },
+                                      message: _vm.fieldsProgrammer.logo.error
+                                        ? _vm.fieldsProgrammer.logo
+                                            .msg_limit_size
+                                        : ""
+                                    }
                                   },
                                   [
                                     _c(
@@ -69237,13 +69272,15 @@ var render = function() {
                                   1
                                 ),
                                 _vm._v(" "),
-                                _vm.logoBase64
+                                _vm.programmer.logo.value
                                   ? _c(
                                       "figure",
                                       { staticClass: "image is-5by4" },
                                       [
                                         _c("img", {
-                                          attrs: { src: _vm.logoBase64 }
+                                          attrs: {
+                                            src: _vm.programmer.logo.value
+                                          }
                                         })
                                       ]
                                     )
@@ -69290,15 +69327,25 @@ var render = function() {
                           ])
                         : _c("div", { staticClass: "columns column is-12" }, [
                             _c("div", { staticClass: "column is-6" }, [
-                              _c("span", [
-                                _vm._v(
-                                  _vm._s(
-                                    _vm.programmer.logo.value
-                                      ? _vm.programmer.logo.value
-                                      : _vm.fieldsProgrammer.logo.placeholder
+                              _vm.programmer.logo.value
+                                ? _c(
+                                    "figure",
+                                    { staticClass: "image is-5by4" },
+                                    [
+                                      _c("img", {
+                                        attrs: {
+                                          src: _vm.programmer.logo.value
+                                        }
+                                      })
+                                    ]
                                   )
-                                )
-                              ])
+                                : _c("span", [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm.fieldsProgrammer.logo.placeholder
+                                      )
+                                    )
+                                  ])
                             ]),
                             _vm._v(" "),
                             _c(

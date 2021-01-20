@@ -154,7 +154,10 @@
                                 <div class="columns">
                                     <div class="columns column is-12" v-if="programmer.logo.editing">
                                         <div class="column is-6">
-                                            <b-field class="file is-primary" :class="{'has-name': !!fileLogo}">
+                                            <b-field class="file is-primary"
+                                                :class="classFile"
+                                                v-bind:type="{ 'is-danger' : fieldsProgrammer.logo.error }"
+                                                :message="fieldsProgrammer.logo.error ? fieldsProgrammer.logo.msg_limit_size : ''">
                                                 <b-upload v-model="fileLogo"
                                                     class="file-label"
                                                     ref="inputFileLogo"
@@ -170,8 +173,8 @@
                                                     </span>
                                                 </b-upload>
                                             </b-field>
-                                            <figure v-if="logoBase64" class="image is-5by4">
-                                                <img :src="logoBase64">
+                                            <figure v-if="programmer.logo.value" class="image is-5by4">
+                                                <img :src="programmer.logo.value">
                                             </figure>
                                         </div>
                                         <div class="column is-6 content-buttons">
@@ -192,7 +195,10 @@
                                     </div>
                                     <div class="columns column is-12" v-else>
                                         <div class="column is-6">
-                                            <span>{{ programmer.logo.value ? programmer.logo.value : fieldsProgrammer.logo.placeholder }}</span>
+                                            <figure v-if="programmer.logo.value" class="image is-5by4">
+                                                <img :src="programmer.logo.value">
+                                            </figure>
+                                            <span v-else>{{ fieldsProgrammer.logo.placeholder }}</span>
                                         </div>
                                         <div class="column is-6">
                                             <b-button
@@ -287,12 +293,19 @@
                 fileLogo: null,
                 enabledUploadLogo: false,
                 aceptLogo: ".jpg,.png",
-                logoBase64: null,
+                sizeFieleUploadAllow: (1024 * 1024 ) * 5, //5MB
             }
         },
         computed: {
             nitDV(){
                 return this.generateDV(this.programmer.identification.value);
+            },
+            classFile(){
+                return {
+                    'has-name': !!this.fileLogo,
+                    'is-danger': this.fieldsProgrammer.logo.error,
+                    'is-primary': !this.fieldsProgrammer.logo.error
+                }
             },
             logoType(){
                 if( this.fileLogo )
@@ -361,6 +374,7 @@
                 }
             },
             clickUpdate( key ){
+                this.isLoading = true;
                 //cleans errors
                 this.fieldsProgrammer[ key ].error = false;
                 if( key === "identification" ) //Is Identification, clean identifications types
@@ -393,6 +407,13 @@
                         this.fieldsProgrammer.identifications_types_id.error = true;
                         valid = false;
                     }
+                    if( key === "logo" && this.fileLogo.size > this.sizeFieleUploadAllow )
+                    {
+                        this.fieldsProgrammer.logo.error = true;
+                        valid = false;
+                    }
+
+                    this.isLoading = false;
 
                     if( valid ) //Not errors
                     {
@@ -509,6 +530,8 @@
                 //validate format
                 if( this.fileLogo )
                 {
+                    this.isLoading = true;
+                    this.fieldsProgrammer.logo.error = false;
                     this.enabledUploadLogo = true;
                     const result = await this.imageToBase64(this.fileLogo).catch(e => Error(e));
                     if(result instanceof Error) {
@@ -516,7 +539,8 @@
                         console.log('Error: ', result.message);
                         return;
                     }
-                    this.logoBase64 = result;
+                    this.programmer.logo.value = result;
+                    this.isLoading = false;
                 }else{
                     this.enabledUploadLogo = false;
                 }

@@ -611,6 +611,19 @@ body, h2, button, input, select, textarea {
                         right: 15px;
                         font-weight: bold;
                     }
+                    .field.file{
+                        .help{
+                            position: absolute;
+                            top: 37px;
+                        }
+                    }
+                    .field.file.is-danger{
+                        .upload.control.file-label{
+                            .file-name{
+                                border-color: #f14668;
+                            }
+                        }
+                    }
                     .content-buttons{
                         .button{
                             font-size: 1rem;

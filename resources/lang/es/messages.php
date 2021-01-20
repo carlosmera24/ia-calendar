@@ -10,12 +10,13 @@ return [
     | The following language lines contain the default  messages for notification/info
     |
     */
-    'success'               =>  'Éxito!',
-    'created_participant'   =>  'Partícipe creado satisfactoriamente.',
-    'updated_participant'   =>  'Partícipe actualizado satisfactoriamente.',
-    'no_options'            =>  'No hay opciones disponibles.',
-    'loading'               =>  'Cargando...',
-    'updated_programmer'    =>  'Programador actualizado satisfactoriamente.',
+    'success'                   =>  'Éxito!',
+    'created_participant'       =>  'Partícipe creado satisfactoriamente.',
+    'updated_participant'       =>  'Partícipe actualizado satisfactoriamente.',
+    'no_options'                =>  'No hay opciones disponibles.',
+    'loading'                   =>  'Cargando...',
+    'updated_programmer'        =>  'Programador actualizado satisfactoriamente.',
+    'size_limit_logo_upload'    =>  'El archivo no puede ser mayor a 5MB',
 
     //Errors
     'bad_request'               =>  'Solicitud incorrecta',

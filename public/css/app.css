@@ -20483,6 +20483,15 @@ textarea {
   font-weight: bold;
 }
 
+.application .content-main .content .form_general_settings .programer_data .field.file .help {
+  position: absolute;
+  top: 37px;
+}
+
+.application .content-main .content .form_general_settings .programer_data .field.file.is-danger .upload.control.file-label .file-name {
+  border-color: #f14668;
+}
+
 .application .content-main .content .form_general_settings .programer_data .content-buttons .button {
   font-size: 1rem;
 }
