@@ -63,9 +63,11 @@
                 v-bind:fields_programmer_json='fields_programmer_json'
                 v-bind:text_breadcrumbs_init='text_breadcrumbs_init'
                 v-bind:text_no_options='text_no_options'
+                v-bind:participant_json='participant_json'
                 v-bind:url_identifications_types='url_identifications_types'
                 v-bind:url_update_programmer='url_update_programmer'
                 v-bind:url_image_base='url_image_base'
+                v-bind:url_person_ui_avatar='url_person_ui_avatar'
             />
         </transition-group>
     </div>
@@ -188,6 +190,10 @@ export default {
             type: String,
             require: true
 
+        },
+        participant_json: {
+            type: String,
+            require: true,
         },
         url_person_ui_avatar: {
             type: String,

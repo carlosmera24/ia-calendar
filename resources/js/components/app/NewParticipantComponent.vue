@@ -340,7 +340,6 @@ export default{
                         this.showErrors({});
                         if( response.data.status === 200 )
                         {
-                            console.log("avatar", response.data.avatar);
                             this.avatar = response.data.avatar.encoded;
                         }
                     },

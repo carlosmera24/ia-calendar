@@ -569,14 +569,29 @@ body, h2, button, input, select, textarea {
                 }
             }
             .form_general_settings{
-                .programer_data{
-                    h3{
+                section{
+                    padding: 12px 0px;
+                    h3.title-section{
                         font-size: 1.25em;
-                        .numerator{
-                            font-weight: 200;
-                            margin-right: 10px;
-                        }
+                            .numerator{
+                                font-weight: 400;
+                                margin-right: 10px;
+                                font-size: 14px;
+                                background-color: #666;
+                                border-radius: 50%;
+                                color: #FFF;
+                                display: inline-grid;
+                                width: 28px;
+                                height: 28px;
+                                text-align: center;
+                                align-items: center;
+                            }
                     }
+                    .is-row-data{
+                        padding: 0px 12px;
+                    }
+                }
+                .programmer_data{
                     .field.label_not-show{
                         .field-label{
                             display: none;
@@ -642,6 +657,24 @@ body, h2, button, input, select, textarea {
                     .content-buttons{
                         .button{
                             font-size: 1rem;
+                        }
+                    }
+                }
+                .adminitrator_data{
+                    .avatar{
+
+                        height: 128px;
+                        width: 128px;
+                        text-align: center;
+                        align-items: center;
+                        figure.image{
+                            border: 2px solid $blue-dark;
+                            border-radius: 50%;
+                            height: 128px;
+                            width: 128px;
+                        }
+                        img{
+                            border-radius: 50%;
                         }
                     }
                 }

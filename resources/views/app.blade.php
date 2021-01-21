@@ -6,14 +6,17 @@
             $user = Auth::user();
             $programmer = null;
             $profile_participant = null;
+            $participant = null;
             if(  $user->participants() != null )
             {
-                $participant = $user->participants()->get()[0];
+                $participant = $user->participants()->first();
                 $profile_participant = isset( $participant ) ? $participant->profiles_participants_id : null;
                 if( $participant->programmer() != null )
                 {
-                    $programmer = $participant->programmer()->get()[0];
+                    $programmer = $participant->programmer()->first();
                 }
+                //Add person date
+                $participant["person"] = $participant->person()->first();
             }
             //TODO -> Get memberships
             $numMailes = 3;
@@ -217,6 +220,7 @@
             v-bind:text_updated_programmer='" {{ __('messages.updated_programmer') }}"'
             v-bind:profiles_participants_names_json="'{{ json_encode($names_profiles_participants) }}'"
             v-bind:fields_programmer_json="'{{ json_encode($fields_programmer) }}'"
+            v-bind:participant_json="'{{ json_encode($participant) }}'"
             v-bind:url_person_ui_avatar='"{{ route('participant_generate_avatar') }}"'
             v-bind:url_person_store='"{{ route('person_store') }}"'
             v-bind:url_participant_store='"{{ route('participant_store') }}"'

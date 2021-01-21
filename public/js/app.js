@@ -2307,6 +2307,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     text_breadcrumbs_init: {
@@ -2418,6 +2420,10 @@ __webpack_require__.r(__webpack_exports__);
       require: true
     },
     fields_programmer_json: {
+      type: String,
+      require: true
+    },
+    participant_json: {
       type: String,
       require: true
     },
@@ -3360,7 +3366,6 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
           _this.showErrors({});
 
           if (response.data.status === 200) {
-            console.log("avatar", response.data.avatar);
             _this.avatar = response.data.avatar.encoded;
           }
         }, function (error) {
@@ -3995,6 +4000,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -4040,6 +4062,10 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       type: String,
       require: true
     },
+    participant_json: {
+      type: String,
+      require: true
+    },
     url_identifications_types: {
       type: String,
       require: true
@@ -4049,6 +4075,10 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       require: true
     },
     url_image_base: {
+      type: String,
+      require: true
+    },
+    url_person_ui_avatar: {
       type: String,
       require: true
     }
@@ -4073,7 +4103,10 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       aceptLogo: ".jpg,.png",
       sizeFieleUploadAllow: 1024 * 1024 * 5,
       //5MB
-      img64Base: null
+      img64Base: null,
+      participant: new Object(),
+      participantCopy: new Object(),
+      avatarAdmin: null
     };
   },
   computed: {
@@ -4112,19 +4145,34 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       _this.programmerCopy[key] = Object.assign({}, val); //Non-reactive copy
     });
     this.textsGeneralSettings = JSON.parse(this.texts_general_settings_json);
-    this.fieldsProgrammer = JSON.parse(this.fields_programmer_json);
+    this.fieldsProgrammer = JSON.parse(this.fields_programmer_json); //Create/load participant data
+
+    var initParticipant = JSON.parse(this.participant_json);
+    Object.keys(initParticipant).forEach(function (key) {
+      var val = {
+        'value': initParticipant[key],
+        'edited': false,
+        'editing': false
+      };
+      Vue.set(_this.participant, key, val); //Reactive objects and values
+      //Crete participant copy
+
+      _this.participantCopy[key] = Object.assign({}, val); //Non-reactive copy
+    });
   },
   mounted: function mounted() {
-    this.getImg64Base();
     this.getIdentificationsTypes();
+    this.getImg64Base(1); //Get logo programmer
+
+    this.getImgAvatar();
   },
   methods: {
-    getImg64Base: function getImg64Base() {
+    getImg64Base: function getImg64Base(option) {
       var _this2 = this;
 
       var params = {
         name: this.programmer.logo.value,
-        option: 1
+        option: option
       };
       axios.get(this.url_image_base, {
         params: params
@@ -4135,6 +4183,47 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       }, function (error) {
         _this2.showErrors(error);
       });
+    },
+    getImgAvatar: function getImgAvatar() {
+      if (this.participant.avatar.value) {
+        this.getImg64Base(2);
+      } else {
+        this.getAvatarString();
+      }
+    },
+    getAvatarString: function getAvatarString() {
+      var _this3 = this;
+
+      var fname = this.participant.person.value.first_name.trim();
+      var lname = this.participant.person.value.last_name.trim();
+      var name = ""; //Only one first name
+
+      if (fname !== "") {
+        name = fname.split(" ", 1)[0];
+      } //Only one last name
+
+
+      if (lname !== "") {
+        name += " " + lname.split(" ", 1)[0];
+      }
+
+      name = name.trim();
+
+      if (name !== "") {
+        axios.post(this.url_person_ui_avatar, {
+          name: name
+        }).then(function (response) {
+          _this3.showErrors({});
+
+          if (response.data.status === 200) {
+            _this3.avatarAdmin = response.data.avatar.encoded;
+          }
+        }, function (error) {
+          _this3.showErrors(error);
+        });
+      } else {
+        this.avatarAdmin = null;
+      }
     },
     clickCancelToHome: function clickCancelToHome() {
       this.$emit('activeMainSection', 'main');
@@ -4148,13 +4237,13 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       }
     },
     clickEdit: function clickEdit(key) {
-      var _this3 = this;
+      var _this4 = this;
 
       this.programmer[key].editing = !this.programmer[key].editing; //wait for the input to load
 
       this.$nextTick(function () {
-        if (_this3.$refs[key]) {
-          _this3.$refs[key].focus();
+        if (_this4.$refs[key]) {
+          _this4.$refs[key].focus();
         }
       });
     },
@@ -4230,11 +4319,11 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       this.hasErrors = this.errors.errors.length > 0;
     },
     getIdentificationsTypes: function getIdentificationsTypes() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.isLoading = true;
       axios.post(this.url_identifications_types).then(function (response) {
-        _this4.showErrors({});
+        _this5.showErrors({});
 
         if (response.data.status === 200) {
           response.data.identifications_types.forEach(function (element) {
@@ -4243,25 +4332,25 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
               identification_type: name,
               meta: element
             };
-            _this4.identificationsTypesIdName[element.id] = name;
+            _this5.identificationsTypesIdName[element.id] = name;
 
-            _this4.identificationsTypes.push(tmp); //selected
+            _this5.identificationsTypes.push(tmp); //selected
 
 
-            if (_this4.programmer.identifications_types_id.value === element.id) {
-              _this4.identificationTypeSelected = element;
-              _this4.identificationTypeSelectedOriginal = element;
+            if (_this5.programmer.identifications_types_id.value === element.id) {
+              _this5.identificationTypeSelected = element;
+              _this5.identificationTypeSelectedOriginal = element;
             }
           });
         }
       }, function (error) {
-        _this4.showErrors(error);
+        _this5.showErrors(error);
       }).then(function () {
-        _this4.isLoading = false;
+        _this5.isLoading = false;
       });
     },
     updateProgrammer: function updateProgrammer(key) {
-      var _this5 = this;
+      var _this6 = this;
 
       var obj = this.programmer[key];
 
@@ -4277,39 +4366,39 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }
 
         axios.post(this.url_update_programmer, params).then(function (response) {
-          _this5.showErrors({});
+          _this6.showErrors({});
 
           if (response.data.status === 200) {
             //update/restore value copy
             //TODO
             if (key === "logo" && response.data.data.extra) //Update logo info
               {
-                _this5.programmer[key].value = response.data.data.extra;
-                _this5.programmerCopy[key].value = response.data.extra;
+                _this6.programmer[key].value = response.data.data.extra;
+                _this6.programmerCopy[key].value = response.data.extra;
 
-                _this5.getImg64Base();
+                _this6.getImg64Base();
               } else //Update copy
               {
-                _this5.programmerCopy[key].value = obj.value;
+                _this6.programmerCopy[key].value = obj.value;
               }
 
             obj.edited = false; //restore
 
             obj.editing = false; //restore
 
-            if (key === "identification" && _this5.identificationTypeSelected !== _this5.identificationTypeSelectedOriginal) {
-              _this5.identificationTypeSelectedOriginal = _this5.identificationTypeSelected; //restore
+            if (key === "identification" && _this6.identificationTypeSelected !== _this6.identificationTypeSelectedOriginal) {
+              _this6.identificationTypeSelectedOriginal = _this6.identificationTypeSelected; //restore
             }
 
             Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
-              title: _this5.text_success,
-              text: _this5.text_updated_programmer
+              title: _this6.text_success,
+              text: _this6.text_updated_programmer
             });
           }
         }, function (error) {
-          _this5.showErrors(error);
+          _this6.showErrors(error);
         }).then(function () {
-          _this5.isLoading = false;
+          _this6.isLoading = false;
         });
       }
     },
@@ -4335,7 +4424,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       return dv;
     },
     onFileLogoSelected: function onFileLogoSelected() {
-      var _this6 = this;
+      var _this7 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
         var result;
@@ -4343,16 +4432,16 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                if (!_this6.fileLogo) {
+                if (!_this7.fileLogo) {
                   _context.next = 15;
                   break;
                 }
 
-                _this6.isLoading = true;
-                _this6.fieldsProgrammer.logo.error = false;
-                _this6.enabledUploadLogo = true;
+                _this7.isLoading = true;
+                _this7.fieldsProgrammer.logo.error = false;
+                _this7.enabledUploadLogo = true;
                 _context.next = 6;
-                return _this6.imageToBase64(_this6.fileLogo)["catch"](function (e) {
+                return _this7.imageToBase64(_this7.fileLogo)["catch"](function (e) {
                   return Error(e);
                 });
 
@@ -4364,19 +4453,19 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                   break;
                 }
 
-                _this6.showErrors(result.message);
+                _this7.showErrors(result.message);
 
                 console.log('Error: ', result.message);
                 return _context.abrupt("return");
 
               case 11:
-                _this6.logoBase64 = result;
-                _this6.isLoading = false;
+                _this7.logoBase64 = result;
+                _this7.isLoading = false;
                 _context.next = 16;
                 break;
 
               case 15:
-                _this6.enabledUploadLogo = false;
+                _this7.enabledUploadLogo = false;
 
               case 16:
               case "end":
@@ -67605,9 +67694,11 @@ var render = function() {
                   fields_programmer_json: _vm.fields_programmer_json,
                   text_breadcrumbs_init: _vm.text_breadcrumbs_init,
                   text_no_options: _vm.text_no_options,
+                  participant_json: _vm.participant_json,
                   url_identifications_types: _vm.url_identifications_types,
                   url_update_programmer: _vm.url_update_programmer,
-                  url_image_base: _vm.url_image_base
+                  url_image_base: _vm.url_image_base,
+                  url_person_ui_avatar: _vm.url_person_ui_avatar
                 },
                 on: { activeMainSection: _vm.setActiveSection }
               })
@@ -68851,14 +68942,14 @@ var render = function() {
         "form",
         { staticClass: "form_general_settings", attrs: { action: "" } },
         [
-          _c("section", { staticClass: "programer_data" }, [
-            _c("h3", [
+          _c("section", { staticClass: "programmer_data" }, [
+            _c("h3", { staticClass: "title-section" }, [
               _c("span", { staticClass: "numerator" }, [_vm._v("1")]),
               _vm._v(_vm._s(_vm.textsGeneralSettings.programmer_data))
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "columns is-multiline" }, [
-              _c("div", { staticClass: "column is-12" }, [
+              _c("div", { staticClass: "column is-12 is-row-data" }, [
                 _c("div", { staticClass: "columns" }, [
                   _c("div", { staticClass: "column is-2" }),
                   _vm._v(" "),
@@ -68988,7 +69079,7 @@ var render = function() {
                 ])
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "column is-12" }, [
+              _c("div", { staticClass: "column is-12 is-row-data" }, [
                 _c("div", { staticClass: "columns" }, [
                   _c("div", { staticClass: "column is-2" }, [
                     _vm.programmer.identification.editing
@@ -69223,7 +69314,7 @@ var render = function() {
                 ])
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "column is-12" }, [
+              _c("div", { staticClass: "column is-12 is-row-data" }, [
                 _c("div", { staticClass: "columns" }, [
                   _c("div", { staticClass: "column is-2" }),
                   _vm._v(" "),
@@ -69410,26 +69501,35 @@ var render = function() {
                   ])
                 ])
               ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("section", { staticClass: "adminitrator_data" }, [
+            _c("h3", { staticClass: "title-section" }, [
+              _c("span", { staticClass: "numerator" }, [_vm._v("2")]),
+              _vm._v(_vm._s(_vm.textsGeneralSettings.administrator_data))
             ]),
             _vm._v(" "),
-            _c("p", [
-              _c("b", [_vm._v("selected:")]),
-              _vm._v(" " + _vm._s(_vm.identificationTypeSelected))
-            ]),
-            _vm._v(" "),
-            _c("p", [
-              _c("b", [_vm._v("selectedCopy:")]),
-              _vm._v(" " + _vm._s(_vm.identificationTypeSelectedOriginal))
-            ]),
-            _vm._v(" "),
-            _c("p", [
-              _c("b", [_vm._v("fieldsProgrammer:")]),
-              _vm._v(" " + _vm._s(_vm.fieldsProgrammer))
-            ]),
-            _vm._v(" "),
-            _c("p", [
-              _c("b", [_vm._v("programmer:")]),
-              _vm._v(" " + _vm._s(_vm.programmer))
+            _c("div", { staticClass: "colums is-multiline" }, [
+              _c("div", { staticClass: "colum is-12" }, [
+                _c("div", { staticClass: "columns" }, [
+                  _c("div", { staticClass: "column is-2 is-row-data" }, [
+                    _c("div", { staticClass: "avatar" }, [
+                      _vm.avatarAdmin
+                        ? _c("figure", { staticClass: "image" }, [
+                            _c("img", { attrs: { src: _vm.avatarAdmin } })
+                          ])
+                        : _vm._e()
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "column is-10 is-row-data" }, [
+                    _vm._v(
+                      "\n                            Otros campos\n                        "
+                    )
+                  ])
+                ])
+              ])
             ])
           ])
         ]

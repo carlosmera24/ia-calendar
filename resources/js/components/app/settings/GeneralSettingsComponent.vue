@@ -15,11 +15,11 @@
             </b-notification>
         </section>
         <form action="" class="form_general_settings">
-            <section class="programer_data">
-                <h3><span class="numerator">1</span>{{ textsGeneralSettings.programmer_data }}</h3>
+            <section class="programmer_data">
+                <h3 class="title-section"><span class="numerator">1</span>{{ textsGeneralSettings.programmer_data }}</h3>
                 <div class="columns is-multiline">
                     <!-- Entity Name -->
-                    <div class="column is-12">
+                    <div class="column is-12 is-row-data">
                         <div class="columns">
                             <div class="column is-2"></div>
                             <div class="column is-10">
@@ -74,7 +74,7 @@
                     </div>
                     <!-- /Entity Name -->
                     <!-- Identification -->
-                    <div class="column is-12">
+                    <div class="column is-12 is-row-data">
                         <div class="columns">
                             <div class="column is-2">
                                 <div class="field-identification-type control has-icons-left has-icons-right" v-if="programmer.identification.editing">
@@ -147,7 +147,7 @@
                     </div>
                     <!-- /Identification -->
                     <!-- Logo company -->
-                    <div class="column is-12">
+                    <div class="column is-12 is-row-data">
                         <div class="columns">
                             <div class="column is-2"></div>
                             <div class="column is-10">
@@ -215,10 +215,27 @@
                     </div>
                     <!-- /Logo company -->
                 </div>
-                <p><b>selected:</b> {{ identificationTypeSelected }}</p>
-                <p><b>selectedCopy:</b> {{ identificationTypeSelectedOriginal }}</p>
-                <p><b>fieldsProgrammer:</b> {{ fieldsProgrammer }}</p>
-                <p><b>programmer:</b> {{ programmer }}</p>
+            </section>
+            <section class="adminitrator_data">
+                <h3 class="title-section"><span class="numerator">2</span>{{ textsGeneralSettings.administrator_data }}</h3>
+                <div class="colums is-multiline">
+                    <div class="colum is-12">
+                        <div class="columns">
+                            <div class="column is-2 is-row-data">
+                                <!-- Avatar -->
+                                <div class="avatar">
+                                    <figure v-if="avatarAdmin" class="image">
+                                        <img :src="avatarAdmin">
+                                    </figure>
+                                </div>
+                                <!-- /Avatar -->
+                            </div>
+                            <div class="column is-10 is-row-data">
+                                Otros campos
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
         </form>
     </div>
@@ -268,6 +285,11 @@
                 require: true
 
             },
+            participant_json: {
+                type: String,
+                require: true
+
+            },
             url_identifications_types: {
                 type: String,
                 require: true,
@@ -277,6 +299,10 @@
                 require: true,
             },
             url_image_base: {
+                type: String,
+                require: true
+            },
+            url_person_ui_avatar: {
                 type: String,
                 require: true
             },
@@ -300,6 +326,9 @@
                 aceptLogo: ".jpg,.png",
                 sizeFieleUploadAllow: (1024 * 1024 ) * 5, //5MB
                 img64Base: null,
+                participant: new Object(),
+                participantCopy: new Object(),
+                avatarAdmin: null,
             }
         },
         computed: {
@@ -337,16 +366,29 @@
             });
             this.textsGeneralSettings = JSON.parse(this.texts_general_settings_json);
             this.fieldsProgrammer = JSON.parse(this.fields_programmer_json);
+            //Create/load participant data
+            const initParticipant = JSON.parse(this.participant_json);
+            Object.keys(initParticipant).forEach( key => {
+               const val = {
+                                'value':    initParticipant[key],
+                                'edited':   false,
+                                'editing':  false,
+                            };
+                Vue.set(this.participant,key,val); //Reactive objects and values
+                //Crete participant copy
+                this.participantCopy[key] = Object.assign({}, val); //Non-reactive copy
+            });
         },
         mounted(){
-            this.getImg64Base();
             this.getIdentificationsTypes();
+            this.getImg64Base(1);//Get logo programmer
+            this.getImgAvatar();
         },
         methods: {
-            getImg64Base(){
+            getImg64Base(option){
                 const params = {
                     name: this.programmer.logo.value,
-                    option: 1
+                    option: option
                 };
                 axios.get(this.url_image_base, { params: params})
                     .then( response => {
@@ -358,6 +400,46 @@
                     error => {
                         this.showErrors(error);
                     });
+            },
+            getImgAvatar(){
+                if( this.participant.avatar.value )
+                {
+                    this.getImg64Base(2);
+                }else{
+                    this.getAvatarString();
+                }
+            },
+            getAvatarString(){
+                const fname = this.participant.person.value.first_name.trim();
+                const lname = this.participant.person.value.last_name.trim();
+                var name = "";
+                //Only one first name
+                if( fname !== "" )
+                {
+                    name = fname.split(" ",1)[0];
+                }
+                //Only one last name
+                if( lname !== "" )
+                {
+                    name += " " + lname.split(" ",1)[0];
+                }
+                name = name.trim();
+                if( name !== "" )
+                {
+                    axios.post( this.url_person_ui_avatar, { name: name } )
+                        .then( response => {
+                            this.showErrors({});
+                            if( response.data.status === 200 )
+                            {
+                                this.avatarAdmin = response.data.avatar.encoded;
+                            }
+                        },
+                        error => {
+                            this.showErrors( error );
+                        } );
+                }else{
+                    this.avatarAdmin = null;
+                }
             },
             clickCancelToHome(){
                 this.$emit('activeMainSection','main')

@@ -20446,36 +20446,53 @@ textarea {
   align-items: center;
 }
 
-.application .content-main .content .form_general_settings .programer_data h3 {
+.application .content-main .content .form_general_settings section {
+  padding: 12px 0px;
+}
+
+.application .content-main .content .form_general_settings section h3.title-section {
   font-size: 1.25em;
 }
 
-.application .content-main .content .form_general_settings .programer_data h3 .numerator {
-  font-weight: 200;
+.application .content-main .content .form_general_settings section h3.title-section .numerator {
+  font-weight: 400;
   margin-right: 10px;
+  font-size: 14px;
+  background-color: #666;
+  border-radius: 50%;
+  color: #FFF;
+  display: inline-grid;
+  width: 28px;
+  height: 28px;
+  text-align: center;
+  align-items: center;
 }
 
-.application .content-main .content .form_general_settings .programer_data .field.label_not-show .field-label {
+.application .content-main .content .form_general_settings section .is-row-data {
+  padding: 0px 12px;
+}
+
+.application .content-main .content .form_general_settings .programmer_data .field.label_not-show .field-label {
   display: none;
 }
 
-.application .content-main .content .form_general_settings .programer_data .field-identification-type.control .v-select .vs__dropdown-toggle .vs__selected-options {
+.application .content-main .content .form_general_settings .programmer_data .field-identification-type.control .v-select .vs__dropdown-toggle .vs__selected-options {
   padding: 0;
 }
 
-.application .content-main .content .form_general_settings .programer_data .field-identification-type.control .v-select .vs__dropdown-toggle .vs__selected-options .vs__selected {
+.application .content-main .content .form_general_settings .programmer_data .field-identification-type.control .v-select .vs__dropdown-toggle .vs__selected-options .vs__selected {
   font-size: 14px;
 }
 
-.application .content-main .content .form_general_settings .programer_data .field-identification-type.control .icon i {
+.application .content-main .content .form_general_settings .programmer_data .field-identification-type.control .icon i {
   margin-right: 20px;
 }
 
-.application .content-main .content .form_general_settings .programer_data .field-identification-type.control .is-danger.v-select .vs__dropdown-toggle {
+.application .content-main .content .form_general_settings .programmer_data .field-identification-type.control .is-danger.v-select .vs__dropdown-toggle {
   border-color: #f14668;
 }
 
-.application .content-main .content .form_general_settings .programer_data .dv-content {
+.application .content-main .content .form_general_settings .programmer_data .dv-content {
   float: right;
   position: relative;
   top: -63px;
@@ -20483,35 +20500,53 @@ textarea {
   font-weight: bold;
 }
 
-.application .content-main .content .form_general_settings .programer_data .field.file .help {
+.application .content-main .content .form_general_settings .programmer_data .field.file .help {
   position: absolute;
   top: 37px;
 }
 
-.application .content-main .content .form_general_settings .programer_data .field.file.is-danger .upload.control.file-label .file-name {
+.application .content-main .content .form_general_settings .programmer_data .field.file.is-danger .upload.control.file-label .file-name {
   border-color: #f14668;
 }
 
-.application .content-main .content .form_general_settings .programer_data figure.logo-upload {
+.application .content-main .content .form_general_settings .programmer_data figure.logo-upload {
   margin-left: 0px;
   margin-right: 0px;
   margin-top: 0px;
   text-align: left;
 }
 
-.application .content-main .content .form_general_settings .programer_data figure.logo {
+.application .content-main .content .form_general_settings .programmer_data figure.logo {
   margin-left: 0px;
   margin-right: 0px;
   text-align: left;
 }
 
-.application .content-main .content .form_general_settings .programer_data figure.logo img {
+.application .content-main .content .form_general_settings .programmer_data figure.logo img {
   width: 128px;
   height: auto;
 }
 
-.application .content-main .content .form_general_settings .programer_data .content-buttons .button {
+.application .content-main .content .form_general_settings .programmer_data .content-buttons .button {
   font-size: 1rem;
+}
+
+.application .content-main .content .form_general_settings .adminitrator_data .avatar {
+  height: 128px;
+  width: 128px;
+  text-align: center;
+  align-items: center;
+}
+
+.application .content-main .content .form_general_settings .adminitrator_data .avatar figure.image {
+  border: 2px solid #005368;
+  border-radius: 50%;
+  height: 128px;
+  width: 128px;
+}
+
+.application .content-main .content .form_general_settings .adminitrator_data .avatar img {
+  border-radius: 50%;
 }
 
 .animated_delay {

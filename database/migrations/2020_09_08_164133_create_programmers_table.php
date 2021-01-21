@@ -20,7 +20,7 @@ class CreateProgrammers extends Migration
             $table->string('entity_name',120);
             $table->integer('identifications_types_id');
             $table->string('identification',100);
-            $table->text('logo')->comment('Logo in format String64')->nullable();
+            $table->text('logo')->comment('Logo name')->nullable();
             $table->tinyInteger('activated_birthday',false)->default(0)->comment('0: InActive, 1:Active');
             $table->tinyInteger('activated_date_join_company',false)->default('0')->comment('0: InActive, 1:Active');
             $table->tinyInteger('activated_tax_calendar',false)->default('0')->comment('0: InActive, 1:Active');
