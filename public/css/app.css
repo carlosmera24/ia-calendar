@@ -20492,6 +20492,24 @@ textarea {
   border-color: #f14668;
 }
 
+.application .content-main .content .form_general_settings .programer_data figure.logo-upload {
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0px;
+  text-align: left;
+}
+
+.application .content-main .content .form_general_settings .programer_data figure.logo {
+  margin-left: 0px;
+  margin-right: 0px;
+  text-align: left;
+}
+
+.application .content-main .content .form_general_settings .programer_data figure.logo img {
+  width: 128px;
+  height: auto;
+}
+
 .application .content-main .content .form_general_settings .programer_data .content-buttons .button {
   font-size: 1rem;
 }

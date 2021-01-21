@@ -65,6 +65,7 @@
                 v-bind:text_no_options='text_no_options'
                 v-bind:url_identifications_types='url_identifications_types'
                 v-bind:url_update_programmer='url_update_programmer'
+                v-bind:url_image_base='url_image_base'
             />
         </transition-group>
     </div>
@@ -250,6 +251,10 @@ export default {
             require: true
         },
         url_update_programmer: {
+            type: String,
+            require: true
+        },
+        url_image_base: {
             type: String,
             require: true
         },

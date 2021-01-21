@@ -173,8 +173,8 @@
                                                     </span>
                                                 </b-upload>
                                             </b-field>
-                                            <figure v-if="programmer.logo.value" class="image is-5by4">
-                                                <img :src="programmer.logo.value">
+                                            <figure v-if="logoBase64" class="image logo-upload is-fullwith">
+                                                <img :src="logoBase64">
                                             </figure>
                                         </div>
                                         <div class="column is-6 content-buttons">
@@ -195,8 +195,8 @@
                                     </div>
                                     <div class="columns column is-12" v-else>
                                         <div class="column is-6">
-                                            <figure v-if="programmer.logo.value" class="image is-5by4">
-                                                <img :src="programmer.logo.value">
+                                            <figure v-if="programmer.logo.value && img64Base" class="image logo">
+                                                <img :src="img64Base">
                                             </figure>
                                             <span v-else>{{ fieldsProgrammer.logo.placeholder }}</span>
                                         </div>
@@ -276,6 +276,10 @@
                 type: String,
                 require: true,
             },
+            url_image_base: {
+                type: String,
+                require: true
+            },
         },
         data() {
             return {
@@ -291,9 +295,11 @@
                 identificationsTypes: [],
                 identificationsTypesIdName: {}, // ID => name
                 fileLogo: null,
+                logoBase64: null,
                 enabledUploadLogo: false,
                 aceptLogo: ".jpg,.png",
                 sizeFieleUploadAllow: (1024 * 1024 ) * 5, //5MB
+                img64Base: null,
             }
         },
         computed: {
@@ -314,6 +320,7 @@
                 }
                 return null;
             },
+
         },
         created(){
             //Create/load programmer data
@@ -332,9 +339,26 @@
             this.fieldsProgrammer = JSON.parse(this.fields_programmer_json);
         },
         mounted(){
+            this.getImg64Base();
             this.getIdentificationsTypes();
         },
         methods: {
+            getImg64Base(){
+                const params = {
+                    name: this.programmer.logo.value,
+                    option: 1
+                };
+                axios.get(this.url_image_base, { params: params})
+                    .then( response => {
+                        if( response.status === 200 )
+                        {
+                            this.img64Base = response.data;
+                        }
+                    },
+                    error => {
+                        this.showErrors(error);
+                    });
+            },
             clickCancelToHome(){
                 this.$emit('activeMainSection','main')
             },
@@ -384,7 +408,8 @@
 
                 //Compare values
                 if( this.programmer[ key ].value !== this.programmerCopy[ key ].value
-                    || ( key === "identification" && this.identificationTypeSelected !== this.identificationTypeSelectedOriginal) )//Edited
+                    || ( key === "identification" && this.identificationTypeSelected !== this.identificationTypeSelectedOriginal)
+                    || ( key === "logo" && this.logoBase64) )//Edited
                 {
                     this.programmer[ key ].edited = true;
 
@@ -407,10 +432,15 @@
                         this.fieldsProgrammer.identifications_types_id.error = true;
                         valid = false;
                     }
+
                     if( key === "logo" && this.fileLogo.size > this.sizeFieleUploadAllow )
                     {
                         this.fieldsProgrammer.logo.error = true;
                         valid = false;
+                    }else if( key === "logo" )
+                    {
+                        //Value for save in DDBB
+                        this.programmer.logo.value = this.logoBase64;
                     }
 
                     this.isLoading = false;
@@ -477,7 +507,16 @@
                             if( response.data.status === 200 )
                             {
                                 //update/restore value copy
-                                this.programmerCopy[ key ].value = obj.value;
+                                //TODO
+                                if( key === "logo" && response.data.data.extra )//Update logo info
+                                {
+                                    this.programmer[ key ].value = response.data.data.extra;
+                                    this.programmerCopy[ key ].value = response.data.extra;
+                                    this.getImg64Base();
+                                }else//Update copy
+                                {
+                                    this.programmerCopy[ key ].value = obj.value;
+                                }
                                 obj.edited = false; //restore
                                 obj.editing = false; //restore
                                 if( key === "identification" && this.identificationTypeSelected !== this.identificationTypeSelectedOriginal )
@@ -539,7 +578,7 @@
                         console.log('Error: ', result.message);
                         return;
                     }
-                    this.programmer.logo.value = result;
+                    this.logoBase64 = result;
                     this.isLoading = false;
                 }else{
                     this.enabledUploadLogo = false;

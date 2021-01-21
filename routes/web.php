@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\CategorieController;
@@ -56,6 +57,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/participants-categories/list-categories', [ ParticipantCategorieController::class, 'listParticipantCategorie' ])->name('list_participant_categories');
     //Identifications types
     Route::post('/identifications-types/list', [ IdentificationTypeController::class, 'list' ])->name('list_identifications_types');
+    //Image
+    Route::get('images/64base', [ FileController::class, 'image64Base'])->name('image_64base');
 });
 // Sesion
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');

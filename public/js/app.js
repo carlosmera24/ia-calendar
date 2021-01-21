@@ -2306,6 +2306,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     text_breadcrumbs_init: {
@@ -2481,6 +2482,10 @@ __webpack_require__.r(__webpack_exports__);
       require: true
     },
     url_update_programmer: {
+      type: String,
+      require: true
+    },
+    url_image_base: {
       type: String,
       require: true
     }
@@ -4042,6 +4047,10 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
     url_update_programmer: {
       type: String,
       require: true
+    },
+    url_image_base: {
+      type: String,
+      require: true
     }
   },
   data: function data() {
@@ -4059,10 +4068,12 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       identificationsTypesIdName: {},
       // ID => name
       fileLogo: null,
+      logoBase64: null,
       enabledUploadLogo: false,
       aceptLogo: ".jpg,.png",
-      sizeFieleUploadAllow: 1024 * 1024 * 5 //5MB
-
+      sizeFieleUploadAllow: 1024 * 1024 * 5,
+      //5MB
+      img64Base: null
     };
   },
   computed: {
@@ -4104,9 +4115,27 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
     this.fieldsProgrammer = JSON.parse(this.fields_programmer_json);
   },
   mounted: function mounted() {
+    this.getImg64Base();
     this.getIdentificationsTypes();
   },
   methods: {
+    getImg64Base: function getImg64Base() {
+      var _this2 = this;
+
+      var params = {
+        name: this.programmer.logo.value,
+        option: 1
+      };
+      axios.get(this.url_image_base, {
+        params: params
+      }).then(function (response) {
+        if (response.status === 200) {
+          _this2.img64Base = response.data;
+        }
+      }, function (error) {
+        _this2.showErrors(error);
+      });
+    },
     clickCancelToHome: function clickCancelToHome() {
       this.$emit('activeMainSection', 'main');
     },
@@ -4119,13 +4148,13 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       }
     },
     clickEdit: function clickEdit(key) {
-      var _this2 = this;
+      var _this3 = this;
 
       this.programmer[key].editing = !this.programmer[key].editing; //wait for the input to load
 
       this.$nextTick(function () {
-        if (_this2.$refs[key]) {
-          _this2.$refs[key].focus();
+        if (_this3.$refs[key]) {
+          _this3.$refs[key].focus();
         }
       });
     },
@@ -4157,7 +4186,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         } //Compare values
 
 
-      if (this.programmer[key].value !== this.programmerCopy[key].value || key === "identification" && this.identificationTypeSelected !== this.identificationTypeSelectedOriginal) //Edited
+      if (this.programmer[key].value !== this.programmerCopy[key].value || key === "identification" && this.identificationTypeSelected !== this.identificationTypeSelectedOriginal || key === "logo" && this.logoBase64) //Edited
         {
           this.programmer[key].edited = true; //validation
 
@@ -4182,6 +4211,9 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
           if (key === "logo" && this.fileLogo.size > this.sizeFieleUploadAllow) {
             this.fieldsProgrammer.logo.error = true;
             valid = false;
+          } else if (key === "logo") {
+            //Value for save in DDBB
+            this.programmer.logo.value = this.logoBase64;
           }
 
           this.isLoading = false;
@@ -4198,11 +4230,11 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       this.hasErrors = this.errors.errors.length > 0;
     },
     getIdentificationsTypes: function getIdentificationsTypes() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.isLoading = true;
       axios.post(this.url_identifications_types).then(function (response) {
-        _this3.showErrors({});
+        _this4.showErrors({});
 
         if (response.data.status === 200) {
           response.data.identifications_types.forEach(function (element) {
@@ -4211,25 +4243,25 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
               identification_type: name,
               meta: element
             };
-            _this3.identificationsTypesIdName[element.id] = name;
+            _this4.identificationsTypesIdName[element.id] = name;
 
-            _this3.identificationsTypes.push(tmp); //selected
+            _this4.identificationsTypes.push(tmp); //selected
 
 
-            if (_this3.programmer.identifications_types_id.value === element.id) {
-              _this3.identificationTypeSelected = element;
-              _this3.identificationTypeSelectedOriginal = element;
+            if (_this4.programmer.identifications_types_id.value === element.id) {
+              _this4.identificationTypeSelected = element;
+              _this4.identificationTypeSelectedOriginal = element;
             }
           });
         }
       }, function (error) {
-        _this3.showErrors(error);
+        _this4.showErrors(error);
       }).then(function () {
-        _this3.isLoading = false;
+        _this4.isLoading = false;
       });
     },
     updateProgrammer: function updateProgrammer(key) {
-      var _this4 = this;
+      var _this5 = this;
 
       var obj = this.programmer[key];
 
@@ -4245,28 +4277,39 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }
 
         axios.post(this.url_update_programmer, params).then(function (response) {
-          _this4.showErrors({});
+          _this5.showErrors({});
 
           if (response.data.status === 200) {
             //update/restore value copy
-            _this4.programmerCopy[key].value = obj.value;
+            //TODO
+            if (key === "logo" && response.data.data.extra) //Update logo info
+              {
+                _this5.programmer[key].value = response.data.data.extra;
+                _this5.programmerCopy[key].value = response.data.extra;
+
+                _this5.getImg64Base();
+              } else //Update copy
+              {
+                _this5.programmerCopy[key].value = obj.value;
+              }
+
             obj.edited = false; //restore
 
             obj.editing = false; //restore
 
-            if (key === "identification" && _this4.identificationTypeSelected !== _this4.identificationTypeSelectedOriginal) {
-              _this4.identificationTypeSelectedOriginal = _this4.identificationTypeSelected; //restore
+            if (key === "identification" && _this5.identificationTypeSelected !== _this5.identificationTypeSelectedOriginal) {
+              _this5.identificationTypeSelectedOriginal = _this5.identificationTypeSelected; //restore
             }
 
             Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
-              title: _this4.text_success,
-              text: _this4.text_updated_programmer
+              title: _this5.text_success,
+              text: _this5.text_updated_programmer
             });
           }
         }, function (error) {
-          _this4.showErrors(error);
+          _this5.showErrors(error);
         }).then(function () {
-          _this4.isLoading = false;
+          _this5.isLoading = false;
         });
       }
     },
@@ -4292,7 +4335,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       return dv;
     },
     onFileLogoSelected: function onFileLogoSelected() {
-      var _this5 = this;
+      var _this6 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
         var result;
@@ -4300,16 +4343,16 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                if (!_this5.fileLogo) {
+                if (!_this6.fileLogo) {
                   _context.next = 15;
                   break;
                 }
 
-                _this5.isLoading = true;
-                _this5.fieldsProgrammer.logo.error = false;
-                _this5.enabledUploadLogo = true;
+                _this6.isLoading = true;
+                _this6.fieldsProgrammer.logo.error = false;
+                _this6.enabledUploadLogo = true;
                 _context.next = 6;
-                return _this5.imageToBase64(_this5.fileLogo)["catch"](function (e) {
+                return _this6.imageToBase64(_this6.fileLogo)["catch"](function (e) {
                   return Error(e);
                 });
 
@@ -4321,19 +4364,19 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                   break;
                 }
 
-                _this5.showErrors(result.message);
+                _this6.showErrors(result.message);
 
                 console.log('Error: ', result.message);
                 return _context.abrupt("return");
 
               case 11:
-                _this5.programmer.logo.value = result;
-                _this5.isLoading = false;
+                _this6.logoBase64 = result;
+                _this6.isLoading = false;
                 _context.next = 16;
                 break;
 
               case 15:
-                _this5.enabledUploadLogo = false;
+                _this6.enabledUploadLogo = false;
 
               case 16:
               case "end":
@@ -67563,7 +67606,8 @@ var render = function() {
                   text_breadcrumbs_init: _vm.text_breadcrumbs_init,
                   text_no_options: _vm.text_no_options,
                   url_identifications_types: _vm.url_identifications_types,
-                  url_update_programmer: _vm.url_update_programmer
+                  url_update_programmer: _vm.url_update_programmer,
+                  url_image_base: _vm.url_image_base
                 },
                 on: { activeMainSection: _vm.setActiveSection }
               })
@@ -69272,15 +69316,16 @@ var render = function() {
                                   1
                                 ),
                                 _vm._v(" "),
-                                _vm.programmer.logo.value
+                                _vm.logoBase64
                                   ? _c(
                                       "figure",
-                                      { staticClass: "image is-5by4" },
+                                      {
+                                        staticClass:
+                                          "image logo-upload is-fullwith"
+                                      },
                                       [
                                         _c("img", {
-                                          attrs: {
-                                            src: _vm.programmer.logo.value
-                                          }
+                                          attrs: { src: _vm.logoBase64 }
                                         })
                                       ]
                                     )
@@ -69327,18 +69372,10 @@ var render = function() {
                           ])
                         : _c("div", { staticClass: "columns column is-12" }, [
                             _c("div", { staticClass: "column is-6" }, [
-                              _vm.programmer.logo.value
-                                ? _c(
-                                    "figure",
-                                    { staticClass: "image is-5by4" },
-                                    [
-                                      _c("img", {
-                                        attrs: {
-                                          src: _vm.programmer.logo.value
-                                        }
-                                      })
-                                    ]
-                                  )
+                              _vm.programmer.logo.value && _vm.img64Base
+                                ? _c("figure", { staticClass: "image logo" }, [
+                                    _c("img", { attrs: { src: _vm.img64Base } })
+                                  ])
                                 : _c("span", [
                                     _vm._v(
                                       _vm._s(

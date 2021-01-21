@@ -624,6 +624,21 @@ body, h2, button, input, select, textarea {
                             }
                         }
                     }
+                    figure.logo-upload{
+                        margin-left: 0px;
+                        margin-right: 0px;
+                        margin-top: 0px;
+                        text-align: left;
+                    }
+                    figure.logo{
+                        margin-left: 0px;
+                        margin-right: 0px;
+                        text-align: left;
+                        img{
+                            width: 128px;
+                            height: auto;
+                        }
+                    }
                     .content-buttons{
                         .button{
                             font-size: 1rem;

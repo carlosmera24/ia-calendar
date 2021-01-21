@@ -233,6 +233,7 @@
             v-bind:url_store_participants_categories='"{{ route('participants_categories_store') }}"'
             v-bind:url_identifications_types='"{{ route('list_identifications_types') }}"'
             v-bind:url_update_programmer='"{{ route('programmer_update') }}"'
+            v-bind:url_image_base='"{{ route('image_64base') }}"'
         />
         {{-- /Content Main --}}
     </div>

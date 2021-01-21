@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Programmer;
-use Illuminate\Http\Request;
 use Validator;
+use App\Models\Programmer;
+use App\CustomClass\Helpers;
+use Illuminate\Http\Request;
 
 class ProgrammerController extends Controller
 {
@@ -127,6 +128,16 @@ class ProgrammerController extends Controller
             {
                 $programmer->identification = $request->identification;
             }
+            if( isset( $request->logo ) )
+            {
+                $name_image = empty($programmer->logo) ? hash( 'md5', $programmer->id .'-'. $programmer->entity_name .'-'. $programmer->identification ) : $programmer->logo;
+                $res_image = Helpers::saveImageString64($request->logo, $name_image, 1);
+                if( isset($res_image) )
+                {
+                    $programmer->logo = $res_image;
+                    $extra = $res_image;
+                }
+            }
             if( isset( $request->activated_birthday ) )
             {
                 $programmer->activated_birthday = $request->activated_birthday;
@@ -154,7 +165,8 @@ class ProgrammerController extends Controller
                                         array(
                                                 'status'    =>  200,
                                                 'data'      =>  array(
-                                                                        "id"    => $programmer->id
+                                                                        "id"    => $programmer->id,
+                                                                        "extra" => $extra
                                                                     )
                                             ),
                                         200
