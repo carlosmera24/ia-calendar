@@ -75,6 +75,15 @@ class TestDataSeeder extends Seeder
 
         ]);
 
+        //Person email
+        DB::table('persons_emails')->insert([
+            'id' => 1,
+            'email' => 'admin@demo.co',
+            'initial_register' => 1,
+            'persons_id' => 1,
+            'status_persons_emails_id' => 1,
+        ]);
+
         //Participant
         DB::table('participants')->insert([
             'id' => 1,
