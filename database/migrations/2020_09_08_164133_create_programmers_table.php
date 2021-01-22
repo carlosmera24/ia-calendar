@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Query\Expression;
 
-class CreateProgrammers extends Migration
+class CreateProgrammersTable extends Migration
 {
     /**
      * Run the migrations.

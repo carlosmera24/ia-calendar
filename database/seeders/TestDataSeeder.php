@@ -18,6 +18,8 @@ class TestDataSeeder extends Seeder
         //Clean data demo
         DB::statement('DELETE FROM permissions_participants WHERE id > 0');
         DB::statement('ALTER TABLE permissions_participants AUTO_INCREMENT = 0');
+        DB::statement('DELETE FROM participants_categories WHERE id > 0');
+        DB::statement('ALTER TABLE participants_categories AUTO_INCREMENT = 0');
         DB::statement('DELETE FROM categories WHERE id > 0');
         DB::statement('ALTER TABLE categories AUTO_INCREMENT = 0');
         DB::statement('DELETE FROM colors WHERE id > 0');
