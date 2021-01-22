@@ -14,6 +14,7 @@ class ProgrammerController extends Controller
                                 'entity_name'                   =>  'nullable|min:2|max:120',
                                 'identifications_types_id'      =>  'nullable|integer|exists:identifications_types,id',
                                 'identification'                =>  'nullable|min:5|max:100',
+                                'logo'                          =>  'nullable|min:5',
                                 'activated_birthday'            =>  'nullable|regex:/^[0-1]$/',
                                 'activated_date_join_company'   =>  'nullable|regex:/^[0-1]$/',
                                 'activated_tax_calendar'        =>  'nullable|regex:/^[0-1]$/',
@@ -116,6 +117,7 @@ class ProgrammerController extends Controller
             }
 
             //Update
+            $extra = null; //Aditional data for request
             if( isset( $request->entity_name ) )
             {
                 $programmer->entity_name = $request->entity_name;
@@ -131,7 +133,7 @@ class ProgrammerController extends Controller
             if( isset( $request->logo ) )
             {
                 $name_image = empty($programmer->logo) ? hash( 'md5', $programmer->id .'-'. $programmer->entity_name .'-'. $programmer->identification ) : $programmer->logo;
-                $res_image = Helpers::saveImageString64($request->logo, $name_image, 1);
+                $res_image = Helpers::saveImageString64($request->logo, $name_image, Helpers::OPTION_DIR_IMAGE_LOGO);
                 if( isset($res_image) )
                 {
                     $programmer->logo = $res_image;

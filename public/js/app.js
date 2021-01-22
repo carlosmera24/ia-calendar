@@ -2309,6 +2309,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     text_breadcrumbs_init: {
@@ -4017,6 +4019,47 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -4047,6 +4090,10 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       require: true
     },
     fields_programmer_json: {
+      type: String,
+      require: true
+    },
+    participant_fields_json: {
       type: String,
       require: true
     },
@@ -4081,6 +4128,10 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
     url_person_ui_avatar: {
       type: String,
       require: true
+    },
+    url_participant_update: {
+      type: String,
+      require: true
     }
   },
   data: function data() {
@@ -4106,26 +4157,35 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       img64Base: null,
       participant: new Object(),
       participantCopy: new Object(),
-      avatarAdmin: null
+      avatarAdmin: null,
+      avatarAdminCopy: null,
+      OPTIONS: {
+        PROGRAMMER: 1,
+        PARTICIPANT: 2
+      },
+      fieldsParticipant: [],
+      fileAvatar: null,
+      enabledUploadAvatar: false,
+      aceptAvatar: ".jpg,.png,.gif"
     };
   },
   computed: {
     nitDV: function nitDV() {
       return this.generateDV(this.programmer.identification.value);
     },
-    classFile: function classFile() {
+    classFileLogo: function classFileLogo() {
       return {
         'has-name': !!this.fileLogo,
         'is-danger': this.fieldsProgrammer.logo.error,
         'is-primary': !this.fieldsProgrammer.logo.error
       };
     },
-    logoType: function logoType() {
-      if (this.fileLogo) {
-        return this.fileLogo.type;
-      }
-
-      return null;
+    classFileAvatar: function classFileAvatar() {
+      return {
+        'has-name': !!this.fileAvatar,
+        'is-danger': this.fieldsParticipant.profile_image.error,
+        'is-primary': !this.fieldsParticipant.profile_image.error
+      };
     }
   },
   created: function created() {
@@ -4145,7 +4205,8 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       _this.programmerCopy[key] = Object.assign({}, val); //Non-reactive copy
     });
     this.textsGeneralSettings = JSON.parse(this.texts_general_settings_json);
-    this.fieldsProgrammer = JSON.parse(this.fields_programmer_json); //Create/load participant data
+    this.fieldsProgrammer = JSON.parse(this.fields_programmer_json);
+    this.fieldsParticipant = JSON.parse(this.participant_fields_json); //Create/load participant data
 
     var initParticipant = JSON.parse(this.participant_json);
     Object.keys(initParticipant).forEach(function (key) {
@@ -4162,37 +4223,82 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
   },
   mounted: function mounted() {
     this.getIdentificationsTypes();
-    this.getImg64Base(1); //Get logo programmer
+    this.getImg64Base(this.OPTIONS.PROGRAMMER, this.programmer.logo.value); //Get logo programmer
 
     this.getImgAvatar();
   },
   methods: {
-    getImg64Base: function getImg64Base(option) {
+    showErrors: function showErrors(resError) {
+      this.errors = Object(_functions_js__WEBPACK_IMPORTED_MODULE_1__["procesarErroresRequest"])(resError);
+      this.hasErrors = this.errors.errors.length > 0;
+    },
+    getIdentificationsTypes: function getIdentificationsTypes() {
       var _this2 = this;
 
-      var params = {
-        name: this.programmer.logo.value,
-        option: option
-      };
-      axios.get(this.url_image_base, {
-        params: params
-      }).then(function (response) {
-        if (response.status === 200) {
-          _this2.img64Base = response.data;
+      this.isLoading = true;
+      axios.post(this.url_identifications_types).then(function (response) {
+        _this2.showErrors({});
+
+        if (response.data.status === 200) {
+          response.data.identifications_types.forEach(function (element) {
+            var name = element.abrevation + (element.translation ? '-' + element.translation.name : '');
+            var tmp = {
+              identification_type: name,
+              meta: element
+            };
+            _this2.identificationsTypesIdName[element.id] = name;
+
+            _this2.identificationsTypes.push(tmp); //selected
+
+
+            if (_this2.programmer.identifications_types_id.value === element.id) {
+              _this2.identificationTypeSelected = element;
+              _this2.identificationTypeSelectedOriginal = element;
+            }
+          });
         }
       }, function (error) {
         _this2.showErrors(error);
+      }).then(function () {
+        _this2.isLoading = false;
       });
     },
     getImgAvatar: function getImgAvatar() {
-      if (this.participant.avatar.value) {
-        this.getImg64Base(2);
+      if (this.participant.profile_image.value) {
+        this.getImg64Base(this.OPTIONS.PARTICIPANT, this.participant.profile_image.value);
       } else {
         this.getAvatarString();
       }
     },
-    getAvatarString: function getAvatarString() {
+    getImg64Base: function getImg64Base(option, name) {
       var _this3 = this;
+
+      if (name) {
+        this.isLoading = true;
+        var params = {
+          name: name,
+          option: option
+        };
+        axios.get(this.url_image_base, {
+          params: params
+        }).then(function (response) {
+          if (response.status === 200) {
+            if (option === _this3.OPTIONS.PROGRAMMER) {
+              _this3.img64Base = response.data;
+            } else if (option === _this3.OPTIONS.PARTICIPANT) {
+              _this3.avatarAdmin = response.data;
+              _this3.avatarAdminCopy = response.data;
+            }
+          }
+        }, function (error) {
+          _this3.showErrors(error);
+        }).then(function () {
+          _this3.isLoading = false;
+        });
+      }
+    },
+    getAvatarString: function getAvatarString() {
+      var _this4 = this;
 
       var fname = this.participant.person.value.first_name.trim();
       var lname = this.participant.person.value.last_name.trim();
@@ -4210,20 +4316,46 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       name = name.trim();
 
       if (name !== "") {
+        this.isLoading = true;
         axios.post(this.url_person_ui_avatar, {
           name: name
         }).then(function (response) {
-          _this3.showErrors({});
+          _this4.showErrors({});
 
           if (response.data.status === 200) {
-            _this3.avatarAdmin = response.data.avatar.encoded;
+            _this4.avatarAdmin = response.data.avatar.encoded;
+            _this4.avatarAdminCopy = response.data.avatar.encoded;
           }
         }, function (error) {
-          _this3.showErrors(error);
+          _this4.showErrors(error);
+        }).then(function () {
+          _this4.isLoading = false;
         });
       } else {
         this.avatarAdmin = null;
+        this.avatarAdminCopy = null;
       }
+    },
+    generateDV: function generateDV(num) {
+      var serie = [71, 67, 59, 53, 47, 43, 41, 37, 29, 23, 19, 17, 13, 7, 3];
+      var numArray = Array.from(num.toString().replace(/\D/g, '').trim()); //Equality numArray with serie
+
+      var diff = serie.length - numArray.length; //Add 0
+
+      if (diff > 0) {
+        for (var n = 0; n < diff; n++) {
+          numArray.unshift(0);
+        }
+      } //Generate DV
+
+
+      var sum = 0;
+      serie.forEach(function (num, i) {
+        sum += num * parseInt(numArray[i]);
+      });
+      var arg11 = sum % 11;
+      var dv = arg11 === 0 || arg11 === 1 ? arg11 : 11 - arg11;
+      return dv;
     },
     clickCancelToHome: function clickCancelToHome() {
       this.$emit('activeMainSection', 'main');
@@ -4236,18 +4368,153 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         obj.value = val;
       }
     },
-    clickEdit: function clickEdit(key) {
-      var _this4 = this;
+    imageToBase64: function imageToBase64(file) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return new Promise(function (resolve, reject) {
+                  var reader = new FileReader();
+                  reader.readAsDataURL(file);
+
+                  reader.onload = function () {
+                    return resolve(reader.result);
+                  };
+
+                  reader.onerror = function (error) {
+                    return reject(error);
+                  };
+                });
+
+              case 2:
+                return _context.abrupt("return", _context.sent);
+
+              case 3:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    },
+    onFileLogoSelected: function onFileLogoSelected() {
+      var _this5 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var result;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                if (!_this5.fileLogo) {
+                  _context2.next = 15;
+                  break;
+                }
+
+                _this5.isLoading = true;
+                _this5.fieldsProgrammer.logo.error = false;
+                _this5.enabledUploadLogo = true;
+                _context2.next = 6;
+                return _this5.imageToBase64(_this5.fileLogo)["catch"](function (e) {
+                  return Error(e);
+                });
+
+              case 6:
+                result = _context2.sent;
+
+                if (!(result instanceof Error)) {
+                  _context2.next = 11;
+                  break;
+                }
+
+                _this5.showErrors(result.message);
+
+                console.log('Error: ', result.message);
+                return _context2.abrupt("return");
+
+              case 11:
+                _this5.logoBase64 = result;
+                _this5.isLoading = false;
+                _context2.next = 16;
+                break;
+
+              case 15:
+                _this5.enabledUploadLogo = false;
+
+              case 16:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
+    },
+    onFileAvatarSelected: function onFileAvatarSelected() {
+      var _this6 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var result;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                if (!_this6.fileAvatar) {
+                  _context3.next = 15;
+                  break;
+                }
+
+                _this6.isLoading = true;
+                _this6.fieldsParticipant.profile_image.error = false;
+                _this6.enabledUploadAvatar = true;
+                _context3.next = 6;
+                return _this6.imageToBase64(_this6.fileAvatar)["catch"](function (e) {
+                  return Error(e);
+                });
+
+              case 6:
+                result = _context3.sent;
+
+                if (!(result instanceof Error)) {
+                  _context3.next = 11;
+                  break;
+                }
+
+                _this6.showErrors(result.message);
+
+                console.log('Error: ', result.message);
+                return _context3.abrupt("return");
+
+              case 11:
+                _this6.avatarAdmin = result;
+                _this6.isLoading = false;
+                _context3.next = 16;
+                break;
+
+              case 15:
+                _this6.enabledUploadAvatar = false;
+
+              case 16:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
+    },
+    clickEditProgrammer: function clickEditProgrammer(key) {
+      var _this7 = this;
 
       this.programmer[key].editing = !this.programmer[key].editing; //wait for the input to load
 
       this.$nextTick(function () {
-        if (_this4.$refs[key]) {
-          _this4.$refs[key].focus();
+        if (_this7.$refs[key]) {
+          _this7.$refs[key].focus();
         }
       });
     },
-    clickCancel: function clickCancel(key) {
+    clickCancelProgrammer: function clickCancelProgrammer(key) {
       //Clean error, change "editing" and restore values
       this.programmer[key].value = this.programmerCopy[key].value;
       this.programmer[key].editing = false;
@@ -4262,9 +4529,11 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
 
       if (key === "logo") {
         this.fileLogo = null;
+        this.logoBase64 = null;
+        this.enabledUploadLogo = null;
       }
     },
-    clickUpdate: function clickUpdate(key) {
+    clickUpdateProgrammer: function clickUpdateProgrammer(key) {
       this.isLoading = true; //cleans errors
 
       this.fieldsProgrammer[key].error = false;
@@ -4272,7 +4541,12 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       if (key === "identification") //Is Identification, clean identifications types
         {
           this.fieldsProgrammer.identifications_types_id.error = false;
-        } //Compare values
+        }
+
+      if (key === "logo") {
+        //Value for save in DDBB
+        this.programmer.logo.value = this.logoBase64;
+      } //Compare values
 
 
       if (this.programmer[key].value !== this.programmerCopy[key].value || key === "identification" && this.identificationTypeSelected !== this.identificationTypeSelectedOriginal || key === "logo" && this.logoBase64) //Edited
@@ -4300,9 +4574,6 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
           if (key === "logo" && this.fileLogo.size > this.sizeFieleUploadAllow) {
             this.fieldsProgrammer.logo.error = true;
             valid = false;
-          } else if (key === "logo") {
-            //Value for save in DDBB
-            this.programmer.logo.value = this.logoBase64;
           }
 
           this.isLoading = false;
@@ -4314,43 +4585,8 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
             }
         }
     },
-    showErrors: function showErrors(resError) {
-      this.errors = Object(_functions_js__WEBPACK_IMPORTED_MODULE_1__["procesarErroresRequest"])(resError);
-      this.hasErrors = this.errors.errors.length > 0;
-    },
-    getIdentificationsTypes: function getIdentificationsTypes() {
-      var _this5 = this;
-
-      this.isLoading = true;
-      axios.post(this.url_identifications_types).then(function (response) {
-        _this5.showErrors({});
-
-        if (response.data.status === 200) {
-          response.data.identifications_types.forEach(function (element) {
-            var name = element.abrevation + (element.translation ? '-' + element.translation.name : '');
-            var tmp = {
-              identification_type: name,
-              meta: element
-            };
-            _this5.identificationsTypesIdName[element.id] = name;
-
-            _this5.identificationsTypes.push(tmp); //selected
-
-
-            if (_this5.programmer.identifications_types_id.value === element.id) {
-              _this5.identificationTypeSelected = element;
-              _this5.identificationTypeSelectedOriginal = element;
-            }
-          });
-        }
-      }, function (error) {
-        _this5.showErrors(error);
-      }).then(function () {
-        _this5.isLoading = false;
-      });
-    },
     updateProgrammer: function updateProgrammer(key) {
-      var _this6 = this;
+      var _this8 = this;
 
       var obj = this.programmer[key];
 
@@ -4366,145 +4602,153 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }
 
         axios.post(this.url_update_programmer, params).then(function (response) {
-          _this6.showErrors({});
+          _this8.showErrors({});
 
           if (response.data.status === 200) {
             //update/restore value copy
-            //TODO
             if (key === "logo" && response.data.data.extra) //Update logo info
               {
-                _this6.programmer[key].value = response.data.data.extra;
-                _this6.programmerCopy[key].value = response.data.extra;
+                _this8.programmer[key].value = response.data.data.extra;
+                _this8.programmerCopy[key].value = response.data.data.extra;
+                _this8.fileLogo = null;
+                _this8.logoBase64 = null;
+                _this8.enabledUploadLogo = false;
 
-                _this6.getImg64Base();
+                _this8.getImg64Base(_this8.OPTIONS.PROGRAMMER, _this8.programmer.logo.value);
               } else //Update copy
               {
-                _this6.programmerCopy[key].value = obj.value;
+                _this8.programmerCopy[key].value = obj.value;
               }
 
             obj.edited = false; //restore
 
             obj.editing = false; //restore
 
-            if (key === "identification" && _this6.identificationTypeSelected !== _this6.identificationTypeSelectedOriginal) {
-              _this6.identificationTypeSelectedOriginal = _this6.identificationTypeSelected; //restore
+            if (key === "identification" && _this8.identificationTypeSelected !== _this8.identificationTypeSelectedOriginal) {
+              _this8.identificationTypeSelectedOriginal = _this8.identificationTypeSelected; //restore
             }
 
             Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
-              title: _this6.text_success,
-              text: _this6.text_updated_programmer
+              title: _this8.text_success,
+              text: _this8.text_updated_programmer
             });
           }
         }, function (error) {
-          _this6.showErrors(error);
+          _this8.showErrors(error);
         }).then(function () {
-          _this6.isLoading = false;
+          _this8.isLoading = false;
         });
       }
     },
-    generateDV: function generateDV(num) {
-      var serie = [71, 67, 59, 53, 47, 43, 41, 37, 29, 23, 19, 17, 13, 7, 3];
-      var numArray = Array.from(num.toString().replace(/\D/g, '').trim()); //Equality numArray with serie
+    clickEditParticipant: function clickEditParticipant(key) {
+      var _this9 = this;
 
-      var diff = serie.length - numArray.length; //Add 0
+      this.participant[key].editing = !this.participant[key].editing; //wait for the input to load
 
-      if (diff > 0) {
-        for (var n = 0; n < diff; n++) {
-          numArray.unshift(0);
+      this.$nextTick(function () {
+        if (_this9.$refs[key]) {
+          _this9.$refs[key].focus();
         }
-      } //Generate DV
-
-
-      var sum = 0;
-      serie.forEach(function (num, i) {
-        sum += num * parseInt(numArray[i]);
       });
-      var arg11 = sum % 11;
-      var dv = arg11 === 0 || arg11 === 1 ? arg11 : 11 - arg11;
-      return dv;
     },
-    onFileLogoSelected: function onFileLogoSelected() {
-      var _this7 = this;
+    clickCancelParticipant: function clickCancelParticipant(key) {
+      //Clean error, change "editing" and restore values
+      this.participant[key].value = this.participantCopy[key].value;
+      this.participant[key].editing = false;
+      this.fieldsParticipant[key].error = false;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var result;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (!_this7.fileLogo) {
-                  _context.next = 15;
-                  break;
-                }
-
-                _this7.isLoading = true;
-                _this7.fieldsProgrammer.logo.error = false;
-                _this7.enabledUploadLogo = true;
-                _context.next = 6;
-                return _this7.imageToBase64(_this7.fileLogo)["catch"](function (e) {
-                  return Error(e);
-                });
-
-              case 6:
-                result = _context.sent;
-
-                if (!(result instanceof Error)) {
-                  _context.next = 11;
-                  break;
-                }
-
-                _this7.showErrors(result.message);
-
-                console.log('Error: ', result.message);
-                return _context.abrupt("return");
-
-              case 11:
-                _this7.logoBase64 = result;
-                _this7.isLoading = false;
-                _context.next = 16;
-                break;
-
-              case 15:
-                _this7.enabledUploadLogo = false;
-
-              case 16:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      if (key === "profile_image") {
+        this.fileAvatar = null;
+        this.avatarAdmin = this.avatarAdminCopy;
+        this.enabledUploadAvatar = false;
+      }
     },
-    imageToBase64: function imageToBase64(file) {
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return new Promise(function (resolve, reject) {
-                  var reader = new FileReader();
-                  reader.readAsDataURL(file);
+    clickUpdateParticipant: function clickUpdateParticipant(key) {
+      this.isLoading = true; //cleans errors
 
-                  reader.onload = function () {
-                    return resolve(reader.result);
-                  };
+      this.fieldsParticipant[key].error = false;
 
-                  reader.onerror = function (error) {
-                    return reject(error);
-                  };
-                });
+      if (key === "profile_image") {
+        //Value for save in DDBB
+        this.participant[key].value = this.avatarAdmin;
+      } //compare values
 
-              case 2:
-                return _context2.abrupt("return", _context2.sent);
 
-              case 3:
-              case "end":
-                return _context2.stop();
+      if (this.participant[key].value !== this.participant[key].value || key === "profile_image" && this.avatarAdmin !== this.avatarAdminCopy) //Edited
+        {
+          this.participant[key].edited = true; //validation
+
+          var valid = true;
+          var value = this.participant[key].value;
+          var constraints = {
+            presence: {
+              allowEmpty: false
             }
+          };
+
+          if (validate.single(value, constraints) !== undefined) {
+            this.fieldsParticipant[key].error = true;
+            valid = false;
           }
-        }, _callee2);
-      }))();
+
+          if (key === "profile_image" && this.fileAvatar.size > this.sizeFieleUploadAllow) {
+            this.fieldsParticipant[key].error = true;
+            valid = false;
+          }
+
+          this.isLoading = false;
+
+          if (valid) //Not errors
+            {
+              //update
+              this.updateParticipant(key);
+            }
+        }
+    },
+    updateParticipant: function updateParticipant(key) {
+      var _this10 = this;
+
+      var obj = this.participant[key];
+
+      if (obj.edited) {
+        this.isLoading = true;
+        var params = {
+          id: this.participant.id.value
+        };
+        params[key] = obj.value;
+        axios.post(this.url_participant_update, params).then(function (response) {
+          _this10.showErrors({});
+
+          if (response.data.status === 200) {
+            //update/restore value copy
+            if (key === "profile_image" && response.data.data.extra) //Update avatar info
+              {
+                _this10.participant[key].value = response.data.data.extra;
+                _this10.participantCopy[key].value = response.data.data.extra;
+                _this10.fileAvatar = null;
+                _this10.enabledUploadAvatar = false;
+
+                _this10.getImg64Base(_this10.OPTIONS.PARTICIPANT, _this10.participant.profile_image.value);
+              } else //Update copy
+              {
+                _this10.participantCopy[key].value = obj.value;
+              }
+
+            obj.edited = false; //restore
+
+            obj.editing = false; //restore
+
+            Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
+              title: _this10.text_success,
+              text: _this10.text_updated_programmer
+            });
+          }
+        }, function (error) {
+          _this10.showErrors(error);
+        }).then(function () {
+          _this10.isLoading = false;
+        });
+      }
     }
   }
 });
@@ -67692,13 +67936,15 @@ var render = function() {
                   text_success: _vm.text_success,
                   text_updated_programmer: _vm.text_updated_programmer,
                   fields_programmer_json: _vm.fields_programmer_json,
+                  participant_fields_json: _vm.text_participant_fields_json,
                   text_breadcrumbs_init: _vm.text_breadcrumbs_init,
                   text_no_options: _vm.text_no_options,
                   participant_json: _vm.participant_json,
                   url_identifications_types: _vm.url_identifications_types,
                   url_update_programmer: _vm.url_update_programmer,
                   url_image_base: _vm.url_image_base,
-                  url_person_ui_avatar: _vm.url_person_ui_avatar
+                  url_person_ui_avatar: _vm.url_person_ui_avatar,
+                  url_participant_update: _vm.url_participant_update
                 },
                 on: { activeMainSection: _vm.setActiveSection }
               })
@@ -69018,7 +69264,9 @@ var render = function() {
                                   on: {
                                     click: function($event) {
                                       $event.preventDefault()
-                                      return _vm.clickUpdate("entity_name")
+                                      return _vm.clickUpdateProgrammer(
+                                        "entity_name"
+                                      )
                                     }
                                   }
                                 }),
@@ -69032,7 +69280,9 @@ var render = function() {
                                   on: {
                                     click: function($event) {
                                       $event.preventDefault()
-                                      return _vm.clickCancel("entity_name")
+                                      return _vm.clickCancelProgrammer(
+                                        "entity_name"
+                                      )
                                     }
                                   }
                                 })
@@ -69066,7 +69316,9 @@ var render = function() {
                                   on: {
                                     click: function($event) {
                                       $event.preventDefault()
-                                      return _vm.clickEdit("entity_name")
+                                      return _vm.clickEditProgrammer(
+                                        "entity_name"
+                                      )
                                     }
                                   }
                                 })
@@ -69250,7 +69502,9 @@ var render = function() {
                                   on: {
                                     click: function($event) {
                                       $event.preventDefault()
-                                      return _vm.clickUpdate("identification")
+                                      return _vm.clickUpdateProgrammer(
+                                        "identification"
+                                      )
                                     }
                                   }
                                 }),
@@ -69264,7 +69518,9 @@ var render = function() {
                                   on: {
                                     click: function($event) {
                                       $event.preventDefault()
-                                      return _vm.clickCancel("identification")
+                                      return _vm.clickCancelProgrammer(
+                                        "identification"
+                                      )
                                     }
                                   }
                                 })
@@ -69301,7 +69557,9 @@ var render = function() {
                                   on: {
                                     click: function($event) {
                                       $event.preventDefault()
-                                      return _vm.clickEdit("identification")
+                                      return _vm.clickEditProgrammer(
+                                        "identification"
+                                      )
                                     }
                                   }
                                 })
@@ -69330,7 +69588,7 @@ var render = function() {
                                   "b-field",
                                   {
                                     staticClass: "file is-primary",
-                                    class: _vm.classFile,
+                                    class: _vm.classFileLogo,
                                     attrs: {
                                       type: {
                                         "is-danger":
@@ -69439,7 +69697,7 @@ var render = function() {
                                   on: {
                                     click: function($event) {
                                       $event.preventDefault()
-                                      return _vm.clickUpdate("logo")
+                                      return _vm.clickUpdateProgrammer("logo")
                                     }
                                   }
                                 }),
@@ -69453,7 +69711,7 @@ var render = function() {
                                   on: {
                                     click: function($event) {
                                       $event.preventDefault()
-                                      return _vm.clickCancel("logo")
+                                      return _vm.clickCancelProgrammer("logo")
                                     }
                                   }
                                 })
@@ -69489,7 +69747,7 @@ var render = function() {
                                   on: {
                                     click: function($event) {
                                       $event.preventDefault()
-                                      return _vm.clickEdit("logo")
+                                      return _vm.clickEditProgrammer("logo")
                                     }
                                   }
                                 })
@@ -69514,13 +69772,151 @@ var render = function() {
               _c("div", { staticClass: "colum is-12" }, [
                 _c("div", { staticClass: "columns" }, [
                   _c("div", { staticClass: "column is-2 is-row-data" }, [
-                    _c("div", { staticClass: "avatar" }, [
-                      _vm.avatarAdmin
-                        ? _c("figure", { staticClass: "image" }, [
-                            _c("img", { attrs: { src: _vm.avatarAdmin } })
-                          ])
-                        : _vm._e()
-                    ])
+                    _c(
+                      "div",
+                      { staticClass: "avatar" },
+                      [
+                        _vm.avatarAdmin
+                          ? _c(
+                              "figure",
+                              { staticClass: "image" },
+                              [
+                                _c("img", { attrs: { src: _vm.avatarAdmin } }),
+                                _vm._v(" "),
+                                !_vm.participant.profile_image.editing
+                                  ? _c("b-button", {
+                                      staticClass: "btn-edit",
+                                      attrs: {
+                                        size: "is-small",
+                                        "icon-left": "pen"
+                                      },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          return _vm.clickEditParticipant(
+                                            "profile_image"
+                                          )
+                                        }
+                                      }
+                                    })
+                                  : _c(
+                                      "div",
+                                      { staticClass: "content-buttons" },
+                                      [
+                                        _c("b-button", {
+                                          staticClass: "btn-save",
+                                          attrs: {
+                                            size: "is-small",
+                                            "icon-left": "save",
+                                            disabled: !_vm.enabledUploadAvatar
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.clickUpdateParticipant(
+                                                "profile_image"
+                                              )
+                                            }
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _c("b-button", {
+                                          staticClass: "btn-cancel",
+                                          attrs: {
+                                            size: "is-small",
+                                            "icon-left": "window-close"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.clickCancelParticipant(
+                                                "profile_image"
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                              ],
+                              1
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c(
+                          "b-field",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.participant.profile_image.editing,
+                                expression: "participant.profile_image.editing"
+                              }
+                            ],
+                            staticClass: "file is-primary",
+                            class: _vm.classFileAvatar,
+                            attrs: {
+                              type: {
+                                "is-danger":
+                                  _vm.fieldsParticipant.profile_image.error
+                              },
+                              message: _vm.fieldsParticipant.profile_image.error
+                                ? _vm.fieldsParticipant.profile_image
+                                    .msg_limit_size
+                                : ""
+                            }
+                          },
+                          [
+                            _c(
+                              "b-upload",
+                              {
+                                ref: "inputFileAvatar",
+                                staticClass: "file-label",
+                                attrs: { accept: _vm.aceptAvatar },
+                                on: {
+                                  input: function($event) {
+                                    return _vm.onFileAvatarSelected()
+                                  }
+                                },
+                                model: {
+                                  value: _vm.fileAvatar,
+                                  callback: function($$v) {
+                                    _vm.fileAvatar = $$v
+                                  },
+                                  expression: "fileAvatar"
+                                }
+                              },
+                              [
+                                _c(
+                                  "span",
+                                  { staticClass: "file-cta" },
+                                  [
+                                    _c("b-icon", {
+                                      staticClass: "file-icon",
+                                      attrs: { icon: "upload" }
+                                    })
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _vm.fileAvatar
+                                  ? _c("span", { staticClass: "file-name" }, [
+                                      _vm._v(
+                                        "\n                                            " +
+                                          _vm._s(_vm.fileAvatar.name) +
+                                          "\n                                        "
+                                      )
+                                    ])
+                                  : _vm._e()
+                              ]
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "column is-10 is-row-data" }, [

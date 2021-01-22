@@ -37,11 +37,11 @@ class FileController extends Controller
             $dir = null;
             switch($request->option)
             {
-                case '1': //Default logo directory
+                case Helpers::OPTION_DIR_IMAGE_LOGO: //Default logo directory
                     $dir = Helpers::PATH_LOGO;
                     break;
-                case '2': //Default profile directory
-                    $dir = Helpers::PATH_LOGO;
+                case Helpers::OPTION_DIR_IMAGE_PROFILE: //Default profile directory
+                    $dir = Helpers::PATH_PROFILE;
                     break;
                 default: //Default image directory
                     $dir = Helpers::PATH_IMG;

@@ -22,7 +22,7 @@ class CreateParticipantsTable extends Migration
             $table->integer('users_id')->nullable();
             $table->integer('profiles_participants_id');
             $table->text('description')->nullable();
-            $table->text('avatar')->comment('Avatar name')->nullable();
+            $table->text('profile_image')->comment('Avatar name')->nullable();
             $table->datetime('created_at')->default(new Expression('CURRENT_TIMESTAMP'));
             $table->datetime('updated_at')->default(new Expression('CURRENT_TIMESTAMP'));
             $table->integer('status_participants_id')->default(1);

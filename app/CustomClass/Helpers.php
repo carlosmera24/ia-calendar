@@ -11,6 +11,8 @@ class Helpers
     const PATH_IMG = "public/img/";
     const PATH_LOGO = self::PATH_IMG . "logos/";
     const PATH_PROFILE = self::PATH_IMG . "profiles/";
+    const OPTION_DIR_IMAGE_LOGO = 1;
+    const OPTION_DIR_IMAGE_PROFILE = 2;
 
     /**
      * Function responsible for storing image from a String64 in the path
@@ -25,10 +27,10 @@ class Helpers
         $dir = self::PATH_IMG;
         switch($option)
         {
-            case 1:
+            case self::OPTION_DIR_IMAGE_LOGO:
                 $dir =  self::PATH_LOGO;
                 break;
-            case 2:
+            case self::OPTION_DIR_IMAGE_PROFILE:
                 $dir =  self::PATH_PROFILE;
                 break;
             default:

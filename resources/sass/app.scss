@@ -588,7 +588,7 @@ body, h2, button, input, select, textarea {
                             }
                     }
                     .is-row-data{
-                        padding: 0px 12px;
+                        padding: 6px 12px;
                     }
                 }
                 .programmer_data{
@@ -642,7 +642,7 @@ body, h2, button, input, select, textarea {
                     figure.logo-upload{
                         margin-left: 0px;
                         margin-right: 0px;
-                        margin-top: 0px;
+                        margin-top: 15px;
                         text-align: left;
                     }
                     figure.logo{
@@ -662,19 +662,49 @@ body, h2, button, input, select, textarea {
                 }
                 .adminitrator_data{
                     .avatar{
-
+                        display: initial;
                         height: 128px;
                         width: 128px;
-                        text-align: center;
-                        align-items: center;
                         figure.image{
                             border: 2px solid $blue-dark;
                             border-radius: 50%;
+                            margin: 0px;
                             height: 128px;
                             width: 128px;
+                            img{
+                                width: 100%;
+                                height: 100%;
+                            }
+                            .btn-edit{
+                                position: absolute;
+                                top: 80px;
+                                right: -3px;
+                                border-radius: 50%;
+                            }
+                            .content-buttons{
+                                position: absolute;
+                                top: 80px;
+                                right: -10px;
+                                .button{
+                                    border-radius: 50%;
+                                }
+                            }
                         }
                         img{
                             border-radius: 50%;
+                        }
+                        .field.file{
+                            .help{
+                                position: absolute;
+                                top: 37px;
+                            }
+                        }
+                        .field.file.is-danger{
+                            .upload.control.file-label{
+                                .file-name{
+                                    border-color: #f14668;
+                                }
+                            }
                         }
                     }
                 }

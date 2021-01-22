@@ -45,13 +45,13 @@
                                                 class="btn-edit"
                                                 size="is-small"
                                                 icon-left="save"
-                                                v-on:click.prevent="clickUpdate( 'entity_name' )"
+                                                v-on:click.prevent="clickUpdateProgrammer( 'entity_name' )"
                                             />
                                             <b-button
                                                 class="btn-edit"
                                                 size="is-small"
                                                 icon-left="window-close"
-                                                v-on:click.prevent="clickCancel('entity_name')"
+                                                v-on:click.prevent="clickCancelProgrammer('entity_name')"
                                             />
                                         </div>
                                     </div>
@@ -64,7 +64,7 @@
                                                 class="btn-edit"
                                                 size="is-small"
                                                 icon-left="pen"
-                                                v-on:click.prevent="clickEdit('entity_name')"
+                                                v-on:click.prevent="clickEditProgrammer('entity_name')"
                                             />
                                         </div>
                                     </div>
@@ -117,13 +117,13 @@
                                                 class="btn-edit"
                                                 size="is-small"
                                                 icon-left="save"
-                                                v-on:click.prevent="clickUpdate( 'identification' )"
+                                                v-on:click.prevent="clickUpdateProgrammer( 'identification' )"
                                             />
                                             <b-button
                                                 class="btn-edit"
                                                 size="is-small"
                                                 icon-left="window-close"
-                                                v-on:click.prevent="clickCancel('identification')"
+                                                v-on:click.prevent="clickCancelProgrammer('identification')"
                                             />
                                         </div>
                                     </div>
@@ -137,7 +137,7 @@
                                                 class="btn-edit"
                                                 size="is-small"
                                                 icon-left="pen"
-                                                v-on:click.prevent="clickEdit('identification')"
+                                                v-on:click.prevent="clickEditProgrammer('identification')"
                                             />
                                         </div>
                                     </div>
@@ -155,7 +155,7 @@
                                     <div class="columns column is-12" v-if="programmer.logo.editing">
                                         <div class="column is-6">
                                             <b-field class="file is-primary"
-                                                :class="classFile"
+                                                :class="classFileLogo"
                                                 v-bind:type="{ 'is-danger' : fieldsProgrammer.logo.error }"
                                                 :message="fieldsProgrammer.logo.error ? fieldsProgrammer.logo.msg_limit_size : ''">
                                                 <b-upload v-model="fileLogo"
@@ -183,13 +183,13 @@
                                                 size="is-small"
                                                 icon-left="save"
                                                 :disabled="!enabledUploadLogo"
-                                                v-on:click.prevent="clickUpdate( 'logo' )"
+                                                v-on:click.prevent="clickUpdateProgrammer( 'logo' )"
                                             />
                                             <b-button
                                                 class="btn-edit"
                                                 size="is-small"
                                                 icon-left="window-close"
-                                                v-on:click.prevent="clickCancel('logo')"
+                                                v-on:click.prevent="clickCancelProgrammer('logo')"
                                             />
                                         </div>
                                     </div>
@@ -205,7 +205,7 @@
                                                 class="btn-edit"
                                                 size="is-small"
                                                 icon-left="pen"
-                                                v-on:click.prevent="clickEdit('logo')"
+                                                v-on:click.prevent="clickEditProgrammer('logo')"
                                             />
                                         </div>
                                     </div>
@@ -222,13 +222,54 @@
                     <div class="colum is-12">
                         <div class="columns">
                             <div class="column is-2 is-row-data">
-                                <!-- Avatar -->
+                                <!-- Profile image -->
                                 <div class="avatar">
                                     <figure v-if="avatarAdmin" class="image">
                                         <img :src="avatarAdmin">
+                                        <b-button
+                                            v-if="!participant.profile_image.editing"
+                                            class="btn-edit"
+                                            size="is-small"
+                                            icon-left="pen"
+                                            v-on:click.prevent="clickEditParticipant('profile_image')"
+                                        />
+                                        <div v-else
+                                            class="content-buttons">
+                                            <b-button
+                                                class="btn-save"
+                                                size="is-small"
+                                                icon-left="save"
+                                                :disabled="!enabledUploadAvatar"
+                                                v-on:click.prevent="clickUpdateParticipant( 'profile_image' )"
+                                            />
+                                            <b-button
+                                                class="btn-cancel"
+                                                size="is-small"
+                                                icon-left="window-close"
+                                                v-on:click.prevent="clickCancelParticipant('profile_image')"
+                                            />
+                                        </div>
                                     </figure>
+                                    <b-field class="file is-primary" v-show="participant.profile_image.editing"
+                                        :class="classFileAvatar"
+                                        v-bind:type="{ 'is-danger' : fieldsParticipant.profile_image.error }"
+                                        :message="fieldsParticipant.profile_image.error ? fieldsParticipant.profile_image.msg_limit_size : ''">
+                                        <b-upload v-model="fileAvatar"
+                                            class="file-label"
+                                            ref="inputFileAvatar"
+                                            :accept="aceptAvatar"
+                                            @input="onFileAvatarSelected()"
+                                            >
+                                            <span class="file-cta">
+                                                <b-icon class="file-icon" icon="upload"></b-icon>
+                                            </span>
+                                            <span class="file-name" v-if="fileAvatar">
+                                                {{ fileAvatar.name }}
+                                            </span>
+                                        </b-upload>
+                                    </b-field>
                                 </div>
-                                <!-- /Avatar -->
+                                <!-- /Profile image -->
                             </div>
                             <div class="column is-10 is-row-data">
                                 Otros campos
@@ -272,6 +313,10 @@
                 type: String,
                 require: true,
             },
+            participant_fields_json: {
+                type: String,
+                require: true,
+            },
             text_updated_programmer: {
                 type: String,
                 require: true,
@@ -306,6 +351,10 @@
                 type: String,
                 require: true
             },
+            url_participant_update: {
+                type: String,
+                require: true
+            },
         },
         data() {
             return {
@@ -329,27 +378,35 @@
                 participant: new Object(),
                 participantCopy: new Object(),
                 avatarAdmin: null,
+                avatarAdminCopy: null,
+                OPTIONS:{
+                            PROGRAMMER : 1,
+                            PARTICIPANT: 2,
+                        },
+                fieldsParticipant: [],
+                fileAvatar: null,
+                enabledUploadAvatar: false,
+                aceptAvatar: ".jpg,.png,.gif",
             }
         },
         computed: {
             nitDV(){
                 return this.generateDV(this.programmer.identification.value);
             },
-            classFile(){
+            classFileLogo(){
                 return {
                     'has-name': !!this.fileLogo,
                     'is-danger': this.fieldsProgrammer.logo.error,
                     'is-primary': !this.fieldsProgrammer.logo.error
                 }
             },
-            logoType(){
-                if( this.fileLogo )
-                {
-                    return this.fileLogo.type;
+            classFileAvatar(){
+                return {
+                    'has-name': !!this.fileAvatar,
+                    'is-danger': this.fieldsParticipant.profile_image.error,
+                    'is-primary': !this.fieldsParticipant.profile_image.error
                 }
-                return null;
             },
-
         },
         created(){
             //Create/load programmer data
@@ -366,6 +423,7 @@
             });
             this.textsGeneralSettings = JSON.parse(this.texts_general_settings_json);
             this.fieldsProgrammer = JSON.parse(this.fields_programmer_json);
+            this.fieldsParticipant = JSON.parse(this.participant_fields_json);
             //Create/load participant data
             const initParticipant = JSON.parse(this.participant_json);
             Object.keys(initParticipant).forEach( key => {
@@ -381,159 +439,10 @@
         },
         mounted(){
             this.getIdentificationsTypes();
-            this.getImg64Base(1);//Get logo programmer
+            this.getImg64Base(this.OPTIONS.PROGRAMMER, this.programmer.logo.value );//Get logo programmer
             this.getImgAvatar();
         },
         methods: {
-            getImg64Base(option){
-                const params = {
-                    name: this.programmer.logo.value,
-                    option: option
-                };
-                axios.get(this.url_image_base, { params: params})
-                    .then( response => {
-                        if( response.status === 200 )
-                        {
-                            this.img64Base = response.data;
-                        }
-                    },
-                    error => {
-                        this.showErrors(error);
-                    });
-            },
-            getImgAvatar(){
-                if( this.participant.avatar.value )
-                {
-                    this.getImg64Base(2);
-                }else{
-                    this.getAvatarString();
-                }
-            },
-            getAvatarString(){
-                const fname = this.participant.person.value.first_name.trim();
-                const lname = this.participant.person.value.last_name.trim();
-                var name = "";
-                //Only one first name
-                if( fname !== "" )
-                {
-                    name = fname.split(" ",1)[0];
-                }
-                //Only one last name
-                if( lname !== "" )
-                {
-                    name += " " + lname.split(" ",1)[0];
-                }
-                name = name.trim();
-                if( name !== "" )
-                {
-                    axios.post( this.url_person_ui_avatar, { name: name } )
-                        .then( response => {
-                            this.showErrors({});
-                            if( response.data.status === 200 )
-                            {
-                                this.avatarAdmin = response.data.avatar.encoded;
-                            }
-                        },
-                        error => {
-                            this.showErrors( error );
-                        } );
-                }else{
-                    this.avatarAdmin = null;
-                }
-            },
-            clickCancelToHome(){
-                this.$emit('activeMainSection','main')
-            },
-            onlyNumber(event, obj){
-                const regex = new RegExp(/[^\d]/g);
-                const val = event.target.value.replace(regex,"");
-                if( obj.value !== val )
-                {
-                    obj.value = val;
-                }
-            },
-            clickEdit( key ){
-                this.programmer[ key].editing = !this.programmer[ key].editing;
-                //wait for the input to load
-                this.$nextTick(() => {
-                    if( (this.$refs[ key ]) )
-                    {
-                        this.$refs[ key ].focus();
-                    }
-                });
-            },
-            clickCancel( key ){
-                //Clean error, change "editing" and restore values
-                this.programmer[ key ].value = this.programmerCopy[ key ].value;
-                this.programmer[ key ].editing = false;
-                this.fieldsProgrammer[ key ].error = false;
-                if( key === "identification" )
-                {
-                    this.programmer.identifications_types_id.value = this.programmerCopy.identifications_types_id.value;
-                    this.identificationTypeSelected = this.identificationTypeSelectedOriginal;
-                    this.programmer.identifications_types_id.editing = false;
-                    this.fieldsProgrammer.identifications_types_id.error = false;
-                }
-                if( key === "logo" )
-                {
-                    this.fileLogo = null;
-                }
-            },
-            clickUpdate( key ){
-                this.isLoading = true;
-                //cleans errors
-                this.fieldsProgrammer[ key ].error = false;
-                if( key === "identification" ) //Is Identification, clean identifications types
-                {
-                    this.fieldsProgrammer.identifications_types_id.error = false;
-                }
-
-                //Compare values
-                if( this.programmer[ key ].value !== this.programmerCopy[ key ].value
-                    || ( key === "identification" && this.identificationTypeSelected !== this.identificationTypeSelectedOriginal)
-                    || ( key === "logo" && this.logoBase64) )//Edited
-                {
-                    this.programmer[ key ].edited = true;
-
-                    //validation
-                    var valid = true;
-                    const value = this.programmer[key].value;
-                    const constraints = {
-                        presence: {
-                            allowEmpty: false,
-                        }
-                    };
-
-                    if( validate.single(value, constraints ) !== undefined )
-                    {
-                        this.fieldsProgrammer[ key ].error = true;
-                        valid = false;
-                    }
-                    if( key === "identification" && this.identificationTypeSelected === null )
-                    {
-                        this.fieldsProgrammer.identifications_types_id.error = true;
-                        valid = false;
-                    }
-
-                    if( key === "logo" && this.fileLogo.size > this.sizeFieleUploadAllow )
-                    {
-                        this.fieldsProgrammer.logo.error = true;
-                        valid = false;
-                    }else if( key === "logo" )
-                    {
-                        //Value for save in DDBB
-                        this.programmer.logo.value = this.logoBase64;
-                    }
-
-                    this.isLoading = false;
-
-                    if( valid ) //Not errors
-                    {
-                        //update
-                        this.updateProgrammer( key );
-                    }
-                }
-            },
             showErrors(resError){
                 this.errors = procesarErroresRequest( resError );
                 this.hasErrors = this.errors.errors.length > 0;
@@ -569,47 +478,33 @@
                         this.isLoading = false;
                     });
             },
-            updateProgrammer( key )
-            {
-                const obj = this.programmer[ key ];
-                if( obj.edited )
+            getImgAvatar(){
+                if( this.participant.profile_image.value )
+                {
+                    this.getImg64Base(this.OPTIONS.PARTICIPANT, this.participant.profile_image.value );
+                }else{
+                    this.getAvatarString();
+                }
+            },
+            getImg64Base(option, name){
+                if( name )
                 {
                     this.isLoading = true;
                     const params = {
-                        id: this.programmer.id.value,
+                        name: name,
+                        option: option
                     };
-                    params[key] = obj.value;
-                    if( key === "identification" && this.identificationTypeSelected !== this.identificationTypeSelectedOriginal )
-                    {
-                        params['identifications_types_id'] = this.identificationTypeSelected.id;
-                    }
-                    axios.post(this.url_update_programmer, params)
+                    axios.get(this.url_image_base, { params: params})
                         .then( response => {
-                            this.showErrors({});
-                            if( response.data.status === 200 )
+                            if( response.status === 200 )
                             {
-                                //update/restore value copy
-                                //TODO
-                                if( key === "logo" && response.data.data.extra )//Update logo info
+                                if( option === this.OPTIONS.PROGRAMMER )
                                 {
-                                    this.programmer[ key ].value = response.data.data.extra;
-                                    this.programmerCopy[ key ].value = response.data.extra;
-                                    this.getImg64Base();
-                                }else//Update copy
-                                {
-                                    this.programmerCopy[ key ].value = obj.value;
+                                    this.img64Base = response.data;
+                                }else if( option === this.OPTIONS.PARTICIPANT ){
+                                    this.avatarAdmin = response.data;
+                                    this.avatarAdminCopy = response.data;
                                 }
-                                obj.edited = false; //restore
-                                obj.editing = false; //restore
-                                if( key === "identification" && this.identificationTypeSelected !== this.identificationTypeSelectedOriginal )
-                                {
-                                    this.identificationTypeSelectedOriginal = this.identificationTypeSelected;//restore
-                                }
-
-                                success({
-                                    title: this.text_success,
-                                    text: this.text_updated_programmer
-                                });
                             }
                         },
                         error => {
@@ -618,6 +513,44 @@
                         .then( () => {
                             this.isLoading = false;
                         });
+                }
+            },
+            getAvatarString(){
+                const fname = this.participant.person.value.first_name.trim();
+                const lname = this.participant.person.value.last_name.trim();
+                var name = "";
+                //Only one first name
+                if( fname !== "" )
+                {
+                    name = fname.split(" ",1)[0];
+                }
+                //Only one last name
+                if( lname !== "" )
+                {
+                    name += " " + lname.split(" ",1)[0];
+                }
+                name = name.trim();
+                if( name !== "" )
+                {
+                    this.isLoading = true;
+                    axios.post( this.url_person_ui_avatar, { name: name } )
+                        .then( response => {
+                            this.showErrors({});
+                            if( response.data.status === 200 )
+                            {
+                                this.avatarAdmin = response.data.avatar.encoded;
+                                this.avatarAdminCopy = response.data.avatar.encoded;
+                            }
+                        },
+                        error => {
+                            this.showErrors( error );
+                        } )
+                        .then( () => {
+                            this.isLoading = false;
+                        });
+                }else{
+                    this.avatarAdmin = null;
+                    this.avatarAdminCopy = null;
                 }
             },
             generateDV(num)
@@ -647,6 +580,25 @@
 
                 return dv;
             },
+            clickCancelToHome(){
+                this.$emit('activeMainSection','main')
+            },
+            onlyNumber(event, obj){
+                const regex = new RegExp(/[^\d]/g);
+                const val = event.target.value.replace(regex,"");
+                if( obj.value !== val )
+                {
+                    obj.value = val;
+                }
+            },
+            async imageToBase64(file){
+                return await new Promise( (resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = error => reject(error);
+                });
+            },
             async onFileLogoSelected(){
                 //validate format
                 if( this.fileLogo )
@@ -666,13 +618,276 @@
                     this.enabledUploadLogo = false;
                 }
             },
-            async imageToBase64(file){
-                return await new Promise( (resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.readAsDataURL(file);
-                    reader.onload = () => resolve(reader.result);
-                    reader.onerror = error => reject(error);
+            async onFileAvatarSelected(){
+                //validate format
+                if( this.fileAvatar )
+                {
+                    this.isLoading = true;
+                    this.fieldsParticipant.profile_image.error = false;
+                    this.enabledUploadAvatar = true;
+                    const result = await this.imageToBase64(this.fileAvatar).catch(e => Error(e));
+                    if(result instanceof Error) {
+                        this.showErrors( result.message )
+                        console.log('Error: ', result.message);
+                        return;
+                    }
+                    this.avatarAdmin = result;
+                    this.isLoading = false;
+                }else{
+                    this.enabledUploadAvatar = false;
+                }
+            },
+            clickEditProgrammer( key ){
+                this.programmer[ key].editing = !this.programmer[ key].editing;
+                //wait for the input to load
+                this.$nextTick(() => {
+                    if( (this.$refs[ key ]) )
+                    {
+                        this.$refs[ key ].focus();
+                    }
                 });
+            },
+            clickCancelProgrammer( key ){
+                //Clean error, change "editing" and restore values
+                this.programmer[ key ].value = this.programmerCopy[ key ].value;
+                this.programmer[ key ].editing = false;
+                this.fieldsProgrammer[ key ].error = false;
+                if( key === "identification" )
+                {
+                    this.programmer.identifications_types_id.value = this.programmerCopy.identifications_types_id.value;
+                    this.identificationTypeSelected = this.identificationTypeSelectedOriginal;
+                    this.programmer.identifications_types_id.editing = false;
+                    this.fieldsProgrammer.identifications_types_id.error = false;
+                }
+                if( key === "logo" )
+                {
+                    this.fileLogo = null;
+                    this.logoBase64 = null;
+                    this.enabledUploadLogo= null;
+                }
+            },
+            clickUpdateProgrammer( key ){
+                this.isLoading = true;
+                //cleans errors
+                this.fieldsProgrammer[ key ].error = false;
+                if( key === "identification" ) //Is Identification, clean identifications types
+                {
+                    this.fieldsProgrammer.identifications_types_id.error = false;
+                }
+                if( key === "logo" )
+                {
+                    //Value for save in DDBB
+                    this.programmer.logo.value = this.logoBase64;
+                }
+
+                //Compare values
+                if( this.programmer[ key ].value !== this.programmerCopy[ key ].value
+                    || ( key === "identification" && this.identificationTypeSelected !== this.identificationTypeSelectedOriginal)
+                    || ( key === "logo" && this.logoBase64) )//Edited
+                {
+                    this.programmer[ key ].edited = true;
+
+                    //validation
+                    var valid = true;
+                    const value = this.programmer[key].value;
+                    const constraints = {
+                        presence: {
+                            allowEmpty: false,
+                        }
+                    };
+
+                    if( validate.single(value, constraints ) !== undefined )
+                    {
+                        this.fieldsProgrammer[ key ].error = true;
+                        valid = false;
+                    }
+                    if( key === "identification" && this.identificationTypeSelected === null )
+                    {
+                        this.fieldsProgrammer.identifications_types_id.error = true;
+                        valid = false;
+                    }
+
+                    if( key === "logo" && this.fileLogo.size > this.sizeFieleUploadAllow )
+                    {
+                        this.fieldsProgrammer.logo.error = true;
+                        valid = false;
+                    }
+
+                    this.isLoading = false;
+
+                    if( valid ) //Not errors
+                    {
+                        //update
+                        this.updateProgrammer( key );
+                    }
+                }
+            },
+            updateProgrammer( key )
+            {
+                const obj = this.programmer[ key ];
+                if( obj.edited )
+                {
+                    this.isLoading = true;
+                    const params = {
+                        id: this.programmer.id.value,
+                    };
+                    params[key] = obj.value;
+                    if( key === "identification" && this.identificationTypeSelected !== this.identificationTypeSelectedOriginal )
+                    {
+                        params['identifications_types_id'] = this.identificationTypeSelected.id;
+                    }
+                    axios.post(this.url_update_programmer, params)
+                        .then( response => {
+                            this.showErrors({});
+                            if( response.data.status === 200 )
+                            {
+                                //update/restore value copy
+                                if( key === "logo" && response.data.data.extra )//Update logo info
+                                {
+                                    this.programmer[ key ].value = response.data.data.extra;
+                                    this.programmerCopy[ key ].value = response.data.data.extra;
+                                    this.fileLogo = null;
+                                    this.logoBase64 = null;
+                                    this.enabledUploadLogo = false;
+                                    this.getImg64Base(this.OPTIONS.PROGRAMMER, this.programmer.logo.value );
+                                }else//Update copy
+                                {
+                                    this.programmerCopy[ key ].value = obj.value;
+                                }
+                                obj.edited = false; //restore
+                                obj.editing = false; //restore
+                                if( key === "identification" && this.identificationTypeSelected !== this.identificationTypeSelectedOriginal )
+                                {
+                                    this.identificationTypeSelectedOriginal = this.identificationTypeSelected;//restore
+                                }
+
+                                success({
+                                    title: this.text_success,
+                                    text: this.text_updated_programmer
+                                });
+                            }
+                        },
+                        error => {
+                            this.showErrors(error);
+                        })
+                        .then( () => {
+                            this.isLoading = false;
+                        });
+                }
+            },
+            clickEditParticipant( key ){
+                this.participant[ key].editing = !this.participant[ key].editing;
+                //wait for the input to load
+                this.$nextTick(() => {
+                    if( (this.$refs[ key ]) )
+                    {
+                        this.$refs[ key ].focus();
+                    }
+                });
+            },
+            clickCancelParticipant( key ){
+                //Clean error, change "editing" and restore values
+                this.participant[ key ].value = this.participantCopy[ key ].value;
+                this.participant[ key ].editing = false;
+                this.fieldsParticipant[ key ].error = false;
+
+                if( key === "profile_image" )
+                {
+                    this.fileAvatar = null;
+                    this.avatarAdmin = this.avatarAdminCopy;
+                    this.enabledUploadAvatar = false;
+                }
+            },
+            clickUpdateParticipant( key ){
+                this.isLoading = true;
+                //cleans errors
+                this.fieldsParticipant[ key ].error = false;
+
+                if( key === "profile_image" )
+                {
+                    //Value for save in DDBB
+                    this.participant[ key ].value = this.avatarAdmin;
+                }
+
+                //compare values
+                if( this.participant[ key ].value !== this.participant[ key ].value
+                    || (key === "profile_image" && this.avatarAdmin !== this.avatarAdminCopy) )//Edited
+                {
+                    this.participant[ key ].edited = true;
+
+                    //validation
+                    let valid = true;
+                    const value = this.participant[key].value;
+                    const constraints = {
+                        presence: {
+                            allowEmpty: false,
+                        }
+                    };
+
+                    if( validate.single(value, constraints ) !== undefined )
+                    {
+                        this.fieldsParticipant[ key ].error = true;
+                        valid = false;
+                    }
+
+                    if( key === "profile_image" && this.fileAvatar.size > this.sizeFieleUploadAllow )
+                    {
+                        this.fieldsParticipant[ key ].error = true;
+                        valid = false;
+                    }
+
+                    this.isLoading = false;
+
+                    if( valid ) //Not errors
+                    {
+                        //update
+                        this.updateParticipant( key );
+                    }
+                }
+            },
+            updateParticipant( key ){
+                const obj = this.participant[ key ];
+                if( obj.edited )
+                {
+                    this.isLoading = true;
+                    const params = {
+                        id: this.participant.id.value,
+                    };
+                    params[key] = obj.value;
+
+                    axios.post(this.url_participant_update, params)
+                        .then( response => {
+                            this.showErrors({});
+                            if( response.data.status === 200 )
+                            {
+                                //update/restore value copy
+                                if( key === "profile_image" && response.data.data.extra )//Update avatar info
+                                {
+                                    this.participant[ key ].value = response.data.data.extra;
+                                    this.participantCopy[ key ].value = response.data.data.extra;
+                                    this.fileAvatar = null;
+                                    this.enabledUploadAvatar = false;
+                                    this.getImg64Base(this.OPTIONS.PARTICIPANT, this.participant.profile_image.value );
+                                }else//Update copy
+                                {
+                                    this.participantCopy[ key ].value = obj.value;
+                                }
+                                obj.edited = false; //restore
+                                obj.editing = false; //restore
+
+                                success({
+                                    title: this.text_success,
+                                    text: this.text_updated_programmer
+                                });
+                            }
+                        },
+                        error => {
+                            this.showErrors(error);
+                        })
+                        .then( () => {
+                            this.isLoading = false;
+                        });
+                }
             }
         }
     }

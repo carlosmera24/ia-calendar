@@ -6,8 +6,8 @@
             $user = Auth::user();
             $programmer = null;
             $profile_participant = null;
-            $participant = null;
-            if(  $user->participants() != null )
+            $participant = $user->participants()->first();
+            if(  isset($participant) )
             {
                 $participant = $user->participants()->first();
                 $profile_participant = isset( $participant ) ? $participant->profiles_participants_id : null;
@@ -63,9 +63,10 @@
                                                                 'msg'   =>  __('validation.required', ['attribute' => ''])
                                                             ],
                                         'profile_image' =>  [
-                                                                'label' =>  __('validation.attributes.profile_image'),
-                                                                'error' => false,
-                                                                'msg'   =>  __('validation.required', ['attribute' => ''])
+                                                                'label'             =>  __('validation.attributes.profile_image'),
+                                                                'error'             => false,
+                                                                'msg'               =>  __('validation.required', ['attribute' => '']),
+                                                                'msg_limit_size'    =>  __('messages.size_limit_logo_upload')
                                                             ],
                                         'description'   =>  [
                                                                 'label'         =>  __('validation.attributes.description'),

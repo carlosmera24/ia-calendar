@@ -6,6 +6,7 @@ use Validator;
 use App\Models\Participant;
 use App\Models\PersonEmail;
 use Laravolt\Avatar\Avatar;
+use App\CustomClass\Helpers;
 use Illuminate\Http\Request;
 use App\Models\PersonCellphone;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +19,7 @@ class ParticipantController extends Controller
                                 'programmers_id'            =>  'required|integer|exists:programmers,id',
                                 'users_id'                  =>  'nullable|integer|exists:users,id',
                                 'profiles_participants_id'  =>  'required|integer|exists:profiles_participants,id',
-                                'description'               =>  'nullable|min:2|',
+                                'description'               =>  'nullable|min:2',
 
                             ];
     protected $rules_update = [
@@ -27,7 +28,8 @@ class ParticipantController extends Controller
                                 'programmers_id'            =>  'nullable|integer|exists:programmers,id',
                                 'users_id'                  =>  'nullable|integer|exists:users,id',
                                 'profiles_participants_id'  =>  'nullable|integer|exists:profiles_participants,id',
-                                'description'               =>  'nullable|min:2|',
+                                'description'               =>  'nullable|min:2',
+                                'profile_image'             =>  'nullable|min:5',
 
                             ];
     protected $rules_list_participants = [
@@ -90,7 +92,7 @@ class ParticipantController extends Controller
     }
 
     /**
-     * Return a list of particpants and your data from ID programmer
+     * Return a list of particpants and your data from ID participant
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -313,6 +315,7 @@ class ParticipantController extends Controller
             }
 
             //Update
+            $extra = null; //Aditional data for request
             if( isset( $request->persons_id ) )
             {
                 $participant->persons_id = $request->persons_id;
@@ -333,7 +336,21 @@ class ParticipantController extends Controller
                 $participant->description = $request->description;
             }
 
-            $participant->users_id = $request->users_id;
+            if( isset( $request->profile_image ) )
+            {
+                $name_image = empty($participant->profile_image) ? hash( 'md5', $participant->id .'-'. $participant->persons_id .'-'. $participant->programmers_id ) : $participant->profile_image;
+                $res_image = Helpers::saveImageString64($request->profile_image, $name_image, Helpers::OPTION_DIR_IMAGE_PROFILE);
+                if( isset($res_image) )
+                {
+                    $participant->profile_image = $res_image;
+                    $extra = $res_image;
+                }
+            }
+
+            if( isset( $request->users_id ) )
+            {
+                $participant->users_id = $request->users_id;
+            }
 
             if( $participant->update() )
             {
@@ -341,7 +358,8 @@ class ParticipantController extends Controller
                                         array(
                                                 'status'    =>  200,
                                                 'data'      =>  array(
-                                                                        "id"    => $participant->id
+                                                                        "id"    => $participant->id,
+                                                                        "extra" => $extra
                                                                     )
                                             ),
                                         200

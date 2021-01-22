@@ -20469,7 +20469,7 @@ textarea {
 }
 
 .application .content-main .content .form_general_settings section .is-row-data {
-  padding: 0px 12px;
+  padding: 6px 12px;
 }
 
 .application .content-main .content .form_general_settings .programmer_data .field.label_not-show .field-label {
@@ -20512,7 +20512,7 @@ textarea {
 .application .content-main .content .form_general_settings .programmer_data figure.logo-upload {
   margin-left: 0px;
   margin-right: 0px;
-  margin-top: 0px;
+  margin-top: 15px;
   text-align: left;
 }
 
@@ -20532,21 +20532,52 @@ textarea {
 }
 
 .application .content-main .content .form_general_settings .adminitrator_data .avatar {
+  display: initial;
   height: 128px;
   width: 128px;
-  text-align: center;
-  align-items: center;
 }
 
 .application .content-main .content .form_general_settings .adminitrator_data .avatar figure.image {
   border: 2px solid #005368;
   border-radius: 50%;
+  margin: 0px;
   height: 128px;
   width: 128px;
 }
 
+.application .content-main .content .form_general_settings .adminitrator_data .avatar figure.image img {
+  width: 100%;
+  height: 100%;
+}
+
+.application .content-main .content .form_general_settings .adminitrator_data .avatar figure.image .btn-edit {
+  position: absolute;
+  top: 80px;
+  right: -3px;
+  border-radius: 50%;
+}
+
+.application .content-main .content .form_general_settings .adminitrator_data .avatar figure.image .content-buttons {
+  position: absolute;
+  top: 80px;
+  right: -10px;
+}
+
+.application .content-main .content .form_general_settings .adminitrator_data .avatar figure.image .content-buttons .button {
+  border-radius: 50%;
+}
+
 .application .content-main .content .form_general_settings .adminitrator_data .avatar img {
   border-radius: 50%;
+}
+
+.application .content-main .content .form_general_settings .adminitrator_data .avatar .field.file .help {
+  position: absolute;
+  top: 37px;
+}
+
+.application .content-main .content .form_general_settings .adminitrator_data .avatar .field.file.is-danger .upload.control.file-label .file-name {
+  border-color: #f14668;
 }
 
 .animated_delay {

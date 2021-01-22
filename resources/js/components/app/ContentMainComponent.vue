@@ -61,6 +61,7 @@
                 v-bind:text_success='text_success'
                 v-bind:text_updated_programmer='text_updated_programmer'
                 v-bind:fields_programmer_json='fields_programmer_json'
+                v-bind:participant_fields_json="text_participant_fields_json"
                 v-bind:text_breadcrumbs_init='text_breadcrumbs_init'
                 v-bind:text_no_options='text_no_options'
                 v-bind:participant_json='participant_json'
@@ -68,6 +69,7 @@
                 v-bind:url_update_programmer='url_update_programmer'
                 v-bind:url_image_base='url_image_base'
                 v-bind:url_person_ui_avatar='url_person_ui_avatar'
+                v-bind:url_participant_update="url_participant_update"
             />
         </transition-group>
     </div>
@@ -75,7 +77,6 @@
 <script>
 export default {
     props: {
-
         text_breadcrumbs_init: {
             type: String,
             require: true
