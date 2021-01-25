@@ -62,6 +62,8 @@ return [
         'filter_identification' =>  'Filtro tipo de documento',
         'logo_placeholder'      =>  'Insertar logo entidad',
         'upload_logo'           =>  'Subir logo',
+        'predetermined'         =>  'Predeterminado',
+        'use_for_events'        =>  'Usar para eventos',
     ],
 
     /**

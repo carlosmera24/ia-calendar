@@ -20452,6 +20452,7 @@ textarea {
 
 .application .content-main .content .form_general_settings section h3.title-section {
   font-size: 1.25em;
+  margin-bottom: 24px;
 }
 
 .application .content-main .content .form_general_settings section h3.title-section .numerator {
@@ -20472,7 +20473,11 @@ textarea {
   padding: 6px 12px;
 }
 
-.application .content-main .content .form_general_settings .programmer_data .field.label_not-show .field-label {
+.application .content-main .content .form_general_settings section .columns.is-row-data:not(:last-child) {
+  margin-bottom: 0px;
+}
+
+.application .content-main .content .form_general_settings .field.label_not-show .field-label {
   display: none;
 }
 

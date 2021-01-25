@@ -22,51 +22,47 @@
                     <div class="column is-12 is-row-data">
                         <div class="columns">
                             <div class="column is-2"></div>
-                            <div class="column is-10">
-                                <div class="columns">
-                                    <div class="columns column is-12" v-if="programmer.entity_name.editing">
-                                        <div class="column is-6">
-                                            <b-field horizontal
-                                                class="label_not-show"
-                                                v-bind:type="{ 'is-danger' : fieldsProgrammer.entity_name.error }"
-                                                :message="fieldsProgrammer.entity_name.error ? fieldsProgrammer.entity_name.msg : ''">
-                                                <b-input
-                                                    ref="entity_name"
-                                                    name="entity_name"
-                                                    v-model="programmer.entity_name.value"
-                                                    maxlength="120"
-                                                    expanded>
-                                                </b-input>
-                                            </b-field>
+                            <div class="columns column is-10">
+                                <div class="columns column is-12" v-if="programmer.entity_name.editing">
+                                    <div class="column is-6">
+                                        <b-field horizontal
+                                            class="label_not-show"
+                                            v-bind:type="{ 'is-danger' : fieldsProgrammer.entity_name.error }"
+                                            :message="fieldsProgrammer.entity_name.error ? fieldsProgrammer.entity_name.msg : ''">
+                                            <b-input
+                                                ref="entity_name"
+                                                name="entity_name"
+                                                v-model="programmer.entity_name.value"
+                                                maxlength="120"
+                                                expanded>
+                                            </b-input>
+                                        </b-field>
 
-                                        </div>
-                                        <div class="column is-6 content-buttons">
-                                            <b-button
-                                                class="btn-edit"
-                                                size="is-small"
-                                                icon-left="save"
-                                                v-on:click.prevent="clickUpdateProgrammer( 'entity_name' )"
-                                            />
-                                            <b-button
-                                                class="btn-edit"
-                                                size="is-small"
-                                                icon-left="window-close"
-                                                v-on:click.prevent="clickCancelProgrammer('entity_name')"
-                                            />
-                                        </div>
                                     </div>
-                                    <div class="columns column is-12" v-else>
-                                        <div class="column is-6">
-                                            <span>{{ programmer.entity_name.value ? programmer.entity_name.value : fieldsProgrammer.entity_name.label }}</span>
-                                        </div>
-                                        <div class="column is-6">
-                                            <b-button
-                                                class="btn-edit"
-                                                size="is-small"
-                                                icon-left="pen"
-                                                v-on:click.prevent="clickEditProgrammer('entity_name')"
-                                            />
-                                        </div>
+                                    <div class="column is-6 content-buttons">
+                                        <b-button
+                                            size="is-small"
+                                            icon-left="save"
+                                            v-on:click.prevent="clickUpdateProgrammer( 'entity_name' )"
+                                        />
+                                        <b-button
+                                            size="is-small"
+                                            icon-left="window-close"
+                                            v-on:click.prevent="clickCancelProgrammer('entity_name')"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="columns column is-12" v-else>
+                                    <div class="column is-6">
+                                        <span>{{ programmer.entity_name.value ? programmer.entity_name.value : fieldsProgrammer.entity_name.label }}</span>
+                                    </div>
+                                    <div class="column is-6">
+                                        <b-button
+                                            class="btn-edit"
+                                            size="is-small"
+                                            icon-left="pen"
+                                            v-on:click.prevent="clickEditProgrammer('entity_name')"
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -93,53 +89,49 @@
                                 </div>
                                 <span v-else>{{ programmer.identifications_types_id.value ? identificationsTypesIdName[programmer.identifications_types_id.value] : fieldsProgrammer.identifications_types_id.placeholder }}</span>
                             </div>
-                            <div class="column is-10">
-                                <div class="columns">
-                                    <div class="columns column is-12" v-if="programmer.identification.editing">
-                                        <div class="column is-6">
-                                            <b-field horizontal
-                                                class="label_not-show"
-                                                v-bind:type="{ 'is-danger' : fieldsProgrammer.identification.error }"
-                                                :message="fieldsProgrammer.identification.error ? fieldsProgrammer.identification.msg : ''">
-                                                <b-input
-                                                    ref="identification"
-                                                    name="identification"
-                                                    v-model="programmer.identification.value"
-                                                    maxlength="100"
-                                                    v-on:keyup.native="onlyNumber($event, programmer.identification)"
-                                                    expanded>
-                                                </b-input>
-                                            </b-field>
-                                            <span class="dv-content">- {{ nitDV }}</span>
-                                        </div>
-                                        <div class="column is-6 content-buttons">
-                                            <b-button
-                                                class="btn-edit"
-                                                size="is-small"
-                                                icon-left="save"
-                                                v-on:click.prevent="clickUpdateProgrammer( 'identification' )"
-                                            />
-                                            <b-button
-                                                class="btn-edit"
-                                                size="is-small"
-                                                icon-left="window-close"
-                                                v-on:click.prevent="clickCancelProgrammer('identification')"
-                                            />
-                                        </div>
+                            <div class="columns column is-10">
+                                <div class="columns column is-12" v-if="programmer.identification.editing">
+                                    <div class="column is-6">
+                                        <b-field horizontal
+                                            class="label_not-show"
+                                            v-bind:type="{ 'is-danger' : fieldsProgrammer.identification.error }"
+                                            :message="fieldsProgrammer.identification.error ? fieldsProgrammer.identification.msg : ''">
+                                            <b-input
+                                                ref="identification"
+                                                name="identification"
+                                                v-model="programmer.identification.value"
+                                                maxlength="100"
+                                                v-on:keyup.native="onlyNumber($event, programmer.identification)"
+                                                expanded>
+                                            </b-input>
+                                        </b-field>
+                                        <span class="dv-content">- {{ nitDV }}</span>
                                     </div>
-                                    <div class="columns column is-12" v-else>
-                                        <div class="column is-6">
-                                            <span>{{ programmer.identification.value ? programmer.identification.value : fieldsProgrammer.identification.label }}</span>
-                                            <span>- {{ nitDV }}</span>
-                                        </div>
-                                        <div class="column is-6">
-                                            <b-button
-                                                class="btn-edit"
-                                                size="is-small"
-                                                icon-left="pen"
-                                                v-on:click.prevent="clickEditProgrammer('identification')"
-                                            />
-                                        </div>
+                                    <div class="column is-6 content-buttons">
+                                        <b-button
+                                            size="is-small"
+                                            icon-left="save"
+                                            v-on:click.prevent="clickUpdateProgrammer( 'identification' )"
+                                        />
+                                        <b-button
+                                            size="is-small"
+                                            icon-left="window-close"
+                                            v-on:click.prevent="clickCancelProgrammer('identification')"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="columns column is-12" v-else>
+                                    <div class="column is-6">
+                                        <span>{{ programmer.identification.value ? programmer.identification.value : fieldsProgrammer.identification.label }}</span>
+                                        <span>- {{ nitDV }}</span>
+                                    </div>
+                                    <div class="column is-6">
+                                        <b-button
+                                            class="btn-edit"
+                                            size="is-small"
+                                            icon-left="pen"
+                                            v-on:click.prevent="clickEditProgrammer('identification')"
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -150,64 +142,60 @@
                     <div class="column is-12 is-row-data">
                         <div class="columns">
                             <div class="column is-2"></div>
-                            <div class="column is-10">
-                                <div class="columns">
-                                    <div class="columns column is-12" v-if="programmer.logo.editing">
-                                        <div class="column is-6">
-                                            <b-field class="file is-primary"
-                                                :class="classFileLogo"
-                                                v-bind:type="{ 'is-danger' : fieldsProgrammer.logo.error }"
-                                                :message="fieldsProgrammer.logo.error ? fieldsProgrammer.logo.msg_limit_size : ''">
-                                                <b-upload v-model="fileLogo"
-                                                    class="file-label"
-                                                    ref="inputFileLogo"
-                                                    :accept="aceptLogo"
-                                                    @input="onFileLogoSelected()"
-                                                    >
-                                                    <span class="file-cta">
-                                                        <b-icon class="file-icon" icon="upload"></b-icon>
-                                                        <span class="file-label">{{ fieldsProgrammer.logo.action_button }}</span>
-                                                    </span>
-                                                    <span class="file-name" v-if="fileLogo">
-                                                        {{ fileLogo.name }}
-                                                    </span>
-                                                </b-upload>
-                                            </b-field>
-                                            <figure v-if="logoBase64" class="image logo-upload is-fullwith">
-                                                <img :src="logoBase64">
-                                            </figure>
-                                        </div>
-                                        <div class="column is-6 content-buttons">
-                                            <b-button
-                                                class="btn-edit"
-                                                size="is-small"
-                                                icon-left="save"
-                                                :disabled="!enabledUploadLogo"
-                                                v-on:click.prevent="clickUpdateProgrammer( 'logo' )"
-                                            />
-                                            <b-button
-                                                class="btn-edit"
-                                                size="is-small"
-                                                icon-left="window-close"
-                                                v-on:click.prevent="clickCancelProgrammer('logo')"
-                                            />
-                                        </div>
+                            <div class="columns column is-10">
+                                <div class="columns column is-12" v-if="programmer.logo.editing">
+                                    <div class="column is-6">
+                                        <b-field class="file is-primary"
+                                            :class="classFileLogo"
+                                            v-bind:type="{ 'is-danger' : fieldsProgrammer.logo.error }"
+                                            :message="fieldsProgrammer.logo.error ? fieldsProgrammer.logo.msg_limit_size : ''">
+                                            <b-upload v-model="fileLogo"
+                                                class="file-label"
+                                                ref="inputFileLogo"
+                                                :accept="aceptLogo"
+                                                @input="onFileLogoSelected()"
+                                                >
+                                                <span class="file-cta">
+                                                    <b-icon class="file-icon" icon="upload"></b-icon>
+                                                    <span class="file-label">{{ fieldsProgrammer.logo.action_button }}</span>
+                                                </span>
+                                                <span class="file-name" v-if="fileLogo">
+                                                    {{ fileLogo.name }}
+                                                </span>
+                                            </b-upload>
+                                        </b-field>
+                                        <figure v-if="logoBase64" class="image logo-upload is-fullwith">
+                                            <img :src="logoBase64">
+                                        </figure>
                                     </div>
-                                    <div class="columns column is-12" v-else>
-                                        <div class="column is-6">
-                                            <figure v-if="programmer.logo.value && img64Base" class="image logo">
-                                                <img :src="img64Base">
-                                            </figure>
-                                            <span v-else>{{ fieldsProgrammer.logo.placeholder }}</span>
-                                        </div>
-                                        <div class="column is-6">
-                                            <b-button
-                                                class="btn-edit"
-                                                size="is-small"
-                                                icon-left="pen"
-                                                v-on:click.prevent="clickEditProgrammer('logo')"
-                                            />
-                                        </div>
+                                    <div class="column is-6 content-buttons">
+                                        <b-button
+                                            size="is-small"
+                                            icon-left="save"
+                                            :disabled="!enabledUploadLogo"
+                                            v-on:click.prevent="clickUpdateProgrammer( 'logo' )"
+                                        />
+                                        <b-button
+                                            size="is-small"
+                                            icon-left="window-close"
+                                            v-on:click.prevent="clickCancelProgrammer('logo')"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="columns column is-12" v-else>
+                                    <div class="column is-6">
+                                        <figure v-if="programmer.logo.value && img64Base" class="image logo">
+                                            <img :src="img64Base">
+                                        </figure>
+                                        <span v-else>{{ fieldsProgrammer.logo.placeholder }}</span>
+                                    </div>
+                                    <div class="column is-6">
+                                        <b-button
+                                            class="btn-edit"
+                                            size="is-small"
+                                            icon-left="pen"
+                                            v-on:click.prevent="clickEditProgrammer('logo')"
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -271,11 +259,11 @@
                                 </div>
                                 <!-- /Profile image -->
                             </div>
-                            <div class="column is-10 is-row-data">
-                                <div class="columns">
+                            <div class="column is-10">
+                                <div class="columns is-multiline">
                                     <!-- Mail main admin-->
-                                    <div class="columns column is-12" v-if="participant.person.initial_register_email">
-                                        <div class="columns column is-6">
+                                    <div class="columns column is-12 is-row-data" v-if="participant.person.initial_register_email">
+                                        <div class="columns column is-6 is-row-data">
                                             <span class="column is-8">{{ participant.person.initial_register_email.value.email }}</span>
                                             <span class="column is-4 label-info">{{ textsGeneralSettings.predetermined }}</span>
                                         </div>
@@ -283,6 +271,53 @@
                                         </div>
                                     </div>
                                     <!-- /Mail main admin-->
+                                    <!-- Mail used for events admin-->
+                                    <div class="columns column is-12 is-row-data">
+                                        <div class="columns column is-12" v-if="participant.person.used_events_email !== undefined && participant.person.used_events_email.editing">
+                                            <div class="column is-6">
+                                                <b-field horizontal
+                                                    class="label_not-show"
+                                                    v-bind:type="{ 'is-danger' : fieldsParticipant.email.error }"
+                                                    :message="fieldsParticipant.email.error ? fieldsParticipant.email.msg : ''">
+                                                    <b-input
+                                                        ref="person.used_events_email"
+                                                        name="person.used_events_email"
+                                                        v-model="participant.person.used_events_email.value.email"
+                                                        maxlength="120"
+                                                        expanded>
+                                                    </b-input>
+                                                </b-field>
+
+                                            </div>
+                                            <div class="column is-6 content-buttons">
+                                                <b-button
+                                                    size="is-small"
+                                                    icon-left="save"
+                                                    v-on:click.prevent="clickUpdateParticipant( 'person.used_events_email' )"
+                                                />
+                                                <b-button
+                                                    size="is-small"
+                                                    icon-left="window-close"
+                                                    v-on:click.prevent="clickCancelParticipant('person.used_events_email')"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div class="columns column is-12" v-else-if="participant.person.used_events_email !== undefined">
+                                            <div class="columns column is-6 is-row-data">
+                                                <span class="column is-8">{{ participant.person.used_events_email.value ? participant.person.used_events_email.value.email : firstCapitalize(fieldsParticipant.email.label) }}</span>
+                                                <span class="column is-4 label-info">{{ textsGeneralSettings.use_for_events }}</span>
+                                            </div>
+                                            <div class="column is-6">
+                                                <b-button
+                                                    class="btn-edit"
+                                                    size="is-small"
+                                                    icon-left="pen"
+                                                    v-on:click.prevent="clickEditParticipant('person.used_events_email')"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Mail used for events admin-->
                                 </div>
                             </div>
                         </div>
@@ -441,7 +476,10 @@
             this.textsGeneralSettings = JSON.parse(this.texts_general_settings_json);
             this.fieldsProgrammer = JSON.parse(this.fields_programmer_json);
             this.fieldsParticipant = JSON.parse(this.participant_fields_json);
-            //Create/load participant data
+
+            /**
+             * Create/load participant data
+             */
             const initParticipant = JSON.parse(this.participant_json);
             Object.keys(initParticipant).forEach( key => {
                 let val = new Object();
@@ -468,6 +506,18 @@
                 //Crete participant copy
                 this.participantCopy[key] = Object.assign({}, val); //Non-reactive copy
             });
+            //add default value for used events with not-reactive copy
+            Vue.set(this.participant.person, 'used_events_email', {
+                            'value':    { email: null },
+                            'edited':   false,
+                            'editing':  false,
+                        });
+            Vue.set(this.participantCopy.person, 'used_events_email', {
+                            'value':    { email: null },
+                            'edited':   false,
+                            'editing':  false,
+                        });
+            /** ./Create/load participant data  */
         },
         async mounted(){
             await this.getIdentificationsTypes();
@@ -482,6 +532,9 @@
             showErrors(resError){
                 this.errors = procesarErroresRequest( resError );
                 this.hasErrors = this.errors.errors.length > 0;
+            },
+            firstCapitalize( word ){
+                return _.capitalize( word );
             },
             async getIdentificationsTypes(){
                 this.isLoading = true;
@@ -627,22 +680,34 @@
                         this.showErrors({});
                         if( response.data.status === 200 )
                         {
-                            console.log("emails", response.data.emails );
                             let email_initial = new Object();
                             let email_event = new Object();
                             response.data.emails.forEach( element => {
-                                const val = {
+                                if( element.initial_register === 1 )
+                                {
+                                    //Set with no-reactive values
+                                    Vue.set(this.participant.person, 'initial_register_email', {
                                                 'value':    element,
                                                 'edited':   false,
                                                 'editing':  false,
-                                            };
-                                if( element.initial_register === 1 )
-                                {
-                                    Vue.set(this.participant.person, 'initial_register_email', val);
-                                    Vue.set(this.participantCopy.person, 'initial_register_email', val);
+                                            });
+                                    Vue.set(this.participantCopy.person, 'initial_register_email', {
+                                                'value':    element,
+                                                'edited':   false,
+                                                'editing':  false,
+                                            });
                                 }else if( element.used_events === 1 ){
-                                    Vue.set(this.participant.person, 'used_events_email', val);
-                                    Vue.set(this.participantCopy.person, 'used_events_email', val);
+                                    //Set with no-reactive values
+                                    Vue.set(this.participant.person, 'used_events_email', {
+                                                'value':    element,
+                                                'edited':   false,
+                                                'editing':  false,
+                                            });
+                                    Vue.set(this.participantCopy.person, 'used_events_email', {
+                                                'value':    element,
+                                                'edited':   false,
+                                                'editing':  false,
+                                            });
                                 }
                             });
                         }
@@ -683,7 +748,6 @@
                     const result = await this.imageToBase64(this.fileLogo).catch(e => Error(e));
                     if(result instanceof Error) {
                         this.showErrors( result.message )
-                        console.log('Error: ', result.message);
                         return;
                     }
                     this.logoBase64 = result;
@@ -702,7 +766,6 @@
                     const result = await this.imageToBase64(this.fileAvatar).catch(e => Error(e));
                     if(result instanceof Error) {
                         this.showErrors( result.message )
-                        console.log('Error: ', result.message);
                         return;
                     }
                     this.avatarAdmin = result;
@@ -794,6 +857,8 @@
                         //update
                         this.updateProgrammer( key );
                     }
+                }else{
+                    this.isLoading = false
                 }
             },
             updateProgrammer( key )
@@ -849,8 +914,24 @@
                         });
                 }
             },
+            setErrorParticipant( key, errValue){
+                switch(key) {
+                    case "person.used_events_email":
+                        this.fieldsParticipant.email.error = errValue;
+                        break;
+                    default:
+                        this.fieldsParticipant[ key ].error = errValue;
+                        break;
+                }
+            },
             clickEditParticipant( key ){
-                this.participant[ key].editing = !this.participant[ key].editing;
+                //Get keys, for exaple: person.emails
+                const keys = key.split(".");
+                let obj = this.participant;
+                keys.forEach( k => {
+                    obj = obj[k];
+                });
+                obj.editing = !obj.editing;
                 //wait for the input to load
                 this.$nextTick(() => {
                     if( (this.$refs[ key ]) )
@@ -860,10 +941,17 @@
                 });
             },
             clickCancelParticipant( key ){
+                //Get keys, for exaple: person.emails
+                const keys = key.split(".");
+                let obj = this.participant;
+                keys.forEach( k => {
+                    obj = obj[k];
+                });
+
                 //Clean error, change "editing" and restore values
-                this.participant[ key ].value = this.participantCopy[ key ].value;
-                this.participant[ key ].editing = false;
-                this.fieldsParticipant[ key ].error = false;
+                obj.value = obj.value;
+                obj.editing = false;
+                this.setErrorParticipant( key, false );
 
                 if( key === "profile_image" )
                 {
@@ -875,7 +963,7 @@
             clickUpdateParticipant( key ){
                 this.isLoading = true;
                 //cleans errors
-                this.fieldsParticipant[ key ].error = false;
+                this.setErrorParticipant( key, false );
 
                 if( key === "profile_image" )
                 {
@@ -883,15 +971,23 @@
                     this.participant[ key ].value = this.avatarAdmin;
                 }
 
+                //Get keys, for exaple: person.emails
+                const keys = key.split(".");
+                let obj = this.participant;
+                let objCopy = this.participantCopy;
+                keys.forEach( k => {
+                    obj = obj[k];
+                    objCopy = objCopy[k];
+                });
                 //compare values
-                if( this.participant[ key ].value !== this.participant[ key ].value
+                if( obj.value !== objCopy.value
                     || (key === "profile_image" && this.avatarAdmin !== this.avatarAdminCopy) )//Edited
                 {
-                    this.participant[ key ].edited = true;
+                    obj.edited = true;
 
                     //validation
                     let valid = true;
-                    const value = this.participant[key].value;
+                    const value = obj.value;
                     const constraints = {
                         presence: {
                             allowEmpty: false,
@@ -900,13 +996,27 @@
 
                     if( validate.single(value, constraints ) !== undefined )
                     {
-                        this.fieldsParticipant[ key ].error = true;
+                        this.setErrorParticipant(key, true);
                         valid = false;
                     }
-
+                    if( key === "person.used_events_email" )
+                    {
+                        const constrEmail = Object.assign({ email: true }, constraints );
+                        if( validate.single(obj.value.email, constraints ) !== undefined )
+                        {
+                            //TODO Agregar mensaje de visualizarción
+                            this.setErrorParticipant(key, true);
+                            valid = false;
+                        }else if( validate.single(obj.value.email, constrEmail ) !== undefined )
+                        {
+                            //TODO Agregar mensaje de visualizarción
+                            this.setErrorParticipant(key, true);
+                            valid = false;
+                        }
+                    }
                     if( key === "profile_image" && this.fileAvatar.size > this.sizeFieleUploadAllow )
                     {
-                        this.fieldsParticipant[ key ].error = true;
+                        this.setErrorParticipant(key, true);
                         valid = false;
                     }
 
@@ -915,8 +1025,11 @@
                     if( valid ) //Not errors
                     {
                         //update
-                        this.updateParticipant( key );
+                        console.log("update participant", key);
+                        //this.updateParticipant( key );
                     }
+                }else{
+                    this.isLoading = false
                 }
             },
             updateParticipant( key ){

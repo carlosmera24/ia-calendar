@@ -17,7 +17,6 @@ return [
     'loading'                   =>  'Cargando...',
     'updated_programmer'        =>  'Programador actualizado satisfactoriamente.',
     'size_limit_logo_upload'    =>  'El archivo no puede ser mayor a 5MB',
-    'predetermined'             =>  'Predeterminado',
 
     //Errors
     'bad_request'               =>  'Solicitud incorrecta',

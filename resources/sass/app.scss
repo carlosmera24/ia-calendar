@@ -573,6 +573,7 @@ body, h2, button, input, select, textarea {
                     padding: 12px 0px;
                     h3.title-section{
                         font-size: 1.25em;
+                        margin-bottom: 24px;
                             .numerator{
                                 font-weight: 400;
                                 margin-right: 10px;
@@ -590,13 +591,16 @@ body, h2, button, input, select, textarea {
                     .is-row-data{
                         padding: 6px 12px;
                     }
+                    .columns.is-row-data:not(:last-child){
+                        margin-bottom: 0px;
+                    }
+                }
+                .field.label_not-show{
+                    .field-label{
+                        display: none;
+                    }
                 }
                 .programmer_data{
-                    .field.label_not-show{
-                        .field-label{
-                            display: none;
-                        }
-                    }
                     .field-identification-type.control{
                         .v-select{
                             .vs__dropdown-toggle{

@@ -4075,6 +4075,41 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -4227,7 +4262,10 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
     });
     this.textsGeneralSettings = JSON.parse(this.texts_general_settings_json);
     this.fieldsProgrammer = JSON.parse(this.fields_programmer_json);
-    this.fieldsParticipant = JSON.parse(this.participant_fields_json); //Create/load participant data
+    this.fieldsParticipant = JSON.parse(this.participant_fields_json);
+    /**
+     * Create/load participant data
+     */
 
     var initParticipant = JSON.parse(this.participant_json);
     Object.keys(initParticipant).forEach(function (key) {
@@ -4257,7 +4295,23 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       //Crete participant copy
 
       _this.participantCopy[key] = Object.assign({}, val); //Non-reactive copy
+    }); //add default value for used events with not-reactive copy
+
+    Vue.set(this.participant.person, 'used_events_email', {
+      'value': {
+        email: null
+      },
+      'edited': false,
+      'editing': false
     });
+    Vue.set(this.participantCopy.person, 'used_events_email', {
+      'value': {
+        email: null
+      },
+      'edited': false,
+      'editing': false
+    });
+    /** ./Create/load participant data  */
   },
   mounted: function mounted() {
     var _this2 = this;
@@ -4299,6 +4353,9 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
     showErrors: function showErrors(resError) {
       this.errors = Object(_functions_js__WEBPACK_IMPORTED_MODULE_1__["procesarErroresRequest"])(resError);
       this.hasErrors = this.errors.errors.length > 0;
+    },
+    firstCapitalize: function firstCapitalize(word) {
+      return _.capitalize(word);
     },
     getIdentificationsTypes: function getIdentificationsTypes() {
       var _this3 = this;
@@ -4524,22 +4581,33 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                   _this7.showErrors({});
 
                   if (response.data.status === 200) {
-                    console.log("emails", response.data.emails);
                     var email_initial = new Object();
                     var email_event = new Object();
                     response.data.emails.forEach(function (element) {
-                      var val = {
-                        'value': element,
-                        'edited': false,
-                        'editing': false
-                      };
-
                       if (element.initial_register === 1) {
-                        Vue.set(_this7.participant.person, 'initial_register_email', val);
-                        Vue.set(_this7.participantCopy.person, 'initial_register_email', val);
+                        //Set with no-reactive values
+                        Vue.set(_this7.participant.person, 'initial_register_email', {
+                          'value': element,
+                          'edited': false,
+                          'editing': false
+                        });
+                        Vue.set(_this7.participantCopy.person, 'initial_register_email', {
+                          'value': element,
+                          'edited': false,
+                          'editing': false
+                        });
                       } else if (element.used_events === 1) {
-                        Vue.set(_this7.participant.person, 'used_events_email', val);
-                        Vue.set(_this7.participantCopy.person, 'used_events_email', val);
+                        //Set with no-reactive values
+                        Vue.set(_this7.participant.person, 'used_events_email', {
+                          'value': element,
+                          'edited': false,
+                          'editing': false
+                        });
+                        Vue.set(_this7.participantCopy.person, 'used_events_email', {
+                          'value': element,
+                          'edited': false,
+                          'editing': false
+                        });
                       }
                     });
                   }
@@ -4609,7 +4677,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
             switch (_context8.prev = _context8.next) {
               case 0:
                 if (!_this8.fileLogo) {
-                  _context8.next = 15;
+                  _context8.next = 14;
                   break;
                 }
 
@@ -4625,25 +4693,24 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 result = _context8.sent;
 
                 if (!(result instanceof Error)) {
-                  _context8.next = 11;
+                  _context8.next = 10;
                   break;
                 }
 
                 _this8.showErrors(result.message);
 
-                console.log('Error: ', result.message);
                 return _context8.abrupt("return");
 
-              case 11:
+              case 10:
                 _this8.logoBase64 = result;
                 _this8.isLoading = false;
-                _context8.next = 16;
+                _context8.next = 15;
                 break;
 
-              case 15:
+              case 14:
                 _this8.enabledUploadLogo = false;
 
-              case 16:
+              case 15:
               case "end":
                 return _context8.stop();
             }
@@ -4661,7 +4728,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
             switch (_context9.prev = _context9.next) {
               case 0:
                 if (!_this9.fileAvatar) {
-                  _context9.next = 15;
+                  _context9.next = 14;
                   break;
                 }
 
@@ -4677,25 +4744,24 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 result = _context9.sent;
 
                 if (!(result instanceof Error)) {
-                  _context9.next = 11;
+                  _context9.next = 10;
                   break;
                 }
 
                 _this9.showErrors(result.message);
 
-                console.log('Error: ', result.message);
                 return _context9.abrupt("return");
 
-              case 11:
+              case 10:
                 _this9.avatarAdmin = result;
                 _this9.isLoading = false;
-                _context9.next = 16;
+                _context9.next = 15;
                 break;
 
-              case 15:
+              case 14:
                 _this9.enabledUploadAvatar = false;
 
-              case 16:
+              case 15:
               case "end":
                 return _context9.stop();
             }
@@ -4783,7 +4849,9 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
               //update
               this.updateProgrammer(key);
             }
-        }
+        } else {
+        this.isLoading = false;
+      }
     },
     updateProgrammer: function updateProgrammer(key) {
       var _this11 = this;
@@ -4840,10 +4908,27 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         });
       }
     },
+    setErrorParticipant: function setErrorParticipant(key, errValue) {
+      switch (key) {
+        case "person.used_events_email":
+          this.fieldsParticipant.email.error = errValue;
+          break;
+
+        default:
+          this.fieldsParticipant[key].error = errValue;
+          break;
+      }
+    },
     clickEditParticipant: function clickEditParticipant(key) {
       var _this12 = this;
 
-      this.participant[key].editing = !this.participant[key].editing; //wait for the input to load
+      //Get keys, for exaple: person.emails
+      var keys = key.split(".");
+      var obj = this.participant;
+      keys.forEach(function (k) {
+        obj = obj[k];
+      });
+      obj.editing = !obj.editing; //wait for the input to load
 
       this.$nextTick(function () {
         if (_this12.$refs[key]) {
@@ -4852,10 +4937,16 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       });
     },
     clickCancelParticipant: function clickCancelParticipant(key) {
-      //Clean error, change "editing" and restore values
-      this.participant[key].value = this.participantCopy[key].value;
-      this.participant[key].editing = false;
-      this.fieldsParticipant[key].error = false;
+      //Get keys, for exaple: person.emails
+      var keys = key.split(".");
+      var obj = this.participant;
+      keys.forEach(function (k) {
+        obj = obj[k];
+      }); //Clean error, change "editing" and restore values
+
+      obj.value = obj.value;
+      obj.editing = false;
+      this.setErrorParticipant(key, false);
 
       if (key === "profile_image") {
         this.fileAvatar = null;
@@ -4866,20 +4957,28 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
     clickUpdateParticipant: function clickUpdateParticipant(key) {
       this.isLoading = true; //cleans errors
 
-      this.fieldsParticipant[key].error = false;
+      this.setErrorParticipant(key, false);
 
       if (key === "profile_image") {
         //Value for save in DDBB
         this.participant[key].value = this.avatarAdmin;
-      } //compare values
+      } //Get keys, for exaple: person.emails
 
 
-      if (this.participant[key].value !== this.participant[key].value || key === "profile_image" && this.avatarAdmin !== this.avatarAdminCopy) //Edited
+      var keys = key.split(".");
+      var obj = this.participant;
+      var objCopy = this.participantCopy;
+      keys.forEach(function (k) {
+        obj = obj[k];
+        objCopy = objCopy[k];
+      }); //compare values
+
+      if (obj.value !== objCopy.value || key === "profile_image" && this.avatarAdmin !== this.avatarAdminCopy) //Edited
         {
-          this.participant[key].edited = true; //validation
+          obj.edited = true; //validation
 
           var valid = true;
-          var value = this.participant[key].value;
+          var value = obj.value;
           var constraints = {
             presence: {
               allowEmpty: false
@@ -4887,12 +4986,28 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
           };
 
           if (validate.single(value, constraints) !== undefined) {
-            this.fieldsParticipant[key].error = true;
+            this.setErrorParticipant(key, true);
             valid = false;
           }
 
+          if (key === "person.used_events_email") {
+            var constrEmail = Object.assign({
+              email: true
+            }, constraints);
+
+            if (validate.single(obj.value.email, constraints) !== undefined) {
+              //TODO Agregar mensaje de visualizarción
+              this.setErrorParticipant(key, true);
+              valid = false;
+            } else if (validate.single(obj.value.email, constrEmail) !== undefined) {
+              //TODO Agregar mensaje de visualizarción
+              this.setErrorParticipant(key, true);
+              valid = false;
+            }
+          }
+
           if (key === "profile_image" && this.fileAvatar.size > this.sizeFieleUploadAllow) {
-            this.fieldsParticipant[key].error = true;
+            this.setErrorParticipant(key, true);
             valid = false;
           }
 
@@ -4901,9 +5016,11 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
           if (valid) //Not errors
             {
               //update
-              this.updateParticipant(key);
+              console.log("update participant", key); //this.updateParticipant( key );
             }
-        }
+        } else {
+        this.isLoading = false;
+      }
     },
     updateParticipant: function updateParticipant(key) {
       var _this13 = this;
@@ -69399,134 +69516,126 @@ var render = function() {
                 _c("div", { staticClass: "columns" }, [
                   _c("div", { staticClass: "column is-2" }),
                   _vm._v(" "),
-                  _c("div", { staticClass: "column is-10" }, [
-                    _c("div", { staticClass: "columns" }, [
-                      _vm.programmer.entity_name.editing
-                        ? _c("div", { staticClass: "columns column is-12" }, [
-                            _c(
-                              "div",
-                              { staticClass: "column is-6" },
-                              [
-                                _c(
-                                  "b-field",
-                                  {
-                                    staticClass: "label_not-show",
+                  _c("div", { staticClass: "columns column is-10" }, [
+                    _vm.programmer.entity_name.editing
+                      ? _c("div", { staticClass: "columns column is-12" }, [
+                          _c(
+                            "div",
+                            { staticClass: "column is-6" },
+                            [
+                              _c(
+                                "b-field",
+                                {
+                                  staticClass: "label_not-show",
+                                  attrs: {
+                                    horizontal: "",
+                                    type: {
+                                      "is-danger":
+                                        _vm.fieldsProgrammer.entity_name.error
+                                    },
+                                    message: _vm.fieldsProgrammer.entity_name
+                                      .error
+                                      ? _vm.fieldsProgrammer.entity_name.msg
+                                      : ""
+                                  }
+                                },
+                                [
+                                  _c("b-input", {
+                                    ref: "entity_name",
                                     attrs: {
-                                      horizontal: "",
-                                      type: {
-                                        "is-danger":
-                                          _vm.fieldsProgrammer.entity_name.error
+                                      name: "entity_name",
+                                      maxlength: "120",
+                                      expanded: ""
+                                    },
+                                    model: {
+                                      value: _vm.programmer.entity_name.value,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.programmer.entity_name,
+                                          "value",
+                                          $$v
+                                        )
                                       },
-                                      message: _vm.fieldsProgrammer.entity_name
-                                        .error
-                                        ? _vm.fieldsProgrammer.entity_name.msg
-                                        : ""
+                                      expression: "programmer.entity_name.value"
                                     }
-                                  },
-                                  [
-                                    _c("b-input", {
-                                      ref: "entity_name",
-                                      attrs: {
-                                        name: "entity_name",
-                                        maxlength: "120",
-                                        expanded: ""
-                                      },
-                                      model: {
-                                        value: _vm.programmer.entity_name.value,
-                                        callback: function($$v) {
-                                          _vm.$set(
-                                            _vm.programmer.entity_name,
-                                            "value",
-                                            $$v
-                                          )
-                                        },
-                                        expression:
-                                          "programmer.entity_name.value"
-                                      }
-                                    })
-                                  ],
-                                  1
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "column is-6 content-buttons" },
+                            [
+                              _c("b-button", {
+                                attrs: {
+                                  size: "is-small",
+                                  "icon-left": "save"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.clickUpdateProgrammer(
+                                      "entity_name"
+                                    )
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("b-button", {
+                                attrs: {
+                                  size: "is-small",
+                                  "icon-left": "window-close"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.clickCancelProgrammer(
+                                      "entity_name"
+                                    )
+                                  }
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ])
+                      : _c("div", { staticClass: "columns column is-12" }, [
+                          _c("div", { staticClass: "column is-6" }, [
+                            _c("span", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.programmer.entity_name.value
+                                    ? _vm.programmer.entity_name.value
+                                    : _vm.fieldsProgrammer.entity_name.label
                                 )
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "column is-6 content-buttons" },
-                              [
-                                _c("b-button", {
-                                  staticClass: "btn-edit",
-                                  attrs: {
-                                    size: "is-small",
-                                    "icon-left": "save"
-                                  },
-                                  on: {
-                                    click: function($event) {
-                                      $event.preventDefault()
-                                      return _vm.clickUpdateProgrammer(
-                                        "entity_name"
-                                      )
-                                    }
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "column is-6" },
+                            [
+                              _c("b-button", {
+                                staticClass: "btn-edit",
+                                attrs: { size: "is-small", "icon-left": "pen" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.clickEditProgrammer(
+                                      "entity_name"
+                                    )
                                   }
-                                }),
-                                _vm._v(" "),
-                                _c("b-button", {
-                                  staticClass: "btn-edit",
-                                  attrs: {
-                                    size: "is-small",
-                                    "icon-left": "window-close"
-                                  },
-                                  on: {
-                                    click: function($event) {
-                                      $event.preventDefault()
-                                      return _vm.clickCancelProgrammer(
-                                        "entity_name"
-                                      )
-                                    }
-                                  }
-                                })
-                              ],
-                              1
-                            )
-                          ])
-                        : _c("div", { staticClass: "columns column is-12" }, [
-                            _c("div", { staticClass: "column is-6" }, [
-                              _c("span", [
-                                _vm._v(
-                                  _vm._s(
-                                    _vm.programmer.entity_name.value
-                                      ? _vm.programmer.entity_name.value
-                                      : _vm.fieldsProgrammer.entity_name.label
-                                  )
-                                )
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "column is-6" },
-                              [
-                                _c("b-button", {
-                                  staticClass: "btn-edit",
-                                  attrs: {
-                                    size: "is-small",
-                                    "icon-left": "pen"
-                                  },
-                                  on: {
-                                    click: function($event) {
-                                      $event.preventDefault()
-                                      return _vm.clickEditProgrammer(
-                                        "entity_name"
-                                      )
-                                    }
-                                  }
-                                })
-                              ],
-                              1
-                            )
-                          ])
-                    ])
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ])
                   ])
                 ])
               ]),
@@ -69622,152 +69731,143 @@ var render = function() {
                         ])
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "column is-10" }, [
-                    _c("div", { staticClass: "columns" }, [
-                      _vm.programmer.identification.editing
-                        ? _c("div", { staticClass: "columns column is-12" }, [
-                            _c(
-                              "div",
-                              { staticClass: "column is-6" },
-                              [
-                                _c(
-                                  "b-field",
-                                  {
-                                    staticClass: "label_not-show",
+                  _c("div", { staticClass: "columns column is-10" }, [
+                    _vm.programmer.identification.editing
+                      ? _c("div", { staticClass: "columns column is-12" }, [
+                          _c(
+                            "div",
+                            { staticClass: "column is-6" },
+                            [
+                              _c(
+                                "b-field",
+                                {
+                                  staticClass: "label_not-show",
+                                  attrs: {
+                                    horizontal: "",
+                                    type: {
+                                      "is-danger":
+                                        _vm.fieldsProgrammer.identification
+                                          .error
+                                    },
+                                    message: _vm.fieldsProgrammer.identification
+                                      .error
+                                      ? _vm.fieldsProgrammer.identification.msg
+                                      : ""
+                                  }
+                                },
+                                [
+                                  _c("b-input", {
+                                    ref: "identification",
                                     attrs: {
-                                      horizontal: "",
-                                      type: {
-                                        "is-danger":
-                                          _vm.fieldsProgrammer.identification
-                                            .error
-                                      },
-                                      message: _vm.fieldsProgrammer
-                                        .identification.error
-                                        ? _vm.fieldsProgrammer.identification
-                                            .msg
-                                        : ""
-                                    }
-                                  },
-                                  [
-                                    _c("b-input", {
-                                      ref: "identification",
-                                      attrs: {
-                                        name: "identification",
-                                        maxlength: "100",
-                                        expanded: ""
-                                      },
-                                      nativeOn: {
-                                        keyup: function($event) {
-                                          return _vm.onlyNumber(
-                                            $event,
-                                            _vm.programmer.identification
-                                          )
-                                        }
-                                      },
-                                      model: {
-                                        value:
-                                          _vm.programmer.identification.value,
-                                        callback: function($$v) {
-                                          _vm.$set(
-                                            _vm.programmer.identification,
-                                            "value",
-                                            $$v
-                                          )
-                                        },
-                                        expression:
-                                          "programmer.identification.value"
+                                      name: "identification",
+                                      maxlength: "100",
+                                      expanded: ""
+                                    },
+                                    nativeOn: {
+                                      keyup: function($event) {
+                                        return _vm.onlyNumber(
+                                          $event,
+                                          _vm.programmer.identification
+                                        )
                                       }
-                                    })
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "dv-content" }, [
-                                  _vm._v("- " + _vm._s(_vm.nitDV))
-                                ])
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "column is-6 content-buttons" },
-                              [
-                                _c("b-button", {
-                                  staticClass: "btn-edit",
-                                  attrs: {
-                                    size: "is-small",
-                                    "icon-left": "save"
-                                  },
-                                  on: {
-                                    click: function($event) {
-                                      $event.preventDefault()
-                                      return _vm.clickUpdateProgrammer(
-                                        "identification"
-                                      )
+                                    },
+                                    model: {
+                                      value:
+                                        _vm.programmer.identification.value,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.programmer.identification,
+                                          "value",
+                                          $$v
+                                        )
+                                      },
+                                      expression:
+                                        "programmer.identification.value"
                                     }
-                                  }
-                                }),
-                                _vm._v(" "),
-                                _c("b-button", {
-                                  staticClass: "btn-edit",
-                                  attrs: {
-                                    size: "is-small",
-                                    "icon-left": "window-close"
-                                  },
-                                  on: {
-                                    click: function($event) {
-                                      $event.preventDefault()
-                                      return _vm.clickCancelProgrammer(
-                                        "identification"
-                                      )
-                                    }
-                                  }
-                                })
-                              ],
-                              1
-                            )
-                          ])
-                        : _c("div", { staticClass: "columns column is-12" }, [
-                            _c("div", { staticClass: "column is-6" }, [
-                              _c("span", [
-                                _vm._v(
-                                  _vm._s(
-                                    _vm.programmer.identification.value
-                                      ? _vm.programmer.identification.value
-                                      : _vm.fieldsProgrammer.identification
-                                          .label
-                                  )
-                                )
-                              ]),
+                                  })
+                                ],
+                                1
+                              ),
                               _vm._v(" "),
-                              _c("span", [_vm._v("- " + _vm._s(_vm.nitDV))])
+                              _c("span", { staticClass: "dv-content" }, [
+                                _vm._v("- " + _vm._s(_vm.nitDV))
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "column is-6 content-buttons" },
+                            [
+                              _c("b-button", {
+                                attrs: {
+                                  size: "is-small",
+                                  "icon-left": "save"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.clickUpdateProgrammer(
+                                      "identification"
+                                    )
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("b-button", {
+                                attrs: {
+                                  size: "is-small",
+                                  "icon-left": "window-close"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.clickCancelProgrammer(
+                                      "identification"
+                                    )
+                                  }
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ])
+                      : _c("div", { staticClass: "columns column is-12" }, [
+                          _c("div", { staticClass: "column is-6" }, [
+                            _c("span", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.programmer.identification.value
+                                    ? _vm.programmer.identification.value
+                                    : _vm.fieldsProgrammer.identification.label
+                                )
+                              )
                             ]),
                             _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "column is-6" },
-                              [
-                                _c("b-button", {
-                                  staticClass: "btn-edit",
-                                  attrs: {
-                                    size: "is-small",
-                                    "icon-left": "pen"
-                                  },
-                                  on: {
-                                    click: function($event) {
-                                      $event.preventDefault()
-                                      return _vm.clickEditProgrammer(
-                                        "identification"
-                                      )
-                                    }
+                            _c("span", [_vm._v("- " + _vm._s(_vm.nitDV))])
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "column is-6" },
+                            [
+                              _c("b-button", {
+                                staticClass: "btn-edit",
+                                attrs: { size: "is-small", "icon-left": "pen" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.clickEditProgrammer(
+                                      "identification"
+                                    )
                                   }
-                                })
-                              ],
-                              1
-                            )
-                          ])
-                    ])
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ])
                   ])
                 ])
               ]),
@@ -69776,186 +69876,178 @@ var render = function() {
                 _c("div", { staticClass: "columns" }, [
                   _c("div", { staticClass: "column is-2" }),
                   _vm._v(" "),
-                  _c("div", { staticClass: "column is-10" }, [
-                    _c("div", { staticClass: "columns" }, [
-                      _vm.programmer.logo.editing
-                        ? _c("div", { staticClass: "columns column is-12" }, [
-                            _c(
-                              "div",
-                              { staticClass: "column is-6" },
-                              [
-                                _c(
-                                  "b-field",
-                                  {
-                                    staticClass: "file is-primary",
-                                    class: _vm.classFileLogo,
-                                    attrs: {
-                                      type: {
-                                        "is-danger":
-                                          _vm.fieldsProgrammer.logo.error
-                                      },
-                                      message: _vm.fieldsProgrammer.logo.error
-                                        ? _vm.fieldsProgrammer.logo
-                                            .msg_limit_size
-                                        : ""
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "b-upload",
-                                      {
-                                        ref: "inputFileLogo",
-                                        staticClass: "file-label",
-                                        attrs: { accept: _vm.aceptLogo },
-                                        on: {
-                                          input: function($event) {
-                                            return _vm.onFileLogoSelected()
-                                          }
-                                        },
-                                        model: {
-                                          value: _vm.fileLogo,
-                                          callback: function($$v) {
-                                            _vm.fileLogo = $$v
-                                          },
-                                          expression: "fileLogo"
+                  _c("div", { staticClass: "columns column is-10" }, [
+                    _vm.programmer.logo.editing
+                      ? _c("div", { staticClass: "columns column is-12" }, [
+                          _c(
+                            "div",
+                            { staticClass: "column is-6" },
+                            [
+                              _c(
+                                "b-field",
+                                {
+                                  staticClass: "file is-primary",
+                                  class: _vm.classFileLogo,
+                                  attrs: {
+                                    type: {
+                                      "is-danger":
+                                        _vm.fieldsProgrammer.logo.error
+                                    },
+                                    message: _vm.fieldsProgrammer.logo.error
+                                      ? _vm.fieldsProgrammer.logo.msg_limit_size
+                                      : ""
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "b-upload",
+                                    {
+                                      ref: "inputFileLogo",
+                                      staticClass: "file-label",
+                                      attrs: { accept: _vm.aceptLogo },
+                                      on: {
+                                        input: function($event) {
+                                          return _vm.onFileLogoSelected()
                                         }
                                       },
-                                      [
-                                        _c(
-                                          "span",
-                                          { staticClass: "file-cta" },
-                                          [
-                                            _c("b-icon", {
-                                              staticClass: "file-icon",
-                                              attrs: { icon: "upload" }
-                                            }),
-                                            _vm._v(" "),
-                                            _c(
-                                              "span",
-                                              { staticClass: "file-label" },
-                                              [
-                                                _vm._v(
-                                                  _vm._s(
-                                                    _vm.fieldsProgrammer.logo
-                                                      .action_button
-                                                  )
+                                      model: {
+                                        value: _vm.fileLogo,
+                                        callback: function($$v) {
+                                          _vm.fileLogo = $$v
+                                        },
+                                        expression: "fileLogo"
+                                      }
+                                    },
+                                    [
+                                      _c(
+                                        "span",
+                                        { staticClass: "file-cta" },
+                                        [
+                                          _c("b-icon", {
+                                            staticClass: "file-icon",
+                                            attrs: { icon: "upload" }
+                                          }),
+                                          _vm._v(" "),
+                                          _c(
+                                            "span",
+                                            { staticClass: "file-label" },
+                                            [
+                                              _vm._v(
+                                                _vm._s(
+                                                  _vm.fieldsProgrammer.logo
+                                                    .action_button
                                                 )
-                                              ]
-                                            )
-                                          ],
-                                          1
-                                        ),
-                                        _vm._v(" "),
-                                        _vm.fileLogo
-                                          ? _c(
-                                              "span",
-                                              { staticClass: "file-name" },
-                                              [
-                                                _vm._v(
-                                                  "\n                                                    " +
-                                                    _vm._s(_vm.fileLogo.name) +
-                                                    "\n                                                "
-                                                )
-                                              ]
-                                            )
-                                          : _vm._e()
-                                      ]
-                                    )
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _vm.logoBase64
-                                  ? _c(
-                                      "figure",
-                                      {
-                                        staticClass:
-                                          "image logo-upload is-fullwith"
-                                      },
-                                      [
-                                        _c("img", {
-                                          attrs: { src: _vm.logoBase64 }
-                                        })
-                                      ]
-                                    )
-                                  : _vm._e()
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "column is-6 content-buttons" },
-                              [
-                                _c("b-button", {
-                                  staticClass: "btn-edit",
-                                  attrs: {
-                                    size: "is-small",
-                                    "icon-left": "save",
-                                    disabled: !_vm.enabledUploadLogo
-                                  },
-                                  on: {
-                                    click: function($event) {
-                                      $event.preventDefault()
-                                      return _vm.clickUpdateProgrammer("logo")
-                                    }
+                                              )
+                                            ]
+                                          )
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _vm.fileLogo
+                                        ? _c(
+                                            "span",
+                                            { staticClass: "file-name" },
+                                            [
+                                              _vm._v(
+                                                "\n                                                " +
+                                                  _vm._s(_vm.fileLogo.name) +
+                                                  "\n                                            "
+                                              )
+                                            ]
+                                          )
+                                        : _vm._e()
+                                    ]
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _vm.logoBase64
+                                ? _c(
+                                    "figure",
+                                    {
+                                      staticClass:
+                                        "image logo-upload is-fullwith"
+                                    },
+                                    [
+                                      _c("img", {
+                                        attrs: { src: _vm.logoBase64 }
+                                      })
+                                    ]
+                                  )
+                                : _vm._e()
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "column is-6 content-buttons" },
+                            [
+                              _c("b-button", {
+                                attrs: {
+                                  size: "is-small",
+                                  "icon-left": "save",
+                                  disabled: !_vm.enabledUploadLogo
+                                },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.clickUpdateProgrammer("logo")
                                   }
-                                }),
-                                _vm._v(" "),
-                                _c("b-button", {
-                                  staticClass: "btn-edit",
-                                  attrs: {
-                                    size: "is-small",
-                                    "icon-left": "window-close"
-                                  },
-                                  on: {
-                                    click: function($event) {
-                                      $event.preventDefault()
-                                      return _vm.clickCancelProgrammer("logo")
-                                    }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("b-button", {
+                                attrs: {
+                                  size: "is-small",
+                                  "icon-left": "window-close"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.clickCancelProgrammer("logo")
                                   }
-                                })
-                              ],
-                              1
-                            )
-                          ])
-                        : _c("div", { staticClass: "columns column is-12" }, [
-                            _c("div", { staticClass: "column is-6" }, [
-                              _vm.programmer.logo.value && _vm.img64Base
-                                ? _c("figure", { staticClass: "image logo" }, [
-                                    _c("img", { attrs: { src: _vm.img64Base } })
-                                  ])
-                                : _c("span", [
-                                    _vm._v(
-                                      _vm._s(
-                                        _vm.fieldsProgrammer.logo.placeholder
-                                      )
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ])
+                      : _c("div", { staticClass: "columns column is-12" }, [
+                          _c("div", { staticClass: "column is-6" }, [
+                            _vm.programmer.logo.value && _vm.img64Base
+                              ? _c("figure", { staticClass: "image logo" }, [
+                                  _c("img", { attrs: { src: _vm.img64Base } })
+                                ])
+                              : _c("span", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.fieldsProgrammer.logo.placeholder
                                     )
-                                  ])
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "column is-6" },
-                              [
-                                _c("b-button", {
-                                  staticClass: "btn-edit",
-                                  attrs: {
-                                    size: "is-small",
-                                    "icon-left": "pen"
-                                  },
-                                  on: {
-                                    click: function($event) {
-                                      $event.preventDefault()
-                                      return _vm.clickEditProgrammer("logo")
-                                    }
+                                  )
+                                ])
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "column is-6" },
+                            [
+                              _c("b-button", {
+                                staticClass: "btn-edit",
+                                attrs: { size: "is-small", "icon-left": "pen" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.clickEditProgrammer("logo")
                                   }
-                                })
-                              ],
-                              1
-                            )
-                          ])
-                    ])
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ])
                   ])
                 ])
               ])
@@ -70119,36 +70211,228 @@ var render = function() {
                     )
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "column is-10 is-row-data" }, [
-                    _c("div", { staticClass: "columns" }, [
+                  _c("div", { staticClass: "column is-10" }, [
+                    _c("div", { staticClass: "columns is-multiline" }, [
                       _vm.participant.person.initial_register_email
-                        ? _c("div", { staticClass: "columns column is-12" }, [
-                            _c("div", { staticClass: "columns column is-6" }, [
-                              _c("span", { staticClass: "column is-8" }, [
-                                _vm._v(
-                                  _vm._s(
-                                    _vm.participant.person
-                                      .initial_register_email.value.email
-                                  )
-                                )
-                              ]),
-                              _vm._v(" "),
+                        ? _c(
+                            "div",
+                            { staticClass: "columns column is-12 is-row-data" },
+                            [
                               _c(
-                                "span",
-                                { staticClass: "column is-4 label-info" },
+                                "div",
+                                {
+                                  staticClass: "columns column is-6 is-row-data"
+                                },
                                 [
-                                  _vm._v(
-                                    _vm._s(
-                                      _vm.textsGeneralSettings.predetermined
+                                  _c("span", { staticClass: "column is-8" }, [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm.participant.person
+                                          .initial_register_email.value.email
+                                      )
                                     )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "span",
+                                    { staticClass: "column is-4 label-info" },
+                                    [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm.textsGeneralSettings.predetermined
+                                        )
+                                      )
+                                    ]
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "column is-6" })
+                            ]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "columns column is-12 is-row-data" },
+                        [
+                          _vm.participant.person.used_events_email !==
+                            undefined &&
+                          _vm.participant.person.used_events_email.editing
+                            ? _c(
+                                "div",
+                                { staticClass: "columns column is-12" },
+                                [
+                                  _c(
+                                    "div",
+                                    { staticClass: "column is-6" },
+                                    [
+                                      _c(
+                                        "b-field",
+                                        {
+                                          staticClass: "label_not-show",
+                                          attrs: {
+                                            horizontal: "",
+                                            type: {
+                                              "is-danger":
+                                                _vm.fieldsParticipant.email
+                                                  .error
+                                            },
+                                            message: _vm.fieldsParticipant.email
+                                              .error
+                                              ? _vm.fieldsParticipant.email.msg
+                                              : ""
+                                          }
+                                        },
+                                        [
+                                          _c("b-input", {
+                                            ref: "person.used_events_email",
+                                            attrs: {
+                                              name: "person.used_events_email",
+                                              maxlength: "120",
+                                              expanded: ""
+                                            },
+                                            model: {
+                                              value:
+                                                _vm.participant.person
+                                                  .used_events_email.value
+                                                  .email,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.participant.person
+                                                    .used_events_email.value,
+                                                  "email",
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "participant.person.used_events_email.value.email"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass: "column is-6 content-buttons"
+                                    },
+                                    [
+                                      _c("b-button", {
+                                        attrs: {
+                                          size: "is-small",
+                                          "icon-left": "save"
+                                        },
+                                        on: {
+                                          click: function($event) {
+                                            $event.preventDefault()
+                                            return _vm.clickUpdateParticipant(
+                                              "person.used_events_email"
+                                            )
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("b-button", {
+                                        attrs: {
+                                          size: "is-small",
+                                          "icon-left": "window-close"
+                                        },
+                                        on: {
+                                          click: function($event) {
+                                            $event.preventDefault()
+                                            return _vm.clickCancelParticipant(
+                                              "person.used_events_email"
+                                            )
+                                          }
+                                        }
+                                      })
+                                    ],
+                                    1
                                   )
                                 ]
                               )
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "column is-6" })
-                          ])
-                        : _vm._e()
+                            : _vm.participant.person.used_events_email !==
+                              undefined
+                            ? _c(
+                                "div",
+                                { staticClass: "columns column is-12" },
+                                [
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "columns column is-6 is-row-data"
+                                    },
+                                    [
+                                      _c(
+                                        "span",
+                                        { staticClass: "column is-8" },
+                                        [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.participant.person
+                                                .used_events_email.value
+                                                ? _vm.participant.person
+                                                    .used_events_email.value
+                                                    .email
+                                                : _vm.firstCapitalize(
+                                                    _vm.fieldsParticipant.email
+                                                      .label
+                                                  )
+                                            )
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "span",
+                                        {
+                                          staticClass: "column is-4 label-info"
+                                        },
+                                        [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.textsGeneralSettings
+                                                .use_for_events
+                                            )
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    { staticClass: "column is-6" },
+                                    [
+                                      _c("b-button", {
+                                        staticClass: "btn-edit",
+                                        attrs: {
+                                          size: "is-small",
+                                          "icon-left": "pen"
+                                        },
+                                        on: {
+                                          click: function($event) {
+                                            $event.preventDefault()
+                                            return _vm.clickEditParticipant(
+                                              "person.used_events_email"
+                                            )
+                                          }
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ]
+                              )
+                            : _vm._e()
+                        ]
+                      )
                     ])
                   ])
                 ])

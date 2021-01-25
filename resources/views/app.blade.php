@@ -148,7 +148,8 @@
             $texts_general_settings = __('app.general_settings');
             $texts_general_settings['text_general_setting'] = $text_general_setting;
             $texts_general_settings['names_profiles_participants'] = $names_profiles_participants;
-            $texts_general_settings['predetermined'] = __('messages.predetermined');
+            $texts_general_settings['predetermined'] = __('app.general_settings.predetermined');
+            $texts_general_settings['use_for_events'] = __('app.general_settings.use_for_events');
         @endphp
         {{-- Header --}}
         <div class="header level is-mobile has-text-white is-size-7 mb-0 px-5 py-4">
