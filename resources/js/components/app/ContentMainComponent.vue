@@ -55,7 +55,6 @@
             <general-settings v-else-if="contentActive.settingAdmin"
                 v-bind:key="3"
                 v-on:activeMainSection="setActiveSection"
-                v-bind:profile_participant='profile_participant'
                 v-bind:programmer_json="programmer_json"
                 v-bind:texts_general_settings_json='texts_general_settings_json'
                 v-bind:text_success='text_success'
@@ -70,6 +69,7 @@
                 v-bind:url_image_base='url_image_base'
                 v-bind:url_person_ui_avatar='url_person_ui_avatar'
                 v-bind:url_participant_update="url_participant_update"
+                v-bind:url_person_emails_admin="url_person_emails_admin"
             />
         </transition-group>
     </div>
@@ -262,6 +262,10 @@ export default {
             require: true
         },
         url_image_base: {
+            type: String,
+            require: true
+        },
+        url_person_emails_admin: {
             type: String,
             require: true
         },

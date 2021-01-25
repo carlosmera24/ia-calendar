@@ -20580,6 +20580,12 @@ textarea {
   border-color: #f14668;
 }
 
+.application .content-main .content .form_general_settings .adminitrator_data .label-info {
+  font-size: 14px;
+  font-style: oblique;
+  color: #777;
+}
+
 .animated_delay {
   -webkit-animation-delay: 0.45s;
           animation-delay: 0.45s;

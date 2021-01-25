@@ -2496,6 +2496,10 @@ __webpack_require__.r(__webpack_exports__);
     url_image_base: {
       type: String,
       require: true
+    },
+    url_person_emails_admin: {
+      type: String,
+      require: true
     }
   },
   data: function data() {
@@ -4060,6 +4064,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -4073,10 +4088,6 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    profile_participant: {
-      type: String,
-      require: true
-    },
     text_breadcrumbs_init: {
       type: String,
       require: true
@@ -4132,6 +4143,10 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
     url_participant_update: {
       type: String,
       require: true
+    },
+    url_person_emails_admin: {
+      type: String,
+      require: true
     }
   },
   data: function data() {
@@ -4161,7 +4176,13 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       avatarAdminCopy: null,
       OPTIONS: {
         PROGRAMMER: 1,
-        PARTICIPANT: 2
+        PARTICIPANT: 2,
+        PROFILE_PARTICPANT: {
+          ADMIN: 1,
+          LEADER: 2,
+          PARTICIPANT: 3,
+          SUPLE_ADMIN: 4
+        }
       },
       fieldsParticipant: [],
       fileAvatar: null,
@@ -4210,11 +4231,28 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
 
     var initParticipant = JSON.parse(this.participant_json);
     Object.keys(initParticipant).forEach(function (key) {
-      var val = {
-        'value': initParticipant[key],
-        'edited': false,
-        'editing': false
-      };
+      var val = new Object();
+
+      if (_.isObject(initParticipant[key])) //Add date for items
+        {
+          var itemObject = initParticipant[key];
+          Object.keys(itemObject).forEach(function (keyObj) {
+            var tmpVal = {
+              'value': itemObject[keyObj],
+              'edited': false,
+              'editing': false
+            };
+            Vue.set(val, keyObj, tmpVal);
+          });
+        } else //Single data
+        {
+          val = {
+            'value': initParticipant[key],
+            'edited': false,
+            'editing': false
+          };
+        }
+
       Vue.set(_this.participant, key, val); //Reactive objects and values
       //Crete participant copy
 
@@ -4222,10 +4260,40 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
     });
   },
   mounted: function mounted() {
-    this.getIdentificationsTypes();
-    this.getImg64Base(this.OPTIONS.PROGRAMMER, this.programmer.logo.value); //Get logo programmer
+    var _this2 = this;
 
-    this.getImgAvatar();
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return _this2.getIdentificationsTypes();
+
+            case 2:
+              _context.next = 4;
+              return _this2.getImg64Base(_this2.OPTIONS.PROGRAMMER, _this2.programmer.logo.value);
+
+            case 4:
+              _context.next = 6;
+              return _this2.getImgAvatar();
+
+            case 6:
+              if (!(_this2.participant.profiles_participants_id.value === _this2.OPTIONS.PROFILE_PARTICPANT.ADMIN)) {
+                _context.next = 9;
+                break;
+              }
+
+              _context.next = 9;
+              return _this2.getEmailsAdmin();
+
+            case 9:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
   },
   methods: {
     showErrors: function showErrors(resError) {
@@ -4233,108 +4301,188 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       this.hasErrors = this.errors.errors.length > 0;
     },
     getIdentificationsTypes: function getIdentificationsTypes() {
-      var _this2 = this;
-
-      this.isLoading = true;
-      axios.post(this.url_identifications_types).then(function (response) {
-        _this2.showErrors({});
-
-        if (response.data.status === 200) {
-          response.data.identifications_types.forEach(function (element) {
-            var name = element.abrevation + (element.translation ? '-' + element.translation.name : '');
-            var tmp = {
-              identification_type: name,
-              meta: element
-            };
-            _this2.identificationsTypesIdName[element.id] = name;
-
-            _this2.identificationsTypes.push(tmp); //selected
-
-
-            if (_this2.programmer.identifications_types_id.value === element.id) {
-              _this2.identificationTypeSelected = element;
-              _this2.identificationTypeSelectedOriginal = element;
-            }
-          });
-        }
-      }, function (error) {
-        _this2.showErrors(error);
-      }).then(function () {
-        _this2.isLoading = false;
-      });
-    },
-    getImgAvatar: function getImgAvatar() {
-      if (this.participant.profile_image.value) {
-        this.getImg64Base(this.OPTIONS.PARTICIPANT, this.participant.profile_image.value);
-      } else {
-        this.getAvatarString();
-      }
-    },
-    getImg64Base: function getImg64Base(option, name) {
       var _this3 = this;
 
-      if (name) {
-        this.isLoading = true;
-        var params = {
-          name: name,
-          option: option
-        };
-        axios.get(this.url_image_base, {
-          params: params
-        }).then(function (response) {
-          if (response.status === 200) {
-            if (option === _this3.OPTIONS.PROGRAMMER) {
-              _this3.img64Base = response.data;
-            } else if (option === _this3.OPTIONS.PARTICIPANT) {
-              _this3.avatarAdmin = response.data;
-              _this3.avatarAdminCopy = response.data;
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _this3.isLoading = true;
+                _context2.next = 3;
+                return axios.post(_this3.url_identifications_types).then(function (response) {
+                  _this3.showErrors({});
+
+                  if (response.data.status === 200) {
+                    response.data.identifications_types.forEach(function (element) {
+                      var name = element.abrevation + (element.translation ? '-' + element.translation.name : '');
+                      var tmp = {
+                        identification_type: name,
+                        meta: element
+                      };
+                      _this3.identificationsTypesIdName[element.id] = name;
+
+                      _this3.identificationsTypes.push(tmp); //selected
+
+
+                      if (_this3.programmer.identifications_types_id.value === element.id) {
+                        _this3.identificationTypeSelected = element;
+                        _this3.identificationTypeSelectedOriginal = element;
+                      }
+                    });
+                  }
+                }, function (error) {
+                  _this3.showErrors(error);
+                }).then(function () {
+                  _this3.isLoading = false;
+                });
+
+              case 3:
+              case "end":
+                return _context2.stop();
             }
           }
-        }, function (error) {
-          _this3.showErrors(error);
-        }).then(function () {
-          _this3.isLoading = false;
-        });
-      }
+        }, _callee2);
+      }))();
     },
-    getAvatarString: function getAvatarString() {
+    getImgAvatar: function getImgAvatar() {
       var _this4 = this;
 
-      var fname = this.participant.person.value.first_name.trim();
-      var lname = this.participant.person.value.last_name.trim();
-      var name = ""; //Only one first name
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                if (!_this4.participant.profile_image.value) {
+                  _context3.next = 5;
+                  break;
+                }
 
-      if (fname !== "") {
-        name = fname.split(" ", 1)[0];
-      } //Only one last name
+                _context3.next = 3;
+                return _this4.getImg64Base(_this4.OPTIONS.PARTICIPANT, _this4.participant.profile_image.value);
 
+              case 3:
+                _context3.next = 7;
+                break;
 
-      if (lname !== "") {
-        name += " " + lname.split(" ", 1)[0];
-      }
+              case 5:
+                _context3.next = 7;
+                return _this4.getAvatarString();
 
-      name = name.trim();
-
-      if (name !== "") {
-        this.isLoading = true;
-        axios.post(this.url_person_ui_avatar, {
-          name: name
-        }).then(function (response) {
-          _this4.showErrors({});
-
-          if (response.data.status === 200) {
-            _this4.avatarAdmin = response.data.avatar.encoded;
-            _this4.avatarAdminCopy = response.data.avatar.encoded;
+              case 7:
+              case "end":
+                return _context3.stop();
+            }
           }
-        }, function (error) {
-          _this4.showErrors(error);
-        }).then(function () {
-          _this4.isLoading = false;
-        });
-      } else {
-        this.avatarAdmin = null;
-        this.avatarAdminCopy = null;
-      }
+        }, _callee3);
+      }))();
+    },
+    getImg64Base: function getImg64Base(option, name) {
+      var _this5 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        var params;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                if (!name) {
+                  _context4.next = 5;
+                  break;
+                }
+
+                _this5.isLoading = true;
+                params = {
+                  name: name,
+                  option: option
+                };
+                _context4.next = 5;
+                return axios.get(_this5.url_image_base, {
+                  params: params
+                }).then(function (response) {
+                  if (response.status === 200) {
+                    if (option === _this5.OPTIONS.PROGRAMMER) {
+                      _this5.img64Base = response.data;
+                    } else if (option === _this5.OPTIONS.PARTICIPANT) {
+                      _this5.avatarAdmin = response.data;
+                      _this5.avatarAdminCopy = response.data;
+                    }
+                  }
+                }, function (error) {
+                  _this5.showErrors(error);
+                }).then(function () {
+                  _this5.isLoading = false;
+                });
+
+              case 5:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
+    },
+    getAvatarString: function getAvatarString() {
+      var _this6 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+        var fname, lname, name;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                fname = _this6.participant.person.first_name.value.trim();
+                lname = _this6.participant.person.last_name.value.trim();
+                name = ""; //Only one first name
+
+                if (fname !== "") {
+                  name = fname.split(" ", 1)[0];
+                } //Only one last name
+
+
+                if (lname !== "") {
+                  name += " " + lname.split(" ", 1)[0];
+                }
+
+                name = name.trim();
+
+                if (!(name !== "")) {
+                  _context5.next = 12;
+                  break;
+                }
+
+                _this6.isLoading = true;
+                _context5.next = 10;
+                return axios.post(_this6.url_person_ui_avatar, {
+                  name: name
+                }).then(function (response) {
+                  _this6.showErrors({});
+
+                  if (response.data.status === 200) {
+                    _this6.avatarAdmin = response.data.avatar.encoded;
+                    _this6.avatarAdminCopy = response.data.avatar.encoded;
+                  }
+                }, function (error) {
+                  _this6.showErrors(error);
+                }).then(function () {
+                  _this6.isLoading = false;
+                });
+
+              case 10:
+                _context5.next = 14;
+                break;
+
+              case 12:
+                _this6.avatarAdmin = null;
+                _this6.avatarAdminCopy = null;
+
+              case 14:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
+      }))();
     },
     generateDV: function generateDV(num) {
       var serie = [71, 67, 59, 53, 47, 43, 41, 37, 29, 23, 19, 17, 13, 7, 3];
@@ -4357,6 +4505,58 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       var dv = arg11 === 0 || arg11 === 1 ? arg11 : 11 - arg11;
       return dv;
     },
+    getEmailsAdmin: function getEmailsAdmin() {
+      var _this7 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+        var params;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _this7.isLoading = true;
+                params = {
+                  persons_id: _this7.participant.person.id.value,
+                  option: 1
+                };
+                _context6.next = 4;
+                return axios.post(_this7.url_person_emails_admin, params).then(function (response) {
+                  _this7.showErrors({});
+
+                  if (response.data.status === 200) {
+                    console.log("emails", response.data.emails);
+                    var email_initial = new Object();
+                    var email_event = new Object();
+                    response.data.emails.forEach(function (element) {
+                      var val = {
+                        'value': element,
+                        'edited': false,
+                        'editing': false
+                      };
+
+                      if (element.initial_register === 1) {
+                        Vue.set(_this7.participant.person, 'initial_register_email', val);
+                        Vue.set(_this7.participantCopy.person, 'initial_register_email', val);
+                      } else if (element.used_events === 1) {
+                        Vue.set(_this7.participant.person, 'used_events_email', val);
+                        Vue.set(_this7.participantCopy.person, 'used_events_email', val);
+                      }
+                    });
+                  }
+                }, function (error) {
+                  _this7.showErrors(error);
+                }).then(function () {
+                  _this7.isLoading = false;
+                });
+
+              case 4:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6);
+      }))();
+    },
     clickCancelToHome: function clickCancelToHome() {
       this.$emit('activeMainSection', 'main');
     },
@@ -4369,12 +4569,12 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       }
     },
     imageToBase64: function imageToBase64(file) {
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee7$(_context7) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context7.prev = _context7.next) {
               case 0:
-                _context.next = 2;
+                _context7.next = 2;
                 return new Promise(function (resolve, reject) {
                   var reader = new FileReader();
                   reader.readAsDataURL(file);
@@ -4389,128 +4589,128 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 });
 
               case 2:
-                return _context.abrupt("return", _context.sent);
+                return _context7.abrupt("return", _context7.sent);
 
               case 3:
               case "end":
-                return _context.stop();
+                return _context7.stop();
             }
           }
-        }, _callee);
+        }, _callee7);
       }))();
     },
     onFileLogoSelected: function onFileLogoSelected() {
-      var _this5 = this;
+      var _this8 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8() {
         var result;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context8.prev = _context8.next) {
               case 0:
-                if (!_this5.fileLogo) {
-                  _context2.next = 15;
+                if (!_this8.fileLogo) {
+                  _context8.next = 15;
                   break;
                 }
 
-                _this5.isLoading = true;
-                _this5.fieldsProgrammer.logo.error = false;
-                _this5.enabledUploadLogo = true;
-                _context2.next = 6;
-                return _this5.imageToBase64(_this5.fileLogo)["catch"](function (e) {
+                _this8.isLoading = true;
+                _this8.fieldsProgrammer.logo.error = false;
+                _this8.enabledUploadLogo = true;
+                _context8.next = 6;
+                return _this8.imageToBase64(_this8.fileLogo)["catch"](function (e) {
                   return Error(e);
                 });
 
               case 6:
-                result = _context2.sent;
+                result = _context8.sent;
 
                 if (!(result instanceof Error)) {
-                  _context2.next = 11;
+                  _context8.next = 11;
                   break;
                 }
 
-                _this5.showErrors(result.message);
+                _this8.showErrors(result.message);
 
                 console.log('Error: ', result.message);
-                return _context2.abrupt("return");
+                return _context8.abrupt("return");
 
               case 11:
-                _this5.logoBase64 = result;
-                _this5.isLoading = false;
-                _context2.next = 16;
+                _this8.logoBase64 = result;
+                _this8.isLoading = false;
+                _context8.next = 16;
                 break;
 
               case 15:
-                _this5.enabledUploadLogo = false;
+                _this8.enabledUploadLogo = false;
 
               case 16:
               case "end":
-                return _context2.stop();
+                return _context8.stop();
             }
           }
-        }, _callee2);
+        }, _callee8);
       }))();
     },
     onFileAvatarSelected: function onFileAvatarSelected() {
-      var _this6 = this;
+      var _this9 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee9() {
         var result;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee9$(_context9) {
           while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context9.prev = _context9.next) {
               case 0:
-                if (!_this6.fileAvatar) {
-                  _context3.next = 15;
+                if (!_this9.fileAvatar) {
+                  _context9.next = 15;
                   break;
                 }
 
-                _this6.isLoading = true;
-                _this6.fieldsParticipant.profile_image.error = false;
-                _this6.enabledUploadAvatar = true;
-                _context3.next = 6;
-                return _this6.imageToBase64(_this6.fileAvatar)["catch"](function (e) {
+                _this9.isLoading = true;
+                _this9.fieldsParticipant.profile_image.error = false;
+                _this9.enabledUploadAvatar = true;
+                _context9.next = 6;
+                return _this9.imageToBase64(_this9.fileAvatar)["catch"](function (e) {
                   return Error(e);
                 });
 
               case 6:
-                result = _context3.sent;
+                result = _context9.sent;
 
                 if (!(result instanceof Error)) {
-                  _context3.next = 11;
+                  _context9.next = 11;
                   break;
                 }
 
-                _this6.showErrors(result.message);
+                _this9.showErrors(result.message);
 
                 console.log('Error: ', result.message);
-                return _context3.abrupt("return");
+                return _context9.abrupt("return");
 
               case 11:
-                _this6.avatarAdmin = result;
-                _this6.isLoading = false;
-                _context3.next = 16;
+                _this9.avatarAdmin = result;
+                _this9.isLoading = false;
+                _context9.next = 16;
                 break;
 
               case 15:
-                _this6.enabledUploadAvatar = false;
+                _this9.enabledUploadAvatar = false;
 
               case 16:
               case "end":
-                return _context3.stop();
+                return _context9.stop();
             }
           }
-        }, _callee3);
+        }, _callee9);
       }))();
     },
     clickEditProgrammer: function clickEditProgrammer(key) {
-      var _this7 = this;
+      var _this10 = this;
 
       this.programmer[key].editing = !this.programmer[key].editing; //wait for the input to load
 
       this.$nextTick(function () {
-        if (_this7.$refs[key]) {
-          _this7.$refs[key].focus();
+        if (_this10.$refs[key]) {
+          _this10.$refs[key].focus();
         }
       });
     },
@@ -4586,7 +4786,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }
     },
     updateProgrammer: function updateProgrammer(key) {
-      var _this8 = this;
+      var _this11 = this;
 
       var obj = this.programmer[key];
 
@@ -4602,52 +4802,52 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }
 
         axios.post(this.url_update_programmer, params).then(function (response) {
-          _this8.showErrors({});
+          _this11.showErrors({});
 
           if (response.data.status === 200) {
             //update/restore value copy
             if (key === "logo" && response.data.data.extra) //Update logo info
               {
-                _this8.programmer[key].value = response.data.data.extra;
-                _this8.programmerCopy[key].value = response.data.data.extra;
-                _this8.fileLogo = null;
-                _this8.logoBase64 = null;
-                _this8.enabledUploadLogo = false;
+                _this11.programmer[key].value = response.data.data.extra;
+                _this11.programmerCopy[key].value = response.data.data.extra;
+                _this11.fileLogo = null;
+                _this11.logoBase64 = null;
+                _this11.enabledUploadLogo = false;
 
-                _this8.getImg64Base(_this8.OPTIONS.PROGRAMMER, _this8.programmer.logo.value);
+                _this11.getImg64Base(_this11.OPTIONS.PROGRAMMER, _this11.programmer.logo.value);
               } else //Update copy
               {
-                _this8.programmerCopy[key].value = obj.value;
+                _this11.programmerCopy[key].value = obj.value;
               }
 
             obj.edited = false; //restore
 
             obj.editing = false; //restore
 
-            if (key === "identification" && _this8.identificationTypeSelected !== _this8.identificationTypeSelectedOriginal) {
-              _this8.identificationTypeSelectedOriginal = _this8.identificationTypeSelected; //restore
+            if (key === "identification" && _this11.identificationTypeSelected !== _this11.identificationTypeSelectedOriginal) {
+              _this11.identificationTypeSelectedOriginal = _this11.identificationTypeSelected; //restore
             }
 
             Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
-              title: _this8.text_success,
-              text: _this8.text_updated_programmer
+              title: _this11.text_success,
+              text: _this11.text_updated_programmer
             });
           }
         }, function (error) {
-          _this8.showErrors(error);
+          _this11.showErrors(error);
         }).then(function () {
-          _this8.isLoading = false;
+          _this11.isLoading = false;
         });
       }
     },
     clickEditParticipant: function clickEditParticipant(key) {
-      var _this9 = this;
+      var _this12 = this;
 
       this.participant[key].editing = !this.participant[key].editing; //wait for the input to load
 
       this.$nextTick(function () {
-        if (_this9.$refs[key]) {
-          _this9.$refs[key].focus();
+        if (_this12.$refs[key]) {
+          _this12.$refs[key].focus();
         }
       });
     },
@@ -4706,7 +4906,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }
     },
     updateParticipant: function updateParticipant(key) {
-      var _this10 = this;
+      var _this13 = this;
 
       var obj = this.participant[key];
 
@@ -4717,21 +4917,21 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         };
         params[key] = obj.value;
         axios.post(this.url_participant_update, params).then(function (response) {
-          _this10.showErrors({});
+          _this13.showErrors({});
 
           if (response.data.status === 200) {
             //update/restore value copy
             if (key === "profile_image" && response.data.data.extra) //Update avatar info
               {
-                _this10.participant[key].value = response.data.data.extra;
-                _this10.participantCopy[key].value = response.data.data.extra;
-                _this10.fileAvatar = null;
-                _this10.enabledUploadAvatar = false;
+                _this13.participant[key].value = response.data.data.extra;
+                _this13.participantCopy[key].value = response.data.data.extra;
+                _this13.fileAvatar = null;
+                _this13.enabledUploadAvatar = false;
 
-                _this10.getImg64Base(_this10.OPTIONS.PARTICIPANT, _this10.participant.profile_image.value);
+                _this13.getImg64Base(_this13.OPTIONS.PARTICIPANT, _this13.participant.profile_image.value);
               } else //Update copy
               {
-                _this10.participantCopy[key].value = obj.value;
+                _this13.participantCopy[key].value = obj.value;
               }
 
             obj.edited = false; //restore
@@ -4739,14 +4939,14 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
             obj.editing = false; //restore
 
             Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
-              title: _this10.text_success,
-              text: _this10.text_updated_programmer
+              title: _this13.text_success,
+              text: _this13.text_updated_programmer
             });
           }
         }, function (error) {
-          _this10.showErrors(error);
+          _this13.showErrors(error);
         }).then(function () {
-          _this10.isLoading = false;
+          _this13.isLoading = false;
         });
       }
     }
@@ -67930,7 +68130,6 @@ var render = function() {
             ? _c("general-settings", {
                 key: 3,
                 attrs: {
-                  profile_participant: _vm.profile_participant,
                   programmer_json: _vm.programmer_json,
                   texts_general_settings_json: _vm.texts_general_settings_json,
                   text_success: _vm.text_success,
@@ -67944,7 +68143,8 @@ var render = function() {
                   url_update_programmer: _vm.url_update_programmer,
                   url_image_base: _vm.url_image_base,
                   url_person_ui_avatar: _vm.url_person_ui_avatar,
-                  url_participant_update: _vm.url_participant_update
+                  url_participant_update: _vm.url_participant_update,
+                  url_person_emails_admin: _vm.url_person_emails_admin
                 },
                 on: { activeMainSection: _vm.setActiveSection }
               })
@@ -69144,7 +69344,7 @@ var render = function() {
             " " +
             _vm._s(
               _vm.textsGeneralSettings.names_profiles_participants[
-                _vm.profile_participant
+                this.participant.profiles_participants_id.value
               ]
             )
         )
@@ -69920,9 +70120,36 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "column is-10 is-row-data" }, [
-                    _vm._v(
-                      "\n                            Otros campos\n                        "
-                    )
+                    _c("div", { staticClass: "columns" }, [
+                      _vm.participant.person.initial_register_email
+                        ? _c("div", { staticClass: "columns column is-12" }, [
+                            _c("div", { staticClass: "columns column is-6" }, [
+                              _c("span", { staticClass: "column is-8" }, [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.participant.person
+                                      .initial_register_email.value.email
+                                  )
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "span",
+                                { staticClass: "column is-4 label-info" },
+                                [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.textsGeneralSettings.predetermined
+                                    )
+                                  )
+                                ]
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "column is-6" })
+                          ])
+                        : _vm._e()
+                    ])
                   ])
                 ])
               ])

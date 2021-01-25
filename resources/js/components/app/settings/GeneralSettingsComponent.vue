@@ -5,7 +5,7 @@
         <breadcrumb-to-main
             v-on:clickCancel="clickCancelToHome"
             v-bind:text_breacrumbs="text_breadcrumbs_init"/>
-        <h2>{{ textsGeneralSettings.text_general_setting }} {{ textsGeneralSettings.names_profiles_participants[profile_participant] }}</h2>
+        <h2>{{ textsGeneralSettings.text_general_setting }} {{ textsGeneralSettings.names_profiles_participants[ this.participant.profiles_participants_id.value] }}</h2>
         <section class="alert-section mt-4">
             <b-notification v-model="hasErrors" type="is-danger" hasIcon role="alert">
                 <h4 class="has-text-white">{{ errors.text }}</h4>
@@ -272,7 +272,18 @@
                                 <!-- /Profile image -->
                             </div>
                             <div class="column is-10 is-row-data">
-                                Otros campos
+                                <div class="columns">
+                                    <!-- Mail main admin-->
+                                    <div class="columns column is-12" v-if="participant.person.initial_register_email">
+                                        <div class="columns column is-6">
+                                            <span class="column is-8">{{ participant.person.initial_register_email.value.email }}</span>
+                                            <span class="column is-4 label-info">{{ textsGeneralSettings.predetermined }}</span>
+                                        </div>
+                                        <div class="column is-6">
+                                        </div>
+                                    </div>
+                                    <!-- /Mail main admin-->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -293,10 +304,6 @@
     import '@pnotify/core/dist/BrightTheme.css';
     export default {
         props: {
-            profile_participant: {
-                type: String,
-                require: true,
-            },
             text_breadcrumbs_init: {
                 type: String,
                 require: true,
@@ -355,6 +362,10 @@
                 type: String,
                 require: true
             },
+            url_person_emails_admin: {
+                type: String,
+                require: true
+            },
         },
         data() {
             return {
@@ -382,6 +393,12 @@
                 OPTIONS:{
                             PROGRAMMER : 1,
                             PARTICIPANT: 2,
+                            PROFILE_PARTICPANT: {
+                                                    ADMIN: 1,
+                                                    LEADER: 2,
+                                                    PARTICIPANT: 3,
+                                                    SUPLE_ADMIN: 4,
+                                                }
                         },
                 fieldsParticipant: [],
                 fileAvatar: null,
@@ -427,29 +444,48 @@
             //Create/load participant data
             const initParticipant = JSON.parse(this.participant_json);
             Object.keys(initParticipant).forEach( key => {
-               const val = {
-                                'value':    initParticipant[key],
-                                'edited':   false,
-                                'editing':  false,
-                            };
+                let val = new Object();
+                if( _.isObject(initParticipant[key]) )//Add date for items
+                {
+                    const itemObject = initParticipant[key];
+                    Object.keys( itemObject ).forEach( keyObj => {
+                        let tmpVal = {
+                                        'value':    itemObject[keyObj],
+                                        'edited':   false,
+                                        'editing':  false,
+                                    };
+                        Vue.set( val, keyObj, tmpVal );
+                    });
+                }else//Single data
+                {
+                    val = {
+                            'value':    initParticipant[key],
+                            'edited':   false,
+                            'editing':  false,
+                        };
+                }
                 Vue.set(this.participant,key,val); //Reactive objects and values
                 //Crete participant copy
                 this.participantCopy[key] = Object.assign({}, val); //Non-reactive copy
             });
         },
-        mounted(){
-            this.getIdentificationsTypes();
-            this.getImg64Base(this.OPTIONS.PROGRAMMER, this.programmer.logo.value );//Get logo programmer
-            this.getImgAvatar();
+        async mounted(){
+            await this.getIdentificationsTypes();
+            await this.getImg64Base(this.OPTIONS.PROGRAMMER, this.programmer.logo.value );//Get logo programmer
+            await this.getImgAvatar();
+            if( this.participant.profiles_participants_id.value === this.OPTIONS.PROFILE_PARTICPANT.ADMIN )//Administrador
+            {
+                await this.getEmailsAdmin();
+            }
         },
         methods: {
             showErrors(resError){
                 this.errors = procesarErroresRequest( resError );
                 this.hasErrors = this.errors.errors.length > 0;
             },
-            getIdentificationsTypes(){
+            async getIdentificationsTypes(){
                 this.isLoading = true;
-                axios.post(this.url_identifications_types)
+                await axios.post(this.url_identifications_types)
                     .then( response => {
                         this.showErrors({});
                         if( response.data.status === 200 )
@@ -478,15 +514,15 @@
                         this.isLoading = false;
                     });
             },
-            getImgAvatar(){
+            async getImgAvatar(){
                 if( this.participant.profile_image.value )
                 {
-                    this.getImg64Base(this.OPTIONS.PARTICIPANT, this.participant.profile_image.value );
+                    await this.getImg64Base(this.OPTIONS.PARTICIPANT, this.participant.profile_image.value );
                 }else{
-                    this.getAvatarString();
+                    await this.getAvatarString();
                 }
             },
-            getImg64Base(option, name){
+            async getImg64Base(option, name){
                 if( name )
                 {
                     this.isLoading = true;
@@ -494,30 +530,30 @@
                         name: name,
                         option: option
                     };
-                    axios.get(this.url_image_base, { params: params})
-                        .then( response => {
-                            if( response.status === 200 )
-                            {
-                                if( option === this.OPTIONS.PROGRAMMER )
-                                {
-                                    this.img64Base = response.data;
-                                }else if( option === this.OPTIONS.PARTICIPANT ){
-                                    this.avatarAdmin = response.data;
-                                    this.avatarAdminCopy = response.data;
-                                }
-                            }
-                        },
-                        error => {
-                            this.showErrors(error);
-                        })
-                        .then( () => {
-                            this.isLoading = false;
-                        });
+                    await axios.get(this.url_image_base, { params: params})
+                                .then( response => {
+                                    if( response.status === 200 )
+                                    {
+                                        if( option === this.OPTIONS.PROGRAMMER )
+                                        {
+                                            this.img64Base = response.data;
+                                        }else if( option === this.OPTIONS.PARTICIPANT ){
+                                            this.avatarAdmin = response.data;
+                                            this.avatarAdminCopy = response.data;
+                                        }
+                                    }
+                                },
+                                error => {
+                                    this.showErrors(error);
+                                })
+                                .then( () => {
+                                    this.isLoading = false;
+                                });
                 }
             },
-            getAvatarString(){
-                const fname = this.participant.person.value.first_name.trim();
-                const lname = this.participant.person.value.last_name.trim();
+            async getAvatarString(){
+                const fname = this.participant.person.first_name.value.trim();
+                const lname = this.participant.person.last_name.value.trim();
                 var name = "";
                 //Only one first name
                 if( fname !== "" )
@@ -533,21 +569,21 @@
                 if( name !== "" )
                 {
                     this.isLoading = true;
-                    axios.post( this.url_person_ui_avatar, { name: name } )
-                        .then( response => {
-                            this.showErrors({});
-                            if( response.data.status === 200 )
-                            {
-                                this.avatarAdmin = response.data.avatar.encoded;
-                                this.avatarAdminCopy = response.data.avatar.encoded;
-                            }
-                        },
-                        error => {
-                            this.showErrors( error );
-                        } )
-                        .then( () => {
-                            this.isLoading = false;
-                        });
+                    await axios.post( this.url_person_ui_avatar, { name: name } )
+                                .then( response => {
+                                    this.showErrors({});
+                                    if( response.data.status === 200 )
+                                    {
+                                        this.avatarAdmin = response.data.avatar.encoded;
+                                        this.avatarAdminCopy = response.data.avatar.encoded;
+                                    }
+                                },
+                                error => {
+                                    this.showErrors( error );
+                                } )
+                                .then( () => {
+                                    this.isLoading = false;
+                                });
                 }else{
                     this.avatarAdmin = null;
                     this.avatarAdminCopy = null;
@@ -579,6 +615,44 @@
                 const dv = ( arg11 === 0 || arg11 === 1) ? arg11 : 11 - arg11;
 
                 return dv;
+            },
+            async getEmailsAdmin(){
+                this.isLoading = true;
+                const params = {
+                    persons_id: this.participant.person.id.value,
+                    option: 1
+                };
+                await axios.post(this.url_person_emails_admin, params)
+                    .then( response => {
+                        this.showErrors({});
+                        if( response.data.status === 200 )
+                        {
+                            console.log("emails", response.data.emails );
+                            let email_initial = new Object();
+                            let email_event = new Object();
+                            response.data.emails.forEach( element => {
+                                const val = {
+                                                'value':    element,
+                                                'edited':   false,
+                                                'editing':  false,
+                                            };
+                                if( element.initial_register === 1 )
+                                {
+                                    Vue.set(this.participant.person, 'initial_register_email', val);
+                                    Vue.set(this.participantCopy.person, 'initial_register_email', val);
+                                }else if( element.used_events === 1 ){
+                                    Vue.set(this.participant.person, 'used_events_email', val);
+                                    Vue.set(this.participantCopy.person, 'used_events_email', val);
+                                }
+                            });
+                        }
+                    },
+                    error => {
+                        this.showErrors(error);
+                    })
+                    .then( () => {
+                        this.isLoading = false;
+                    });
             },
             clickCancelToHome(){
                 this.$emit('activeMainSection','main')

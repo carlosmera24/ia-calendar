@@ -15,7 +15,7 @@
                 {
                     $programmer = $participant->programmer()->first();
                 }
-                //Add person date
+                //Add person data
                 $participant["person"] = $participant->person()->first();
             }
             //TODO -> Get memberships
@@ -148,6 +148,7 @@
             $texts_general_settings = __('app.general_settings');
             $texts_general_settings['text_general_setting'] = $text_general_setting;
             $texts_general_settings['names_profiles_participants'] = $names_profiles_participants;
+            $texts_general_settings['predetermined'] = __('messages.predetermined');
         @endphp
         {{-- Header --}}
         <div class="header level is-mobile has-text-white is-size-7 mb-0 px-5 py-4">
@@ -239,6 +240,7 @@
             v-bind:url_identifications_types='"{{ route('list_identifications_types') }}"'
             v-bind:url_update_programmer='"{{ route('programmer_update') }}"'
             v-bind:url_image_base='"{{ route('image_64base') }}"'
+            v-bind:url_person_emails_admin='"{{ route('persons_emails_admin') }}"'
         />
         {{-- /Content Main --}}
     </div>

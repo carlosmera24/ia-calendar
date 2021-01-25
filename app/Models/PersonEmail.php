@@ -10,6 +10,11 @@ class PersonEmail extends Model
     use HasFactory;
     protected $table = "persons_emails";
 
+    const INITIAL_REGISTER_YES = 1;
+    const INITIAL_REGISTER_NO = 0;
+    const USED_EVENTS_YES = 1;
+    const USED_EVENTS_NO = 0;
+
     public function person()
     {
         return $this->belongsTo('App\Models\Person','persons_id');

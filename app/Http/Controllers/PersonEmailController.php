@@ -8,24 +8,28 @@ use Validator;
 
 class PersonEmailController extends Controller
 {
-    protected $rules_store = [
-                                'email'             =>  'required|email|max:45|unique:persons_emails',
-                                'initial_register'  =>  'nullable|regex:/^[0-1]$/',
-                                'persons_id'        =>  'required|exists:persons,id',
-                            ];
-    protected $rules_store_array = [
+    protected $rules_store =    [
+                                    'email'             =>  'required|email|max:45|unique:persons_emails',
+                                    'initial_register'  =>  'nullable|regex:/^[0-1]$/',
+                                    'persons_id'        =>  'required|exists:persons,id',
+                                ];
+    protected $rules_store_array =  [
                                         'emails'                    =>  'required|array|min:1',
                                         'emails.*'                  =>  'required|email|max:45|unique:persons_emails,email',
                                         'emails.initial_register'   =>  'nullable|regex:/^[0-1]$/',
-                                        'persons_id'                =>  'required|exists:persons,id',
+                                        'persons_id'                =>  'required|integer|exists:persons,id',
 
                                     ];
-    protected $rules_email_exist = [
+    protected $rules_email_exist =  [
                                         'email' => 'required|email|max:45'
                                     ];
-    protected $rules_emails_exists = [
-                                        'emails'    =>  'required|array|min:1',
-                                        'emails.*'  =>  'required|email|max:45',
+    protected $rules_emails_exists =    [
+                                            'emails'    =>  'required|array|min:1',
+                                            'emails.*'  =>  'required|email|max:45',
+                                        ];
+    protected $rules_emails_admin = [
+                                        'persons_id'    =>  'required|integer|exists:persons,id',
+                                        'option'        =>  'nullable|regex:/^[0-2]$/', //0:All, 1: Initial register, 2: Used events
                                     ];
 
     /**
@@ -105,6 +109,48 @@ class PersonEmailController extends Controller
                                             'status'    =>  200,
                                             'exists'    =>  $exists,
                                             'validate'  =>  $array_validate
+                                        ),
+                                    200
+                                );
+        }
+    }
+
+    /**
+     * Return emailes.
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getEmailsAdmin(Request $request)
+    {
+        $validator = Validator::make($request->input(), $this->rules_emails_admin);
+        if( $validator->fails() )
+        {
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'error'     =>  __('messages.bad_request'),
+                                                'data'      =>  $validator->getMessageBag()->toArray()
+                                            ),
+                                        400
+                                    );
+        }else
+        {
+            $initial = $request->option === 1 ? true : false;
+            $used_events = $request->option === 2 ? true : false;
+
+            $emails = PersonEmail::where('persons_id', $request->persons_id )
+                                ->when( $initial, function( $query ){
+                                        return $query->where('initial_register', PersonEmail::INITIAL_REGISTER_YES);
+                                    })
+                                ->when( $used_events, function( $query ){
+                                        return $query->where('used_events', PersonEmail::USED_EVENTS_YES);
+                                    })
+                                ->get();
+
+            return response()->json(
+                                    array(
+                                            'status'    =>  200,
+                                            'emails'    =>  $emails,
                                         ),
                                     200
                                 );
