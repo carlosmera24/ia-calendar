@@ -278,11 +278,11 @@
                                                 <b-field horizontal
                                                     class="label_not-show"
                                                     v-bind:type="{ 'is-danger' : fieldsParticipant.email.error }"
-                                                    :message="fieldsParticipant.email.error ? fieldsParticipant.email.msg : ''">
+                                                    :message="fieldsParticipant.email.error ? emailError : ''">
                                                     <b-input
                                                         ref="person.used_events_email"
                                                         name="person.used_events_email"
-                                                        v-model="participant.person.used_events_email.value.email"
+                                                        v-model.trim="participant.person.used_events_email.value.email"
                                                         maxlength="120"
                                                         expanded>
                                                     </b-input>
@@ -439,6 +439,7 @@
                 fileAvatar: null,
                 enabledUploadAvatar: false,
                 aceptAvatar: ".jpg,.png,.gif",
+                emailError: null,
             }
         },
         computed: {
@@ -1004,12 +1005,12 @@
                         const constrEmail = Object.assign({ email: true }, constraints );
                         if( validate.single(obj.value.email, constraints ) !== undefined )
                         {
-                            //TODO Agregar mensaje de visualizarción
+                            this.emailError = this.fieldsParticipant.email.msg;
                             this.setErrorParticipant(key, true);
                             valid = false;
                         }else if( validate.single(obj.value.email, constrEmail ) !== undefined )
                         {
-                            //TODO Agregar mensaje de visualizarción
+                            this.emailError = this.fieldsParticipant.email.msg_validate;
                             this.setErrorParticipant(key, true);
                             valid = false;
                         }

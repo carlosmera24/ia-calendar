@@ -4222,7 +4222,8 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       fieldsParticipant: [],
       fileAvatar: null,
       enabledUploadAvatar: false,
-      aceptAvatar: ".jpg,.png,.gif"
+      aceptAvatar: ".jpg,.png,.gif",
+      emailError: null
     };
   },
   computed: {
@@ -4996,11 +4997,11 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
             }, constraints);
 
             if (validate.single(obj.value.email, constraints) !== undefined) {
-              //TODO Agregar mensaje de visualizarción
+              this.emailError = this.fieldsParticipant.email.msg;
               this.setErrorParticipant(key, true);
               valid = false;
             } else if (validate.single(obj.value.email, constrEmail) !== undefined) {
-              //TODO Agregar mensaje de visualizarción
+              this.emailError = this.fieldsParticipant.email.msg_validate;
               this.setErrorParticipant(key, true);
               valid = false;
             }
@@ -70280,7 +70281,7 @@ var render = function() {
                                             },
                                             message: _vm.fieldsParticipant.email
                                               .error
-                                              ? _vm.fieldsParticipant.email.msg
+                                              ? _vm.emailError
                                               : ""
                                           }
                                         },
@@ -70302,7 +70303,9 @@ var render = function() {
                                                   _vm.participant.person
                                                     .used_events_email.value,
                                                   "email",
-                                                  $$v
+                                                  typeof $$v === "string"
+                                                    ? $$v.trim()
+                                                    : $$v
                                                 )
                                               },
                                               expression:
