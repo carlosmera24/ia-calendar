@@ -33,6 +33,7 @@
                                                 ref="entity_name"
                                                 name="entity_name"
                                                 v-model="programmer.entity_name.value"
+                                                v-on:blur="setTrim('entity_name', OPTIONS.PROGRAMMER)"
                                                 maxlength="120"
                                                 expanded>
                                             </b-input>
@@ -282,7 +283,8 @@
                                                     <b-input
                                                         ref="person.used_events_email"
                                                         name="person.used_events_email"
-                                                        v-model.trim="participant.person.used_events_email.value.email"
+                                                        v-model="participant.person.used_events_email.value.email"
+                                                        v-on:blur="setTrim('person.used_events_email.value.email', OPTIONS.PARTICIPANT)"
                                                         maxlength="120"
                                                         expanded>
                                                     </b-input>
@@ -536,6 +538,35 @@
             },
             firstCapitalize( word ){
                 return _.capitalize( word );
+            },
+            getStringWithTrim( word ){
+                if( !word )
+                {
+                    return;
+                }else{
+                    return word.trim();
+                }
+            },
+            setTrim( key, option ){
+                let obj = new Object();
+                if( option === this.OPTIONS.PROGRAMMER )
+                {
+                    obj = this.programmer;
+                }else if( option === this.OPTIONS.PARTICIPANT )
+                {
+                    obj = this.participant;
+                }
+
+                switch(key) {
+                    case "entity_name":
+                        obj.entity_name.value = this.getStringWithTrim(obj.entity_name.value);
+                        break;
+                    case "person.used_events_email.value.email":
+                        obj.person.used_events_email.value.email = this.getStringWithTrim(obj.person.used_events_email.value.email);
+                        break;
+                    default:
+                        break;
+                }
             },
             async getIdentificationsTypes(){
                 this.isLoading = true;
@@ -980,6 +1011,7 @@
                     obj = obj[k];
                     objCopy = objCopy[k];
                 });
+
                 //compare values
                 if( obj.value !== objCopy.value
                     || (key === "profile_image" && this.avatarAdmin !== this.avatarAdminCopy) )//Edited

@@ -4110,6 +4110,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -4357,6 +4359,35 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
     },
     firstCapitalize: function firstCapitalize(word) {
       return _.capitalize(word);
+    },
+    getStringWithTrim: function getStringWithTrim(word) {
+      if (!word) {
+        return;
+      } else {
+        return word.trim();
+      }
+    },
+    setTrim: function setTrim(key, option) {
+      var obj = new Object();
+
+      if (option === this.OPTIONS.PROGRAMMER) {
+        obj = this.programmer;
+      } else if (option === this.OPTIONS.PARTICIPANT) {
+        obj = this.participant;
+      }
+
+      switch (key) {
+        case "entity_name":
+          obj.entity_name.value = this.getStringWithTrim(obj.entity_name.value);
+          break;
+
+        case "person.used_events_email.value.email":
+          obj.person.used_events_email.value.email = this.getStringWithTrim(obj.person.used_events_email.value.email);
+          break;
+
+        default:
+          break;
+      }
     },
     getIdentificationsTypes: function getIdentificationsTypes() {
       var _this3 = this;
@@ -69548,6 +69579,14 @@ var render = function() {
                                       maxlength: "120",
                                       expanded: ""
                                     },
+                                    on: {
+                                      blur: function($event) {
+                                        return _vm.setTrim(
+                                          "entity_name",
+                                          _vm.OPTIONS.PROGRAMMER
+                                        )
+                                      }
+                                    },
                                     model: {
                                       value: _vm.programmer.entity_name.value,
                                       callback: function($$v) {
@@ -70293,6 +70332,14 @@ var render = function() {
                                               maxlength: "120",
                                               expanded: ""
                                             },
+                                            on: {
+                                              blur: function($event) {
+                                                return _vm.setTrim(
+                                                  "person.used_events_email.value.email",
+                                                  _vm.OPTIONS.PARTICIPANT
+                                                )
+                                              }
+                                            },
                                             model: {
                                               value:
                                                 _vm.participant.person
@@ -70303,9 +70350,7 @@ var render = function() {
                                                   _vm.participant.person
                                                     .used_events_email.value,
                                                   "email",
-                                                  typeof $$v === "string"
-                                                    ? $$v.trim()
-                                                    : $$v
+                                                  $$v
                                                 )
                                               },
                                               expression:
