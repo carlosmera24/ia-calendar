@@ -2311,6 +2311,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     text_breadcrumbs_init: {
@@ -2417,10 +2419,6 @@ __webpack_require__.r(__webpack_exports__);
       type: String,
       require: true
     },
-    text_updated_programmer: {
-      type: String,
-      require: true
-    },
     fields_programmer_json: {
       type: String,
       require: true
@@ -2454,6 +2452,14 @@ __webpack_require__.r(__webpack_exports__);
       require: true
     },
     url_person_email_exist: {
+      type: String,
+      require: true
+    },
+    url_persons_emails_store: {
+      type: String,
+      require: true
+    },
+    url_persons_emails_update: {
       type: String,
       require: true
     },
@@ -4145,10 +4151,6 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       type: String,
       require: true
     },
-    text_updated_programmer: {
-      type: String,
-      require: true
-    },
     text_no_options: {
       type: String,
       require: true
@@ -4182,6 +4184,18 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       require: true
     },
     url_person_emails_admin: {
+      type: String,
+      require: true
+    },
+    url_person_email_exist: {
+      type: String,
+      require: true
+    },
+    url_persons_emails_store: {
+      type: String,
+      require: true
+    },
+    url_persons_emails_update: {
       type: String,
       require: true
     }
@@ -4605,38 +4619,35 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
               case 0:
                 _this7.isLoading = true;
                 params = {
-                  persons_id: _this7.participant.person.id.value,
-                  option: 1
+                  persons_id: _this7.participant.person.id.value
                 };
                 _context6.next = 4;
                 return axios.post(_this7.url_person_emails_admin, params).then(function (response) {
                   _this7.showErrors({});
 
                   if (response.data.status === 200) {
-                    var email_initial = new Object();
-                    var email_event = new Object();
                     response.data.emails.forEach(function (element) {
                       if (element.initial_register === 1) {
                         //Set with no-reactive values
                         Vue.set(_this7.participant.person, 'initial_register_email', {
-                          'value': element,
+                          'value': Object.assign({}, element),
                           'edited': false,
                           'editing': false
                         });
                         Vue.set(_this7.participantCopy.person, 'initial_register_email', {
-                          'value': element,
+                          'value': Object.assign({}, element),
                           'edited': false,
                           'editing': false
                         });
                       } else if (element.used_events === 1) {
                         //Set with no-reactive values
                         Vue.set(_this7.participant.person, 'used_events_email', {
-                          'value': element,
+                          'value': Object.assign({}, element),
                           'edited': false,
                           'editing': false
                         });
                         Vue.set(_this7.participantCopy.person, 'used_events_email', {
-                          'value': element,
+                          'value': Object.assign({}, element),
                           'edited': false,
                           'editing': false
                         });
@@ -4930,7 +4941,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
 
             Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
               title: _this11.text_success,
-              text: _this11.text_updated_programmer
+              text: _this11.textsGeneralSettings.text_updated_programmer
             });
           }
         }, function (error) {
@@ -4939,6 +4950,58 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
           _this11.isLoading = false;
         });
       }
+    },
+    emailsExist: function emailsExist() {
+      var _arguments = arguments,
+          _this12 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee10() {
+        var emails, data;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee10$(_context10) {
+          while (1) {
+            switch (_context10.prev = _context10.next) {
+              case 0:
+                emails = _arguments.length > 0 && _arguments[0] !== undefined ? _arguments[0] : [];
+                _this12.isLoading = true;
+                data = null;
+
+                if (!(emails && _.isArray(emails) && !_.isEmpty(emails))) {
+                  _context10.next = 8;
+                  break;
+                }
+
+                _context10.next = 6;
+                return axios.post(_this12.url_person_email_exist, {
+                  emails: emails
+                }).then(function (response) {
+                  _this12.showErrors({});
+
+                  if (response.data.status === 200) {
+                    data = response.data;
+                  }
+                }, function (error) {
+                  _this12.showErrors(error);
+                }).then(function () {
+                  _this12.isLoading = false;
+                });
+
+              case 6:
+                _context10.next = 9;
+                break;
+
+              case 8:
+                _this12.isLoading = false;
+
+              case 9:
+                return _context10.abrupt("return", data);
+
+              case 10:
+              case "end":
+                return _context10.stop();
+            }
+          }
+        }, _callee10);
+      }))();
     },
     setErrorParticipant: function setErrorParticipant(key, errValue) {
       switch (key) {
@@ -4952,7 +5015,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       }
     },
     clickEditParticipant: function clickEditParticipant(key) {
-      var _this12 = this;
+      var _this13 = this;
 
       //Get keys, for exaple: person.emails
       var keys = key.split(".");
@@ -4963,8 +5026,8 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       obj.editing = !obj.editing; //wait for the input to load
 
       this.$nextTick(function () {
-        if (_this12.$refs[key]) {
-          _this12.$refs[key].focus();
+        if (_this13.$refs[key]) {
+          _this13.$refs[key].focus();
         }
       });
     },
@@ -4978,6 +5041,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
 
       obj.value = obj.value;
       obj.editing = false;
+      obj.edited = false;
       this.setErrorParticipant(key, false);
 
       if (key === "profile_image") {
@@ -4987,117 +5051,364 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       }
     },
     clickUpdateParticipant: function clickUpdateParticipant(key) {
-      this.isLoading = true; //cleans errors
+      var _this14 = this;
 
-      this.setErrorParticipant(key, false);
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee11() {
+        var keys, obj, objCopy, valid, value, constraints, constrEmail, data;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee11$(_context11) {
+          while (1) {
+            switch (_context11.prev = _context11.next) {
+              case 0:
+                _this14.isLoading = true; //cleans errors
 
-      if (key === "profile_image") {
-        //Value for save in DDBB
-        this.participant[key].value = this.avatarAdmin;
-      } //Get keys, for exaple: person.emails
+                _this14.setErrorParticipant(key, false);
+
+                if (key === "profile_image") {
+                  //Value for save in DDBB
+                  _this14.participant[key].value = _this14.avatarAdmin;
+                } //Get keys, for exaple: person.emails
 
 
-      var keys = key.split(".");
-      var obj = this.participant;
-      var objCopy = this.participantCopy;
-      keys.forEach(function (k) {
-        obj = obj[k];
-        objCopy = objCopy[k];
-      }); //compare values
+                keys = key.split(".");
+                obj = _this14.participant;
+                objCopy = _this14.participantCopy;
+                keys.forEach(function (k) {
+                  obj = obj[k];
+                  objCopy = objCopy[k];
+                }); //compare values
 
-      if (obj.value !== objCopy.value || key === "profile_image" && this.avatarAdmin !== this.avatarAdminCopy) //Edited
-        {
-          obj.edited = true; //validation
+                if (!(obj.value !== objCopy.value || key === "profile_image" && _this14.avatarAdmin !== _this14.avatarAdminCopy)) {
+                  _context11.next = 42;
+                  break;
+                }
 
-          var valid = true;
-          var value = obj.value;
-          var constraints = {
-            presence: {
-              allowEmpty: false
+                obj.edited = true; //validation
+
+                valid = true;
+                value = obj.value;
+                constraints = {
+                  presence: {
+                    allowEmpty: false
+                  }
+                };
+
+                if (validate.single(value, constraints) !== undefined) {
+                  _this14.setErrorParticipant(key, true);
+
+                  valid = false;
+                }
+
+                if (!(key === "person.used_events_email")) {
+                  _context11.next = 37;
+                  break;
+                }
+
+                constrEmail = Object.assign({
+                  email: true
+                }, constraints);
+
+                if (!(validate.single(obj.value.email, constraints) !== undefined)) {
+                  _context11.next = 21;
+                  break;
+                }
+
+                _this14.emailError = _this14.fieldsParticipant.email.msg;
+
+                _this14.setErrorParticipant(key, true);
+
+                valid = false;
+                _context11.next = 37;
+                break;
+
+              case 21:
+                if (!(validate.single(obj.value.email, constrEmail) !== undefined)) {
+                  _context11.next = 27;
+                  break;
+                }
+
+                _this14.emailError = _this14.fieldsParticipant.email.msg_validate;
+
+                _this14.setErrorParticipant(key, true);
+
+                valid = false;
+                _context11.next = 37;
+                break;
+
+              case 27:
+                if (!(obj.value.email === _this14.participant.person.initial_register_email.value.email)) {
+                  _context11.next = 33;
+                  break;
+                }
+
+                _this14.emailError = _this14.fieldsParticipant.email.msg_validate;
+
+                _this14.setErrorParticipant(key, true);
+
+                valid = false;
+                _context11.next = 37;
+                break;
+
+              case 33:
+                _context11.next = 35;
+                return _this14.emailsExist([obj.value.email]);
+
+              case 35:
+                data = _context11.sent;
+
+                if (data.exists) {
+                  _this14.emailError = _this14.fieldsParticipant.email.msg_exist;
+
+                  _this14.setErrorParticipant(key, true);
+
+                  valid = false;
+                }
+
+              case 37:
+                if (key === "profile_image" && _this14.fileAvatar.size > _this14.sizeFieleUploadAllow) {
+                  _this14.setErrorParticipant(key, true);
+
+                  valid = false;
+                }
+
+                _this14.isLoading = false;
+
+                if (valid) //Not errors
+                  {
+                    //update
+                    _this14.updateParticipant(key);
+                  }
+
+                _context11.next = 43;
+                break;
+
+              case 42:
+                _this14.isLoading = false;
+
+              case 43:
+              case "end":
+                return _context11.stop();
             }
-          };
-
-          if (validate.single(value, constraints) !== undefined) {
-            this.setErrorParticipant(key, true);
-            valid = false;
           }
+        }, _callee11);
+      }))();
+    },
+    updateDBParticipant: function updateDBParticipant(key, obj, objCopy) {
+      var _this15 = this;
 
-          if (key === "person.used_events_email") {
-            var constrEmail = Object.assign({
-              email: true
-            }, constraints);
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee12() {
+        var params;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee12$(_context12) {
+          while (1) {
+            switch (_context12.prev = _context12.next) {
+              case 0:
+                _this15.isLoading = true;
+                params = {
+                  id: _this15.participant.id.value
+                };
+                params[key] = obj.value;
+                _context12.next = 5;
+                return axios.post(_this15.url_participant_update, params).then(function (response) {
+                  _this15.showErrors({});
 
-            if (validate.single(obj.value.email, constraints) !== undefined) {
-              this.emailError = this.fieldsParticipant.email.msg;
-              this.setErrorParticipant(key, true);
-              valid = false;
-            } else if (validate.single(obj.value.email, constrEmail) !== undefined) {
-              this.emailError = this.fieldsParticipant.email.msg_validate;
-              this.setErrorParticipant(key, true);
-              valid = false;
+                  if (response.data.status === 200) {
+                    //update/restore value copy
+                    if (key === "profile_image" && response.data.data.extra) //Update avatar info
+                      {
+                        obj.value = response.data.data.extra;
+                        objCopy.value = Object.assign({}, response.data.data.extra); //Non-reactive copy
+
+                        _this15.fileAvatar = null;
+                        _this15.enabledUploadAvatar = false;
+
+                        _this15.getImg64Base(_this15.OPTIONS.PARTICIPANT, _this15.participant.profile_image.value);
+                      } else //Update copy
+                      {
+                        objCopy.value = Object.assign({}, obj.value); //Non-reactive copy
+                      }
+
+                    obj.edited = false; //restore
+
+                    obj.editing = false; //restore
+
+                    Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
+                      title: _this15.text_success,
+                      text: _this15.textsGeneralSettings.text_updated_participant
+                    });
+                  }
+                }, function (error) {
+                  _this15.showErrors(error);
+                }).then(function () {
+                  _this15.isLoading = false;
+                });
+
+              case 5:
+              case "end":
+                return _context12.stop();
             }
           }
+        }, _callee12);
+      }))();
+    },
+    createDBPersonEmailUsedEvents: function createDBPersonEmailUsedEvents(obj, objCopy) {
+      var _this16 = this;
 
-          if (key === "profile_image" && this.fileAvatar.size > this.sizeFieleUploadAllow) {
-            this.setErrorParticipant(key, true);
-            valid = false;
-          }
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee13() {
+        var params;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee13$(_context13) {
+          while (1) {
+            switch (_context13.prev = _context13.next) {
+              case 0:
+                _this16.isLoading = true;
+                params = {
+                  email: obj.value.email,
+                  persons_id: _this16.participant.persons_id.value,
+                  used_events: 1
+                };
+                _context13.next = 4;
+                return axios.post(_this16.url_persons_emails_store, params).then(function (response) {
+                  _this16.showErrors({});
 
-          this.isLoading = false;
+                  if (response.data.status === 201) {
+                    //update/restore value copy
+                    obj.value = response.data.data;
+                    objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
 
-          if (valid) //Not errors
-            {
-              //update
-              console.log("update participant", key); //this.updateParticipant( key );
+                    objCopy.edited = false; //restore
+
+                    objCopy.editing = false; //restore
+
+                    obj.edited = false; //restore
+
+                    obj.editing = false; //restore
+
+                    Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
+                      title: _this16.text_success,
+                      text: _this16.textsGeneralSettings.text_updated_participant
+                    });
+                  }
+                }, function (error) {
+                  _this16.showErrors(error);
+                }).then(function () {
+                  _this16.isLoading = false;
+                });
+
+              case 4:
+              case "end":
+                return _context13.stop();
             }
-        } else {
-        this.isLoading = false;
-      }
+          }
+        }, _callee13);
+      }))();
+    },
+    updateDBPersonEmailUsedEvents: function updateDBPersonEmailUsedEvents(obj, objCopy) {
+      var _this17 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee14() {
+        var params;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee14$(_context14) {
+          while (1) {
+            switch (_context14.prev = _context14.next) {
+              case 0:
+                _this17.isLoading = true;
+                params = {
+                  email: obj.value.email,
+                  id: obj.value.id
+                };
+                _context14.next = 4;
+                return axios.post(_this17.url_persons_emails_update, params).then(function (response) {
+                  _this17.showErrors({});
+
+                  if (response.data.status === 200) {
+                    //update/restore value copy
+                    obj.value = response.data.data;
+                    objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
+
+                    objCopy.edited = false; //restore
+
+                    objCopy.editing = false; //restore
+
+                    obj.edited = false; //restore
+
+                    obj.editing = false; //restore
+
+                    Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
+                      title: _this17.text_success,
+                      text: _this17.textsGeneralSettings.text_updated_participant
+                    });
+                  }
+                }, function (error) {
+                  _this17.showErrors(error);
+                }).then(function () {
+                  _this17.isLoading = false;
+                });
+
+              case 4:
+              case "end":
+                return _context14.stop();
+            }
+          }
+        }, _callee14);
+      }))();
     },
     updateParticipant: function updateParticipant(key) {
-      var _this13 = this;
+      var _this18 = this;
 
-      var obj = this.participant[key];
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee15() {
+        var keys, obj, objCopy;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee15$(_context15) {
+          while (1) {
+            switch (_context15.prev = _context15.next) {
+              case 0:
+                //Get keys, for exaple: person.emails
+                keys = key.split(".");
+                obj = _this18.participant;
+                objCopy = _this18.participantCopy;
+                keys.forEach(function (k) {
+                  obj = obj[k];
+                  objCopy = objCopy[k];
+                });
 
-      if (obj.edited) {
-        this.isLoading = true;
-        var params = {
-          id: this.participant.id.value
-        };
-        params[key] = obj.value;
-        axios.post(this.url_participant_update, params).then(function (response) {
-          _this13.showErrors({});
+                if (!obj.edited) {
+                  _context15.next = 17;
+                  break;
+                }
 
-          if (response.data.status === 200) {
-            //update/restore value copy
-            if (key === "profile_image" && response.data.data.extra) //Update avatar info
-              {
-                _this13.participant[key].value = response.data.data.extra;
-                _this13.participantCopy[key].value = response.data.data.extra;
-                _this13.fileAvatar = null;
-                _this13.enabledUploadAvatar = false;
+                if (!(key === "person.used_events_email")) {
+                  _context15.next = 15;
+                  break;
+                }
 
-                _this13.getImg64Base(_this13.OPTIONS.PARTICIPANT, _this13.participant.profile_image.value);
-              } else //Update copy
-              {
-                _this13.participantCopy[key].value = obj.value;
-              }
+                if (objCopy.value.email) {
+                  _context15.next = 11;
+                  break;
+                }
 
-            obj.edited = false; //restore
+                _context15.next = 9;
+                return _this18.createDBPersonEmailUsedEvents(obj, objCopy);
 
-            obj.editing = false; //restore
+              case 9:
+                _context15.next = 13;
+                break;
 
-            Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
-              title: _this13.text_success,
-              text: _this13.text_updated_programmer
-            });
+              case 11:
+                _context15.next = 13;
+                return _this18.updateDBPersonEmailUsedEvents(obj, objCopy);
+
+              case 13:
+                _context15.next = 17;
+                break;
+
+              case 15:
+                _context15.next = 17;
+                return _this18.updateDBParticipant(key, obj, objCopy);
+
+              case 17:
+              case "end":
+                return _context15.stop();
+            }
           }
-        }, function (error) {
-          _this13.showErrors(error);
-        }).then(function () {
-          _this13.isLoading = false;
-        });
-      }
+        }, _callee15);
+      }))();
     }
   }
 });
@@ -68282,7 +68593,6 @@ var render = function() {
                   programmer_json: _vm.programmer_json,
                   texts_general_settings_json: _vm.texts_general_settings_json,
                   text_success: _vm.text_success,
-                  text_updated_programmer: _vm.text_updated_programmer,
                   fields_programmer_json: _vm.fields_programmer_json,
                   participant_fields_json: _vm.text_participant_fields_json,
                   text_breadcrumbs_init: _vm.text_breadcrumbs_init,
@@ -68293,7 +68603,10 @@ var render = function() {
                   url_image_base: _vm.url_image_base,
                   url_person_ui_avatar: _vm.url_person_ui_avatar,
                   url_participant_update: _vm.url_participant_update,
-                  url_person_emails_admin: _vm.url_person_emails_admin
+                  url_person_emails_admin: _vm.url_person_emails_admin,
+                  url_person_email_exist: _vm.url_person_email_exist,
+                  url_persons_emails_store: _vm.url_persons_emails_store,
+                  url_persons_emails_update: _vm.url_persons_emails_update
                 },
                 on: { activeMainSection: _vm.setActiveSection }
               })

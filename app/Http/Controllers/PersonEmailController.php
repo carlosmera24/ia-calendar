@@ -11,12 +11,21 @@ class PersonEmailController extends Controller
     protected $rules_store =    [
                                     'email'             =>  'required|email|max:45|unique:persons_emails',
                                     'initial_register'  =>  'nullable|regex:/^[0-1]$/',
+                                    'used_events'       =>  'nullable|regex:/^[0-1]$/',
                                     'persons_id'        =>  'required|exists:persons,id',
+                                ];
+    protected $rules_update =   [
+                                    'email'                     =>  'nullable|email|max:45|unique:persons_emails',
+                                    'initial_register'          =>  'nullable|regex:/^[0-1]$/',
+                                    'used_events'               =>  'nullable|regex:/^[0-1]$/',
+                                    'persons_id'                =>  'nullable|exists:persons,id',
+                                    'status_persons_emails_id'  =>  'nullable|exists:status_persons_emails,id',
                                 ];
     protected $rules_store_array =  [
                                         'emails'                    =>  'required|array|min:1',
                                         'emails.*'                  =>  'required|email|max:45|unique:persons_emails,email',
                                         'emails.initial_register'   =>  'nullable|regex:/^[0-1]$/',
+                                        'emails.used_events'        =>  'nullable|regex:/^[0-1]$/',
                                         'persons_id'                =>  'required|integer|exists:persons,id',
 
                                     ];
@@ -175,7 +184,53 @@ class PersonEmailController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->input(), $this->rules_store);
+        if( $validator->fails() )
+        {
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'error'     =>  __('messages.bad_request'),
+                                                'data'      =>  $validator->getMessageBag()->toArray()
+                                            ),
+                                        400
+                                    );
+        }else
+        {
+            $email = new PersonEmail();
+            $email->email = $request->email;
+            $email->persons_id = $request->persons_id;
+            if( $request->initial_register)
+            {
+                $email->initial_register = $request->initial_register;
+            }
+            if( $request->used_events)
+            {
+                $email->used_events = $request->used_events;
+            }
+
+            //save new participant
+            if( $email->save() )
+            {
+              return response()->json(
+                                        array(
+                                                'status'    =>  201,
+                                                'data'      =>  $email
+                                            ),
+                                        201
+                                    );
+            }
+
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'data'      =>  array(
+                                                                        "msg"    => __('messages.error_saving', [ 'attribute' => __('validation.attributes.participant') ])
+                                                                    )
+                                            ),
+                                        400
+                                    );
+        }
     }
 
     /**
@@ -208,6 +263,10 @@ class PersonEmailController extends Controller
                 {
                     $email->initial_register = $request->initial_register;
                 }
+                if( $request->used_events)
+                {
+                    $email->used_events = $request->used_events;
+                }
 
                 if( $email->save() )
                 {
@@ -217,7 +276,7 @@ class PersonEmailController extends Controller
                                                 array(
                                                         'status'    =>  400,
                                                         'data'      =>  array(
-                                                                                "msg"    => "Error saving the new person email in the database"
+                                                                                "msg"    => __('messages.error_saving', [ 'attribute' => __('validation.attributes.participant') ])
                                                                             )
                                                     ),
                                                 400
@@ -242,7 +301,7 @@ class PersonEmailController extends Controller
                                                 array(
                                                         'status'    =>  400,
                                                         'data'      =>  array(
-                                                                                "msg"    => "Error saving the new persons emails in the database"
+                                                                                "msg"    => __('messages.error_saving', [ 'attribute' => __('validation.attributes.participant') ])
                                                                             )
                                                     ),
                                                 400
@@ -283,7 +342,88 @@ class PersonEmailController extends Controller
      */
     public function update(Request $request, PersonEmail $personEmail)
     {
-        //
+        $validator = Validator::make($request->input(), $this->rules_update);
+        if( $validator->fails() )
+        {
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'error'     =>  __('messages.bad_request'),
+                                                'data'      =>  $validator->getMessageBag()->toArray()
+                                            ),
+                                        400
+                                    );
+        }else
+        {
+            //search PersonEmail
+            $email = PersonEmail::find( $request->id );
+
+            //Not found
+            if( empty($email) )
+            {
+                return response()->json(
+                                            array(
+                                                'status'    =>  204,
+                                                'error'     =>  __('messages.no_content'),
+                                                'data'      =>  array(
+                                                                        __('messages.no_found', [
+                                                                                                    'attribute' => __('validation.attributes.participant'),
+                                                                                                    'id' => $request->id
+                                                                                                ]
+                                                                            )
+                                                                    )
+                                            ),
+                                            200
+                                        );
+            }
+
+            //Update
+            if( isset( $request->email ) )
+            {
+                $email->email = $request->email;
+            }
+
+            if( isset( $request->initial_register ) )
+            {
+                $email->initial_register = $request->initial_register;
+            }
+
+            if( isset( $request->used_events ) )
+            {
+                $email->used_events = $request->used_events;
+            }
+
+            if( isset( $request->persons_id ) )
+            {
+                $email->persons_id = $request->persons_id;
+            }
+
+            if( isset( $request->status_persons_emails_id ) )
+            {
+                $email->status_persons_emails_id = $request->status_persons_emails_id;
+            }
+
+            if( $email->update() )
+            {
+                return response()->json(
+                                        array(
+                                                'status'    =>  200,
+                                                'data'      =>  $email,
+                                            ),
+                                        200
+                                    );
+            }
+
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'data'      =>  array(
+                                                                        "msg"    => __('messages.error_updating', [ 'attribute' => __('validation.attributes.participant') ])
+                                                                    )
+                                            ),
+                                        400
+                                    );
+        }
     }
 
     /**

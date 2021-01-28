@@ -361,10 +361,6 @@
                 type: String,
                 require: true,
             },
-            text_updated_programmer: {
-                type: String,
-                require: true,
-            },
             text_no_options: {
                 type: String,
                 require: true,
@@ -403,6 +399,18 @@
                 type: String,
                 require: true
             },
+            url_person_email_exist: {
+                type: String,
+                require: true
+            },
+            url_persons_emails_store: {
+                type: String,
+                require: true
+            },
+            url_persons_emails_update: {
+                type: String,
+                require: true
+            }
         },
         data() {
             return {
@@ -705,38 +713,35 @@
                 this.isLoading = true;
                 const params = {
                     persons_id: this.participant.person.id.value,
-                    option: 1
                 };
                 await axios.post(this.url_person_emails_admin, params)
                     .then( response => {
                         this.showErrors({});
                         if( response.data.status === 200 )
                         {
-                            let email_initial = new Object();
-                            let email_event = new Object();
                             response.data.emails.forEach( element => {
                                 if( element.initial_register === 1 )
                                 {
                                     //Set with no-reactive values
                                     Vue.set(this.participant.person, 'initial_register_email', {
-                                                'value':    element,
+                                                'value':    Object.assign({},element),
                                                 'edited':   false,
                                                 'editing':  false,
                                             });
                                     Vue.set(this.participantCopy.person, 'initial_register_email', {
-                                                'value':    element,
+                                                'value':    Object.assign({},element),
                                                 'edited':   false,
                                                 'editing':  false,
                                             });
                                 }else if( element.used_events === 1 ){
                                     //Set with no-reactive values
                                     Vue.set(this.participant.person, 'used_events_email', {
-                                                'value':    element,
+                                                'value':    Object.assign({},element),
                                                 'edited':   false,
                                                 'editing':  false,
                                             });
                                     Vue.set(this.participantCopy.person, 'used_events_email', {
-                                                'value':    element,
+                                                'value':    Object.assign({},element),
                                                 'edited':   false,
                                                 'editing':  false,
                                             });
@@ -934,7 +939,7 @@
 
                                 success({
                                     title: this.text_success,
-                                    text: this.text_updated_programmer
+                                    text: this.textsGeneralSettings.text_updated_programmer
                                 });
                             }
                         },
@@ -945,6 +950,31 @@
                             this.isLoading = false;
                         });
                 }
+            },
+            async emailsExist( emails = []){
+                this.isLoading = true;
+                let data = null;
+                if( emails && _.isArray( emails ) && !_.isEmpty( emails ) )
+                {
+                    await axios.post(this.url_person_email_exist, { emails: emails} )
+                        .then( response => {
+                                this.showErrors({});
+                                if( response.data.status === 200 )
+                                {
+                                    data =  response.data;
+                                }
+                            },
+                            error => {
+                                this.showErrors( error );
+                            }
+                        )
+                        .then( () => {
+                            this.isLoading = false;
+                        });
+                }else{
+                    this.isLoading = false;
+                }
+                return data;
             },
             setErrorParticipant( key, errValue){
                 switch(key) {
@@ -983,6 +1013,7 @@
                 //Clean error, change "editing" and restore values
                 obj.value = obj.value;
                 obj.editing = false;
+                obj.edited = false;
                 this.setErrorParticipant( key, false );
 
                 if( key === "profile_image" )
@@ -992,7 +1023,7 @@
                     this.enabledUploadAvatar = false;
                 }
             },
-            clickUpdateParticipant( key ){
+            async clickUpdateParticipant( key ){
                 this.isLoading = true;
                 //cleans errors
                 this.setErrorParticipant( key, false );
@@ -1045,6 +1076,20 @@
                             this.emailError = this.fieldsParticipant.email.msg_validate;
                             this.setErrorParticipant(key, true);
                             valid = false;
+                        }else if( obj.value.email === this.participant.person.initial_register_email.value.email )//Equal to initial register email
+                        {
+                            this.emailError = this.fieldsParticipant.email.msg_validate;
+                            this.setErrorParticipant(key, true);
+                            valid = false;
+                        }else //Validate exist
+                        {
+                            const data = await this.emailsExist( [obj.value.email] );
+                            if( data.exists )
+                            {
+                                this.emailError = this.fieldsParticipant.email.msg_exist;
+                                this.setErrorParticipant(key, true);
+                                valid = false;
+                            }
                         }
                     }
                     if( key === "profile_image" && this.fileAvatar.size > this.sizeFieleUploadAllow )
@@ -1058,24 +1103,20 @@
                     if( valid ) //Not errors
                     {
                         //update
-                        console.log("update participant", key);
-                        //this.updateParticipant( key );
+                        this.updateParticipant( key );
                     }
                 }else{
                     this.isLoading = false
                 }
             },
-            updateParticipant( key ){
-                const obj = this.participant[ key ];
-                if( obj.edited )
-                {
-                    this.isLoading = true;
-                    const params = {
-                        id: this.participant.id.value,
-                    };
-                    params[key] = obj.value;
+            async updateDBParticipant(key, obj, objCopy){
+                this.isLoading = true;
+                const params = {
+                    id: this.participant.id.value,
+                };
+                params[key] = obj.value;
 
-                    axios.post(this.url_participant_update, params)
+                await axios.post(this.url_participant_update, params)
                         .then( response => {
                             this.showErrors({});
                             if( response.data.status === 200 )
@@ -1083,21 +1124,21 @@
                                 //update/restore value copy
                                 if( key === "profile_image" && response.data.data.extra )//Update avatar info
                                 {
-                                    this.participant[ key ].value = response.data.data.extra;
-                                    this.participantCopy[ key ].value = response.data.data.extra;
+                                    obj.value = response.data.data.extra;
+                                    objCopy.value = Object.assign({}, response.data.data.extra) ;//Non-reactive copy
                                     this.fileAvatar = null;
                                     this.enabledUploadAvatar = false;
                                     this.getImg64Base(this.OPTIONS.PARTICIPANT, this.participant.profile_image.value );
                                 }else//Update copy
                                 {
-                                    this.participantCopy[ key ].value = obj.value;
+                                    objCopy.value = Object.assign({}, obj.value);//Non-reactive copy
                                 }
                                 obj.edited = false; //restore
                                 obj.editing = false; //restore
 
                                 success({
                                     title: this.text_success,
-                                    text: this.text_updated_programmer
+                                    text: this.textsGeneralSettings.text_updated_participant
                                 });
                             }
                         },
@@ -1107,6 +1148,99 @@
                         .then( () => {
                             this.isLoading = false;
                         });
+            },
+            async createDBPersonEmailUsedEvents(obj, objCopy){
+                this.isLoading = true;
+                const params = {
+                    email: obj.value.email,
+                    persons_id: this.participant.persons_id.value,
+                    used_events: 1,
+                };
+
+                await axios.post(this.url_persons_emails_store, params)
+                        .then( response => {
+                            this.showErrors({});
+                            if( response.data.status === 201 )
+                            {
+                                //update/restore value copy
+                                obj.value = response.data.data;
+                                objCopy.value = Object.assign({}, response.data.data);//Non-reactive copy
+                                objCopy.edited = false; //restore
+                                objCopy.editing = false; //restore
+                                obj.edited = false; //restore
+                                obj.editing = false; //restore
+
+                                success({
+                                    title: this.text_success,
+                                    text: this.textsGeneralSettings.text_updated_participant
+                                });
+                            }
+                        },
+                        error => {
+                            this.showErrors(error);
+                        })
+                        .then( () => {
+                            this.isLoading = false;
+                        });
+            },
+            async updateDBPersonEmailUsedEvents(obj, objCopy){
+                this.isLoading = true;
+                const params = {
+                    email: obj.value.email,
+                    id: obj.value.id,
+                };
+
+                await axios.post(this.url_persons_emails_update, params)
+                        .then( response => {
+                            this.showErrors({});
+                            if( response.data.status === 200 )
+                            {
+                                //update/restore value copy
+                                obj.value = response.data.data;
+                                objCopy.value = Object.assign({}, response.data.data);//Non-reactive copy
+                                objCopy.edited = false; //restore
+                                objCopy.editing = false; //restore
+                                obj.edited = false; //restore
+                                obj.editing = false; //restore
+
+                                success({
+                                    title: this.text_success,
+                                    text: this.textsGeneralSettings.text_updated_participant
+                                });
+                            }
+                        },
+                        error => {
+                            this.showErrors(error);
+                        })
+                        .then( () => {
+                            this.isLoading = false;
+                        });
+            },
+            async updateParticipant( key ){
+                //Get keys, for exaple: person.emails
+                const keys = key.split(".");
+                let obj = this.participant;
+                let objCopy = this.participantCopy;
+                keys.forEach( k => {
+                    obj = obj[k];
+                    objCopy = objCopy[k];
+                });
+                if( obj.edited )
+                {
+                    if( key === "person.used_events_email" )
+                    {
+                        //Update or create email
+                        if( !objCopy.value.email )//Copy is null, create new email
+                        {
+                            await this.createDBPersonEmailUsedEvents(obj, objCopy);
+                        }else //Copy exist update
+                        {
+                            await this.updateDBPersonEmailUsedEvents(obj, objCopy);
+                        }
+                    }else//Participant
+                    {
+                        await this.updateDBParticipant(key, obj, objCopy);
+                    }
                 }
             }
         }

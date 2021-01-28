@@ -150,6 +150,8 @@
             $texts_general_settings['names_profiles_participants'] = $names_profiles_participants;
             $texts_general_settings['predetermined'] = __('app.general_settings.predetermined');
             $texts_general_settings['use_for_events'] = __('app.general_settings.use_for_events');
+            $texts_general_settings['text_updated_programmer'] =__('messages.updated_programmer');
+            $texts_general_settings['text_updated_participant'] =__('messages.updated_participant');
         @endphp
         {{-- Header --}}
         <div class="header level is-mobile has-text-white is-size-7 mb-0 px-5 py-4">
@@ -220,7 +222,6 @@
             v-bind:profile_participant="'{{ $profile_participant }}'"
             v-bind:texts_manage_leader_json="'{{ json_encode($texts_manage_leader) }}'"
             v-bind:texts_general_settings_json="'{{ json_encode($texts_general_settings) }}'"
-            v-bind:text_updated_programmer='" {{ __('messages.updated_programmer') }}"'
             v-bind:profiles_participants_names_json="'{{ json_encode($names_profiles_participants) }}'"
             v-bind:fields_programmer_json="'{{ json_encode($fields_programmer) }}'"
             v-bind:participant_json="'{{ json_encode($participant) }}'"
@@ -232,6 +233,8 @@
             v-bind:urls_mobiles_store='"{{ route('persons_mobiles_store_array') }}"'
             v-bind:url_person_email_exist='"{{ route('persons_emails_exists') }}"'
             v-bind:url_person_cellphone_exist='"{{ route('persons_cellphones_exists') }}"'
+            v-bind:url_persons_emails_store='"{{ route('persons_emails_store') }}"'
+            v-bind:url_persons_emails_update='"{{ route('persons_emails_update') }}"'
             v-bind:url_participants_programmer='"{{ route('participants_list_programmer') }}"'
             v-bind:url_categories_programmer='"{{ route('list_categories_from_programmer') }}"'
             v-bind:url_permissions_participant='"{{ route('list_permissions') }}"'

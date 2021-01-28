@@ -46,7 +46,7 @@ class TestDataSeeder extends Seeder
             'entity_name' => "Demo IA Calendar's",
             'identifications_types_id' => 8,
             'activated_birthday' => 1,
-            'identification' => '23112020-1',
+            'identification' => '23112020',
             'activated_birthday' => 1,
             'activated_date_join_company' => 1,
             'activated_tax_calendar' => 1,

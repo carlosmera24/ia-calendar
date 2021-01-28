@@ -58,7 +58,6 @@
                 v-bind:programmer_json="programmer_json"
                 v-bind:texts_general_settings_json='texts_general_settings_json'
                 v-bind:text_success='text_success'
-                v-bind:text_updated_programmer='text_updated_programmer'
                 v-bind:fields_programmer_json='fields_programmer_json'
                 v-bind:participant_fields_json="text_participant_fields_json"
                 v-bind:text_breadcrumbs_init='text_breadcrumbs_init'
@@ -70,6 +69,9 @@
                 v-bind:url_person_ui_avatar='url_person_ui_avatar'
                 v-bind:url_participant_update="url_participant_update"
                 v-bind:url_person_emails_admin="url_person_emails_admin"
+                v-bind:url_person_email_exist='url_person_email_exist'
+                v-bind:url_persons_emails_store='url_persons_emails_store'
+                v-bind:url_persons_emails_update='url_persons_emails_update'
             />
         </transition-group>
     </div>
@@ -182,11 +184,6 @@ export default {
             type: String,
             require: true
         },
-        text_updated_programmer: {
-            type: String,
-            require: true
-
-        },
         fields_programmer_json: {
             type: String,
             require: true
@@ -221,6 +218,14 @@ export default {
             require: true
         },
         url_person_email_exist: {
+            type: String,
+            require: true
+        },
+        url_persons_emails_store: {
+            type: String,
+            require: true
+        },
+        url_persons_emails_update: {
             type: String,
             require: true
         },

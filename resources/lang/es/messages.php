@@ -16,6 +16,7 @@ return [
     'no_options'                =>  'No hay opciones disponibles.',
     'loading'                   =>  'Cargando...',
     'updated_programmer'        =>  'Programador actualizado satisfactoriamente.',
+    'updated_participant'       =>  'Partícipe actualizado satisfactoriamente.',
     'size_limit_logo_upload'    =>  'El archivo no puede ser mayor a 5MB',
 
     //Errors
