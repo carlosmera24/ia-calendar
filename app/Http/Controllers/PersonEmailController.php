@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use App\Models\PersonEmail;
 use Illuminate\Http\Request;
-use Validator;
+use Illuminate\Support\Facades\Crypt;
 
 class PersonEmailController extends Controller
 {
     protected $rules_store =    [
-                                    'email'             =>  'required|email|max:45|unique:persons_emails',
-                                    'initial_register'  =>  'nullable|regex:/^[0-1]$/',
-                                    'used_events'       =>  'nullable|regex:/^[0-1]$/',
-                                    'persons_id'        =>  'required|exists:persons,id',
+                                    'email'                     =>  'required|email|max:45|unique:persons_emails',
+                                    'initial_register'          =>  'nullable|regex:/^[0-1]$/',
+                                    'used_events'               =>  'nullable|regex:/^[0-1]$/',
+                                    'persons_id'                =>  'required|exists:persons,id',
+                                    'status_persons_emails_id'  =>  'nullable|exists:status_persons_emails,id',
                                 ];
     protected $rules_update =   [
                                     'email'                     =>  'nullable|email|max:45|unique:persons_emails',
@@ -40,6 +42,9 @@ class PersonEmailController extends Controller
                                         'persons_id'    =>  'required|integer|exists:persons,id',
                                         'option'        =>  'nullable|regex:/^[0-2]$/', //0:All, 1: Initial register, 2: Used events
                                     ];
+    protected $rules_confirm_email =    [
+                                            'data'  =>  'required|min:100',
+                                        ];
 
     /**
      * Display a listing of the resource.
@@ -200,25 +205,37 @@ class PersonEmailController extends Controller
             $email = new PersonEmail();
             $email->email = $request->email;
             $email->persons_id = $request->persons_id;
-            if( $request->initial_register)
+            if( isset($request->initial_register) )
             {
                 $email->initial_register = $request->initial_register;
             }
-            if( $request->used_events)
+            if( isset($request->used_events) )
             {
                 $email->used_events = $request->used_events;
+            }
+            if( isset($request->status_persons_emails_id) )
+            {
+                $email->status_persons_emails_id = $request->status_persons_emails_id;
             }
 
             //save new participant
             if( $email->save() )
             {
-              return response()->json(
-                                        array(
-                                                'status'    =>  201,
-                                                'data'      =>  $email
-                                            ),
-                                        201
-                                    );
+                if( isset( $request->used_events ) && $request->used_events == PersonEmail::USED_EVENTS_YES )
+                {
+                    //Send email
+                    PersonEmail::sendEmailConfirmation( $email );
+                    $email->status_persons_emails_id = PersonEmail::STATUS_PERSONS_EMAILS_CONFIRMING;
+                    $email->update();
+                }
+
+                return response()->json(
+                                            array(
+                                                    'status'    =>  201,
+                                                    'data'      =>  $email
+                                                ),
+                                            201
+                                        );
             }
 
             return response()->json(
@@ -308,6 +325,46 @@ class PersonEmailController extends Controller
                                             );
             }
         }
+    }
+
+    public function confirmEmail( Request $request )
+    {
+        $data = null;
+        $code = 200;
+
+        if( isset($request->data ) )
+        {
+            //Decrypt params
+            $params = Crypt::decrypt( $request->data ); // id => value
+            //Get email
+            $person_email = PersonEmail::find( $params['id'] );
+            if( isset( $person_email ) )
+            {
+                $data = [ 'exists' => true ];
+                if( $person_email->status_persons_emails_id == PersonEmail::STATUS_PERSONS_EMAILS_ACTIVE )
+                {
+                    $data['actived'] = true;
+                }else //Confirm email
+                {
+                    $data['actived'] = false;
+                    $person_email->status_persons_emails_id = PersonEmail::STATUS_PERSONS_EMAILS_ACTIVE;
+                    $person_email->update();
+                }
+                $data['person_email'] = $person_email;
+            }else{
+                $data = [ 'exists' => false ];
+            }
+        }else{
+            $data = [
+                        'fails' => [
+                                        'error' => __('messages.bad_request'),
+                                        'data'  => __('validation.required', ['attribute' => 'data']),
+                                    ]
+                    ];
+            $code = 400;
+        }
+
+        return response()->view( 'persons-emails.confirmation', $data, $code );
     }
 
 
@@ -405,6 +462,14 @@ class PersonEmailController extends Controller
 
             if( $email->update() )
             {
+                if( isset( $request->used_events ) && $request->used_events == PersonEmail::USED_EVENTS_YES )
+                {
+                    //Send email
+                    PersonEmail::sendEmailConfirmation( $email );
+                    $email->status_persons_emails_id = PersonEmail::STATUS_PERSONS_EMAILS_CONFIRMING;
+                    $email->update();
+                }
+
                 return response()->json(
                                         array(
                                                 'status'    =>  200,

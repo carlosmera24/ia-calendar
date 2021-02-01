@@ -19,6 +19,22 @@ return [
     'updated_participant'       =>  'Partícipe actualizado satisfactoriamente.',
     'size_limit_logo_upload'    =>  'El archivo no puede ser mayor a 5MB',
 
+    //Emails
+    'emails' => [
+                    'confirmation'  =>  [
+                                            'subject'               =>  'Confirmación de E-Mail',
+                                            'greeting'              =>  'Hola :name,',
+                                            'description'           =>  'Necesitamos confirmar tu correo electrónico <b>:email</b>',
+                                            'click_confirm'         =>  'Click para confirmar',
+                                            'copy_link'             =>  'o copia el siguiente enlace en la barra de direcciones de tu navegador',
+                                            'footer'                =>  "Mensaje de prueba enviado desde el servidor de IA-Calendar's",
+                                            'not_found'             =>  "Lo sentimos el email que intenta confirmar no se encontró en nustra base de datos.",
+                                            'previous_confirmed'    =>  "El email <i>:email</i> ya ha sido confirmado previamente.",
+                                            'success'               =>  "Gracias por confirmar tu email <i>:email</i>.",
+                                            'success_subtitle'      =>  "Confirmación realizada con éxito!!!.",
+                                        ],
+                ],
+
     //Errors
     'bad_request'               =>  'Solicitud incorrecta',
     'error_saving'              =>  'Error al guardar :attribute en la base de datos',

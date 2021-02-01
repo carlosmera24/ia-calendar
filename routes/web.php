@@ -63,7 +63,11 @@ Route::group(['middleware' => ['auth']], function(){
     //Image
     Route::get('images/64base', [ FileController::class, 'image64Base'])->name('image_64base');
 });
+
 // Sesion
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('start_login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+//Email confirmation
+Route::get('/persons-emails-confirmation/{data}', [PersonEmailController::class, 'confirmEmail'])->name('persons_emails_confirmation');

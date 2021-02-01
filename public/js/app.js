@@ -4233,6 +4233,12 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
           LEADER: 2,
           PARTICIPANT: 3,
           SUPLE_ADMIN: 4
+        },
+        STATUS_PERSONS_EMAILS: {
+          ACTIVE: 1,
+          PENDING: 2,
+          CONFIRMING: 3,
+          INACTIVE: 4
         }
       },
       fieldsParticipant: [],
@@ -5262,7 +5268,8 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 params = {
                   email: obj.value.email,
                   persons_id: _this16.participant.persons_id.value,
-                  used_events: 1
+                  used_events: 1,
+                  status_persons_emails_id: _this16.OPTIONS.STATUS_PERSONS_EMAILS.PENDING
                 };
                 _context13.next = 4;
                 return axios.post(_this16.url_persons_emails_store, params).then(function (response) {
@@ -5312,7 +5319,9 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 _this17.isLoading = true;
                 params = {
                   email: obj.value.email,
-                  id: obj.value.id
+                  id: obj.value.id,
+                  used_events: 1,
+                  status_persons_emails_id: _this17.OPTIONS.STATUS_PERSONS_EMAILS.PENDING
                 };
                 _context14.next = 4;
                 return axios.post(_this17.url_persons_emails_update, params).then(function (response) {

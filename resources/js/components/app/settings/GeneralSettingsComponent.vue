@@ -443,7 +443,13 @@
                                                     LEADER: 2,
                                                     PARTICIPANT: 3,
                                                     SUPLE_ADMIN: 4,
-                                                }
+                                                },
+                            STATUS_PERSONS_EMAILS:  {
+                                                        ACTIVE: 1,
+                                                        PENDING: 2,
+                                                        CONFIRMING: 3,
+                                                        INACTIVE: 4
+                                                    }
                         },
                 fieldsParticipant: [],
                 fileAvatar: null,
@@ -1155,6 +1161,7 @@
                     email: obj.value.email,
                     persons_id: this.participant.persons_id.value,
                     used_events: 1,
+                    status_persons_emails_id : this.OPTIONS.STATUS_PERSONS_EMAILS.PENDING,
                 };
 
                 await axios.post(this.url_persons_emails_store, params)
@@ -1188,6 +1195,8 @@
                 const params = {
                     email: obj.value.email,
                     id: obj.value.id,
+                    used_events: 1,
+                    status_persons_emails_id : this.OPTIONS.STATUS_PERSONS_EMAILS.PENDING,
                 };
 
                 await axios.post(this.url_persons_emails_update, params)
