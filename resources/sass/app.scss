@@ -716,6 +716,15 @@ body, h2, button, input, select, textarea {
                        font-style: oblique;
                        color: #777;
                     }
+                    .row-used_events_email{
+                        .columns.column.is-6.is-row-data{
+                            margin: 0;
+                            .column.is-8{
+                                margin-left: -12px;
+                                margin-right: 8px;
+                            }
+                        }
+                    }
                 }
             }
         }

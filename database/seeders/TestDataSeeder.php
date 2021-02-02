@@ -84,6 +84,15 @@ class TestDataSeeder extends Seeder
             'status_persons_emails_id' => 1,
         ]);
 
+        //Person cellphones
+        DB::table('persons_cellphones')->insert([
+            'id' => 1,
+            'cellphone_number' => '+57123456789',
+            'initial_register' => 1,
+            'persons_id' => 1,
+            'status_persons_emails_id' => 1,
+        ]);
+
         //Participant
         DB::table('participants')->insert([
             'id' => 1,

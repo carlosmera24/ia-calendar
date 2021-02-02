@@ -245,6 +245,7 @@
             v-bind:url_update_programmer='"{{ route('programmer_update') }}"'
             v-bind:url_image_base='"{{ route('image_64base') }}"'
             v-bind:url_person_emails_admin='"{{ route('persons_emails_admin') }}"'
+            v-bind:url_persons_cellphones_for_person='"{{ route('persons_cellphones_for_person') }}"'
         />
         {{-- /Content Main --}}
     </div>

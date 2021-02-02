@@ -20591,6 +20591,15 @@ textarea {
   color: #777;
 }
 
+.application .content-main .content .form_general_settings .adminitrator_data .row-used_events_email .columns.column.is-6.is-row-data {
+  margin: 0;
+}
+
+.application .content-main .content .form_general_settings .adminitrator_data .row-used_events_email .columns.column.is-6.is-row-data .column.is-8 {
+  margin-left: -12px;
+  margin-right: 8px;
+}
+
 .animated_delay {
   -webkit-animation-delay: 0.45s;
           animation-delay: 0.45s;

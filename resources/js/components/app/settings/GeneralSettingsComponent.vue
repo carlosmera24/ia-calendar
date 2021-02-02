@@ -274,7 +274,7 @@
                                     <!-- /Mail main admin-->
                                     <!-- Mail used for events admin-->
                                     <div class="columns column is-12 is-row-data">
-                                        <div class="columns column is-12" v-if="participant.person.used_events_email !== undefined && participant.person.used_events_email.editing">
+                                        <div class="columns column is-12 row-used_events_email" v-if="participant.person.used_events_email !== undefined && participant.person.used_events_email.editing">
                                             <div class="column is-6">
                                                 <b-field horizontal
                                                     class="label_not-show"
@@ -304,7 +304,7 @@
                                                 />
                                             </div>
                                         </div>
-                                        <div class="columns column is-12" v-else-if="participant.person.used_events_email !== undefined">
+                                        <div class="columns column is-12 row-used_events_email" v-else-if="participant.person.used_events_email !== undefined">
                                             <div class="columns column is-6 is-row-data">
                                                 <span class="column is-8">{{ participant.person.used_events_email.value ? participant.person.used_events_email.value.email : firstCapitalize(fieldsParticipant.email.label) }}</span>
                                                 <span class="column is-4 label-info">{{ textsGeneralSettings.use_for_events }}</span>
@@ -320,6 +320,24 @@
                                         </div>
                                     </div>
                                     <!-- /Mail used for events admin-->
+                                    <!-- Cellphones -->
+                                    <div class="columns column is-12 is-row-data"
+                                        v-for="(mobile, index) in participant.person.cellphones" :key="'mobile.'+index">
+                                            <div class="columns column is-12">
+                                                <div class="column is-6 is-row-data">
+                                                    <span>{{ mobile.value.cellphone_number }}</span>
+                                                </div>
+                                                <div class="column is-6">
+                                                    <b-button
+                                                        class="btn-edit"
+                                                        size="is-small"
+                                                        icon-left="pen"
+                                                        v-on:click.prevent="clickEditParticipant('person.cellphones')"
+                                                    />
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <!-- /Cellphones -->
                                 </div>
                             </div>
                         </div>
@@ -410,7 +428,11 @@
             url_persons_emails_update: {
                 type: String,
                 require: true
-            }
+            },
+            url_persons_cellphones_for_person: {
+                type: String,
+                require: true
+            },
         },
         data() {
             return {
@@ -543,6 +565,12 @@
             if( this.participant.profiles_participants_id.value === this.OPTIONS.PROFILE_PARTICPANT.ADMIN )//Administrador
             {
                 await this.getEmailsAdmin();
+            }
+            //Get cellphones for Admin/Suple admin
+            if( this.participant.profiles_participants_id.value === this.OPTIONS.PROFILE_PARTICPANT.ADMIN
+                || this.participant.profiles_participants_id.value === this.OPTIONS.PROFILE_PARTICPANT.SUPLE_ADMIN )
+            {
+                await this.getCellphones();
             }
         },
         methods: {
@@ -753,6 +781,42 @@
                                             });
                                 }
                             });
+                        }
+                    },
+                    error => {
+                        this.showErrors(error);
+                    })
+                    .then( () => {
+                        this.isLoading = false;
+                    });
+            },
+            async getCellphones(){
+                this.isLoading = true;
+                const params = {
+                    persons_id: this.participant.person.id.value,
+                };
+                await axios.post(this.url_persons_cellphones_for_person, params)
+                    .then( response => {
+                        this.showErrors({});
+                        if( response.data.status === 200 )
+                        {
+                            let cellphones = [];
+                            let cellphonesCopy = [];
+                            response.data.cellphones.forEach( element => {
+                                cellphones.push({
+                                                'value':    Object.assign({},element),
+                                                'edited':   false,
+                                                'editing':  false,
+                                            });
+                                cellphonesCopy.push({
+                                                'value':    Object.assign({},element),
+                                                'edited':   false,
+                                                'editing':  false,
+                                            });
+                            });
+                            //Set with no-reactive values
+                            Vue.set(this.participant.person, 'cellphones', cellphones);
+                            Vue.set(this.participantCopy.person, 'cellphones', cellphonesCopy);
                         }
                     },
                     error => {

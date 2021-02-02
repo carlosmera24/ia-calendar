@@ -72,6 +72,7 @@
                 v-bind:url_person_email_exist='url_person_email_exist'
                 v-bind:url_persons_emails_store='url_persons_emails_store'
                 v-bind:url_persons_emails_update='url_persons_emails_update'
+                v-bind:url_persons_cellphones_for_person='url_persons_cellphones_for_person'
             />
         </transition-group>
     </div>
@@ -271,6 +272,10 @@ export default {
             require: true
         },
         url_person_emails_admin: {
+            type: String,
+            require: true
+        },
+        url_persons_cellphones_for_person: {
             type: String,
             require: true
         },

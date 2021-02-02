@@ -8,11 +8,14 @@ use Validator;
 
 class PersonCellphoneController extends Controller
 {
-    protected $rules_store = [
-                                'mobile'             =>  'required|regex:/^\d{10,12}/|unique:persons_cellphones',
-                                'initial_register'  =>  'nullable|regex:/^[0-1]$/',
-                                'persons_id'        =>  'required|exists:persons,id',
-                            ];
+    protected $rules_cellphones_person =    [
+                                                'persons_id'        =>  'required|exists:persons,id',
+                                            ];
+    protected $rules_store =    [
+                                    'mobile'             =>  'required|regex:/^\d{10,12}/|unique:persons_cellphones',
+                                    'initial_register'  =>  'nullable|regex:/^[0-1]$/',
+                                    'persons_id'        =>  'required|exists:persons,id',
+                                ];
     protected $rules_store_array = [
                                         'mobiles'                   =>  'required|array|min:1',
                                         'mobiles.*'                 =>  'required|regex:/^\d{10,12}/|unique:persons_cellphones,cellphone_number',
@@ -35,6 +38,39 @@ class PersonCellphoneController extends Controller
     public function index()
     {
         //
+    }
+
+    /**
+     * List of the resource.
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function cellphonesForPerson(Request $request)
+    {
+        $validator = Validator::make($request->input(), $this->rules_cellphones_person);
+        if( $validator->fails() )
+        {
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'error'     =>  __('messages.bad_request'),
+                                                'data'      =>  $validator->getMessageBag()->toArray()
+                                            ),
+                                        400
+                                    );
+        }else
+        {
+            $phones = PersonCellphone::where('persons_id', $request->persons_id)
+                                        ->get();
+
+            return response()->json(
+                                    array(
+                                            'status'        =>  200,
+                                            'cellphones'    =>  $phones
+                                        ),
+                                    200
+                                );
+        }
     }
 
     /**

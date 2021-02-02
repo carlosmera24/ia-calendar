@@ -2313,6 +2313,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     text_breadcrumbs_init: {
@@ -2504,6 +2505,10 @@ __webpack_require__.r(__webpack_exports__);
       require: true
     },
     url_person_emails_admin: {
+      type: String,
+      require: true
+    },
+    url_persons_cellphones_for_person: {
       type: String,
       require: true
     }
@@ -4118,6 +4123,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -4196,6 +4219,10 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       require: true
     },
     url_persons_emails_update: {
+      type: String,
+      require: true
+    },
+    url_persons_cellphones_for_person: {
       type: String,
       require: true
     }
@@ -4365,6 +4392,15 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
               return _this2.getEmailsAdmin();
 
             case 9:
+              if (!(_this2.participant.profiles_participants_id.value === _this2.OPTIONS.PROFILE_PARTICPANT.ADMIN || _this2.participant.profiles_participants_id.value === _this2.OPTIONS.PROFILE_PARTICPANT.SUPLE_ADMIN)) {
+                _context.next = 12;
+                break;
+              }
+
+              _context.next = 12;
+              return _this2.getCellphones();
+
+            case 12:
             case "end":
               return _context.stop();
           }
@@ -4674,6 +4710,56 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }, _callee6);
       }))();
     },
+    getCellphones: function getCellphones() {
+      var _this8 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
+        var params;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                _this8.isLoading = true;
+                params = {
+                  persons_id: _this8.participant.person.id.value
+                };
+                _context7.next = 4;
+                return axios.post(_this8.url_persons_cellphones_for_person, params).then(function (response) {
+                  _this8.showErrors({});
+
+                  if (response.data.status === 200) {
+                    var cellphones = [];
+                    var cellphonesCopy = [];
+                    response.data.cellphones.forEach(function (element) {
+                      cellphones.push({
+                        'value': Object.assign({}, element),
+                        'edited': false,
+                        'editing': false
+                      });
+                      cellphonesCopy.push({
+                        'value': Object.assign({}, element),
+                        'edited': false,
+                        'editing': false
+                      });
+                    }); //Set with no-reactive values
+
+                    Vue.set(_this8.participant.person, 'cellphones', cellphones);
+                    Vue.set(_this8.participantCopy.person, 'cellphones', cellphonesCopy);
+                  }
+                }, function (error) {
+                  _this8.showErrors(error);
+                }).then(function () {
+                  _this8.isLoading = false;
+                });
+
+              case 4:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7);
+      }))();
+    },
     clickCancelToHome: function clickCancelToHome() {
       this.$emit('activeMainSection', 'main');
     },
@@ -4686,12 +4772,12 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       }
     },
     imageToBase64: function imageToBase64(file) {
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee7$(_context7) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
           while (1) {
-            switch (_context7.prev = _context7.next) {
+            switch (_context8.prev = _context8.next) {
               case 0:
-                _context7.next = 2;
+                _context8.next = 2;
                 return new Promise(function (resolve, reject) {
                   var reader = new FileReader();
                   reader.readAsDataURL(file);
@@ -4706,60 +4792,9 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 });
 
               case 2:
-                return _context7.abrupt("return", _context7.sent);
+                return _context8.abrupt("return", _context8.sent);
 
               case 3:
-              case "end":
-                return _context7.stop();
-            }
-          }
-        }, _callee7);
-      }))();
-    },
-    onFileLogoSelected: function onFileLogoSelected() {
-      var _this8 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8() {
-        var result;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
-          while (1) {
-            switch (_context8.prev = _context8.next) {
-              case 0:
-                if (!_this8.fileLogo) {
-                  _context8.next = 14;
-                  break;
-                }
-
-                _this8.isLoading = true;
-                _this8.fieldsProgrammer.logo.error = false;
-                _this8.enabledUploadLogo = true;
-                _context8.next = 6;
-                return _this8.imageToBase64(_this8.fileLogo)["catch"](function (e) {
-                  return Error(e);
-                });
-
-              case 6:
-                result = _context8.sent;
-
-                if (!(result instanceof Error)) {
-                  _context8.next = 10;
-                  break;
-                }
-
-                _this8.showErrors(result.message);
-
-                return _context8.abrupt("return");
-
-              case 10:
-                _this8.logoBase64 = result;
-                _this8.isLoading = false;
-                _context8.next = 15;
-                break;
-
-              case 14:
-                _this8.enabledUploadLogo = false;
-
-              case 15:
               case "end":
                 return _context8.stop();
             }
@@ -4767,7 +4802,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }, _callee8);
       }))();
     },
-    onFileAvatarSelected: function onFileAvatarSelected() {
+    onFileLogoSelected: function onFileLogoSelected() {
       var _this9 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee9() {
@@ -4776,16 +4811,16 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
           while (1) {
             switch (_context9.prev = _context9.next) {
               case 0:
-                if (!_this9.fileAvatar) {
+                if (!_this9.fileLogo) {
                   _context9.next = 14;
                   break;
                 }
 
                 _this9.isLoading = true;
-                _this9.fieldsParticipant.profile_image.error = false;
-                _this9.enabledUploadAvatar = true;
+                _this9.fieldsProgrammer.logo.error = false;
+                _this9.enabledUploadLogo = true;
                 _context9.next = 6;
-                return _this9.imageToBase64(_this9.fileAvatar)["catch"](function (e) {
+                return _this9.imageToBase64(_this9.fileLogo)["catch"](function (e) {
                   return Error(e);
                 });
 
@@ -4802,13 +4837,13 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 return _context9.abrupt("return");
 
               case 10:
-                _this9.avatarAdmin = result;
+                _this9.logoBase64 = result;
                 _this9.isLoading = false;
                 _context9.next = 15;
                 break;
 
               case 14:
-                _this9.enabledUploadAvatar = false;
+                _this9.enabledUploadLogo = false;
 
               case 15:
               case "end":
@@ -4818,14 +4853,65 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }, _callee9);
       }))();
     },
-    clickEditProgrammer: function clickEditProgrammer(key) {
+    onFileAvatarSelected: function onFileAvatarSelected() {
       var _this10 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee10() {
+        var result;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee10$(_context10) {
+          while (1) {
+            switch (_context10.prev = _context10.next) {
+              case 0:
+                if (!_this10.fileAvatar) {
+                  _context10.next = 14;
+                  break;
+                }
+
+                _this10.isLoading = true;
+                _this10.fieldsParticipant.profile_image.error = false;
+                _this10.enabledUploadAvatar = true;
+                _context10.next = 6;
+                return _this10.imageToBase64(_this10.fileAvatar)["catch"](function (e) {
+                  return Error(e);
+                });
+
+              case 6:
+                result = _context10.sent;
+
+                if (!(result instanceof Error)) {
+                  _context10.next = 10;
+                  break;
+                }
+
+                _this10.showErrors(result.message);
+
+                return _context10.abrupt("return");
+
+              case 10:
+                _this10.avatarAdmin = result;
+                _this10.isLoading = false;
+                _context10.next = 15;
+                break;
+
+              case 14:
+                _this10.enabledUploadAvatar = false;
+
+              case 15:
+              case "end":
+                return _context10.stop();
+            }
+          }
+        }, _callee10);
+      }))();
+    },
+    clickEditProgrammer: function clickEditProgrammer(key) {
+      var _this11 = this;
 
       this.programmer[key].editing = !this.programmer[key].editing; //wait for the input to load
 
       this.$nextTick(function () {
-        if (_this10.$refs[key]) {
-          _this10.$refs[key].focus();
+        if (_this11.$refs[key]) {
+          _this11.$refs[key].focus();
         }
       });
     },
@@ -4903,7 +4989,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       }
     },
     updateProgrammer: function updateProgrammer(key) {
-      var _this11 = this;
+      var _this12 = this;
 
       var obj = this.programmer[key];
 
@@ -4919,94 +5005,94 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }
 
         axios.post(this.url_update_programmer, params).then(function (response) {
-          _this11.showErrors({});
+          _this12.showErrors({});
 
           if (response.data.status === 200) {
             //update/restore value copy
             if (key === "logo" && response.data.data.extra) //Update logo info
               {
-                _this11.programmer[key].value = response.data.data.extra;
-                _this11.programmerCopy[key].value = response.data.data.extra;
-                _this11.fileLogo = null;
-                _this11.logoBase64 = null;
-                _this11.enabledUploadLogo = false;
+                _this12.programmer[key].value = response.data.data.extra;
+                _this12.programmerCopy[key].value = response.data.data.extra;
+                _this12.fileLogo = null;
+                _this12.logoBase64 = null;
+                _this12.enabledUploadLogo = false;
 
-                _this11.getImg64Base(_this11.OPTIONS.PROGRAMMER, _this11.programmer.logo.value);
+                _this12.getImg64Base(_this12.OPTIONS.PROGRAMMER, _this12.programmer.logo.value);
               } else //Update copy
               {
-                _this11.programmerCopy[key].value = obj.value;
+                _this12.programmerCopy[key].value = obj.value;
               }
 
             obj.edited = false; //restore
 
             obj.editing = false; //restore
 
-            if (key === "identification" && _this11.identificationTypeSelected !== _this11.identificationTypeSelectedOriginal) {
-              _this11.identificationTypeSelectedOriginal = _this11.identificationTypeSelected; //restore
+            if (key === "identification" && _this12.identificationTypeSelected !== _this12.identificationTypeSelectedOriginal) {
+              _this12.identificationTypeSelectedOriginal = _this12.identificationTypeSelected; //restore
             }
 
             Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
-              title: _this11.text_success,
-              text: _this11.textsGeneralSettings.text_updated_programmer
+              title: _this12.text_success,
+              text: _this12.textsGeneralSettings.text_updated_programmer
             });
           }
         }, function (error) {
-          _this11.showErrors(error);
+          _this12.showErrors(error);
         }).then(function () {
-          _this11.isLoading = false;
+          _this12.isLoading = false;
         });
       }
     },
     emailsExist: function emailsExist() {
       var _arguments = arguments,
-          _this12 = this;
+          _this13 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee10() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee11() {
         var emails, data;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee10$(_context10) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee11$(_context11) {
           while (1) {
-            switch (_context10.prev = _context10.next) {
+            switch (_context11.prev = _context11.next) {
               case 0:
                 emails = _arguments.length > 0 && _arguments[0] !== undefined ? _arguments[0] : [];
-                _this12.isLoading = true;
+                _this13.isLoading = true;
                 data = null;
 
                 if (!(emails && _.isArray(emails) && !_.isEmpty(emails))) {
-                  _context10.next = 8;
+                  _context11.next = 8;
                   break;
                 }
 
-                _context10.next = 6;
-                return axios.post(_this12.url_person_email_exist, {
+                _context11.next = 6;
+                return axios.post(_this13.url_person_email_exist, {
                   emails: emails
                 }).then(function (response) {
-                  _this12.showErrors({});
+                  _this13.showErrors({});
 
                   if (response.data.status === 200) {
                     data = response.data;
                   }
                 }, function (error) {
-                  _this12.showErrors(error);
+                  _this13.showErrors(error);
                 }).then(function () {
-                  _this12.isLoading = false;
+                  _this13.isLoading = false;
                 });
 
               case 6:
-                _context10.next = 9;
+                _context11.next = 9;
                 break;
 
               case 8:
-                _this12.isLoading = false;
+                _this13.isLoading = false;
 
               case 9:
-                return _context10.abrupt("return", data);
+                return _context11.abrupt("return", data);
 
               case 10:
               case "end":
-                return _context10.stop();
+                return _context11.stop();
             }
           }
-        }, _callee10);
+        }, _callee11);
       }))();
     },
     setErrorParticipant: function setErrorParticipant(key, errValue) {
@@ -5021,7 +5107,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       }
     },
     clickEditParticipant: function clickEditParticipant(key) {
-      var _this13 = this;
+      var _this14 = this;
 
       //Get keys, for exaple: person.emails
       var keys = key.split(".");
@@ -5032,8 +5118,8 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       obj.editing = !obj.editing; //wait for the input to load
 
       this.$nextTick(function () {
-        if (_this13.$refs[key]) {
-          _this13.$refs[key].focus();
+        if (_this14.$refs[key]) {
+          _this14.$refs[key].focus();
         }
       });
     },
@@ -5057,34 +5143,34 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       }
     },
     clickUpdateParticipant: function clickUpdateParticipant(key) {
-      var _this14 = this;
+      var _this15 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee11() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee12() {
         var keys, obj, objCopy, valid, value, constraints, constrEmail, data;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee11$(_context11) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee12$(_context12) {
           while (1) {
-            switch (_context11.prev = _context11.next) {
+            switch (_context12.prev = _context12.next) {
               case 0:
-                _this14.isLoading = true; //cleans errors
+                _this15.isLoading = true; //cleans errors
 
-                _this14.setErrorParticipant(key, false);
+                _this15.setErrorParticipant(key, false);
 
                 if (key === "profile_image") {
                   //Value for save in DDBB
-                  _this14.participant[key].value = _this14.avatarAdmin;
+                  _this15.participant[key].value = _this15.avatarAdmin;
                 } //Get keys, for exaple: person.emails
 
 
                 keys = key.split(".");
-                obj = _this14.participant;
-                objCopy = _this14.participantCopy;
+                obj = _this15.participant;
+                objCopy = _this15.participantCopy;
                 keys.forEach(function (k) {
                   obj = obj[k];
                   objCopy = objCopy[k];
                 }); //compare values
 
-                if (!(obj.value !== objCopy.value || key === "profile_image" && _this14.avatarAdmin !== _this14.avatarAdminCopy)) {
-                  _context11.next = 42;
+                if (!(obj.value !== objCopy.value || key === "profile_image" && _this15.avatarAdmin !== _this15.avatarAdminCopy)) {
+                  _context12.next = 42;
                   break;
                 }
 
@@ -5099,13 +5185,13 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 };
 
                 if (validate.single(value, constraints) !== undefined) {
-                  _this14.setErrorParticipant(key, true);
+                  _this15.setErrorParticipant(key, true);
 
                   valid = false;
                 }
 
                 if (!(key === "person.used_events_email")) {
-                  _context11.next = 37;
+                  _context12.next = 37;
                   break;
                 }
 
@@ -5114,140 +5200,83 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 }, constraints);
 
                 if (!(validate.single(obj.value.email, constraints) !== undefined)) {
-                  _context11.next = 21;
+                  _context12.next = 21;
                   break;
                 }
 
-                _this14.emailError = _this14.fieldsParticipant.email.msg;
+                _this15.emailError = _this15.fieldsParticipant.email.msg;
 
-                _this14.setErrorParticipant(key, true);
+                _this15.setErrorParticipant(key, true);
 
                 valid = false;
-                _context11.next = 37;
+                _context12.next = 37;
                 break;
 
               case 21:
                 if (!(validate.single(obj.value.email, constrEmail) !== undefined)) {
-                  _context11.next = 27;
+                  _context12.next = 27;
                   break;
                 }
 
-                _this14.emailError = _this14.fieldsParticipant.email.msg_validate;
+                _this15.emailError = _this15.fieldsParticipant.email.msg_validate;
 
-                _this14.setErrorParticipant(key, true);
+                _this15.setErrorParticipant(key, true);
 
                 valid = false;
-                _context11.next = 37;
+                _context12.next = 37;
                 break;
 
               case 27:
-                if (!(obj.value.email === _this14.participant.person.initial_register_email.value.email)) {
-                  _context11.next = 33;
+                if (!(obj.value.email === _this15.participant.person.initial_register_email.value.email)) {
+                  _context12.next = 33;
                   break;
                 }
 
-                _this14.emailError = _this14.fieldsParticipant.email.msg_validate;
+                _this15.emailError = _this15.fieldsParticipant.email.msg_validate;
 
-                _this14.setErrorParticipant(key, true);
+                _this15.setErrorParticipant(key, true);
 
                 valid = false;
-                _context11.next = 37;
+                _context12.next = 37;
                 break;
 
               case 33:
-                _context11.next = 35;
-                return _this14.emailsExist([obj.value.email]);
+                _context12.next = 35;
+                return _this15.emailsExist([obj.value.email]);
 
               case 35:
-                data = _context11.sent;
+                data = _context12.sent;
 
                 if (data.exists) {
-                  _this14.emailError = _this14.fieldsParticipant.email.msg_exist;
+                  _this15.emailError = _this15.fieldsParticipant.email.msg_exist;
 
-                  _this14.setErrorParticipant(key, true);
+                  _this15.setErrorParticipant(key, true);
 
                   valid = false;
                 }
 
               case 37:
-                if (key === "profile_image" && _this14.fileAvatar.size > _this14.sizeFieleUploadAllow) {
-                  _this14.setErrorParticipant(key, true);
+                if (key === "profile_image" && _this15.fileAvatar.size > _this15.sizeFieleUploadAllow) {
+                  _this15.setErrorParticipant(key, true);
 
                   valid = false;
                 }
 
-                _this14.isLoading = false;
+                _this15.isLoading = false;
 
                 if (valid) //Not errors
                   {
                     //update
-                    _this14.updateParticipant(key);
+                    _this15.updateParticipant(key);
                   }
 
-                _context11.next = 43;
+                _context12.next = 43;
                 break;
 
               case 42:
-                _this14.isLoading = false;
+                _this15.isLoading = false;
 
               case 43:
-              case "end":
-                return _context11.stop();
-            }
-          }
-        }, _callee11);
-      }))();
-    },
-    updateDBParticipant: function updateDBParticipant(key, obj, objCopy) {
-      var _this15 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee12() {
-        var params;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee12$(_context12) {
-          while (1) {
-            switch (_context12.prev = _context12.next) {
-              case 0:
-                _this15.isLoading = true;
-                params = {
-                  id: _this15.participant.id.value
-                };
-                params[key] = obj.value;
-                _context12.next = 5;
-                return axios.post(_this15.url_participant_update, params).then(function (response) {
-                  _this15.showErrors({});
-
-                  if (response.data.status === 200) {
-                    //update/restore value copy
-                    if (key === "profile_image" && response.data.data.extra) //Update avatar info
-                      {
-                        obj.value = response.data.data.extra;
-                        objCopy.value = Object.assign({}, response.data.data.extra); //Non-reactive copy
-
-                        _this15.fileAvatar = null;
-                        _this15.enabledUploadAvatar = false;
-
-                        _this15.getImg64Base(_this15.OPTIONS.PARTICIPANT, _this15.participant.profile_image.value);
-                      } else //Update copy
-                      {
-                        objCopy.value = Object.assign({}, obj.value); //Non-reactive copy
-                      }
-
-                    obj.edited = false; //restore
-
-                    obj.editing = false; //restore
-
-                    Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
-                      title: _this15.text_success,
-                      text: _this15.textsGeneralSettings.text_updated_participant
-                    });
-                  }
-                }, function (error) {
-                  _this15.showErrors(error);
-                }).then(function () {
-                  _this15.isLoading = false;
-                });
-
-              case 5:
               case "end":
                 return _context12.stop();
             }
@@ -5255,7 +5284,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }, _callee12);
       }))();
     },
-    createDBPersonEmailUsedEvents: function createDBPersonEmailUsedEvents(obj, objCopy) {
+    updateDBParticipant: function updateDBParticipant(key, obj, objCopy) {
       var _this16 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee13() {
@@ -5266,23 +5295,28 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
               case 0:
                 _this16.isLoading = true;
                 params = {
-                  email: obj.value.email,
-                  persons_id: _this16.participant.persons_id.value,
-                  used_events: 1,
-                  status_persons_emails_id: _this16.OPTIONS.STATUS_PERSONS_EMAILS.PENDING
+                  id: _this16.participant.id.value
                 };
-                _context13.next = 4;
-                return axios.post(_this16.url_persons_emails_store, params).then(function (response) {
+                params[key] = obj.value;
+                _context13.next = 5;
+                return axios.post(_this16.url_participant_update, params).then(function (response) {
                   _this16.showErrors({});
 
-                  if (response.data.status === 201) {
+                  if (response.data.status === 200) {
                     //update/restore value copy
-                    obj.value = response.data.data;
-                    objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
+                    if (key === "profile_image" && response.data.data.extra) //Update avatar info
+                      {
+                        obj.value = response.data.data.extra;
+                        objCopy.value = Object.assign({}, response.data.data.extra); //Non-reactive copy
 
-                    objCopy.edited = false; //restore
+                        _this16.fileAvatar = null;
+                        _this16.enabledUploadAvatar = false;
 
-                    objCopy.editing = false; //restore
+                        _this16.getImg64Base(_this16.OPTIONS.PARTICIPANT, _this16.participant.profile_image.value);
+                      } else //Update copy
+                      {
+                        objCopy.value = Object.assign({}, obj.value); //Non-reactive copy
+                      }
 
                     obj.edited = false; //restore
 
@@ -5299,7 +5333,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                   _this16.isLoading = false;
                 });
 
-              case 4:
+              case 5:
               case "end":
                 return _context13.stop();
             }
@@ -5307,7 +5341,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }, _callee13);
       }))();
     },
-    updateDBPersonEmailUsedEvents: function updateDBPersonEmailUsedEvents(obj, objCopy) {
+    createDBPersonEmailUsedEvents: function createDBPersonEmailUsedEvents(obj, objCopy) {
       var _this17 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee14() {
@@ -5319,15 +5353,15 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 _this17.isLoading = true;
                 params = {
                   email: obj.value.email,
-                  id: obj.value.id,
+                  persons_id: _this17.participant.persons_id.value,
                   used_events: 1,
                   status_persons_emails_id: _this17.OPTIONS.STATUS_PERSONS_EMAILS.PENDING
                 };
                 _context14.next = 4;
-                return axios.post(_this17.url_persons_emails_update, params).then(function (response) {
+                return axios.post(_this17.url_persons_emails_store, params).then(function (response) {
                   _this17.showErrors({});
 
-                  if (response.data.status === 200) {
+                  if (response.data.status === 201) {
                     //update/restore value copy
                     obj.value = response.data.data;
                     objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
@@ -5359,64 +5393,116 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }, _callee14);
       }))();
     },
-    updateParticipant: function updateParticipant(key) {
+    updateDBPersonEmailUsedEvents: function updateDBPersonEmailUsedEvents(obj, objCopy) {
       var _this18 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee15() {
-        var keys, obj, objCopy;
+        var params;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee15$(_context15) {
           while (1) {
             switch (_context15.prev = _context15.next) {
               case 0:
+                _this18.isLoading = true;
+                params = {
+                  email: obj.value.email,
+                  id: obj.value.id,
+                  used_events: 1,
+                  status_persons_emails_id: _this18.OPTIONS.STATUS_PERSONS_EMAILS.PENDING
+                };
+                _context15.next = 4;
+                return axios.post(_this18.url_persons_emails_update, params).then(function (response) {
+                  _this18.showErrors({});
+
+                  if (response.data.status === 200) {
+                    //update/restore value copy
+                    obj.value = response.data.data;
+                    objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
+
+                    objCopy.edited = false; //restore
+
+                    objCopy.editing = false; //restore
+
+                    obj.edited = false; //restore
+
+                    obj.editing = false; //restore
+
+                    Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
+                      title: _this18.text_success,
+                      text: _this18.textsGeneralSettings.text_updated_participant
+                    });
+                  }
+                }, function (error) {
+                  _this18.showErrors(error);
+                }).then(function () {
+                  _this18.isLoading = false;
+                });
+
+              case 4:
+              case "end":
+                return _context15.stop();
+            }
+          }
+        }, _callee15);
+      }))();
+    },
+    updateParticipant: function updateParticipant(key) {
+      var _this19 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee16() {
+        var keys, obj, objCopy;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee16$(_context16) {
+          while (1) {
+            switch (_context16.prev = _context16.next) {
+              case 0:
                 //Get keys, for exaple: person.emails
                 keys = key.split(".");
-                obj = _this18.participant;
-                objCopy = _this18.participantCopy;
+                obj = _this19.participant;
+                objCopy = _this19.participantCopy;
                 keys.forEach(function (k) {
                   obj = obj[k];
                   objCopy = objCopy[k];
                 });
 
                 if (!obj.edited) {
-                  _context15.next = 17;
+                  _context16.next = 17;
                   break;
                 }
 
                 if (!(key === "person.used_events_email")) {
-                  _context15.next = 15;
+                  _context16.next = 15;
                   break;
                 }
 
                 if (objCopy.value.email) {
-                  _context15.next = 11;
+                  _context16.next = 11;
                   break;
                 }
 
-                _context15.next = 9;
-                return _this18.createDBPersonEmailUsedEvents(obj, objCopy);
+                _context16.next = 9;
+                return _this19.createDBPersonEmailUsedEvents(obj, objCopy);
 
               case 9:
-                _context15.next = 13;
+                _context16.next = 13;
                 break;
 
               case 11:
-                _context15.next = 13;
-                return _this18.updateDBPersonEmailUsedEvents(obj, objCopy);
+                _context16.next = 13;
+                return _this19.updateDBPersonEmailUsedEvents(obj, objCopy);
 
               case 13:
-                _context15.next = 17;
+                _context16.next = 17;
                 break;
 
               case 15:
-                _context15.next = 17;
-                return _this18.updateDBParticipant(key, obj, objCopy);
+                _context16.next = 17;
+                return _this19.updateDBParticipant(key, obj, objCopy);
 
               case 17:
               case "end":
-                return _context15.stop();
+                return _context16.stop();
             }
           }
-        }, _callee15);
+        }, _callee16);
       }))();
     }
   }
@@ -68615,7 +68701,9 @@ var render = function() {
                   url_person_emails_admin: _vm.url_person_emails_admin,
                   url_person_email_exist: _vm.url_person_email_exist,
                   url_persons_emails_store: _vm.url_persons_emails_store,
-                  url_persons_emails_update: _vm.url_persons_emails_update
+                  url_persons_emails_update: _vm.url_persons_emails_update,
+                  url_persons_cellphones_for_person:
+                    _vm.url_persons_cellphones_for_person
                 },
                 on: { activeMainSection: _vm.setActiveSection }
               })
@@ -70574,205 +70662,276 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "column is-10" }, [
-                    _c("div", { staticClass: "columns is-multiline" }, [
-                      _vm.participant.person.initial_register_email
-                        ? _c(
+                    _c(
+                      "div",
+                      { staticClass: "columns is-multiline" },
+                      [
+                        _vm.participant.person.initial_register_email
+                          ? _c(
+                              "div",
+                              {
+                                staticClass: "columns column is-12 is-row-data"
+                              },
+                              [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "columns column is-6 is-row-data"
+                                  },
+                                  [
+                                    _c("span", { staticClass: "column is-8" }, [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm.participant.person
+                                            .initial_register_email.value.email
+                                        )
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "span",
+                                      { staticClass: "column is-4 label-info" },
+                                      [
+                                        _vm._v(
+                                          _vm._s(
+                                            _vm.textsGeneralSettings
+                                              .predetermined
+                                          )
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "column is-6" })
+                              ]
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "columns column is-12 is-row-data" },
+                          [
+                            _vm.participant.person.used_events_email !==
+                              undefined &&
+                            _vm.participant.person.used_events_email.editing
+                              ? _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "columns column is-12 row-used_events_email"
+                                  },
+                                  [
+                                    _c(
+                                      "div",
+                                      { staticClass: "column is-6" },
+                                      [
+                                        _c(
+                                          "b-field",
+                                          {
+                                            staticClass: "label_not-show",
+                                            attrs: {
+                                              horizontal: "",
+                                              type: {
+                                                "is-danger":
+                                                  _vm.fieldsParticipant.email
+                                                    .error
+                                              },
+                                              message: _vm.fieldsParticipant
+                                                .email.error
+                                                ? _vm.emailError
+                                                : ""
+                                            }
+                                          },
+                                          [
+                                            _c("b-input", {
+                                              ref: "person.used_events_email",
+                                              attrs: {
+                                                name:
+                                                  "person.used_events_email",
+                                                maxlength: "120",
+                                                expanded: ""
+                                              },
+                                              on: {
+                                                blur: function($event) {
+                                                  return _vm.setTrim(
+                                                    "person.used_events_email.value.email",
+                                                    _vm.OPTIONS.PARTICIPANT
+                                                  )
+                                                }
+                                              },
+                                              model: {
+                                                value:
+                                                  _vm.participant.person
+                                                    .used_events_email.value
+                                                    .email,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.participant.person
+                                                      .used_events_email.value,
+                                                    "email",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "participant.person.used_events_email.value.email"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "column is-6 content-buttons"
+                                      },
+                                      [
+                                        _c("b-button", {
+                                          attrs: {
+                                            size: "is-small",
+                                            "icon-left": "save"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.clickUpdateParticipant(
+                                                "person.used_events_email"
+                                              )
+                                            }
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _c("b-button", {
+                                          attrs: {
+                                            size: "is-small",
+                                            "icon-left": "window-close"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.clickCancelParticipant(
+                                                "person.used_events_email"
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ]
+                                )
+                              : _vm.participant.person.used_events_email !==
+                                undefined
+                              ? _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "columns column is-12 row-used_events_email"
+                                  },
+                                  [
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "columns column is-6 is-row-data"
+                                      },
+                                      [
+                                        _c(
+                                          "span",
+                                          { staticClass: "column is-8" },
+                                          [
+                                            _vm._v(
+                                              _vm._s(
+                                                _vm.participant.person
+                                                  .used_events_email.value
+                                                  ? _vm.participant.person
+                                                      .used_events_email.value
+                                                      .email
+                                                  : _vm.firstCapitalize(
+                                                      _vm.fieldsParticipant
+                                                        .email.label
+                                                    )
+                                              )
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "span",
+                                          {
+                                            staticClass:
+                                              "column is-4 label-info"
+                                          },
+                                          [
+                                            _vm._v(
+                                              _vm._s(
+                                                _vm.textsGeneralSettings
+                                                  .use_for_events
+                                              )
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "column is-6" },
+                                      [
+                                        _c("b-button", {
+                                          staticClass: "btn-edit",
+                                          attrs: {
+                                            size: "is-small",
+                                            "icon-left": "pen"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.clickEditParticipant(
+                                                "person.used_events_email"
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _vm._l(_vm.participant.person.cellphones, function(
+                          mobile,
+                          index
+                        ) {
+                          return _c(
                             "div",
-                            { staticClass: "columns column is-12 is-row-data" },
+                            {
+                              key: "mobile." + index,
+                              staticClass: "columns column is-12 is-row-data"
+                            },
                             [
                               _c(
                                 "div",
-                                {
-                                  staticClass: "columns column is-6 is-row-data"
-                                },
+                                { staticClass: "columns column is-12" },
                                 [
-                                  _c("span", { staticClass: "column is-8" }, [
-                                    _vm._v(
-                                      _vm._s(
-                                        _vm.participant.person
-                                          .initial_register_email.value.email
-                                      )
-                                    )
-                                  ]),
-                                  _vm._v(" "),
                                   _c(
-                                    "span",
-                                    { staticClass: "column is-4 label-info" },
+                                    "div",
+                                    { staticClass: "column is-6 is-row-data" },
                                     [
-                                      _vm._v(
-                                        _vm._s(
-                                          _vm.textsGeneralSettings.predetermined
+                                      _c("span", [
+                                        _vm._v(
+                                          _vm._s(mobile.value.cellphone_number)
                                         )
-                                      )
-                                    ]
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "column is-6" })
-                            ]
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "columns column is-12 is-row-data" },
-                        [
-                          _vm.participant.person.used_events_email !==
-                            undefined &&
-                          _vm.participant.person.used_events_email.editing
-                            ? _c(
-                                "div",
-                                { staticClass: "columns column is-12" },
-                                [
-                                  _c(
-                                    "div",
-                                    { staticClass: "column is-6" },
-                                    [
-                                      _c(
-                                        "b-field",
-                                        {
-                                          staticClass: "label_not-show",
-                                          attrs: {
-                                            horizontal: "",
-                                            type: {
-                                              "is-danger":
-                                                _vm.fieldsParticipant.email
-                                                  .error
-                                            },
-                                            message: _vm.fieldsParticipant.email
-                                              .error
-                                              ? _vm.emailError
-                                              : ""
-                                          }
-                                        },
-                                        [
-                                          _c("b-input", {
-                                            ref: "person.used_events_email",
-                                            attrs: {
-                                              name: "person.used_events_email",
-                                              maxlength: "120",
-                                              expanded: ""
-                                            },
-                                            on: {
-                                              blur: function($event) {
-                                                return _vm.setTrim(
-                                                  "person.used_events_email.value.email",
-                                                  _vm.OPTIONS.PARTICIPANT
-                                                )
-                                              }
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.participant.person
-                                                  .used_events_email.value
-                                                  .email,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.participant.person
-                                                    .used_events_email.value,
-                                                  "email",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "participant.person.used_events_email.value.email"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    {
-                                      staticClass: "column is-6 content-buttons"
-                                    },
-                                    [
-                                      _c("b-button", {
-                                        attrs: {
-                                          size: "is-small",
-                                          "icon-left": "save"
-                                        },
-                                        on: {
-                                          click: function($event) {
-                                            $event.preventDefault()
-                                            return _vm.clickUpdateParticipant(
-                                              "person.used_events_email"
-                                            )
-                                          }
-                                        }
-                                      }),
-                                      _vm._v(" "),
-                                      _c("b-button", {
-                                        attrs: {
-                                          size: "is-small",
-                                          "icon-left": "window-close"
-                                        },
-                                        on: {
-                                          click: function($event) {
-                                            $event.preventDefault()
-                                            return _vm.clickCancelParticipant(
-                                              "person.used_events_email"
-                                            )
-                                          }
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ]
-                              )
-                            : _vm.participant.person.used_events_email !==
-                              undefined
-                            ? _c(
-                                "div",
-                                { staticClass: "columns column is-12" },
-                                [
-                                  _c(
-                                    "div",
-                                    {
-                                      staticClass:
-                                        "columns column is-6 is-row-data"
-                                    },
-                                    [
-                                      _c(
-                                        "span",
-                                        { staticClass: "column is-8" },
-                                        [
-                                          _vm._v(
-                                            _vm._s(
-                                              _vm.participant.person
-                                                .used_events_email.value
-                                                ? _vm.participant.person
-                                                    .used_events_email.value
-                                                    .email
-                                                : _vm.firstCapitalize(
-                                                    _vm.fieldsParticipant.email
-                                                      .label
-                                                  )
-                                            )
-                                          )
-                                        ]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "span",
-                                        {
-                                          staticClass: "column is-4 label-info"
-                                        },
-                                        [
-                                          _vm._v(
-                                            _vm._s(
-                                              _vm.textsGeneralSettings
-                                                .use_for_events
-                                            )
-                                          )
-                                        ]
-                                      )
+                                      ])
                                     ]
                                   ),
                                   _vm._v(" "),
@@ -70790,7 +70949,7 @@ var render = function() {
                                           click: function($event) {
                                             $event.preventDefault()
                                             return _vm.clickEditParticipant(
-                                              "person.used_events_email"
+                                              "person.cellphones"
                                             )
                                           }
                                         }
@@ -70800,10 +70959,12 @@ var render = function() {
                                   )
                                 ]
                               )
-                            : _vm._e()
-                        ]
-                      )
-                    ])
+                            ]
+                          )
+                        })
+                      ],
+                      2
+                    )
                   ])
                 ])
               ])
