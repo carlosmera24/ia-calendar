@@ -20481,6 +20481,10 @@ textarea {
   display: none;
 }
 
+.application .content-main .content .form_general_settings .content-buttons .button {
+  font-size: 1rem;
+}
+
 .application .content-main .content .form_general_settings .programmer_data .field-identification-type.control .v-select .vs__dropdown-toggle .vs__selected-options {
   padding: 0;
 }
@@ -20530,10 +20534,6 @@ textarea {
 .application .content-main .content .form_general_settings .programmer_data figure.logo img {
   width: 128px;
   height: auto;
-}
-
-.application .content-main .content .form_general_settings .programmer_data .content-buttons .button {
-  font-size: 1rem;
 }
 
 .application .content-main .content .form_general_settings .adminitrator_data .avatar {

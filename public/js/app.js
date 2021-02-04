@@ -4141,6 +4141,37 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -4424,6 +4455,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       }
     },
     setTrim: function setTrim(key, option) {
+      var index = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
       var obj = new Object();
 
       if (option === this.OPTIONS.PROGRAMMER) {
@@ -4439,6 +4471,13 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
 
         case "person.used_events_email.value.email":
           obj.person.used_events_email.value.email = this.getStringWithTrim(obj.person.used_events_email.value.email);
+          break;
+
+        case "person.cellphones.value.cellphone_number":
+          if (index != null) {
+            obj.person.cellphones[index].value.cellphone_number = this.getStringWithTrim(obj.person.cellphones[index].value.cellphone_number);
+          }
+
           break;
 
         default:
@@ -4673,11 +4712,13 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                         //Set with no-reactive values
                         Vue.set(_this7.participant.person, 'initial_register_email', {
                           'value': Object.assign({}, element),
+                          'msg': _this7.fieldsParticipant.mobile.msg,
                           'edited': false,
                           'editing': false
                         });
                         Vue.set(_this7.participantCopy.person, 'initial_register_email', {
                           'value': Object.assign({}, element),
+                          'msg': _this7.fieldsParticipant.mobile.msg,
                           'edited': false,
                           'editing': false
                         });
@@ -4685,11 +4726,13 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                         //Set with no-reactive values
                         Vue.set(_this7.participant.person, 'used_events_email', {
                           'value': Object.assign({}, element),
+                          'msg': _this7.fieldsParticipant.mobile.msg,
                           'edited': false,
                           'editing': false
                         });
                         Vue.set(_this7.participantCopy.person, 'used_events_email', {
                           'value': Object.assign({}, element),
+                          'msg': _this7.fieldsParticipant.mobile.msg,
                           'edited': false,
                           'editing': false
                         });
@@ -4733,15 +4776,40 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                     response.data.cellphones.forEach(function (element) {
                       cellphones.push({
                         'value': Object.assign({}, element),
+                        'error': false,
+                        'msg': _this8.fieldsParticipant.mobile.msg,
                         'edited': false,
                         'editing': false
                       });
                       cellphonesCopy.push({
                         'value': Object.assign({}, element),
+                        'error': false,
                         'edited': false,
                         'editing': false
                       });
-                    }); //Set with no-reactive values
+                    }); //Empty cellphones
+
+                    if (_.isEmpty(cellphones)) {
+                      cellphones.push({
+                        'value': {
+                          cellphone_number: null
+                        },
+                        'error': false,
+                        'msg': _this8.fieldsParticipant.mobile.msg,
+                        'edited': false,
+                        'editing': false
+                      });
+                      cellphonesCopy.push({
+                        'value': {
+                          cellphone_number: null
+                        },
+                        'error': false,
+                        'msg': _this8.fieldsParticipant.mobile.msg,
+                        'edited': false,
+                        'editing': false
+                      });
+                    } //Set with no-reactive values
+
 
                     Vue.set(_this8.participant.person, 'cellphones', cellphones);
                     Vue.set(_this8.participantCopy.person, 'cellphones', cellphonesCopy);
@@ -4769,6 +4837,14 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
 
       if (obj.value !== val) {
         obj.value = val;
+      }
+    },
+    onlyPhoneNumber: function onlyPhoneNumber(event, index) {
+      var regex = new RegExp(/[^\+|\d]$/g);
+      var val = event.target.value.replace(regex, "");
+
+      if (this.participant.person.cellphones[index].value.cellphone_number !== val) {
+        this.participant.person.cellphones[index].value.cellphone_number = val;
       }
     },
     imageToBase64: function imageToBase64(file) {
@@ -5096,45 +5172,85 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       }))();
     },
     setErrorParticipant: function setErrorParticipant(key, errValue) {
+      var index = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
       switch (key) {
         case "person.used_events_email":
           this.fieldsParticipant.email.error = errValue;
           break;
 
         default:
-          this.fieldsParticipant[key].error = errValue;
+          if (index !== null) {
+            var obj = this.participant;
+            var keys = key.split(".");
+            keys.forEach(function (k) {
+              obj = obj[k];
+            });
+
+            if (_.isArray(obj)) //Arrays, asign object from Array position
+              {
+                obj[index].error = errValue;
+              }
+          } else {
+            this.fieldsParticipant[key].error = errValue;
+          }
+
           break;
       }
     },
     clickEditParticipant: function clickEditParticipant(key) {
       var _this14 = this;
 
+      var index = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
       //Get keys, for exaple: person.emails
       var keys = key.split(".");
       var obj = this.participant;
       keys.forEach(function (k) {
         obj = obj[k];
       });
-      obj.editing = !obj.editing; //wait for the input to load
+      var keyRef = key;
+
+      if (index !== null && _.isArray(obj)) //Arrays
+        {
+          keyRef = keyRef + '_' + index;
+          obj[index].editing = !obj[index].editing;
+        } else {
+        obj.editing = !obj.editing;
+      } //wait for the input to load
+
 
       this.$nextTick(function () {
-        if (_this14.$refs[key]) {
-          _this14.$refs[key].focus();
+        if (_this14.$refs[keyRef]) {
+          if (_.isArray(_this14.$refs[keyRef])) {
+            _this14.$refs[keyRef][index].focus();
+          } else {
+            _this14.$refs[keyRef].focus();
+          }
         }
       });
     },
     clickCancelParticipant: function clickCancelParticipant(key) {
+      var index = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
       //Get keys, for exaple: person.emails
       var keys = key.split(".");
       var obj = this.participant;
+      var objCopy = this.participantCopy;
       keys.forEach(function (k) {
         obj = obj[k];
-      }); //Clean error, change "editing" and restore values
+        objCopy = objCopy[k];
+      });
 
-      obj.value = obj.value;
+      if (index !== null && _.isArray(obj)) //Arrays, asign object from Array position
+        {
+          obj = obj[index];
+          objCopy = objCopy[index];
+        } //Clean error, change "editing" and restore values
+
+
+      obj.value = Object.assign({}, objCopy.value);
       obj.editing = false;
       obj.edited = false;
-      this.setErrorParticipant(key, false);
+      this.setErrorParticipant(key, false, index);
 
       if (key === "profile_image") {
         this.fileAvatar = null;
@@ -5143,17 +5259,19 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       }
     },
     clickUpdateParticipant: function clickUpdateParticipant(key) {
-      var _this15 = this;
+      var _arguments2 = arguments,
+          _this15 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee12() {
-        var keys, obj, objCopy, valid, value, constraints, constrEmail, data;
+        var index, keys, obj, objCopy, valid, value, constraints, constrEmail, data, regex, constrMobile;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee12$(_context12) {
           while (1) {
             switch (_context12.prev = _context12.next) {
               case 0:
+                index = _arguments2.length > 1 && _arguments2[1] !== undefined ? _arguments2[1] : null;
                 _this15.isLoading = true; //cleans errors
 
-                _this15.setErrorParticipant(key, false);
+                _this15.setErrorParticipant(key, false, index);
 
                 if (key === "profile_image") {
                   //Value for save in DDBB
@@ -5167,10 +5285,17 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 keys.forEach(function (k) {
                   obj = obj[k];
                   objCopy = objCopy[k];
-                }); //compare values
+                });
+
+                if (index !== null && _.isArray(obj)) //Arrays, asign object from Array position
+                  {
+                    obj = obj[index];
+                    objCopy = objCopy[index];
+                  } //compare values
+
 
                 if (!(obj.value !== objCopy.value || key === "profile_image" && _this15.avatarAdmin !== _this15.avatarAdminCopy)) {
-                  _context12.next = 42;
+                  _context12.next = 45;
                   break;
                 }
 
@@ -5191,7 +5316,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 }
 
                 if (!(key === "person.used_events_email")) {
-                  _context12.next = 37;
+                  _context12.next = 39;
                   break;
                 }
 
@@ -5200,7 +5325,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 }, constraints);
 
                 if (!(validate.single(obj.value.email, constraints) !== undefined)) {
-                  _context12.next = 21;
+                  _context12.next = 23;
                   break;
                 }
 
@@ -5209,12 +5334,12 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 _this15.setErrorParticipant(key, true);
 
                 valid = false;
-                _context12.next = 37;
+                _context12.next = 39;
                 break;
 
-              case 21:
+              case 23:
                 if (!(validate.single(obj.value.email, constrEmail) !== undefined)) {
-                  _context12.next = 27;
+                  _context12.next = 29;
                   break;
                 }
 
@@ -5223,12 +5348,12 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 _this15.setErrorParticipant(key, true);
 
                 valid = false;
-                _context12.next = 37;
+                _context12.next = 39;
                 break;
 
-              case 27:
+              case 29:
                 if (!(obj.value.email === _this15.participant.person.initial_register_email.value.email)) {
-                  _context12.next = 33;
+                  _context12.next = 35;
                   break;
                 }
 
@@ -5237,14 +5362,14 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 _this15.setErrorParticipant(key, true);
 
                 valid = false;
-                _context12.next = 37;
+                _context12.next = 39;
                 break;
-
-              case 33:
-                _context12.next = 35;
-                return _this15.emailsExist([obj.value.email]);
 
               case 35:
+                _context12.next = 37;
+                return _this15.emailsExist([obj.value.email]);
+
+              case 37:
                 data = _context12.sent;
 
                 if (data.exists) {
@@ -5255,7 +5380,34 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                   valid = false;
                 }
 
-              case 37:
+              case 39:
+                if (key === "person.cellphones") {
+                  if (validate.single(obj.value.cellphone_number, constraints) !== undefined) //Empty
+                    {
+                      obj.msg = _this15.fieldsParticipant.mobile.msg;
+
+                      _this15.setErrorParticipant(key, true, index);
+
+                      valid = false;
+                    } else {
+                    regex = new RegExp(/^\+?[1-9]{1,2}[0-9]{3,14}$/g);
+                    constrMobile = Object.assign({
+                      format: regex
+                    }, constraints);
+
+                    if (validate.single(obj.value.cellphone_number, constrMobile) !== undefined) //Format
+                      {
+                        obj.msg = _this15.fieldsParticipant.mobile.msg_validate;
+
+                        _this15.setErrorParticipant(key, true, index);
+
+                        valid = false;
+                      } else //validate exists
+                      {//TODO
+                      }
+                  }
+                }
+
                 if (key === "profile_image" && _this15.fileAvatar.size > _this15.sizeFieleUploadAllow) {
                   _this15.setErrorParticipant(key, true);
 
@@ -5267,16 +5419,16 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 if (valid) //Not errors
                   {
                     //update
-                    _this15.updateParticipant(key);
+                    _this15.updateParticipant(key, index);
                   }
 
-                _context12.next = 43;
+                _context12.next = 46;
                 break;
 
-              case 42:
+              case 45:
                 _this15.isLoading = false;
 
-              case 43:
+              case 46:
               case "end":
                 return _context12.stop();
             }
@@ -5446,14 +5598,16 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       }))();
     },
     updateParticipant: function updateParticipant(key) {
-      var _this19 = this;
+      var _arguments3 = arguments,
+          _this19 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee16() {
-        var keys, obj, objCopy;
+        var index, keys, obj, objCopy;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee16$(_context16) {
           while (1) {
             switch (_context16.prev = _context16.next) {
               case 0:
+                index = _arguments3.length > 1 && _arguments3[1] !== undefined ? _arguments3[1] : null;
                 //Get keys, for exaple: person.emails
                 keys = key.split(".");
                 obj = _this19.participant;
@@ -5463,41 +5617,63 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                   objCopy = objCopy[k];
                 });
 
+                if (index !== null && _.isArray(obj)) //Arrays, asign object from Array position
+                  {
+                    obj = obj[index];
+                    objCopy = objCopy[index];
+                  }
+
+                console.log(key, obj);
+
                 if (!obj.edited) {
-                  _context16.next = 17;
+                  _context16.next = 24;
                   break;
                 }
 
-                if (!(key === "person.used_events_email")) {
-                  _context16.next = 15;
-                  break;
-                }
-
-                if (objCopy.value.email) {
-                  _context16.next = 11;
-                  break;
-                }
-
-                _context16.next = 9;
-                return _this19.createDBPersonEmailUsedEvents(obj, objCopy);
-
-              case 9:
-                _context16.next = 13;
+                _context16.t0 = key;
+                _context16.next = _context16.t0 === "person.used_events_email" ? 11 : _context16.t0 === "person.cellphones" ? 19 : 21;
                 break;
 
               case 11:
-                _context16.next = 13;
-                return _this19.updateDBPersonEmailUsedEvents(obj, objCopy);
+                if (objCopy.value.email) {
+                  _context16.next = 16;
+                  break;
+                }
 
-              case 13:
-                _context16.next = 17;
+                _context16.next = 14;
+                return _this19.createDBPersonEmailUsedEvents(obj, objCopy);
+
+              case 14:
+                _context16.next = 18;
                 break;
 
-              case 15:
-                _context16.next = 17;
+              case 16:
+                _context16.next = 18;
+                return _this19.updateDBPersonEmailUsedEvents(obj, objCopy);
+
+              case 18:
+                return _context16.abrupt("break", 24);
+
+              case 19:
+                //Update or create cellphone
+                if (!objCopy.value.cellphone_number) //Copy is null, create new cellphone
+                  {
+                    console.log("Create cellphone person");
+                  } else //Copy existe update
+                  {
+                    console.log("update cellphone person");
+                  }
+
+                return _context16.abrupt("break", 24);
+
+              case 21:
+                _context16.next = 23;
                 return _this19.updateDBParticipant(key, obj, objCopy);
 
-              case 17:
+              case 23:
+                return _context16.abrupt("break", 24);
+
+              case 24:
               case "end":
                 return _context16.stop();
             }
@@ -70919,46 +71095,172 @@ var render = function() {
                               staticClass: "columns column is-12 is-row-data"
                             },
                             [
-                              _c(
-                                "div",
-                                { staticClass: "columns column is-12" },
-                                [
-                                  _c(
+                              mobile.editing
+                                ? _c(
                                     "div",
-                                    { staticClass: "column is-6 is-row-data" },
+                                    { staticClass: "columns column is-12" },
                                     [
-                                      _c("span", [
-                                        _vm._v(
-                                          _vm._s(mobile.value.cellphone_number)
-                                        )
-                                      ])
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    { staticClass: "column is-6" },
-                                    [
-                                      _c("b-button", {
-                                        staticClass: "btn-edit",
-                                        attrs: {
-                                          size: "is-small",
-                                          "icon-left": "pen"
+                                      _c(
+                                        "div",
+                                        { staticClass: "column is-6" },
+                                        [
+                                          _c(
+                                            "b-field",
+                                            {
+                                              staticClass: "label_not-show",
+                                              attrs: {
+                                                horizontal: "",
+                                                type: {
+                                                  "is-danger": mobile.error
+                                                },
+                                                message: mobile.error
+                                                  ? mobile.msg
+                                                  : ""
+                                              }
+                                            },
+                                            [
+                                              _c("b-input", {
+                                                ref:
+                                                  "person.cellphones_" + index,
+                                                refInFor: true,
+                                                attrs: {
+                                                  name:
+                                                    "person.cellphones_" +
+                                                    index,
+                                                  maxlength: "12",
+                                                  expanded: ""
+                                                },
+                                                on: {
+                                                  blur: function($event) {
+                                                    return _vm.setTrim(
+                                                      "person.cellphones.value.cellphone_number",
+                                                      _vm.OPTIONS.PARTICIPANT,
+                                                      index
+                                                    )
+                                                  }
+                                                },
+                                                nativeOn: {
+                                                  keyup: function($event) {
+                                                    return _vm.onlyPhoneNumber(
+                                                      $event,
+                                                      index
+                                                    )
+                                                  }
+                                                },
+                                                model: {
+                                                  value:
+                                                    mobile.value
+                                                      .cellphone_number,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      mobile.value,
+                                                      "cellphone_number",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "mobile.value.cellphone_number"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass:
+                                            "column is-6 content-buttons"
                                         },
-                                        on: {
-                                          click: function($event) {
-                                            $event.preventDefault()
-                                            return _vm.clickEditParticipant(
-                                              "person.cellphones"
-                                            )
-                                          }
-                                        }
-                                      })
-                                    ],
-                                    1
+                                        [
+                                          _c("b-button", {
+                                            attrs: {
+                                              size: "is-small",
+                                              "icon-left": "save"
+                                            },
+                                            on: {
+                                              click: function($event) {
+                                                $event.preventDefault()
+                                                return _vm.clickUpdateParticipant(
+                                                  "person.cellphones",
+                                                  index
+                                                )
+                                              }
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _c("b-button", {
+                                            attrs: {
+                                              size: "is-small",
+                                              "icon-left": "window-close"
+                                            },
+                                            on: {
+                                              click: function($event) {
+                                                $event.preventDefault()
+                                                return _vm.clickCancelParticipant(
+                                                  "person.cellphones",
+                                                  index
+                                                )
+                                              }
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    ]
                                   )
-                                ]
-                              )
+                                : _c(
+                                    "div",
+                                    { staticClass: "columns column is-12" },
+                                    [
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass: "column is-6 is-row-data"
+                                        },
+                                        [
+                                          _c("span", [
+                                            _vm._v(
+                                              _vm._s(
+                                                mobile.value.cellphone_number
+                                                  ? mobile.value
+                                                      .cellphone_number
+                                                  : _vm.fieldsParticipant.mobile
+                                                      .placeholder
+                                              )
+                                            )
+                                          ])
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        { staticClass: "column is-6" },
+                                        [
+                                          _c("b-button", {
+                                            staticClass: "btn-edit",
+                                            attrs: {
+                                              size: "is-small",
+                                              "icon-left": "pen"
+                                            },
+                                            on: {
+                                              click: function($event) {
+                                                $event.preventDefault()
+                                                return _vm.clickEditParticipant(
+                                                  "person.cellphones",
+                                                  index
+                                                )
+                                              }
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    ]
+                                  )
                             ]
                           )
                         })

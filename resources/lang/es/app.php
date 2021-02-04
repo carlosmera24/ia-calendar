@@ -83,6 +83,7 @@ return [
     'participant_new'  =>  [
         'title'                     =>  'Partícipe nuevo',
         'description_placeholder'   =>  'Detalla brevemente el el cargo y funciones a realizar',
+        'cellphone_placeholder'     =>  'Numero celular',
     ],
 
     /**

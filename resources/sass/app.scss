@@ -600,6 +600,11 @@ body, h2, button, input, select, textarea {
                         display: none;
                     }
                 }
+                .content-buttons{
+                    .button{
+                        font-size: 1rem;
+                    }
+                }
                 .programmer_data{
                     .field-identification-type.control{
                         .v-select{
@@ -656,11 +661,6 @@ body, h2, button, input, select, textarea {
                         img{
                             width: 128px;
                             height: auto;
-                        }
-                    }
-                    .content-buttons{
-                        .button{
-                            font-size: 1rem;
                         }
                     }
                 }

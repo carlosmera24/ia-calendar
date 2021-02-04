@@ -42,6 +42,7 @@
                                                             ],
                                         'mobile'        =>  [
                                                                 'label' =>  __('validation.attributes.mobile'),
+                                                                'placeholder'   =>  __('app.participant_new.cellphone_placeholder'),
                                                                 'error' => false,
                                                                 'msg'   =>  __('validation.required', ['attribute' => '']),
                                                                 'msg_validate'   =>  __('validation.mobile', ['attribute' => '']),

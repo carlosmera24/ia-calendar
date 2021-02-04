@@ -323,16 +323,47 @@
                                     <!-- Cellphones -->
                                     <div class="columns column is-12 is-row-data"
                                         v-for="(mobile, index) in participant.person.cellphones" :key="'mobile.'+index">
-                                            <div class="columns column is-12">
+                                            <div class="columns column is-12" v-if="mobile.editing">
+                                                <div class="column is-6">
+                                                    <b-field horizontal
+                                                        class="label_not-show"
+                                                        v-bind:type="{ 'is-danger' : mobile.error }"
+                                                        :message="mobile.error ? mobile.msg : ''">
+                                                        <b-input
+                                                            :ref="'person.cellphones_'+index"
+                                                            :name="'person.cellphones_'+index"
+                                                            v-model="mobile.value.cellphone_number"
+                                                            v-on:blur="setTrim('person.cellphones.value.cellphone_number', OPTIONS.PARTICIPANT, index)"
+                                                            v-on:keyup.native="onlyPhoneNumber($event, index)"
+                                                            maxlength="12"
+                                                            expanded>
+                                                        </b-input>
+                                                    </b-field>
+
+                                                </div>
+                                                <div class="column is-6 content-buttons">
+                                                    <b-button
+                                                        size="is-small"
+                                                        icon-left="save"
+                                                        v-on:click.prevent="clickUpdateParticipant( 'person.cellphones', index )"
+                                                    />
+                                                    <b-button
+                                                        size="is-small"
+                                                        icon-left="window-close"
+                                                        v-on:click.prevent="clickCancelParticipant('person.cellphones', index)"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div class="columns column is-12" v-else>
                                                 <div class="column is-6 is-row-data">
-                                                    <span>{{ mobile.value.cellphone_number }}</span>
+                                                    <span>{{ mobile.value.cellphone_number ? mobile.value.cellphone_number : fieldsParticipant.mobile.placeholder }}</span>
                                                 </div>
                                                 <div class="column is-6">
                                                     <b-button
                                                         class="btn-edit"
                                                         size="is-small"
                                                         icon-left="pen"
-                                                        v-on:click.prevent="clickEditParticipant('person.cellphones')"
+                                                        v-on:click.prevent="clickEditParticipant('person.cellphones', index)"
                                                     />
                                                 </div>
                                             </div>
@@ -589,7 +620,7 @@
                     return word.trim();
                 }
             },
-            setTrim( key, option ){
+            setTrim( key, option, index = null ){
                 let obj = new Object();
                 if( option === this.OPTIONS.PROGRAMMER )
                 {
@@ -605,6 +636,11 @@
                         break;
                     case "person.used_events_email.value.email":
                         obj.person.used_events_email.value.email = this.getStringWithTrim(obj.person.used_events_email.value.email);
+                        break;
+                    case "person.cellphones.value.cellphone_number":
+                        if( index != null ){
+                            obj.person.cellphones[index].value.cellphone_number = this.getStringWithTrim(obj.person.cellphones[index].value.cellphone_number);
+                        }
                         break;
                     default:
                         break;
@@ -759,11 +795,13 @@
                                     //Set with no-reactive values
                                     Vue.set(this.participant.person, 'initial_register_email', {
                                                 'value':    Object.assign({},element),
+                                                'msg':   this.fieldsParticipant.mobile.msg,
                                                 'edited':   false,
                                                 'editing':  false,
                                             });
                                     Vue.set(this.participantCopy.person, 'initial_register_email', {
                                                 'value':    Object.assign({},element),
+                                                'msg':   this.fieldsParticipant.mobile.msg,
                                                 'edited':   false,
                                                 'editing':  false,
                                             });
@@ -771,11 +809,13 @@
                                     //Set with no-reactive values
                                     Vue.set(this.participant.person, 'used_events_email', {
                                                 'value':    Object.assign({},element),
+                                                'msg':   this.fieldsParticipant.mobile.msg,
                                                 'edited':   false,
                                                 'editing':  false,
                                             });
                                     Vue.set(this.participantCopy.person, 'used_events_email', {
                                                 'value':    Object.assign({},element),
+                                                'msg':   this.fieldsParticipant.mobile.msg,
                                                 'edited':   false,
                                                 'editing':  false,
                                             });
@@ -805,15 +845,38 @@
                             response.data.cellphones.forEach( element => {
                                 cellphones.push({
                                                 'value':    Object.assign({},element),
+                                                'error':   false,
+                                                'msg':   this.fieldsParticipant.mobile.msg,
                                                 'edited':   false,
                                                 'editing':  false,
                                             });
                                 cellphonesCopy.push({
                                                 'value':    Object.assign({},element),
+                                                'error':   false,
                                                 'edited':   false,
                                                 'editing':  false,
                                             });
                             });
+
+                            //Empty cellphones
+                            if( _.isEmpty(cellphones) )
+                            {
+                                cellphones.push({
+                                                'value':    { cellphone_number : null },
+                                                'error':   false,
+                                                'msg':   this.fieldsParticipant.mobile.msg,
+                                                'edited':   false,
+                                                'editing':  false,
+                                            });
+                                cellphonesCopy.push({
+                                                'value':    { cellphone_number : null },
+                                                'error':   false,
+                                                'msg':   this.fieldsParticipant.mobile.msg,
+                                                'edited':   false,
+                                                'editing':  false,
+                                            });
+                            }
+
                             //Set with no-reactive values
                             Vue.set(this.participant.person, 'cellphones', cellphones);
                             Vue.set(this.participantCopy.person, 'cellphones', cellphonesCopy);
@@ -835,6 +898,14 @@
                 if( obj.value !== val )
                 {
                     obj.value = val;
+                }
+            },
+            onlyPhoneNumber(event, index){
+                const regex = new RegExp(/[^\+|\d]$/g);
+                const val = event.target.value.replace(regex,"");
+                if( this.participant.person.cellphones[index].value.cellphone_number !== val )
+                {
+                    this.participant.person.cellphones[index].value.cellphone_number = val;
                 }
             },
             async imageToBase64(file){
@@ -1046,33 +1117,30 @@
                 }
                 return data;
             },
-            setErrorParticipant( key, errValue){
+            setErrorParticipant( key, errValue, index = null){
                 switch(key) {
                     case "person.used_events_email":
                         this.fieldsParticipant.email.error = errValue;
                         break;
                     default:
-                        this.fieldsParticipant[ key ].error = errValue;
+                        if( index !== null )
+                        {
+                            let obj = this.participant;
+                            const keys = key.split(".");
+                            keys.forEach( k => {
+                                obj = obj[k];
+                            });
+                            if( _.isArray(obj) )//Arrays, asign object from Array position
+                            {
+                                obj[ index ].error = errValue;
+                            }
+                        }else{
+                            this.fieldsParticipant[ key ].error = errValue;
+                        }
                         break;
                 }
             },
-            clickEditParticipant( key ){
-                //Get keys, for exaple: person.emails
-                const keys = key.split(".");
-                let obj = this.participant;
-                keys.forEach( k => {
-                    obj = obj[k];
-                });
-                obj.editing = !obj.editing;
-                //wait for the input to load
-                this.$nextTick(() => {
-                    if( (this.$refs[ key ]) )
-                    {
-                        this.$refs[ key ].focus();
-                    }
-                });
-            },
-            clickCancelParticipant( key ){
+            clickEditParticipant( key, index = null ){
                 //Get keys, for exaple: person.emails
                 const keys = key.split(".");
                 let obj = this.participant;
@@ -1080,11 +1148,51 @@
                     obj = obj[k];
                 });
 
+                let keyRef = key;
+                if( index !== null && _.isArray(obj) )//Arrays
+                {
+                    keyRef = keyRef +'_'+ index;
+
+                    obj[ index ].editing = !obj[ index ].editing;
+                }else{
+                    obj.editing = !obj.editing;
+                }
+
+                //wait for the input to load
+                this.$nextTick(() => {
+                    if( (this.$refs[ keyRef ]) )
+                    {
+                        if( _.isArray(this.$refs[ keyRef ] ) )
+                        {
+                            this.$refs[ keyRef ][ index ].focus();
+
+                        }else{
+                            this.$refs[ keyRef ].focus();
+                        }
+                    }
+                });
+            },
+            clickCancelParticipant( key, index = null ){
+                //Get keys, for exaple: person.emails
+                const keys = key.split(".");
+                let obj = this.participant;
+                let objCopy = this.participantCopy;
+                keys.forEach( k => {
+                    obj = obj[k];
+                    objCopy = objCopy[k];
+                });
+
+                if( index !== null && _.isArray(obj) )//Arrays, asign object from Array position
+                {
+                    obj = obj[ index ];
+                    objCopy = objCopy[ index ];
+                }
+
                 //Clean error, change "editing" and restore values
-                obj.value = obj.value;
+                obj.value = Object.assign({},objCopy.value);
                 obj.editing = false;
                 obj.edited = false;
-                this.setErrorParticipant( key, false );
+                this.setErrorParticipant( key, false, index );
 
                 if( key === "profile_image" )
                 {
@@ -1093,10 +1201,10 @@
                     this.enabledUploadAvatar = false;
                 }
             },
-            async clickUpdateParticipant( key ){
+            async clickUpdateParticipant( key, index = null ){
                 this.isLoading = true;
                 //cleans errors
-                this.setErrorParticipant( key, false );
+                this.setErrorParticipant( key, false, index );
 
                 if( key === "profile_image" )
                 {
@@ -1112,6 +1220,12 @@
                     obj = obj[k];
                     objCopy = objCopy[k];
                 });
+
+                if( index !== null && _.isArray(obj) )//Arrays, asign object from Array position
+                {
+                    obj = obj[ index ];
+                    objCopy = objCopy[ index ];
+                }
 
                 //compare values
                 if( obj.value !== objCopy.value
@@ -1151,7 +1265,7 @@
                             this.emailError = this.fieldsParticipant.email.msg_validate;
                             this.setErrorParticipant(key, true);
                             valid = false;
-                        }else //Validate exist
+                        }else //Validate exists
                         {
                             const data = await this.emailsExist( [obj.value.email] );
                             if( data.exists )
@@ -1161,6 +1275,28 @@
                                 valid = false;
                             }
                         }
+                    }
+                    if( key === "person.cellphones")
+                    {
+                        if( validate.single(obj.value.cellphone_number, constraints) !== undefined )//Empty
+                        {
+                            obj.msg = this.fieldsParticipant.mobile.msg;
+                            this.setErrorParticipant(key, true, index);
+                            valid = false;
+                        }else{
+                            const regex = new RegExp(/^\+?[1-9]{1,2}[0-9]{3,14}$/g);
+                            const constrMobile = Object.assign({ format: regex }, constraints );
+                            if( validate.single(obj.value.cellphone_number, constrMobile ) !== undefined )//Format
+                            {
+                                obj.msg = this.fieldsParticipant.mobile.msg_validate;
+                                this.setErrorParticipant(key, true, index);
+                                valid = false;
+                            }else //validate exists
+                            {
+                                //TODO
+                            }
+                        }
+
                     }
                     if( key === "profile_image" && this.fileAvatar.size > this.sizeFieleUploadAllow )
                     {
@@ -1173,7 +1309,7 @@
                     if( valid ) //Not errors
                     {
                         //update
-                        this.updateParticipant( key );
+                        this.updateParticipant( key, index );
                     }
                 }else{
                     this.isLoading = false
@@ -1289,7 +1425,7 @@
                             this.isLoading = false;
                         });
             },
-            async updateParticipant( key ){
+            async updateParticipant( key, index = null ){
                 //Get keys, for exaple: person.emails
                 const keys = key.split(".");
                 let obj = this.participant;
@@ -1298,21 +1434,41 @@
                     obj = obj[k];
                     objCopy = objCopy[k];
                 });
+
+                if( index !== null && _.isArray(obj) )//Arrays, asign object from Array position
+                {
+                    obj = obj[ index ];
+                    objCopy = objCopy[ index ];
+                }
+
+                console.log(key, obj );
                 if( obj.edited )
                 {
-                    if( key === "person.used_events_email" )
+                    switch( key )
                     {
-                        //Update or create email
-                        if( !objCopy.value.email )//Copy is null, create new email
-                        {
-                            await this.createDBPersonEmailUsedEvents(obj, objCopy);
-                        }else //Copy exist update
-                        {
-                            await this.updateDBPersonEmailUsedEvents(obj, objCopy);
-                        }
-                    }else//Participant
-                    {
-                        await this.updateDBParticipant(key, obj, objCopy);
+                        case "person.used_events_email":
+                            //Update or create email
+                            if( !objCopy.value.email )//Copy is null, create new email
+                            {
+                                await this.createDBPersonEmailUsedEvents(obj, objCopy);
+                            }else //Copy exist update
+                            {
+                                await this.updateDBPersonEmailUsedEvents(obj, objCopy);
+                            }
+                            break;
+                        case "person.cellphones":
+                            //Update or create cellphone
+                            if( !objCopy.value.cellphone_number )//Copy is null, create new cellphone
+                            {
+                                console.log("Create cellphone person");
+                            }else //Copy existe update
+                            {
+                                console.log("update cellphone person");
+                            }
+                            break;
+                        default://Participant
+                            await this.updateDBParticipant(key, obj, objCopy);
+                            break;
                     }
                 }
             }
