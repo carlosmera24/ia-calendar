@@ -25,7 +25,7 @@
                 v-bind:urls_emails_store='urls_emails_store'
                 v-bind:urls_mobiles_store='urls_mobiles_store'
                 v-bind:url_person_email_exist='url_person_email_exist'
-                v-bind:url_person_cellphone_exist='url_person_cellphone_exist'
+                v-bind:url_person_cellphones_array_exist='url_person_cellphones_array_exist'
             />
             <manage-leader v-else-if="contentActive.adminLeaders"
                 v-bind:key="2"
@@ -70,9 +70,12 @@
                 v-bind:url_participant_update="url_participant_update"
                 v-bind:url_person_emails_admin="url_person_emails_admin"
                 v-bind:url_person_email_exist='url_person_email_exist'
+                v-bind:url_person_cellphone_exist='url_person_cellphone_exist'
                 v-bind:url_persons_emails_store='url_persons_emails_store'
                 v-bind:url_persons_emails_update='url_persons_emails_update'
                 v-bind:url_persons_cellphones_for_person='url_persons_cellphones_for_person'
+                v-bind:url_persons_cellphone_store='url_persons_cellphone_store'
+                v-bind:url_person_cellphone_update='url_person_cellphone_update'
             />
         </transition-group>
     </div>
@@ -230,7 +233,19 @@ export default {
             type: String,
             require: true
         },
+        url_person_cellphones_array_exist: {
+            type: String,
+            require: true
+        },
         url_person_cellphone_exist: {
+            type: String,
+            require: true
+        },
+        url_persons_cellphone_store: {
+            type: String,
+            require: true
+        },
+        url_person_cellphone_update: {
             type: String,
             require: true
         },

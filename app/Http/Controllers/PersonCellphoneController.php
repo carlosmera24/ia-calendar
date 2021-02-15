@@ -12,23 +12,29 @@ class PersonCellphoneController extends Controller
                                                 'persons_id'        =>  'required|exists:persons,id',
                                             ];
     protected $rules_store =    [
-                                    'mobile'             =>  'required|regex:/^\d{10,12}/|unique:persons_cellphones',
+                                    'mobile'            =>  'required|regex:/^\+?[1-9]{1,2}[0-9]{3,14}$/|unique:persons_cellphones,cellphone_number',
                                     'initial_register'  =>  'nullable|regex:/^[0-1]$/',
                                     'persons_id'        =>  'required|exists:persons,id',
                                 ];
+    protected $rules_update =   [
+                                    'id'                =>  'required|exists:persons_cellphones,id',
+                                    'mobile'            =>  'nullable|regex:/^\+?[1-9]{1,2}[0-9]{3,14}$/|unique:persons_cellphones,cellphone_number',
+                                    'initial_register'  =>  'nullable|regex:/^[0-1]$/',
+                                    'persons_id'        =>  'nullable|exists:persons,id',
+                                ];
     protected $rules_store_array = [
                                         'mobiles'                   =>  'required|array|min:1',
-                                        'mobiles.*'                 =>  'required|regex:/^\d{10,12}/|unique:persons_cellphones,cellphone_number',
+                                        'mobiles.*'                 =>  'required|regex:/^\+?[1-9]{1,2}[0-9]{3,14}$/|unique:persons_cellphones,cellphone_number',
                                         'mobiles.initial_register'  =>  'nullable|regex:/^[0-1]$/',
                                         'persons_id'                =>  'required|exists:persons,id',
 
                                     ];
     protected $rules_mobile_exists = [
-                                        'mobile' => 'required|regex:/^\d{10,12}/'
+                                        'mobile' => 'required|regex:/^\+?[1-9]{1,2}[0-9]{3,14}$/'
                                     ];
     protected $rules_mobiles_exists = [
                                         'mobiles'   =>  'required|array|min:1',
-                                        'mobiles.*' =>  'required|regex:/^\d{10,12}/',
+                                        'mobiles.*' =>  'required|regex:/^\+?[1-9]{1,2}[0-9]{3,14}$/',
                                     ];
     /**
      * Display a listing of the resource.
@@ -74,7 +80,7 @@ class PersonCellphoneController extends Controller
     }
 
     /**
-     * Search email.
+     * Search mobile.
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -96,7 +102,7 @@ class PersonCellphoneController extends Controller
             return response()->json(
                                     array(
                                             'status'    =>  200,
-                                            'exist'      =>  PersonCellphone::cellphoneExist( $request->mobile )
+                                            'exists'      =>  PersonCellphone::cellphoneExist( $request->mobile )
                                         ),
                                     200
                                 );
@@ -164,7 +170,50 @@ class PersonCellphoneController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->input(), $this->rules_store);
+        if( $validator->fails() )
+        {
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'error'     =>  __('messages.bad_request'),
+                                                'data'      =>  $validator->getMessageBag()->toArray()
+                                            ),
+                                        400
+                                    );
+        }else
+        {
+            $mobile = new PersonCellphone();
+            $mobile->cellphone_number = $request->mobile;
+            $mobile->persons_id = $request->persons_id;
+            if( $request->initial_register)
+            {
+                $mobile->initial_register = $request->initial_register;
+            }
+
+            if( $mobile->save() )
+            {
+                return response()->json(
+                                            array(
+                                                    'status'    =>  201,
+                                                    'data'      =>  $mobile
+                                                ),
+                                            201
+                                        );
+            }
+
+
+
+            return response()->json(
+                                            array(
+                                                    'status'    =>  400,
+                                                    'data'      =>  array(
+                                                                            "msg"    => __('messages.error_saving', [ 'attribute' => __('validation.attributes.mobile') ])
+                                                                        )
+                                                ),
+                                            400
+                                        );
+        }
     }
 
     /**
@@ -271,7 +320,79 @@ class PersonCellphoneController extends Controller
      */
     public function update(Request $request, PersonCellphone $personCellphone)
     {
-        //
+        $validator = Validator::make($request->input(), $this->rules_update);
+        if( $validator->fails() )
+        {
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'error'     =>  __('messages.bad_request'),
+                                                'data'      =>  $validator->getMessageBag()->toArray()
+                                            ),
+                                        400
+                                    );
+        }else
+        {
+            //search PersonEmail
+            $mobile = PersonCellphone::find( $request->id );
+
+            //Not found
+            if( empty($mobile) )
+            {
+                return response()->json(
+                                            array(
+                                                'status'    =>  204,
+                                                'error'     =>  __('messages.no_content'),
+                                                'data'      =>  array(
+                                                                        __('messages.no_found', [
+                                                                                                    'attribute' => __('validation.attributes.mobile'),
+                                                                                                    'id' => $request->id
+                                                                                                ]
+                                                                            )
+                                                                    )
+                                            ),
+                                            200
+                                        );
+            }
+
+            //Update
+            if( isset( $request->mobile ) )
+            {
+                $mobile->cellphone_number = $request->mobile;
+            }
+
+            if( isset( $request->initial_register ) )
+            {
+                $mobile->initial_register = $request->initial_register;
+            }
+
+            if( isset( $request->persons_id ) )
+            {
+                $mobile->persons_id = $request->persons_id;
+            }
+
+            if( $mobile->update() )
+            {
+
+                return response()->json(
+                                        array(
+                                                'status'    =>  200,
+                                                'data'      =>  $mobile,
+                                            ),
+                                        200
+                                    );
+            }
+
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'data'      =>  array(
+                                                                        "msg"    => __('messages.error_updating', [ 'attribute' => __('validation.attributes.mobile') ])
+                                                                    )
+                                            ),
+                                        400
+                                    );
+        }
     }
 
     /**

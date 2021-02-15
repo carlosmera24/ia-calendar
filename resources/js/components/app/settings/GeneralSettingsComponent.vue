@@ -263,9 +263,9 @@
                             <div class="column is-10">
                                 <div class="columns is-multiline">
                                     <!-- Mail main admin-->
-                                    <div class="columns column is-12 is-row-data" v-if="participant.person.initial_register_email">
+                                    <div class="columns column is-12 is-row-data">
                                         <div class="columns column is-6 is-row-data">
-                                            <span class="column is-8">{{ participant.person.initial_register_email.value.email }}</span>
+                                            <span class="column is-8">{{ participant.person.initial_register_email ? participant.person.initial_register_email.value.email : firstCapitalize(fieldsParticipant.email.label) }}</span>
                                             <span class="column is-4 label-info">{{ textsGeneralSettings.predetermined }}</span>
                                         </div>
                                         <div class="column is-6">
@@ -306,7 +306,7 @@
                                         </div>
                                         <div class="columns column is-12 row-used_events_email" v-else-if="participant.person.used_events_email !== undefined">
                                             <div class="columns column is-6 is-row-data">
-                                                <span class="column is-8">{{ participant.person.used_events_email.value ? participant.person.used_events_email.value.email : firstCapitalize(fieldsParticipant.email.label) }}</span>
+                                                <span class="column is-8">{{ participant.person.used_events_email.value.email ? participant.person.used_events_email.value.email : firstCapitalize(fieldsParticipant.email.label) }}</span>
                                                 <span class="column is-4 label-info">{{ textsGeneralSettings.use_for_events }}</span>
                                             </div>
                                             <div class="column is-6">
@@ -335,7 +335,7 @@
                                                             v-model="mobile.value.cellphone_number"
                                                             v-on:blur="setTrim('person.cellphones.value.cellphone_number', OPTIONS.PARTICIPANT, index)"
                                                             v-on:keyup.native="onlyPhoneNumber($event, index)"
-                                                            maxlength="12"
+                                                            maxlength="17"
                                                             expanded>
                                                         </b-input>
                                                     </b-field>
@@ -461,6 +461,18 @@
                 require: true
             },
             url_persons_cellphones_for_person: {
+                type: String,
+                require: true
+            },
+            url_person_cellphone_exist: {
+                type: String,
+                require: true
+            },
+            url_persons_cellphone_store: {
+                type: String,
+                require: true
+            },
+            url_person_cellphone_update: {
                 type: String,
                 require: true
             },
@@ -892,6 +904,31 @@
             clickCancelToHome(){
                 this.$emit('activeMainSection','main')
             },
+            async emailsExist( emails = []){
+                this.isLoading = true;
+                let data = null;
+                if( emails && _.isArray( emails ) && !_.isEmpty( emails ) )
+                {
+                    await axios.post(this.url_person_email_exist, { emails: emails} )
+                        .then( response => {
+                                this.showErrors({});
+                                if( response.data.status === 200 )
+                                {
+                                    data =  response.data;
+                                }
+                            },
+                            error => {
+                                this.showErrors( error );
+                            }
+                        )
+                        .then( () => {
+                            this.isLoading = false;
+                        });
+                }else{
+                    this.isLoading = false;
+                }
+                return data;
+            },
             onlyNumber(event, obj){
                 const regex = new RegExp(/[^\d]/g);
                 const val = event.target.value.replace(regex,"");
@@ -907,6 +944,46 @@
                 {
                     this.participant.person.cellphones[index].value.cellphone_number = val;
                 }
+            },
+            isCellphoneDuplicate( index )
+            {
+                if( this.participant.person.cellphones.length > 1 )
+                {
+                    const value = this.participant.person.cellphones[ index ].value.cellphone_number;
+                    this.participant.person.cellphones.forEach( (mobile, i ) => {
+                        if( i !== index && mobile.value.cellphone_number === value )
+                        {
+                            return true;
+                        }
+                    });
+                }
+
+                return false;
+            },
+            async cellphoneExists( mobile ){
+                this.isLoading = true;
+                let data = null;
+                if( mobile && !_.isEmpty( mobile ) )
+                {
+                    await axios.post(this.url_person_cellphone_exist, { mobile: mobile} )
+                        .then( response => {
+                                this.showErrors({});
+                                if( response.data.status === 200 )
+                                {
+                                    data =  response.data;
+                                }
+                            },
+                            error => {
+                                this.showErrors( error );
+                            }
+                        )
+                        .then( () => {
+                            this.isLoading = false;
+                        });
+                }else{
+                    this.isLoading = false;
+                }
+                return data;
             },
             async imageToBase64(file){
                 return await new Promise( (resolve, reject) => {
@@ -1092,31 +1169,6 @@
                         });
                 }
             },
-            async emailsExist( emails = []){
-                this.isLoading = true;
-                let data = null;
-                if( emails && _.isArray( emails ) && !_.isEmpty( emails ) )
-                {
-                    await axios.post(this.url_person_email_exist, { emails: emails} )
-                        .then( response => {
-                                this.showErrors({});
-                                if( response.data.status === 200 )
-                                {
-                                    data =  response.data;
-                                }
-                            },
-                            error => {
-                                this.showErrors( error );
-                            }
-                        )
-                        .then( () => {
-                            this.isLoading = false;
-                        });
-                }else{
-                    this.isLoading = false;
-                }
-                return data;
-            },
             setErrorParticipant( key, errValue, index = null){
                 switch(key) {
                     case "person.used_events_email":
@@ -1228,8 +1280,25 @@
                 }
 
                 //compare values
-                if( obj.value !== objCopy.value
-                    || (key === "profile_image" && this.avatarAdmin !== this.avatarAdminCopy) )//Edited
+                let different = false;
+                switch(key)
+                {
+                    case "profile_image":
+                        different = this.avatarAdmin !== this.avatarAdminCopy;
+                        break;
+                    case "person.used_events_email":
+                        different = obj.value.email !== objCopy.value.email;
+                        break;
+                    case "person.cellphones":
+                        different = obj.value.cellphone_number !== objCopy.value.cellphone_number;
+                        break;
+                    default:
+                        different = obj.value !== objCopy.value;
+                        break;
+                }
+
+
+                if( different )//Edited
                 {
                     obj.edited = true;
 
@@ -1291,9 +1360,20 @@
                                 obj.msg = this.fieldsParticipant.mobile.msg_validate;
                                 this.setErrorParticipant(key, true, index);
                                 valid = false;
+                            }else if( this.isCellphoneDuplicate( index ) ) //validate duplicate
+                            {
+                                obj.msg = this.fieldsParticipant.mobile.msg_exist;
+                                this.setErrorParticipant(key, true, index);
+                                valid = false;
                             }else //validate exists
                             {
-                                //TODO
+                                const data = await this.cellphoneExists( obj.value.cellphone_number );
+                                if( data.exists )
+                                {
+                                    obj.msg = this.fieldsParticipant.mobile.msg_exist;
+                                    this.setErrorParticipant(key, true, index);
+                                    valid = false;
+                                }
                             }
                         }
 
@@ -1425,6 +1505,72 @@
                             this.isLoading = false;
                         });
             },
+            async createDBPersonCellhpone(obj, objCopy){
+                this.isLoading = true;
+                const params = {
+                    mobile: obj.value.cellphone_number,
+                    persons_id: this.participant.persons_id.value,
+                };
+
+                await axios.post(this.url_persons_cellphone_store, params)
+                        .then( response => {
+                            this.showErrors({});
+                            if( response.data.status === 201 )
+                            {
+                                //update/restore value copy
+                                obj.value = response.data.data;
+                                objCopy.value = Object.assign({}, response.data.data);//Non-reactive copy
+                                objCopy.edited = false; //restore
+                                objCopy.editing = false; //restore
+                                obj.edited = false; //restore
+                                obj.editing = false; //restore
+
+                                success({
+                                    title: this.text_success,
+                                    text: this.textsGeneralSettings.text_updated_participant
+                                });
+                            }
+                        },
+                        error => {
+                            this.showErrors(error);
+                        })
+                        .then( () => {
+                            this.isLoading = false;
+                        });
+            },
+            async updateDBPersonCellhpone(obj, objCopy){
+                this.isLoading = true;
+                const params = {
+                    mobile: obj.value.cellphone_number,
+                    id: obj.value.id,
+                };
+
+                await axios.post(this.url_person_cellphone_update, params)
+                        .then( response => {
+                            this.showErrors({});
+                            if( response.data.status === 200 )
+                            {
+                                //update/restore value copy
+                                obj.value = response.data.data;
+                                objCopy.value = Object.assign({}, response.data.data);//Non-reactive copy
+                                objCopy.edited = false; //restore
+                                objCopy.editing = false; //restore
+                                obj.edited = false; //restore
+                                obj.editing = false; //restore
+
+                                success({
+                                    title: this.text_success,
+                                    text: this.textsGeneralSettings.text_updated_participant
+                                });
+                            }
+                        },
+                        error => {
+                            this.showErrors(error);
+                        })
+                        .then( () => {
+                            this.isLoading = false;
+                        });
+            },
             async updateParticipant( key, index = null ){
                 //Get keys, for exaple: person.emails
                 const keys = key.split(".");
@@ -1441,7 +1587,6 @@
                     objCopy = objCopy[ index ];
                 }
 
-                console.log(key, obj );
                 if( obj.edited )
                 {
                     switch( key )
@@ -1460,10 +1605,10 @@
                             //Update or create cellphone
                             if( !objCopy.value.cellphone_number )//Copy is null, create new cellphone
                             {
-                                console.log("Create cellphone person");
+                                await this.createDBPersonCellhpone(obj, objCopy);
                             }else //Copy existe update
                             {
-                                console.log("update cellphone person");
+                                await this.updateDBPersonCellhpone(obj, objCopy);
                             }
                             break;
                         default://Participant

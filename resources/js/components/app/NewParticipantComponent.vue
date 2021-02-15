@@ -79,7 +79,7 @@
                         name="mobile"
                         v-on:keyup.native="onlyNumber($event, index)"
                         v-model="inputMobile.value"
-                        maxlength="12"
+                        maxlength="17"
                         expanded>
                     </b-input>
                 </b-field>
@@ -200,7 +200,7 @@ export default{
             type: String,
             require: true
         },
-        url_person_cellphone_exist: {
+        url_person_cellphones_array_exist: {
             type: String,
             require: true
         },
@@ -491,7 +491,7 @@ export default{
                                         }
                                     });
                                     this.isLoading = true;
-                                    axios.post(this.url_person_cellphone_exist, { mobiles: mobiles})
+                                    axios.post(this.url_person_cellphones_array_exist, { mobiles: mobiles})
                                         .then( response => {
                                             this.showErrors({});
                                                 if( response.data.status === 200 )

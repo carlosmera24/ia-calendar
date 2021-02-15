@@ -45,7 +45,7 @@
                         v-bind:url_person_email_exist="url_person_email_exist"
                         v-bind:urls_mobiles_store="urls_mobiles_store"
                         v-bind:urls_emails_store="urls_emails_store"
-                        v-bind:url_person_cellphone_exist="url_person_cellphone_exist" />
+                        v-bind:url_person_cellphones_array_exist="url_person_cellphones_array_exist" />
                 </transition-group>
             </section>
         </section>
@@ -127,7 +127,7 @@ export default {
             type: String,
             require: true
         },
-        url_person_cellphone_exist: {
+        url_person_cellphones_array_exist: {
             type: String,
             require: true
         },

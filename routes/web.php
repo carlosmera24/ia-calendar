@@ -51,6 +51,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/persons-cellphones/cellphone-exists', [ PersonCellphoneController::class, 'cellphoneExists' ])->name('persons_cellphone_exists');
     Route::post('/persons-cellphones/cellphones-exists', [ PersonCellphoneController::class, 'cellphonesExists' ])->name('persons_cellphones_exists');
     Route::post('/persons-cellphones/cellphones-for-person', [ PersonCellphoneController::class, 'cellphonesForPerson' ])->name('persons_cellphones_for_person');
+    Route::post('/persons-cellphones/store', [ PersonCellphoneController::class, 'store' ])->name('persons_cellphones_store');
+    Route::post('/persons-cellphones/update', [ PersonCellphoneController::class, 'update' ])->name('persons_cellphones_update');
     //Permissiones participants
     Route::post('/permissions-participants/store', [ PermissionParticipantController::class, 'store' ])->name('permissions_participants_store');
     Route::post('/permissions-participants/list-permissions', [ PermissionParticipantController::class, 'listPermissionsParticipant' ])->name('list_permissions');

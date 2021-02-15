@@ -17,6 +17,7 @@ class PersonEmailController extends Controller
                                     'status_persons_emails_id'  =>  'nullable|exists:status_persons_emails,id',
                                 ];
     protected $rules_update =   [
+                                    'id'                        =>  'required|exists:persons_emails,id',
                                     'email'                     =>  'nullable|email|max:45|unique:persons_emails',
                                     'initial_register'          =>  'nullable|regex:/^[0-1]$/',
                                     'used_events'               =>  'nullable|regex:/^[0-1]$/',
@@ -242,7 +243,7 @@ class PersonEmailController extends Controller
                                         array(
                                                 'status'    =>  400,
                                                 'data'      =>  array(
-                                                                        "msg"    => __('messages.error_saving', [ 'attribute' => __('validation.attributes.participant') ])
+                                                                        "msg"    => __('messages.error_saving', [ 'attribute' => __('validation.attributes.email') ])
                                                                     )
                                             ),
                                         400
@@ -293,7 +294,7 @@ class PersonEmailController extends Controller
                                                 array(
                                                         'status'    =>  400,
                                                         'data'      =>  array(
-                                                                                "msg"    => __('messages.error_saving', [ 'attribute' => __('validation.attributes.participant') ])
+                                                                                "msg"    => __('messages.error_saving', [ 'attribute' => __('validation.attributes.email') ])
                                                                             )
                                                     ),
                                                 400
@@ -318,7 +319,7 @@ class PersonEmailController extends Controller
                                                 array(
                                                         'status'    =>  400,
                                                         'data'      =>  array(
-                                                                                "msg"    => __('messages.error_saving', [ 'attribute' => __('validation.attributes.participant') ])
+                                                                                "msg"    => __('messages.error_saving', [ 'attribute' => __('validation.attributes.email') ])
                                                                             )
                                                     ),
                                                 400
@@ -424,7 +425,7 @@ class PersonEmailController extends Controller
                                                 'error'     =>  __('messages.no_content'),
                                                 'data'      =>  array(
                                                                         __('messages.no_found', [
-                                                                                                    'attribute' => __('validation.attributes.participant'),
+                                                                                                    'attribute' => __('validation.attributes.email'),
                                                                                                     'id' => $request->id
                                                                                                 ]
                                                                             )
@@ -483,7 +484,7 @@ class PersonEmailController extends Controller
                                         array(
                                                 'status'    =>  400,
                                                 'data'      =>  array(
-                                                                        "msg"    => __('messages.error_updating', [ 'attribute' => __('validation.attributes.participant') ])
+                                                                        "msg"    => __('messages.error_updating', [ 'attribute' => __('validation.attributes.email') ])
                                                                     )
                                             ),
                                         400
