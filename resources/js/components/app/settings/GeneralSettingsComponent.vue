@@ -950,12 +950,13 @@
                 if( this.participant.person.cellphones.length > 1 )
                 {
                     const value = this.participant.person.cellphones[ index ].value.cellphone_number;
-                    this.participant.person.cellphones.forEach( (mobile, i ) => {
-                        if( i !== index && mobile.value.cellphone_number === value )
+                    for( let i = 0; i < this.participant.person.cellphones.length; i++ )
+                    {
+                        if( i !== index && this.participant.person.cellphones[ i ].value.cellphone_number === value )
                         {
                             return true;
                         }
-                    });
+                    }
                 }
 
                 return false;
@@ -1216,7 +1217,7 @@
                     {
                         if( _.isArray(this.$refs[ keyRef ] ) )
                         {
-                            this.$refs[ keyRef ][ index ].focus();
+                            this.$refs[ keyRef ][0].focus();
 
                         }else{
                             this.$refs[ keyRef ].focus();
@@ -1376,7 +1377,6 @@
                                 }
                             }
                         }
-
                     }
                     if( key === "profile_image" && this.fileAvatar.size > this.sizeFieleUploadAllow )
                     {

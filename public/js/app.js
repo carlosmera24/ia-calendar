@@ -4929,11 +4929,12 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
     isCellphoneDuplicate: function isCellphoneDuplicate(index) {
       if (this.participant.person.cellphones.length > 1) {
         var value = this.participant.person.cellphones[index].value.cellphone_number;
-        this.participant.person.cellphones.forEach(function (mobile, i) {
-          if (i !== index && mobile.value.cellphone_number === value) {
+
+        for (var i = 0; i < this.participant.person.cellphones.length; i++) {
+          if (i !== index && this.participant.person.cellphones[i].value.cellphone_number === value) {
             return true;
           }
-        });
+        }
       }
 
       return false;
@@ -5311,7 +5312,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       this.$nextTick(function () {
         if (_this15.$refs[keyRef]) {
           if (_.isArray(_this15.$refs[keyRef])) {
-            _this15.$refs[keyRef][index].focus();
+            _this15.$refs[keyRef][0].focus();
           } else {
             _this15.$refs[keyRef].focus();
           }
