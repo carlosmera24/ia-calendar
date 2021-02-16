@@ -4187,6 +4187,53 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -4377,32 +4424,42 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
 
     var initParticipant = JSON.parse(this.participant_json);
     Object.keys(initParticipant).forEach(function (key) {
-      var val = new Object();
-
       if (_.isObject(initParticipant[key])) //Add date for items
         {
+          var val = new Object();
+          var valCopy = new Object();
           var itemObject = initParticipant[key];
           Object.keys(itemObject).forEach(function (keyObj) {
-            var tmpVal = {
+            Vue.set(val, keyObj, {
               'value': itemObject[keyObj],
               'edited': false,
               'editing': false
-            };
-            Vue.set(val, keyObj, tmpVal);
+            });
+            Vue.set(valCopy, keyObj, {
+              'value': itemObject[keyObj],
+              'edited': false,
+              'editing': false
+            });
           });
+          Vue.set(_this.participant, key, val); //Reactive objects and values
+          //Crete participant copy
+
+          _this.participantCopy[key] = Object.assign({}, valCopy); //Non-reactive copy
         } else //Single data
         {
-          val = {
+          Vue.set(_this.participant, key, {
             'value': initParticipant[key],
             'edited': false,
             'editing': false
-          };
+          }); //Reactive objects and values
+          //Crete participant copy
+
+          _this.participantCopy[key] = Object.assign({}, {
+            'value': initParticipant[key],
+            'edited': false,
+            'editing': false
+          }); //Non-reactive copy
         }
-
-      Vue.set(_this.participant, key, val); //Reactive objects and values
-      //Crete participant copy
-
-      _this.participantCopy[key] = Object.assign({}, val); //Non-reactive copy
     }); //add default value for used events with not-reactive copy
 
     Vue.set(this.participant.person, 'used_events_email', {
@@ -4508,6 +4565,12 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
           break;
 
         default:
+          //Get keys, for exaple: person.emails
+          var keys = key.split(".");
+          keys.forEach(function (k) {
+            obj = obj[k];
+          });
+          obj.value = this.getStringWithTrim(obj.value);
           break;
       }
     },
@@ -5263,6 +5326,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
     },
     setErrorParticipant: function setErrorParticipant(key, errValue) {
       var index = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+      var singleKey = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
 
       switch (key) {
         case "person.used_events_email":
@@ -5282,7 +5346,13 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 obj[index].error = errValue;
               }
           } else {
-            this.fieldsParticipant[key].error = errValue;
+            if (singleKey) {
+              this.fieldsParticipant[key].error = errValue;
+            } else {
+              var _keys = key.split(".");
+
+              this.fieldsParticipant[_keys[_keys.length - 1]].error = errValue;
+            }
           }
 
           break;
@@ -5337,7 +5407,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         } //Clean error, change "editing" and restore values
 
 
-      obj.value = Object.assign({}, objCopy.value);
+      obj.value = _.isObject(objCopy.value) ? Object.assign({}, objCopy.value) : objCopy.value;
       obj.editing = false;
       obj.edited = false;
       this.setErrorParticipant(key, false, index);
@@ -71526,7 +71596,171 @@ var render = function() {
                                   )
                             ]
                           )
-                        })
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "columns column is-12 is-row-data" },
+                          [
+                            _vm.participant.person.first_name.editing
+                              ? _c(
+                                  "div",
+                                  { staticClass: "columns column is-12" },
+                                  [
+                                    _c(
+                                      "div",
+                                      { staticClass: "column is-6" },
+                                      [
+                                        _c(
+                                          "b-field",
+                                          {
+                                            staticClass: "label_not-show",
+                                            attrs: {
+                                              horizontal: "",
+                                              type: {
+                                                "is-danger":
+                                                  _vm.fieldsParticipant
+                                                    .first_name.error
+                                              },
+                                              message: _vm.fieldsParticipant
+                                                .first_name.error
+                                                ? _vm.fieldsParticipant
+                                                    .first_name.msg
+                                                : ""
+                                            }
+                                          },
+                                          [
+                                            _c("b-input", {
+                                              ref: "person.first_name",
+                                              attrs: {
+                                                name: "person.first_name",
+                                                maxlength: "100",
+                                                expanded: ""
+                                              },
+                                              on: {
+                                                blur: function($event) {
+                                                  return _vm.setTrim(
+                                                    "person.first_name",
+                                                    _vm.OPTIONS.PARTICIPANT
+                                                  )
+                                                }
+                                              },
+                                              model: {
+                                                value:
+                                                  _vm.participant.person
+                                                    .first_name.value,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.participant.person
+                                                      .first_name,
+                                                    "value",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "participant.person.first_name.value"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "column is-6 content-buttons"
+                                      },
+                                      [
+                                        _c("b-button", {
+                                          attrs: {
+                                            size: "is-small",
+                                            "icon-left": "save"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.clickUpdateParticipant(
+                                                "person.first_name"
+                                              )
+                                            }
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _c("b-button", {
+                                          attrs: {
+                                            size: "is-small",
+                                            "icon-left": "window-close"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.clickCancelParticipant(
+                                                "person.first_name"
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ]
+                                )
+                              : _c(
+                                  "div",
+                                  { staticClass: "columns column is-12" },
+                                  [
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass: "column is-6 is-row-data"
+                                      },
+                                      [
+                                        _c("span", [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.participant.person.first_name
+                                                ? _vm.participant.person
+                                                    .first_name.value
+                                                : _vm.firstCapitalize(
+                                                    _vm.fieldsParticipant
+                                                      .first_name.label
+                                                  )
+                                            )
+                                          )
+                                        ])
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "column is-6" },
+                                      [
+                                        _c("b-button", {
+                                          staticClass: "btn-edit",
+                                          attrs: {
+                                            size: "is-small",
+                                            "icon-left": "pen"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.clickEditParticipant(
+                                                "person.first_name"
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ]
+                                )
+                          ]
+                        )
                       ],
                       2
                     )

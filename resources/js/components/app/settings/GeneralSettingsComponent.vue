@@ -369,6 +369,53 @@
                                             </div>
                                     </div>
                                     <!-- /Cellphones -->
+                                    <!-- First Name -->
+                                    <div class="columns column is-12 is-row-data">
+                                        <div class="columns column is-12" v-if="participant.person.first_name.editing">
+                                            <div class="column is-6">
+                                                <b-field horizontal
+                                                    class="label_not-show"
+                                                    v-bind:type="{ 'is-danger' : fieldsParticipant.first_name.error }"
+                                                    :message="fieldsParticipant.first_name.error ? fieldsParticipant.first_name.msg : ''">
+                                                    <b-input
+                                                        ref="person.first_name"
+                                                        name="person.first_name"
+                                                        v-model="participant.person.first_name.value"
+                                                        v-on:blur="setTrim('person.first_name', OPTIONS.PARTICIPANT)"
+                                                        maxlength="100"
+                                                        expanded>
+                                                    </b-input>
+                                                </b-field>
+
+                                            </div>
+                                            <div class="column is-6 content-buttons">
+                                                <b-button
+                                                    size="is-small"
+                                                    icon-left="save"
+                                                    v-on:click.prevent="clickUpdateParticipant( 'person.first_name' )"
+                                                />
+                                                <b-button
+                                                    size="is-small"
+                                                    icon-left="window-close"
+                                                    v-on:click.prevent="clickCancelParticipant('person.first_name')"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div class="columns column is-12" v-else>
+                                            <div class="column is-6 is-row-data">
+                                                <span>{{ participant.person.first_name ? participant.person.first_name.value : firstCapitalize(fieldsParticipant.first_name.label) }}</span>
+                                            </div>
+                                            <div class="column is-6">
+                                                <b-button
+                                                    class="btn-edit"
+                                                    size="is-small"
+                                                    icon-left="pen"
+                                                    v-on:click.prevent="clickEditParticipant('person.first_name')"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /First Name -->
                                 </div>
                             </div>
                         </div>
@@ -564,29 +611,40 @@
              */
             const initParticipant = JSON.parse(this.participant_json);
             Object.keys(initParticipant).forEach( key => {
-                let val = new Object();
                 if( _.isObject(initParticipant[key]) )//Add date for items
                 {
+                    let val = new Object();
+                    let valCopy = new Object();
                     const itemObject = initParticipant[key];
                     Object.keys( itemObject ).forEach( keyObj => {
-                        let tmpVal = {
+                        Vue.set( val, keyObj, {
                                         'value':    itemObject[keyObj],
                                         'edited':   false,
                                         'editing':  false,
-                                    };
-                        Vue.set( val, keyObj, tmpVal );
+                                    } );
+                        Vue.set( valCopy, keyObj, {
+                                        'value':    itemObject[keyObj],
+                                        'edited':   false,
+                                        'editing':  false,
+                                    } );
                     });
+                    Vue.set(this.participant,key,val); //Reactive objects and values
+                    //Crete participant copy
+                    this.participantCopy[key] = Object.assign({}, valCopy); //Non-reactive copy
                 }else//Single data
                 {
-                    val = {
+                    Vue.set(this.participant,key,{
                             'value':    initParticipant[key],
                             'edited':   false,
                             'editing':  false,
-                        };
+                        }); //Reactive objects and values
+                    //Crete participant copy
+                    this.participantCopy[key] = Object.assign({}, {
+                            'value':    initParticipant[key],
+                            'edited':   false,
+                            'editing':  false,
+                        }); //Non-reactive copy
                 }
-                Vue.set(this.participant,key,val); //Reactive objects and values
-                //Crete participant copy
-                this.participantCopy[key] = Object.assign({}, val); //Non-reactive copy
             });
             //add default value for used events with not-reactive copy
             Vue.set(this.participant.person, 'used_events_email', {
@@ -655,6 +713,12 @@
                         }
                         break;
                     default:
+                        //Get keys, for exaple: person.emails
+                        const keys = key.split(".");
+                        keys.forEach( k => {
+                            obj = obj[k];
+                        });
+                        obj.value = this.getStringWithTrim(obj.value);
                         break;
                 }
             },
@@ -1170,7 +1234,7 @@
                         });
                 }
             },
-            setErrorParticipant( key, errValue, index = null){
+            setErrorParticipant( key, errValue, index = null, singleKey = false){
                 switch(key) {
                     case "person.used_events_email":
                         this.fieldsParticipant.email.error = errValue;
@@ -1187,8 +1251,15 @@
                             {
                                 obj[ index ].error = errValue;
                             }
-                        }else{
-                            this.fieldsParticipant[ key ].error = errValue;
+                        }else
+                        {
+                            if( singleKey )
+                            {
+                                this.fieldsParticipant[ key ].error = errValue;
+                            }else{
+                                const keys = key.split(".");
+                                this.fieldsParticipant[ keys[ keys.length - 1] ].error = errValue;
+                            }
                         }
                         break;
                 }
@@ -1242,7 +1313,7 @@
                 }
 
                 //Clean error, change "editing" and restore values
-                obj.value = Object.assign({},objCopy.value);
+                obj.value = _.isObject( objCopy.value ) ? Object.assign({},objCopy.value) : objCopy.value;
                 obj.editing = false;
                 obj.edited = false;
                 this.setErrorParticipant( key, false, index );
