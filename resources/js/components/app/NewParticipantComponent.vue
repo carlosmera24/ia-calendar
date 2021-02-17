@@ -46,9 +46,9 @@
                     </b-input>
                 </b-field>
                 <b-field horizontal class="column is-4"
-                    :label="fields.position.label"
-                    v-bind:type="{ 'is-danger' : fields.position.error }"
-                    :message="fields.position.error ? fields.position.msg : ''">
+                    :label="fields.position_company.label"
+                    v-bind:type="{ 'is-danger' : fields.position_company.error }"
+                    :message="fields.position_company.error ? fields.position_company.msg : ''">
                     <b-input
                         name="position"
                         v-model="position"
@@ -403,7 +403,7 @@ export default{
         save(){
             this.fields.first_name.error = this.fname === '';
             this.fields.last_name.error = this.lname === '';
-            this.fields.position.error = this.position === '';
+            this.fields.position_company.error = this.position === '';
             this.fields.date_join.error = this.date_join === null;
             this.fields.birth_date.error = this.birth_date === null;
             var is_email_duplicate = false;
@@ -463,7 +463,7 @@ export default{
                 }
             });
 
-            if( !this.fields.first_name.error &&  !this.fields.last_name.error  && !this.fields.position.error
+            if( !this.fields.first_name.error &&  !this.fields.last_name.error  && !this.fields.position_company.error
                 && !this.fields.date_join.error && !this.birth_date.error && !isEmailError && !isMobileError
                 && !is_email_duplicate && !is_mobile_duplicate )
             {

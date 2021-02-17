@@ -48,7 +48,7 @@
                                                                 'msg_validate'   =>  __('validation.mobile', ['attribute' => '']),
                                                                 'msg_exist'   =>  __('validation.custom.mobile.unique', ['attribute' => __('validation.attributes.mobile')])
                                                             ],
-                                        'position'      =>  [
+                                        'position_company'      =>  [
                                                                 'label' =>  __('validation.attributes.position_company'),
                                                                 'error' => false,
                                                                 'msg'   =>  __('validation.required', ['attribute' => ''])

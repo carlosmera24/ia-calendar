@@ -417,6 +417,101 @@
                                         </div>
                                     </div>
                                     <!-- /First Name -->
+                                    <!-- Last Name -->
+                                    <div class="columns column is-12 is-row-data">
+                                        <div class="columns column is-12" v-if="participant.person.last_name.editing">
+                                            <div class="column is-6">
+                                                <b-field horizontal
+                                                    class="label_not-show"
+                                                    v-bind:type="{ 'is-danger' : fieldsParticipant.last_name.error }"
+                                                    :message="fieldsParticipant.last_name.error ? fieldsParticipant.last_name.msg : ''">
+                                                    <b-input
+                                                        ref="person.last_name"
+                                                        name="person.last_name"
+                                                        v-model="participant.person.last_name.value"
+                                                        v-on:keyup.native="capitalizeText($event, 'person.last_name', OPTIONS.PARTICIPANT)"
+                                                        v-on:blur="setTrim('person.last_name', OPTIONS.PARTICIPANT)"
+                                                        maxlength="100"
+                                                        expanded>
+                                                    </b-input>
+                                                </b-field>
+
+                                            </div>
+                                            <div class="column is-6 content-buttons">
+                                                <b-button
+                                                    size="is-small"
+                                                    icon-left="save"
+                                                    v-on:click.prevent="clickUpdateParticipant( 'person.last_name' )"
+                                                />
+                                                <b-button
+                                                    size="is-small"
+                                                    icon-left="window-close"
+                                                    v-on:click.prevent="clickCancelParticipant('person.last_name')"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div class="columns column is-12" v-else>
+                                            <div class="column is-6 is-row-data">
+                                                <span>{{ participant.person.last_name ? participant.person.last_name.value : firstCapitalize(fieldsParticipant.last_name.label) }}</span>
+                                            </div>
+                                            <div class="column is-6">
+                                                <b-button
+                                                    class="btn-edit"
+                                                    size="is-small"
+                                                    icon-left="pen"
+                                                    v-on:click.prevent="clickEditParticipant('person.last_name')"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Last Name -->
+                                    <!-- Position company -->
+                                    <div class="columns column is-12 is-row-data">
+                                        <div class="columns column is-12" v-if="participant.person.position_company.editing">
+                                            <div class="column is-6">
+                                                <b-field horizontal
+                                                    class="label_not-show"
+                                                    v-bind:type="{ 'is-danger' : fieldsParticipant.position_company.error }"
+                                                    :message="fieldsParticipant.position_company.error ? fieldsParticipant.position_company.msg : ''">
+                                                    <b-input
+                                                        ref="person.position_company"
+                                                        name="person.position_company"
+                                                        v-model="participant.person.position_company.value"
+                                                        v-on:blur="setTrim('person.position_company', OPTIONS.PARTICIPANT)"
+                                                        maxlength="100"
+                                                        expanded>
+                                                    </b-input>
+                                                </b-field>
+
+                                            </div>
+                                            <div class="column is-6 content-buttons">
+                                                <b-button
+                                                    size="is-small"
+                                                    icon-left="save"
+                                                    v-on:click.prevent="clickUpdateParticipant( 'person.position_company' )"
+                                                />
+                                                <b-button
+                                                    size="is-small"
+                                                    icon-left="window-close"
+                                                    v-on:click.prevent="clickCancelParticipant('person.position_company')"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div class="columns column is-12" v-else>
+                                            <div class="column is-6 is-row-data">
+                                                <span>{{ participant.person.position_company ? participant.person.position_company.value : firstCapitalize(fieldsParticipant.position_company.label) }}</span>
+                                            </div>
+                                            <div class="column is-6">
+                                                <b-button
+                                                    class="btn-edit"
+                                                    size="is-small"
+                                                    icon-left="pen"
+                                                    v-on:click.prevent="clickEditParticipant('person.position_company')"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Position company -->
                                 </div>
                             </div>
                         </div>
@@ -1793,6 +1888,8 @@
                             }
                             break;
                         case "person.first_name":
+                        case "person.last_name":
+                        case "person.position_company":
                             await this.updatedDBPerson( keys[ keys.length - 1 ], obj, objCopy );
                             break;
                         default://Participant

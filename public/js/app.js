@@ -3476,7 +3476,7 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
 
       this.fields.first_name.error = this.fname === '';
       this.fields.last_name.error = this.lname === '';
-      this.fields.position.error = this.position === '';
+      this.fields.position_company.error = this.position === '';
       this.fields.date_join.error = this.date_join === null;
       this.fields.birth_date.error = this.birth_date === null;
       var is_email_duplicate = false;
@@ -3539,7 +3539,7 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
         }
       });
 
-      if (!this.fields.first_name.error && !this.fields.last_name.error && !this.fields.position.error && !this.fields.date_join.error && !this.birth_date.error && !isEmailError && !isMobileError && !is_email_duplicate && !is_mobile_duplicate) {
+      if (!this.fields.first_name.error && !this.fields.last_name.error && !this.fields.position_company.error && !this.fields.date_join.error && !this.birth_date.error && !isEmailError && !isMobileError && !is_email_duplicate && !is_mobile_duplicate) {
         //Validatate if emailss exist in database
         var emails = [];
         this.emails.forEach(function (element) {
@@ -3817,6 +3817,101 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -6107,7 +6202,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 }
 
                 _context21.t0 = key;
-                _context21.next = _context21.t0 === "person.used_events_email" ? 10 : _context21.t0 === "person.cellphones" ? 18 : _context21.t0 === "person.first_name" ? 26 : 29;
+                _context21.next = _context21.t0 === "person.used_events_email" ? 10 : _context21.t0 === "person.cellphones" ? 18 : _context21.t0 === "person.first_name" ? 26 : _context21.t0 === "person.last_name" ? 26 : _context21.t0 === "person.position_company" ? 26 : 29;
                 break;
 
               case 10:
@@ -70068,10 +70163,10 @@ var render = function() {
                   staticClass: "column is-4",
                   attrs: {
                     horizontal: "",
-                    label: _vm.fields.position.label,
-                    type: { "is-danger": _vm.fields.position.error },
-                    message: _vm.fields.position.error
-                      ? _vm.fields.position.msg
+                    label: _vm.fields.position_company.label,
+                    type: { "is-danger": _vm.fields.position_company.error },
+                    message: _vm.fields.position_company.error
+                      ? _vm.fields.position_company.msg
                       : ""
                   }
                 },
@@ -71923,6 +72018,344 @@ var render = function() {
                                               $event.preventDefault()
                                               return _vm.clickEditParticipant(
                                                 "person.first_name"
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ]
+                                )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "columns column is-12 is-row-data" },
+                          [
+                            _vm.participant.person.last_name.editing
+                              ? _c(
+                                  "div",
+                                  { staticClass: "columns column is-12" },
+                                  [
+                                    _c(
+                                      "div",
+                                      { staticClass: "column is-6" },
+                                      [
+                                        _c(
+                                          "b-field",
+                                          {
+                                            staticClass: "label_not-show",
+                                            attrs: {
+                                              horizontal: "",
+                                              type: {
+                                                "is-danger":
+                                                  _vm.fieldsParticipant
+                                                    .last_name.error
+                                              },
+                                              message: _vm.fieldsParticipant
+                                                .last_name.error
+                                                ? _vm.fieldsParticipant
+                                                    .last_name.msg
+                                                : ""
+                                            }
+                                          },
+                                          [
+                                            _c("b-input", {
+                                              ref: "person.last_name",
+                                              attrs: {
+                                                name: "person.last_name",
+                                                maxlength: "100",
+                                                expanded: ""
+                                              },
+                                              on: {
+                                                blur: function($event) {
+                                                  return _vm.setTrim(
+                                                    "person.last_name",
+                                                    _vm.OPTIONS.PARTICIPANT
+                                                  )
+                                                }
+                                              },
+                                              nativeOn: {
+                                                keyup: function($event) {
+                                                  return _vm.capitalizeText(
+                                                    $event,
+                                                    "person.last_name",
+                                                    _vm.OPTIONS.PARTICIPANT
+                                                  )
+                                                }
+                                              },
+                                              model: {
+                                                value:
+                                                  _vm.participant.person
+                                                    .last_name.value,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.participant.person
+                                                      .last_name,
+                                                    "value",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "participant.person.last_name.value"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "column is-6 content-buttons"
+                                      },
+                                      [
+                                        _c("b-button", {
+                                          attrs: {
+                                            size: "is-small",
+                                            "icon-left": "save"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.clickUpdateParticipant(
+                                                "person.last_name"
+                                              )
+                                            }
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _c("b-button", {
+                                          attrs: {
+                                            size: "is-small",
+                                            "icon-left": "window-close"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.clickCancelParticipant(
+                                                "person.last_name"
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ]
+                                )
+                              : _c(
+                                  "div",
+                                  { staticClass: "columns column is-12" },
+                                  [
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass: "column is-6 is-row-data"
+                                      },
+                                      [
+                                        _c("span", [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.participant.person.last_name
+                                                ? _vm.participant.person
+                                                    .last_name.value
+                                                : _vm.firstCapitalize(
+                                                    _vm.fieldsParticipant
+                                                      .last_name.label
+                                                  )
+                                            )
+                                          )
+                                        ])
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "column is-6" },
+                                      [
+                                        _c("b-button", {
+                                          staticClass: "btn-edit",
+                                          attrs: {
+                                            size: "is-small",
+                                            "icon-left": "pen"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.clickEditParticipant(
+                                                "person.last_name"
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ]
+                                )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "columns column is-12 is-row-data" },
+                          [
+                            _vm.participant.person.position_company.editing
+                              ? _c(
+                                  "div",
+                                  { staticClass: "columns column is-12" },
+                                  [
+                                    _c(
+                                      "div",
+                                      { staticClass: "column is-6" },
+                                      [
+                                        _c(
+                                          "b-field",
+                                          {
+                                            staticClass: "label_not-show",
+                                            attrs: {
+                                              horizontal: "",
+                                              type: {
+                                                "is-danger":
+                                                  _vm.fieldsParticipant
+                                                    .position_company.error
+                                              },
+                                              message: _vm.fieldsParticipant
+                                                .position_company.error
+                                                ? _vm.fieldsParticipant
+                                                    .position_company.msg
+                                                : ""
+                                            }
+                                          },
+                                          [
+                                            _c("b-input", {
+                                              ref: "person.position_company",
+                                              attrs: {
+                                                name: "person.position_company",
+                                                maxlength: "100",
+                                                expanded: ""
+                                              },
+                                              on: {
+                                                blur: function($event) {
+                                                  return _vm.setTrim(
+                                                    "person.position_company",
+                                                    _vm.OPTIONS.PARTICIPANT
+                                                  )
+                                                }
+                                              },
+                                              model: {
+                                                value:
+                                                  _vm.participant.person
+                                                    .position_company.value,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.participant.person
+                                                      .position_company,
+                                                    "value",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "participant.person.position_company.value"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "column is-6 content-buttons"
+                                      },
+                                      [
+                                        _c("b-button", {
+                                          attrs: {
+                                            size: "is-small",
+                                            "icon-left": "save"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.clickUpdateParticipant(
+                                                "person.position_company"
+                                              )
+                                            }
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _c("b-button", {
+                                          attrs: {
+                                            size: "is-small",
+                                            "icon-left": "window-close"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.clickCancelParticipant(
+                                                "person.position_company"
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ]
+                                )
+                              : _c(
+                                  "div",
+                                  { staticClass: "columns column is-12" },
+                                  [
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass: "column is-6 is-row-data"
+                                      },
+                                      [
+                                        _c("span", [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.participant.person
+                                                .position_company
+                                                ? _vm.participant.person
+                                                    .position_company.value
+                                                : _vm.firstCapitalize(
+                                                    _vm.fieldsParticipant
+                                                      .position_company.label
+                                                  )
+                                            )
+                                          )
+                                        ])
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "column is-6" },
+                                      [
+                                        _c("b-button", {
+                                          staticClass: "btn-edit",
+                                          attrs: {
+                                            size: "is-small",
+                                            "icon-left": "pen"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.clickEditParticipant(
+                                                "person.position_company"
                                               )
                                             }
                                           }
