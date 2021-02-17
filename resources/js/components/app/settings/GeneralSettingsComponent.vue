@@ -478,7 +478,7 @@
                                                         name="person.position_company"
                                                         v-model="participant.person.position_company.value"
                                                         v-on:blur="setTrim('person.position_company', OPTIONS.PARTICIPANT)"
-                                                        maxlength="100"
+                                                        maxlength="60"
                                                         expanded>
                                                     </b-input>
                                                 </b-field>
@@ -512,6 +512,58 @@
                                         </div>
                                     </div>
                                     <!-- /Position company -->
+                                    <!-- Birth date -->
+                                    <div class="columns column is-12 is-row-data">
+                                        <div class="columns column is-12" v-if="participant.person.birth_date.editing">
+                                            <div class="column is-6">
+                                                <b-field horizontal
+                                                    class="label_not-show"
+                                                    v-bind:type="{ 'is-danger' : fieldsParticipant.birth_date.error }"
+                                                    :message="fieldsParticipant.birth_date.error ? fieldsParticipant.birth_date.msg : ''">
+                                                    <b-datepicker
+                                                        ref="person.birth_date"
+                                                        name="person.birth_date"
+                                                        v-model="birth_date"
+                                                        :show-week-number="false"
+                                                        :open-on-focus="true"
+                                                        :locale="locale"
+                                                        :date-formatter="dateFormat"
+                                                        :max-date="maxBirthDate"
+                                                        :inline="true"
+                                                        @input="onChangedBirthDate"
+                                                        trap-focus expanded>
+                                                    </b-datepicker>
+                                                </b-field>
+
+                                            </div>
+                                            <div class="column is-6 content-buttons">
+                                                <b-button
+                                                    size="is-small"
+                                                    icon-left="save"
+                                                    v-on:click.prevent="clickUpdateParticipant( 'person.birth_date' )"
+                                                />
+                                                <b-button
+                                                    size="is-small"
+                                                    icon-left="window-close"
+                                                    v-on:click.prevent="clickCancelParticipant('person.birth_date')"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div class="columns column is-12" v-else>
+                                            <div class="column is-6 is-row-data">
+                                                <span>{{ participant.person.birth_date ? participant.person.birth_date.value : firstCapitalize(fieldsParticipant.birth_date.label) }}</span>
+                                            </div>
+                                            <div class="column is-6">
+                                                <b-button
+                                                    class="btn-edit"
+                                                    size="is-small"
+                                                    icon-left="pen"
+                                                    v-on:click.prevent="clickEditParticipant('person.birth_date')"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Birth date -->
                                 </div>
                             </div>
                         </div>
@@ -531,6 +583,9 @@
     import { success } from '@pnotify/core';
     import '@pnotify/core/dist/PNotify.css';
     import '@pnotify/core/dist/BrightTheme.css';
+    //Import moment
+    var moment = require('moment');
+
     export default {
         props: {
             text_breadcrumbs_init: {
@@ -672,6 +727,9 @@
                 enabledUploadAvatar: false,
                 aceptAvatar: ".jpg,.png,.gif",
                 emailError: null,
+                locale: undefined, //Set browser language
+                maxBirthDate: new Date(moment().subtract(18, 'years')),
+                birth_date: null,
             }
         },
         computed: {
@@ -866,6 +924,9 @@
                     }
                 }
             },
+            dateFormat(d){
+                return moment(d).format('YYYY-MM-DD');
+            },
             async getPersonData(){
                 this.isLoading = true;
                 await axios.post(this.url_person_data,{ id : this.participant.persons_id.value })
@@ -885,6 +946,8 @@
                                                 'editing':  false,
                                             } );
                             });
+                            //Set birth date
+                            this.initBirthDate( this.participant.person.birth_date.value );
                         }
                     },
                     error => {
@@ -1436,6 +1499,12 @@
                         break;
                 }
             },
+            initBirthDate( stringDate ){
+                this.birth_date = moment( stringDate, "YYYY-MM-DD" ).toDate();
+            },
+            onChangedBirthDate(){
+                this.participant.person.birth_date.value = this.dateFormat(this.birth_date);
+            },
             clickEditParticipant( key, index = null ){
                 //Get keys, for exaple: person.emails
                 const keys = key.split(".");
@@ -1463,7 +1532,12 @@
                             this.$refs[ keyRef ][0].focus();
 
                         }else{
-                            this.$refs[ keyRef ].focus();
+                            if( key === "person.birth_date" )
+                            {
+                                this.$refs[ keyRef ].toggle();
+                            }else{
+                                this.$refs[ keyRef ].focus();
+                            }
                         }
                     }
                 });
@@ -1490,11 +1564,18 @@
                 obj.edited = false;
                 this.setErrorParticipant( key, false, index );
 
-                if( key === "profile_image" )
+                switch (key)
                 {
-                    this.fileAvatar = null;
-                    this.avatarAdmin = this.avatarAdminCopy;
-                    this.enabledUploadAvatar = false;
+                    case "profile_image":
+                        this.fileAvatar = null;
+                        this.avatarAdmin = this.avatarAdminCopy;
+                        this.enabledUploadAvatar = false;
+                        break;
+                    case "person.birth_date":
+                        this.initBirthDate( objCopy.value );
+                        break;
+                    default:
+                        break;
                 }
             },
             async clickUpdateParticipant( key, index = null ){
@@ -1890,6 +1971,7 @@
                         case "person.first_name":
                         case "person.last_name":
                         case "person.position_company":
+                        case "person.birth_date":
                             await this.updatedDBPerson( keys[ keys.length - 1 ], obj, objCopy );
                             break;
                         default://Participant

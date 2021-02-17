@@ -4340,6 +4340,58 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -4350,6 +4402,9 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
 
 
 
+ //Import moment
+
+var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -4491,7 +4546,11 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       fileAvatar: null,
       enabledUploadAvatar: false,
       aceptAvatar: ".jpg,.png,.gif",
-      emailError: null
+      emailError: null,
+      locale: undefined,
+      //Set browser language
+      maxBirthDate: new Date(moment().subtract(18, 'years')),
+      birth_date: null
     };
   },
   computed: {
@@ -4732,6 +4791,9 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
           }
         }
     },
+    dateFormat: function dateFormat(d) {
+      return moment(d).format('YYYY-MM-DD');
+    },
     getPersonData: function getPersonData() {
       var _this3 = this;
 
@@ -4759,7 +4821,9 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                         'edited': false,
                         'editing': false
                       });
-                    });
+                    }); //Set birth date
+
+                    _this3.initBirthDate(_this3.participant.person.birth_date.value);
                   }
                 }, function (error) {
                   _this3.showErrors(error);
@@ -5559,6 +5623,12 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
           break;
       }
     },
+    initBirthDate: function initBirthDate(stringDate) {
+      this.birth_date = moment(stringDate, "YYYY-MM-DD").toDate();
+    },
+    onChangedBirthDate: function onChangedBirthDate() {
+      this.participant.person.birth_date.value = this.dateFormat(this.birth_date);
+    },
     clickEditParticipant: function clickEditParticipant(key) {
       var _this16 = this;
 
@@ -5585,7 +5655,11 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
           if (_.isArray(_this16.$refs[keyRef])) {
             _this16.$refs[keyRef][0].focus();
           } else {
-            _this16.$refs[keyRef].focus();
+            if (key === "person.birth_date") {
+              _this16.$refs[keyRef].toggle();
+            } else {
+              _this16.$refs[keyRef].focus();
+            }
           }
         }
       });
@@ -5613,10 +5687,19 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       obj.edited = false;
       this.setErrorParticipant(key, false, index);
 
-      if (key === "profile_image") {
-        this.fileAvatar = null;
-        this.avatarAdmin = this.avatarAdminCopy;
-        this.enabledUploadAvatar = false;
+      switch (key) {
+        case "profile_image":
+          this.fileAvatar = null;
+          this.avatarAdmin = this.avatarAdminCopy;
+          this.enabledUploadAvatar = false;
+          break;
+
+        case "person.birth_date":
+          this.initBirthDate(objCopy.value);
+          break;
+
+        default:
+          break;
       }
     },
     clickUpdateParticipant: function clickUpdateParticipant(key) {
@@ -6202,7 +6285,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 }
 
                 _context21.t0 = key;
-                _context21.next = _context21.t0 === "person.used_events_email" ? 10 : _context21.t0 === "person.cellphones" ? 18 : _context21.t0 === "person.first_name" ? 26 : _context21.t0 === "person.last_name" ? 26 : _context21.t0 === "person.position_company" ? 26 : 29;
+                _context21.next = _context21.t0 === "person.used_events_email" ? 10 : _context21.t0 === "person.cellphones" ? 18 : _context21.t0 === "person.first_name" ? 26 : _context21.t0 === "person.last_name" ? 26 : _context21.t0 === "person.position_company" ? 26 : _context21.t0 === "person.birth_date" ? 26 : 29;
                 break;
 
               case 10:
@@ -72239,7 +72322,7 @@ var render = function() {
                                               ref: "person.position_company",
                                               attrs: {
                                                 name: "person.position_company",
-                                                maxlength: "100",
+                                                maxlength: "60",
                                                 expanded: ""
                                               },
                                               on: {
@@ -72356,6 +72439,164 @@ var render = function() {
                                               $event.preventDefault()
                                               return _vm.clickEditParticipant(
                                                 "person.position_company"
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ]
+                                )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "columns column is-12 is-row-data" },
+                          [
+                            _vm.participant.person.birth_date.editing
+                              ? _c(
+                                  "div",
+                                  { staticClass: "columns column is-12" },
+                                  [
+                                    _c(
+                                      "div",
+                                      { staticClass: "column is-6" },
+                                      [
+                                        _c(
+                                          "b-field",
+                                          {
+                                            staticClass: "label_not-show",
+                                            attrs: {
+                                              horizontal: "",
+                                              type: {
+                                                "is-danger":
+                                                  _vm.fieldsParticipant
+                                                    .birth_date.error
+                                              },
+                                              message: _vm.fieldsParticipant
+                                                .birth_date.error
+                                                ? _vm.fieldsParticipant
+                                                    .birth_date.msg
+                                                : ""
+                                            }
+                                          },
+                                          [
+                                            _c("b-datepicker", {
+                                              ref: "person.birth_date",
+                                              attrs: {
+                                                name: "person.birth_date",
+                                                "show-week-number": false,
+                                                "open-on-focus": true,
+                                                locale: _vm.locale,
+                                                "date-formatter":
+                                                  _vm.dateFormat,
+                                                "max-date": _vm.maxBirthDate,
+                                                inline: true,
+                                                "trap-focus": "",
+                                                expanded: ""
+                                              },
+                                              on: {
+                                                input: _vm.onChangedBirthDate
+                                              },
+                                              model: {
+                                                value: _vm.birth_date,
+                                                callback: function($$v) {
+                                                  _vm.birth_date = $$v
+                                                },
+                                                expression: "birth_date"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "column is-6 content-buttons"
+                                      },
+                                      [
+                                        _c("b-button", {
+                                          attrs: {
+                                            size: "is-small",
+                                            "icon-left": "save"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.clickUpdateParticipant(
+                                                "person.birth_date"
+                                              )
+                                            }
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _c("b-button", {
+                                          attrs: {
+                                            size: "is-small",
+                                            "icon-left": "window-close"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.clickCancelParticipant(
+                                                "person.birth_date"
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ]
+                                )
+                              : _c(
+                                  "div",
+                                  { staticClass: "columns column is-12" },
+                                  [
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass: "column is-6 is-row-data"
+                                      },
+                                      [
+                                        _c("span", [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.participant.person.birth_date
+                                                ? _vm.participant.person
+                                                    .birth_date.value
+                                                : _vm.firstCapitalize(
+                                                    _vm.fieldsParticipant
+                                                      .birth_date.label
+                                                  )
+                                            )
+                                          )
+                                        ])
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "column is-6" },
+                                      [
+                                        _c("b-button", {
+                                          staticClass: "btn-edit",
+                                          attrs: {
+                                            size: "is-small",
+                                            "icon-left": "pen"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.clickEditParticipant(
+                                                "person.birth_date"
                                               )
                                             }
                                           }
