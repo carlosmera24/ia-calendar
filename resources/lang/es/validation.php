@@ -204,6 +204,7 @@ return [
         'logo'                  =>  'logo',
         'reason_change_state'   =>  'motivo',
         'state'                 =>  'estado',
+        'person'                =>  'persona',
     ],
 
 ];

@@ -15,6 +15,14 @@ class PersonController extends Controller
                                 'position_company'  =>  'required | min:3 | max:60',
                                 'date_join_company' =>  'required | date_format:Y-m-d',
                             ];
+    protected $rules_update = [
+                                'id'                =>  'required|exists:persons,id',
+                                'first_name'        =>  'nullable | min:3 | max:100',
+                                'last_name'         =>  'nullable | min:3 | max:100',
+                                'birth_date'        =>  'nullable | date_format:Y-m-d',
+                                'position_company'  =>  'nullable | min:3 | max:60',
+                                'date_join_company' =>  'nullable | date_format:Y-m-d',
+                            ];
 
     /**
      * Display a listing of the resource.
@@ -81,7 +89,7 @@ class PersonController extends Controller
                                         array(
                                                 'status'    =>  400,
                                                 'data'      =>  array(
-                                                                        "msg"    => "Error saving the new person in the database"
+                                                                        "msg"    => __('messages.error_saving', [ 'attribute' => __('validation.attributes.person') ])
                                                                     )
                                             ),
                                         400
@@ -120,7 +128,89 @@ class PersonController extends Controller
      */
     public function update(Request $request, Person $person)
     {
-        //
+        $validator = Validator::make($request->input(), $this->rules_update);
+        if( $validator->fails() )
+        {
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'error'     =>  __('messages.bad_request'),
+                                                'data'      =>  $validator->getMessageBag()->toArray()
+                                            ),
+                                        400
+                                    );
+        }else
+        {
+            //search Person
+            $person = Person::find( $request->id );
+
+            //Not found
+            if( empty($person) )
+            {
+                return response()->json(
+                                            array(
+                                                'status'    =>  204,
+                                                'error'     =>  __('messages.no_content'),
+                                                'data'      =>  array(
+                                                                        __('messages.no_found', [
+                                                                                                    'attribute' => __('validation.attributes.person'),
+                                                                                                    'id' => $request->id
+                                                                                                ]
+                                                                            )
+                                                                    )
+                                            ),
+                                            200
+                                        );
+            }
+
+            //Update
+            if( isset( $request->first_name ) )
+            {
+                $person->first_name = $request->first_name;
+            }
+
+            if( isset( $request->last_name ) )
+            {
+                $person->last_name = $request->last_name;
+            }
+
+            if( isset( $request->birth_date ) )
+            {
+                $person->birth_date = $request->birth_date;
+            }
+
+            if( isset( $request->position_company ) )
+            {
+                $person->position_company = $request->position_company;
+            }
+
+            if( isset( $request->date_join_company ) )
+            {
+                $person->date_join_company = $request->date_join_company;
+            }
+
+            if( $person->update() )
+            {
+
+                return response()->json(
+                                        array(
+                                                'status'    =>  200,
+                                                'data'      =>  $person,
+                                            ),
+                                        200
+                                    );
+            }
+
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'data'      =>  array(
+                                                                        "msg"    => __('messages.error_updating', [ 'attribute' => __('validation.attributes.person') ])
+                                                                    )
+                                            ),
+                                        400
+                                    );
+        }
     }
 
     /**

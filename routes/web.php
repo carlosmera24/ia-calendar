@@ -34,6 +34,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/programmer/update', [ ProgrammerController::class, 'update' ])->name('programmer_update');
     //Persons
     Route::post('/person/store', [ PersonController::class, 'store' ])->name('person_store');
+    Route::post('/person/update', [ PersonController::class, 'update' ])->name('person_update');
     //Participants
     Route::post('/participants/generate-avatar', [ ParticipantController::class, 'getAvatarFromString' ])->name('participant_generate_avatar');
     Route::post('/participants/list-from-programmer', [ ParticipantController::class, 'listFromProgrammer' ])->name('participants_list_programmer');

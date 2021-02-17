@@ -2317,6 +2317,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     text_breadcrumbs_init: {
@@ -2524,6 +2525,10 @@ __webpack_require__.r(__webpack_exports__);
       require: true
     },
     url_persons_cellphones_for_person: {
+      type: String,
+      require: true
+    },
+    url_person_update: {
       type: String,
       require: true
     }
@@ -4234,6 +4239,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -4328,6 +4334,10 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       require: true
     },
     url_person_cellphone_update: {
+      type: String,
+      require: true
+    },
+    url_person_update: {
       type: String,
       require: true
     }
@@ -4573,6 +4583,46 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
           obj.value = this.getStringWithTrim(obj.value);
           break;
       }
+    },
+    capitalizeText: function capitalizeText(event, key, option) {
+      if (event.keyCode >= 65 && event.keyCode <= 90) //A-Z
+        {
+          var phrase = event.target.value.trimStart();
+          var phrasesArray = phrase.split(" ");
+          var txtEnd = "";
+
+          if (phrasesArray.length > 1) {
+            phrasesArray.forEach(function (item) {
+              txtEnd += Object(_functions_js__WEBPACK_IMPORTED_MODULE_1__["capitalize"])(item) + " ";
+            });
+          } else {
+            txtEnd = Object(_functions_js__WEBPACK_IMPORTED_MODULE_1__["capitalize"])(phrase);
+          } //Model
+
+
+          var obj = new Object();
+
+          if (option === this.OPTIONS.PROGRAMMER) {
+            obj = this.programmer;
+          } else if (option === this.OPTIONS.PARTICIPANT) {
+            obj = this.participant;
+          }
+
+          switch (key) {
+            case "entity_name":
+              obj.entity_name.value = txtEnd.trim();
+              break;
+
+            default:
+              //Get keys, for exaple: person.emails
+              var keys = key.split(".");
+              keys.forEach(function (k) {
+                obj = obj[k];
+              });
+              obj.value = txtEnd.trim();
+              break;
+          }
+        }
     },
     getIdentificationsTypes: function getIdentificationsTypes() {
       var _this3 = this;
@@ -5920,21 +5970,70 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }, _callee18);
       }))();
     },
-    updateParticipant: function updateParticipant(key) {
-      var _arguments3 = arguments,
-          _this22 = this;
+    updatedDBPerson: function updatedDBPerson(keyParamenter, obj, objCopy) {
+      var _this22 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee19() {
-        var index, keys, obj, objCopy;
+        var params;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee19$(_context19) {
           while (1) {
             switch (_context19.prev = _context19.next) {
               case 0:
+                _this22.isLoading = true;
+                params = {
+                  id: _this22.participant.person.id.value
+                };
+                params[keyParamenter] = obj.value;
+                _context19.next = 5;
+                return axios.post(_this22.url_person_update, params).then(function (response) {
+                  _this22.showErrors({});
+
+                  if (response.data.status === 200) {
+                    //update/restore value copy
+                    obj.value = response.data.data[keyParamenter];
+                    objCopy.value = response.data.data[keyParamenter];
+                    objCopy.edited = false; //restore
+
+                    objCopy.editing = false; //restore
+
+                    obj.edited = false; //restore
+
+                    obj.editing = false; //restore
+
+                    Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
+                      title: _this22.text_success,
+                      text: _this22.textsGeneralSettings.text_updated_participant
+                    });
+                  }
+                }, function (error) {
+                  _this22.showErrors(error);
+                }).then(function () {
+                  _this22.isLoading = false;
+                });
+
+              case 5:
+              case "end":
+                return _context19.stop();
+            }
+          }
+        }, _callee19);
+      }))();
+    },
+    updateParticipant: function updateParticipant(key) {
+      var _arguments3 = arguments,
+          _this23 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee20() {
+        var index, keys, obj, objCopy;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee20$(_context20) {
+          while (1) {
+            switch (_context20.prev = _context20.next) {
+              case 0:
                 index = _arguments3.length > 1 && _arguments3[1] !== undefined ? _arguments3[1] : null;
                 //Get keys, for exaple: person.emails
                 keys = key.split(".");
-                obj = _this22.participant;
-                objCopy = _this22.participantCopy;
+                obj = _this23.participant;
+                objCopy = _this23.participantCopy;
                 keys.forEach(function (k) {
                   obj = obj[k];
                   objCopy = objCopy[k];
@@ -5947,67 +6046,74 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                   }
 
                 if (!obj.edited) {
-                  _context19.next = 29;
+                  _context20.next = 32;
                   break;
                 }
 
-                _context19.t0 = key;
-                _context19.next = _context19.t0 === "person.used_events_email" ? 10 : _context19.t0 === "person.cellphones" ? 18 : 26;
+                _context20.t0 = key;
+                _context20.next = _context20.t0 === "person.used_events_email" ? 10 : _context20.t0 === "person.cellphones" ? 18 : _context20.t0 === "person.first_name" ? 26 : 29;
                 break;
 
               case 10:
                 if (objCopy.value.email) {
-                  _context19.next = 15;
+                  _context20.next = 15;
                   break;
                 }
 
-                _context19.next = 13;
-                return _this22.createDBPersonEmailUsedEvents(obj, objCopy);
+                _context20.next = 13;
+                return _this23.createDBPersonEmailUsedEvents(obj, objCopy);
 
               case 13:
-                _context19.next = 17;
+                _context20.next = 17;
                 break;
 
               case 15:
-                _context19.next = 17;
-                return _this22.updateDBPersonEmailUsedEvents(obj, objCopy);
+                _context20.next = 17;
+                return _this23.updateDBPersonEmailUsedEvents(obj, objCopy);
 
               case 17:
-                return _context19.abrupt("break", 29);
+                return _context20.abrupt("break", 32);
 
               case 18:
                 if (objCopy.value.cellphone_number) {
-                  _context19.next = 23;
+                  _context20.next = 23;
                   break;
                 }
 
-                _context19.next = 21;
-                return _this22.createDBPersonCellhpone(obj, objCopy);
+                _context20.next = 21;
+                return _this23.createDBPersonCellhpone(obj, objCopy);
 
               case 21:
-                _context19.next = 25;
+                _context20.next = 25;
                 break;
 
               case 23:
-                _context19.next = 25;
-                return _this22.updateDBPersonCellhpone(obj, objCopy);
+                _context20.next = 25;
+                return _this23.updateDBPersonCellhpone(obj, objCopy);
 
               case 25:
-                return _context19.abrupt("break", 29);
+                return _context20.abrupt("break", 32);
 
               case 26:
-                _context19.next = 28;
-                return _this22.updateDBParticipant(key, obj, objCopy);
+                _context20.next = 28;
+                return _this23.updatedDBPerson(keys[keys.length - 1], obj, objCopy);
 
               case 28:
-                return _context19.abrupt("break", 29);
+                return _context20.abrupt("break", 32);
 
               case 29:
+                _context20.next = 31;
+                return _this23.updateDBParticipant(key, obj, objCopy);
+
+              case 31:
+                return _context20.abrupt("break", 32);
+
+              case 32:
               case "end":
-                return _context19.stop();
+                return _context20.stop();
             }
           }
-        }, _callee19);
+        }, _callee20);
       }))();
     }
   }
@@ -69212,7 +69318,8 @@ var render = function() {
                   url_persons_cellphones_for_person:
                     _vm.url_persons_cellphones_for_person,
                   url_persons_cellphone_store: _vm.url_persons_cellphone_store,
-                  url_person_cellphone_update: _vm.url_person_cellphone_update
+                  url_person_cellphone_update: _vm.url_person_cellphone_update,
+                  url_person_update: _vm.url_person_update
                 },
                 on: { activeMainSection: _vm.setActiveSection }
               })
@@ -71640,6 +71747,15 @@ var render = function() {
                                               on: {
                                                 blur: function($event) {
                                                   return _vm.setTrim(
+                                                    "person.first_name",
+                                                    _vm.OPTIONS.PARTICIPANT
+                                                  )
+                                                }
+                                              },
+                                              nativeOn: {
+                                                keyup: function($event) {
+                                                  return _vm.capitalizeText(
+                                                    $event,
                                                     "person.first_name",
                                                     _vm.OPTIONS.PARTICIPANT
                                                   )

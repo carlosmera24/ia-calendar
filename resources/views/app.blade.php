@@ -228,6 +228,7 @@
             v-bind:participant_json="'{{ json_encode($participant) }}'"
             v-bind:url_person_ui_avatar='"{{ route('participant_generate_avatar') }}"'
             v-bind:url_person_store='"{{ route('person_store') }}"'
+            v-bind:url_person_update='"{{ route('person_update') }}"'
             v-bind:url_participant_store='"{{ route('participant_store') }}"'
             v-bind:url_participant_update='"{{ route('participant_update') }}"'
             v-bind:urls_emails_store='"{{ route('persons_emails_store_array') }}"'

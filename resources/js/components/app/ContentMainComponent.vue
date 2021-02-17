@@ -76,6 +76,7 @@
                 v-bind:url_persons_cellphones_for_person='url_persons_cellphones_for_person'
                 v-bind:url_persons_cellphone_store='url_persons_cellphone_store'
                 v-bind:url_person_cellphone_update='url_person_cellphone_update'
+                v-bind:url_person_update='url_person_update'
             />
         </transition-group>
     </div>
@@ -291,6 +292,10 @@ export default {
             require: true
         },
         url_persons_cellphones_for_person: {
+            type: String,
+            require: true
+        },
+        url_person_update: {
             type: String,
             require: true
         },

@@ -381,6 +381,7 @@
                                                         ref="person.first_name"
                                                         name="person.first_name"
                                                         v-model="participant.person.first_name.value"
+                                                        v-on:keyup.native="capitalizeText($event, 'person.first_name', OPTIONS.PARTICIPANT)"
                                                         v-on:blur="setTrim('person.first_name', OPTIONS.PARTICIPANT)"
                                                         maxlength="100"
                                                         expanded>
@@ -520,6 +521,10 @@
                 require: true
             },
             url_person_cellphone_update: {
+                type: String,
+                require: true
+            },
+            url_person_update: {
                 type: String,
                 require: true
             },
@@ -720,6 +725,45 @@
                         });
                         obj.value = this.getStringWithTrim(obj.value);
                         break;
+                }
+            },
+            capitalizeText( event, key, option ){
+                if( event.keyCode >= 65 && event.keyCode <= 90 ) //A-Z
+                {
+                    var phrase = event.target.value.trimStart();
+                    const phrasesArray = phrase.split(" ");
+                    var txtEnd = "";
+                    if( phrasesArray.length > 1 )
+                    {
+                        phrasesArray.forEach( item => {
+                            txtEnd += capitalize( item ) +" ";
+                        });
+                    }else{
+                        txtEnd = capitalize( phrase );
+                    }
+                    //Model
+                    let obj = new Object();
+                    if( option === this.OPTIONS.PROGRAMMER )
+                    {
+                        obj = this.programmer;
+                    }else if( option === this.OPTIONS.PARTICIPANT )
+                    {
+                        obj = this.participant;
+                    }
+                    switch( key )
+                    {
+                        case "entity_name":
+                            obj.entity_name.value = txtEnd.trim();
+                            break;
+                        default:
+                            //Get keys, for exaple: person.emails
+                            const keys = key.split(".");
+                            keys.forEach( k => {
+                                obj = obj[k];
+                            });
+                            obj.value = txtEnd.trim();
+                            break;
+                    }
                 }
             },
             async getIdentificationsTypes(){
@@ -1642,6 +1686,39 @@
                             this.isLoading = false;
                         });
             },
+            async updatedDBPerson( keyParamenter, obj, objCopy ){
+                this.isLoading = true;
+                let params = {
+                    id: this.participant.person.id.value,
+                };
+                params[ keyParamenter ] = obj.value,
+
+                await axios.post(this.url_person_update, params)
+                        .then( response => {
+                            this.showErrors({});
+                            if( response.data.status === 200 )
+                            {
+                                //update/restore value copy
+                                obj.value = response.data.data[ keyParamenter ];
+                                objCopy.value = response.data.data[ keyParamenter ];
+                                objCopy.edited = false; //restore
+                                objCopy.editing = false; //restore
+                                obj.edited = false; //restore
+                                obj.editing = false; //restore
+
+                                success({
+                                    title: this.text_success,
+                                    text: this.textsGeneralSettings.text_updated_participant
+                                });
+                            }
+                        },
+                        error => {
+                            this.showErrors(error);
+                        })
+                        .then( () => {
+                            this.isLoading = false;
+                        });
+            },
             async updateParticipant( key, index = null ){
                 //Get keys, for exaple: person.emails
                 const keys = key.split(".");
@@ -1681,6 +1758,9 @@
                             {
                                 await this.updateDBPersonCellhpone(obj, objCopy);
                             }
+                            break;
+                        case "person.first_name":
+                            await this.updatedDBPerson( keys[ keys.length - 1 ], obj, objCopy );
                             break;
                         default://Participant
                             await this.updateDBParticipant(key, obj, objCopy);
