@@ -2318,6 +2318,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     text_breadcrumbs_init: {
@@ -2433,6 +2434,10 @@ __webpack_require__.r(__webpack_exports__);
       require: true
     },
     url_person_ui_avatar: {
+      type: String,
+      require: true
+    },
+    url_person_data: {
       type: String,
       require: true
     },
@@ -4313,6 +4318,10 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       type: String,
       require: true
     },
+    url_person_data: {
+      type: String,
+      require: true
+    },
     url_persons_emails_store: {
       type: String,
       require: true
@@ -4497,35 +4506,39 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return _this2.getIdentificationsTypes();
+              return _this2.getPersonData();
 
             case 2:
               _context.next = 4;
-              return _this2.getImg64Base(_this2.OPTIONS.PROGRAMMER, _this2.programmer.logo.value);
+              return _this2.getIdentificationsTypes();
 
             case 4:
               _context.next = 6;
-              return _this2.getImgAvatar();
+              return _this2.getImg64Base(_this2.OPTIONS.PROGRAMMER, _this2.programmer.logo.value);
 
             case 6:
+              _context.next = 8;
+              return _this2.getImgAvatar();
+
+            case 8:
               if (!(_this2.participant.profiles_participants_id.value === _this2.OPTIONS.PROFILE_PARTICPANT.ADMIN)) {
-                _context.next = 9;
+                _context.next = 11;
                 break;
               }
 
-              _context.next = 9;
+              _context.next = 11;
               return _this2.getEmailsAdmin();
 
-            case 9:
+            case 11:
               if (!(_this2.participant.profiles_participants_id.value === _this2.OPTIONS.PROFILE_PARTICPANT.ADMIN || _this2.participant.profiles_participants_id.value === _this2.OPTIONS.PROFILE_PARTICPANT.SUPLE_ADMIN)) {
-                _context.next = 12;
+                _context.next = 14;
                 break;
               }
 
-              _context.next = 12;
+              _context.next = 14;
               return _this2.getCellphones();
 
-            case 12:
+            case 14:
             case "end":
               return _context.stop();
           }
@@ -4624,7 +4637,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
           }
         }
     },
-    getIdentificationsTypes: function getIdentificationsTypes() {
+    getPersonData: function getPersonData() {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
@@ -4634,25 +4647,23 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
               case 0:
                 _this3.isLoading = true;
                 _context2.next = 3;
-                return axios.post(_this3.url_identifications_types).then(function (response) {
+                return axios.post(_this3.url_person_data, {
+                  id: _this3.participant.persons_id.value
+                }).then(function (response) {
                   _this3.showErrors({});
 
                   if (response.data.status === 200) {
-                    response.data.identifications_types.forEach(function (element) {
-                      var name = element.abrevation + (element.translation ? '-' + element.translation.name : '');
-                      var tmp = {
-                        identification_type: name,
-                        meta: element
-                      };
-                      _this3.identificationsTypesIdName[element.id] = name;
-
-                      _this3.identificationsTypes.push(tmp); //selected
-
-
-                      if (_this3.programmer.identifications_types_id.value === element.id) {
-                        _this3.identificationTypeSelected = element;
-                        _this3.identificationTypeSelectedOriginal = element;
-                      }
+                    Object.keys(response.data.data).forEach(function (keyObj) {
+                      Vue.set(_this3.participant.person, keyObj, {
+                        'value': response.data.data[keyObj],
+                        'edited': false,
+                        'editing': false
+                      });
+                      Vue.set(_this3.participantCopy.person, keyObj, {
+                        'value': response.data.data[keyObj],
+                        'edited': false,
+                        'editing': false
+                      });
                     });
                   }
                 }, function (error) {
@@ -4669,7 +4680,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }, _callee2);
       }))();
     },
-    getImgAvatar: function getImgAvatar() {
+    getIdentificationsTypes: function getIdentificationsTypes() {
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
@@ -4677,23 +4688,36 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                if (!_this4.participant.profile_image.value) {
-                  _context3.next = 5;
-                  break;
-                }
-
+                _this4.isLoading = true;
                 _context3.next = 3;
-                return _this4.getImg64Base(_this4.OPTIONS.PARTICIPANT, _this4.participant.profile_image.value);
+                return axios.post(_this4.url_identifications_types).then(function (response) {
+                  _this4.showErrors({});
+
+                  if (response.data.status === 200) {
+                    response.data.identifications_types.forEach(function (element) {
+                      var name = element.abrevation + (element.translation ? '-' + element.translation.name : '');
+                      var tmp = {
+                        identification_type: name,
+                        meta: element
+                      };
+                      _this4.identificationsTypesIdName[element.id] = name;
+
+                      _this4.identificationsTypes.push(tmp); //selected
+
+
+                      if (_this4.programmer.identifications_types_id.value === element.id) {
+                        _this4.identificationTypeSelected = element;
+                        _this4.identificationTypeSelectedOriginal = element;
+                      }
+                    });
+                  }
+                }, function (error) {
+                  _this4.showErrors(error);
+                }).then(function () {
+                  _this4.isLoading = false;
+                });
 
               case 3:
-                _context3.next = 7;
-                break;
-
-              case 5:
-                _context3.next = 7;
-                return _this4.getAvatarString();
-
-              case 7:
               case "end":
                 return _context3.stop();
             }
@@ -4701,44 +4725,31 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }, _callee3);
       }))();
     },
-    getImg64Base: function getImg64Base(option, name) {
+    getImgAvatar: function getImgAvatar() {
       var _this5 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        var params;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                if (!name) {
+                if (!_this5.participant.profile_image.value) {
                   _context4.next = 5;
                   break;
                 }
 
-                _this5.isLoading = true;
-                params = {
-                  name: name,
-                  option: option
-                };
-                _context4.next = 5;
-                return axios.get(_this5.url_image_base, {
-                  params: params
-                }).then(function (response) {
-                  if (response.status === 200) {
-                    if (option === _this5.OPTIONS.PROGRAMMER) {
-                      _this5.img64Base = response.data;
-                    } else if (option === _this5.OPTIONS.PARTICIPANT) {
-                      _this5.avatarAdmin = response.data;
-                      _this5.avatarAdminCopy = response.data;
-                    }
-                  }
-                }, function (error) {
-                  _this5.showErrors(error);
-                }).then(function () {
-                  _this5.isLoading = false;
-                });
+                _context4.next = 3;
+                return _this5.getImg64Base(_this5.OPTIONS.PARTICIPANT, _this5.participant.profile_image.value);
+
+              case 3:
+                _context4.next = 7;
+                break;
 
               case 5:
+                _context4.next = 7;
+                return _this5.getAvatarString();
+
+              case 7:
               case "end":
                 return _context4.stop();
             }
@@ -4746,17 +4757,62 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }, _callee4);
       }))();
     },
-    getAvatarString: function getAvatarString() {
+    getImg64Base: function getImg64Base(option, name) {
       var _this6 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
-        var fname, lname, name;
+        var params;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
-                fname = _this6.participant.person.first_name.value.trim();
-                lname = _this6.participant.person.last_name.value.trim();
+                if (!name) {
+                  _context5.next = 5;
+                  break;
+                }
+
+                _this6.isLoading = true;
+                params = {
+                  name: name,
+                  option: option
+                };
+                _context5.next = 5;
+                return axios.get(_this6.url_image_base, {
+                  params: params
+                }).then(function (response) {
+                  if (response.status === 200) {
+                    if (option === _this6.OPTIONS.PROGRAMMER) {
+                      _this6.img64Base = response.data;
+                    } else if (option === _this6.OPTIONS.PARTICIPANT) {
+                      _this6.avatarAdmin = response.data;
+                      _this6.avatarAdminCopy = response.data;
+                    }
+                  }
+                }, function (error) {
+                  _this6.showErrors(error);
+                }).then(function () {
+                  _this6.isLoading = false;
+                });
+
+              case 5:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
+      }))();
+    },
+    getAvatarString: function getAvatarString() {
+      var _this7 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+        var fname, lname, name;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                fname = _this7.participant.person.first_name.value.trim();
+                lname = _this7.participant.person.last_name.value.trim();
                 name = ""; //Only one first name
 
                 if (fname !== "") {
@@ -4771,41 +4827,41 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 name = name.trim();
 
                 if (!(name !== "")) {
-                  _context5.next = 12;
+                  _context6.next = 12;
                   break;
                 }
 
-                _this6.isLoading = true;
-                _context5.next = 10;
-                return axios.post(_this6.url_person_ui_avatar, {
+                _this7.isLoading = true;
+                _context6.next = 10;
+                return axios.post(_this7.url_person_ui_avatar, {
                   name: name
                 }).then(function (response) {
-                  _this6.showErrors({});
+                  _this7.showErrors({});
 
                   if (response.data.status === 200) {
-                    _this6.avatarAdmin = response.data.avatar.encoded;
-                    _this6.avatarAdminCopy = response.data.avatar.encoded;
+                    _this7.avatarAdmin = response.data.avatar.encoded;
+                    _this7.avatarAdminCopy = response.data.avatar.encoded;
                   }
                 }, function (error) {
-                  _this6.showErrors(error);
+                  _this7.showErrors(error);
                 }).then(function () {
-                  _this6.isLoading = false;
+                  _this7.isLoading = false;
                 });
 
               case 10:
-                _context5.next = 14;
+                _context6.next = 14;
                 break;
 
               case 12:
-                _this6.avatarAdmin = null;
-                _this6.avatarAdminCopy = null;
+                _this7.avatarAdmin = null;
+                _this7.avatarAdminCopy = null;
 
               case 14:
               case "end":
-                return _context5.stop();
+                return _context6.stop();
             }
           }
-        }, _callee5);
+        }, _callee6);
       }))();
     },
     generateDV: function generateDV(num) {
@@ -4830,70 +4886,6 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       return dv;
     },
     getEmailsAdmin: function getEmailsAdmin() {
-      var _this7 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
-        var params;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
-          while (1) {
-            switch (_context6.prev = _context6.next) {
-              case 0:
-                _this7.isLoading = true;
-                params = {
-                  persons_id: _this7.participant.person.id.value
-                };
-                _context6.next = 4;
-                return axios.post(_this7.url_person_emails_admin, params).then(function (response) {
-                  _this7.showErrors({});
-
-                  if (response.data.status === 200) {
-                    response.data.emails.forEach(function (element) {
-                      if (element.initial_register === 1) {
-                        //Set with no-reactive values
-                        Vue.set(_this7.participant.person, 'initial_register_email', {
-                          'value': Object.assign({}, element),
-                          'msg': _this7.fieldsParticipant.mobile.msg,
-                          'edited': false,
-                          'editing': false
-                        });
-                        Vue.set(_this7.participantCopy.person, 'initial_register_email', {
-                          'value': Object.assign({}, element),
-                          'msg': _this7.fieldsParticipant.mobile.msg,
-                          'edited': false,
-                          'editing': false
-                        });
-                      } else if (element.used_events === 1) {
-                        //Set with no-reactive values
-                        Vue.set(_this7.participant.person, 'used_events_email', {
-                          'value': Object.assign({}, element),
-                          'msg': _this7.fieldsParticipant.mobile.msg,
-                          'edited': false,
-                          'editing': false
-                        });
-                        Vue.set(_this7.participantCopy.person, 'used_events_email', {
-                          'value': Object.assign({}, element),
-                          'msg': _this7.fieldsParticipant.mobile.msg,
-                          'edited': false,
-                          'editing': false
-                        });
-                      }
-                    });
-                  }
-                }, function (error) {
-                  _this7.showErrors(error);
-                }).then(function () {
-                  _this7.isLoading = false;
-                });
-
-              case 4:
-              case "end":
-                return _context6.stop();
-            }
-          }
-        }, _callee6);
-      }))();
-    },
-    getCellphones: function getCellphones() {
       var _this8 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
@@ -4904,11 +4896,75 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
               case 0:
                 _this8.isLoading = true;
                 params = {
-                  persons_id: _this8.participant.person.id.value
+                  persons_id: _this8.participant.persons_id.value
                 };
                 _context7.next = 4;
-                return axios.post(_this8.url_persons_cellphones_for_person, params).then(function (response) {
+                return axios.post(_this8.url_person_emails_admin, params).then(function (response) {
                   _this8.showErrors({});
+
+                  if (response.data.status === 200) {
+                    response.data.emails.forEach(function (element) {
+                      if (element.initial_register === 1) {
+                        //Set with no-reactive values
+                        Vue.set(_this8.participant.person, 'initial_register_email', {
+                          'value': Object.assign({}, element),
+                          'msg': _this8.fieldsParticipant.mobile.msg,
+                          'edited': false,
+                          'editing': false
+                        });
+                        Vue.set(_this8.participantCopy.person, 'initial_register_email', {
+                          'value': Object.assign({}, element),
+                          'msg': _this8.fieldsParticipant.mobile.msg,
+                          'edited': false,
+                          'editing': false
+                        });
+                      } else if (element.used_events === 1) {
+                        //Set with no-reactive values
+                        Vue.set(_this8.participant.person, 'used_events_email', {
+                          'value': Object.assign({}, element),
+                          'msg': _this8.fieldsParticipant.mobile.msg,
+                          'edited': false,
+                          'editing': false
+                        });
+                        Vue.set(_this8.participantCopy.person, 'used_events_email', {
+                          'value': Object.assign({}, element),
+                          'msg': _this8.fieldsParticipant.mobile.msg,
+                          'edited': false,
+                          'editing': false
+                        });
+                      }
+                    });
+                  }
+                }, function (error) {
+                  _this8.showErrors(error);
+                }).then(function () {
+                  _this8.isLoading = false;
+                });
+
+              case 4:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7);
+      }))();
+    },
+    getCellphones: function getCellphones() {
+      var _this9 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8() {
+        var params;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
+          while (1) {
+            switch (_context8.prev = _context8.next) {
+              case 0:
+                _this9.isLoading = true;
+                params = {
+                  persons_id: _this9.participant.person.id.value
+                };
+                _context8.next = 4;
+                return axios.post(_this9.url_persons_cellphones_for_person, params).then(function (response) {
+                  _this9.showErrors({});
 
                   if (response.data.status === 200) {
                     var cellphones = [];
@@ -4917,7 +4973,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                       cellphones.push({
                         'value': Object.assign({}, element),
                         'error': false,
-                        'msg': _this8.fieldsParticipant.mobile.msg,
+                        'msg': _this9.fieldsParticipant.mobile.msg,
                         'edited': false,
                         'editing': false
                       });
@@ -4935,7 +4991,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                           cellphone_number: null
                         },
                         'error': false,
-                        'msg': _this8.fieldsParticipant.mobile.msg,
+                        'msg': _this9.fieldsParticipant.mobile.msg,
                         'edited': false,
                         'editing': false
                       });
@@ -4944,60 +5000,15 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                           cellphone_number: null
                         },
                         'error': false,
-                        'msg': _this8.fieldsParticipant.mobile.msg,
+                        'msg': _this9.fieldsParticipant.mobile.msg,
                         'edited': false,
                         'editing': false
                       });
                     } //Set with no-reactive values
 
 
-                    Vue.set(_this8.participant.person, 'cellphones', cellphones);
-                    Vue.set(_this8.participantCopy.person, 'cellphones', cellphonesCopy);
-                  }
-                }, function (error) {
-                  _this8.showErrors(error);
-                }).then(function () {
-                  _this8.isLoading = false;
-                });
-
-              case 4:
-              case "end":
-                return _context7.stop();
-            }
-          }
-        }, _callee7);
-      }))();
-    },
-    clickCancelToHome: function clickCancelToHome() {
-      this.$emit('activeMainSection', 'main');
-    },
-    emailsExist: function emailsExist() {
-      var _arguments = arguments,
-          _this9 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8() {
-        var emails, data;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
-          while (1) {
-            switch (_context8.prev = _context8.next) {
-              case 0:
-                emails = _arguments.length > 0 && _arguments[0] !== undefined ? _arguments[0] : [];
-                _this9.isLoading = true;
-                data = null;
-
-                if (!(emails && _.isArray(emails) && !_.isEmpty(emails))) {
-                  _context8.next = 8;
-                  break;
-                }
-
-                _context8.next = 6;
-                return axios.post(_this9.url_person_email_exist, {
-                  emails: emails
-                }).then(function (response) {
-                  _this9.showErrors({});
-
-                  if (response.data.status === 200) {
-                    data = response.data;
+                    Vue.set(_this9.participant.person, 'cellphones', cellphones);
+                    Vue.set(_this9.participantCopy.person, 'cellphones', cellphonesCopy);
                   }
                 }, function (error) {
                   _this9.showErrors(error);
@@ -5005,22 +5016,67 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                   _this9.isLoading = false;
                 });
 
-              case 6:
-                _context8.next = 9;
-                break;
-
-              case 8:
-                _this9.isLoading = false;
-
-              case 9:
-                return _context8.abrupt("return", data);
-
-              case 10:
+              case 4:
               case "end":
                 return _context8.stop();
             }
           }
         }, _callee8);
+      }))();
+    },
+    clickCancelToHome: function clickCancelToHome() {
+      this.$emit('activeMainSection', 'main');
+    },
+    emailsExist: function emailsExist() {
+      var _arguments = arguments,
+          _this10 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee9() {
+        var emails, data;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee9$(_context9) {
+          while (1) {
+            switch (_context9.prev = _context9.next) {
+              case 0:
+                emails = _arguments.length > 0 && _arguments[0] !== undefined ? _arguments[0] : [];
+                _this10.isLoading = true;
+                data = null;
+
+                if (!(emails && _.isArray(emails) && !_.isEmpty(emails))) {
+                  _context9.next = 8;
+                  break;
+                }
+
+                _context9.next = 6;
+                return axios.post(_this10.url_person_email_exist, {
+                  emails: emails
+                }).then(function (response) {
+                  _this10.showErrors({});
+
+                  if (response.data.status === 200) {
+                    data = response.data;
+                  }
+                }, function (error) {
+                  _this10.showErrors(error);
+                }).then(function () {
+                  _this10.isLoading = false;
+                });
+
+              case 6:
+                _context9.next = 9;
+                break;
+
+              case 8:
+                _this10.isLoading = false;
+
+              case 9:
+                return _context9.abrupt("return", data);
+
+              case 10:
+              case "end":
+                return _context9.stop();
+            }
+          }
+        }, _callee9);
       }))();
     },
     onlyNumber: function onlyNumber(event, obj) {
@@ -5053,62 +5109,62 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       return false;
     },
     cellphoneExists: function cellphoneExists(mobile) {
-      var _this10 = this;
+      var _this11 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee9() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee10() {
         var data;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee9$(_context9) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee10$(_context10) {
           while (1) {
-            switch (_context9.prev = _context9.next) {
+            switch (_context10.prev = _context10.next) {
               case 0:
-                _this10.isLoading = true;
+                _this11.isLoading = true;
                 data = null;
 
                 if (!(mobile && !_.isEmpty(mobile))) {
-                  _context9.next = 7;
+                  _context10.next = 7;
                   break;
                 }
 
-                _context9.next = 5;
-                return axios.post(_this10.url_person_cellphone_exist, {
+                _context10.next = 5;
+                return axios.post(_this11.url_person_cellphone_exist, {
                   mobile: mobile
                 }).then(function (response) {
-                  _this10.showErrors({});
+                  _this11.showErrors({});
 
                   if (response.data.status === 200) {
                     data = response.data;
                   }
                 }, function (error) {
-                  _this10.showErrors(error);
+                  _this11.showErrors(error);
                 }).then(function () {
-                  _this10.isLoading = false;
+                  _this11.isLoading = false;
                 });
 
               case 5:
-                _context9.next = 8;
+                _context10.next = 8;
                 break;
 
               case 7:
-                _this10.isLoading = false;
+                _this11.isLoading = false;
 
               case 8:
-                return _context9.abrupt("return", data);
+                return _context10.abrupt("return", data);
 
               case 9:
               case "end":
-                return _context9.stop();
+                return _context10.stop();
             }
           }
-        }, _callee9);
+        }, _callee10);
       }))();
     },
     imageToBase64: function imageToBase64(file) {
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee10() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee10$(_context10) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee11() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee11$(_context11) {
           while (1) {
-            switch (_context10.prev = _context10.next) {
+            switch (_context11.prev = _context11.next) {
               case 0:
-                _context10.next = 2;
+                _context11.next = 2;
                 return new Promise(function (resolve, reject) {
                   var reader = new FileReader();
                   reader.readAsDataURL(file);
@@ -5123,60 +5179,9 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 });
 
               case 2:
-                return _context10.abrupt("return", _context10.sent);
+                return _context11.abrupt("return", _context11.sent);
 
               case 3:
-              case "end":
-                return _context10.stop();
-            }
-          }
-        }, _callee10);
-      }))();
-    },
-    onFileLogoSelected: function onFileLogoSelected() {
-      var _this11 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee11() {
-        var result;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee11$(_context11) {
-          while (1) {
-            switch (_context11.prev = _context11.next) {
-              case 0:
-                if (!_this11.fileLogo) {
-                  _context11.next = 14;
-                  break;
-                }
-
-                _this11.isLoading = true;
-                _this11.fieldsProgrammer.logo.error = false;
-                _this11.enabledUploadLogo = true;
-                _context11.next = 6;
-                return _this11.imageToBase64(_this11.fileLogo)["catch"](function (e) {
-                  return Error(e);
-                });
-
-              case 6:
-                result = _context11.sent;
-
-                if (!(result instanceof Error)) {
-                  _context11.next = 10;
-                  break;
-                }
-
-                _this11.showErrors(result.message);
-
-                return _context11.abrupt("return");
-
-              case 10:
-                _this11.logoBase64 = result;
-                _this11.isLoading = false;
-                _context11.next = 15;
-                break;
-
-              case 14:
-                _this11.enabledUploadLogo = false;
-
-              case 15:
               case "end":
                 return _context11.stop();
             }
@@ -5184,7 +5189,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }, _callee11);
       }))();
     },
-    onFileAvatarSelected: function onFileAvatarSelected() {
+    onFileLogoSelected: function onFileLogoSelected() {
       var _this12 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee12() {
@@ -5193,16 +5198,16 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
           while (1) {
             switch (_context12.prev = _context12.next) {
               case 0:
-                if (!_this12.fileAvatar) {
+                if (!_this12.fileLogo) {
                   _context12.next = 14;
                   break;
                 }
 
                 _this12.isLoading = true;
-                _this12.fieldsParticipant.profile_image.error = false;
-                _this12.enabledUploadAvatar = true;
+                _this12.fieldsProgrammer.logo.error = false;
+                _this12.enabledUploadLogo = true;
                 _context12.next = 6;
-                return _this12.imageToBase64(_this12.fileAvatar)["catch"](function (e) {
+                return _this12.imageToBase64(_this12.fileLogo)["catch"](function (e) {
                   return Error(e);
                 });
 
@@ -5219,13 +5224,13 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 return _context12.abrupt("return");
 
               case 10:
-                _this12.avatarAdmin = result;
+                _this12.logoBase64 = result;
                 _this12.isLoading = false;
                 _context12.next = 15;
                 break;
 
               case 14:
-                _this12.enabledUploadAvatar = false;
+                _this12.enabledUploadLogo = false;
 
               case 15:
               case "end":
@@ -5235,14 +5240,65 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }, _callee12);
       }))();
     },
-    clickEditProgrammer: function clickEditProgrammer(key) {
+    onFileAvatarSelected: function onFileAvatarSelected() {
       var _this13 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee13() {
+        var result;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee13$(_context13) {
+          while (1) {
+            switch (_context13.prev = _context13.next) {
+              case 0:
+                if (!_this13.fileAvatar) {
+                  _context13.next = 14;
+                  break;
+                }
+
+                _this13.isLoading = true;
+                _this13.fieldsParticipant.profile_image.error = false;
+                _this13.enabledUploadAvatar = true;
+                _context13.next = 6;
+                return _this13.imageToBase64(_this13.fileAvatar)["catch"](function (e) {
+                  return Error(e);
+                });
+
+              case 6:
+                result = _context13.sent;
+
+                if (!(result instanceof Error)) {
+                  _context13.next = 10;
+                  break;
+                }
+
+                _this13.showErrors(result.message);
+
+                return _context13.abrupt("return");
+
+              case 10:
+                _this13.avatarAdmin = result;
+                _this13.isLoading = false;
+                _context13.next = 15;
+                break;
+
+              case 14:
+                _this13.enabledUploadAvatar = false;
+
+              case 15:
+              case "end":
+                return _context13.stop();
+            }
+          }
+        }, _callee13);
+      }))();
+    },
+    clickEditProgrammer: function clickEditProgrammer(key) {
+      var _this14 = this;
 
       this.programmer[key].editing = !this.programmer[key].editing; //wait for the input to load
 
       this.$nextTick(function () {
-        if (_this13.$refs[key]) {
-          _this13.$refs[key].focus();
+        if (_this14.$refs[key]) {
+          _this14.$refs[key].focus();
         }
       });
     },
@@ -5320,7 +5376,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       }
     },
     updateProgrammer: function updateProgrammer(key) {
-      var _this14 = this;
+      var _this15 = this;
 
       var obj = this.programmer[key];
 
@@ -5336,41 +5392,41 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }
 
         axios.post(this.url_update_programmer, params).then(function (response) {
-          _this14.showErrors({});
+          _this15.showErrors({});
 
           if (response.data.status === 200) {
             //update/restore value copy
             if (key === "logo" && response.data.data.extra) //Update logo info
               {
-                _this14.programmer[key].value = response.data.data.extra;
-                _this14.programmerCopy[key].value = response.data.data.extra;
-                _this14.fileLogo = null;
-                _this14.logoBase64 = null;
-                _this14.enabledUploadLogo = false;
+                _this15.programmer[key].value = response.data.data.extra;
+                _this15.programmerCopy[key].value = response.data.data.extra;
+                _this15.fileLogo = null;
+                _this15.logoBase64 = null;
+                _this15.enabledUploadLogo = false;
 
-                _this14.getImg64Base(_this14.OPTIONS.PROGRAMMER, _this14.programmer.logo.value);
+                _this15.getImg64Base(_this15.OPTIONS.PROGRAMMER, _this15.programmer.logo.value);
               } else //Update copy
               {
-                _this14.programmerCopy[key].value = obj.value;
+                _this15.programmerCopy[key].value = obj.value;
               }
 
             obj.edited = false; //restore
 
             obj.editing = false; //restore
 
-            if (key === "identification" && _this14.identificationTypeSelected !== _this14.identificationTypeSelectedOriginal) {
-              _this14.identificationTypeSelectedOriginal = _this14.identificationTypeSelected; //restore
+            if (key === "identification" && _this15.identificationTypeSelected !== _this15.identificationTypeSelectedOriginal) {
+              _this15.identificationTypeSelectedOriginal = _this15.identificationTypeSelected; //restore
             }
 
             Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
-              title: _this14.text_success,
-              text: _this14.textsGeneralSettings.text_updated_programmer
+              title: _this15.text_success,
+              text: _this15.textsGeneralSettings.text_updated_programmer
             });
           }
         }, function (error) {
-          _this14.showErrors(error);
+          _this15.showErrors(error);
         }).then(function () {
-          _this14.isLoading = false;
+          _this15.isLoading = false;
         });
       }
     },
@@ -5409,7 +5465,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       }
     },
     clickEditParticipant: function clickEditParticipant(key) {
-      var _this15 = this;
+      var _this16 = this;
 
       var index = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
       //Get keys, for exaple: person.emails
@@ -5430,11 +5486,11 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
 
 
       this.$nextTick(function () {
-        if (_this15.$refs[keyRef]) {
-          if (_.isArray(_this15.$refs[keyRef])) {
-            _this15.$refs[keyRef][0].focus();
+        if (_this16.$refs[keyRef]) {
+          if (_.isArray(_this16.$refs[keyRef])) {
+            _this16.$refs[keyRef][0].focus();
           } else {
-            _this15.$refs[keyRef].focus();
+            _this16.$refs[keyRef].focus();
           }
         }
       });
@@ -5470,29 +5526,29 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
     },
     clickUpdateParticipant: function clickUpdateParticipant(key) {
       var _arguments2 = arguments,
-          _this16 = this;
+          _this17 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee13() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee14() {
         var index, keys, obj, objCopy, different, valid, value, constraints, constrEmail, data, regex, constrMobile, _data;
 
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee13$(_context13) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee14$(_context14) {
           while (1) {
-            switch (_context13.prev = _context13.next) {
+            switch (_context14.prev = _context14.next) {
               case 0:
                 index = _arguments2.length > 1 && _arguments2[1] !== undefined ? _arguments2[1] : null;
-                _this16.isLoading = true; //cleans errors
+                _this17.isLoading = true; //cleans errors
 
-                _this16.setErrorParticipant(key, false, index);
+                _this17.setErrorParticipant(key, false, index);
 
                 if (key === "profile_image") {
                   //Value for save in DDBB
-                  _this16.participant[key].value = _this16.avatarAdmin;
+                  _this17.participant[key].value = _this17.avatarAdmin;
                 } //Get keys, for exaple: person.emails
 
 
                 keys = key.split(".");
-                obj = _this16.participant;
-                objCopy = _this16.participantCopy;
+                obj = _this17.participant;
+                objCopy = _this17.participantCopy;
                 keys.forEach(function (k) {
                   obj = obj[k];
                   objCopy = objCopy[k];
@@ -5506,29 +5562,29 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
 
 
                 different = false;
-                _context13.t0 = key;
-                _context13.next = _context13.t0 === "profile_image" ? 13 : _context13.t0 === "person.used_events_email" ? 15 : _context13.t0 === "person.cellphones" ? 17 : 19;
+                _context14.t0 = key;
+                _context14.next = _context14.t0 === "profile_image" ? 13 : _context14.t0 === "person.used_events_email" ? 15 : _context14.t0 === "person.cellphones" ? 17 : 19;
                 break;
 
               case 13:
-                different = _this16.avatarAdmin !== _this16.avatarAdminCopy;
-                return _context13.abrupt("break", 21);
+                different = _this17.avatarAdmin !== _this17.avatarAdminCopy;
+                return _context14.abrupt("break", 21);
 
               case 15:
                 different = obj.value.email !== objCopy.value.email;
-                return _context13.abrupt("break", 21);
+                return _context14.abrupt("break", 21);
 
               case 17:
                 different = obj.value.cellphone_number !== objCopy.value.cellphone_number;
-                return _context13.abrupt("break", 21);
+                return _context14.abrupt("break", 21);
 
               case 19:
                 different = obj.value !== objCopy.value;
-                return _context13.abrupt("break", 21);
+                return _context14.abrupt("break", 21);
 
               case 21:
                 if (!different) {
-                  _context13.next = 81;
+                  _context14.next = 81;
                   break;
                 }
 
@@ -5543,13 +5599,13 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 };
 
                 if (validate.single(value, constraints) !== undefined) {
-                  _this16.setErrorParticipant(key, true);
+                  _this17.setErrorParticipant(key, true);
 
                   valid = false;
                 }
 
                 if (!(key === "person.used_events_email")) {
-                  _context13.next = 51;
+                  _context14.next = 51;
                   break;
                 }
 
@@ -5558,78 +5614,78 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 }, constraints);
 
                 if (!(validate.single(obj.value.email, constraints) !== undefined)) {
-                  _context13.next = 35;
+                  _context14.next = 35;
                   break;
                 }
 
-                _this16.emailError = _this16.fieldsParticipant.email.msg;
+                _this17.emailError = _this17.fieldsParticipant.email.msg;
 
-                _this16.setErrorParticipant(key, true);
+                _this17.setErrorParticipant(key, true);
 
                 valid = false;
-                _context13.next = 51;
+                _context14.next = 51;
                 break;
 
               case 35:
                 if (!(validate.single(obj.value.email, constrEmail) !== undefined)) {
-                  _context13.next = 41;
+                  _context14.next = 41;
                   break;
                 }
 
-                _this16.emailError = _this16.fieldsParticipant.email.msg_validate;
+                _this17.emailError = _this17.fieldsParticipant.email.msg_validate;
 
-                _this16.setErrorParticipant(key, true);
+                _this17.setErrorParticipant(key, true);
 
                 valid = false;
-                _context13.next = 51;
+                _context14.next = 51;
                 break;
 
               case 41:
-                if (!(obj.value.email === _this16.participant.person.initial_register_email.value.email)) {
-                  _context13.next = 47;
+                if (!(obj.value.email === _this17.participant.person.initial_register_email.value.email)) {
+                  _context14.next = 47;
                   break;
                 }
 
-                _this16.emailError = _this16.fieldsParticipant.email.msg_validate;
+                _this17.emailError = _this17.fieldsParticipant.email.msg_validate;
 
-                _this16.setErrorParticipant(key, true);
+                _this17.setErrorParticipant(key, true);
 
                 valid = false;
-                _context13.next = 51;
+                _context14.next = 51;
                 break;
 
               case 47:
-                _context13.next = 49;
-                return _this16.emailsExist([obj.value.email]);
+                _context14.next = 49;
+                return _this17.emailsExist([obj.value.email]);
 
               case 49:
-                data = _context13.sent;
+                data = _context14.sent;
 
                 if (data.exists) {
-                  _this16.emailError = _this16.fieldsParticipant.email.msg_exist;
+                  _this17.emailError = _this17.fieldsParticipant.email.msg_exist;
 
-                  _this16.setErrorParticipant(key, true);
+                  _this17.setErrorParticipant(key, true);
 
                   valid = false;
                 }
 
               case 51:
                 if (!(key === "person.cellphones")) {
-                  _context13.next = 76;
+                  _context14.next = 76;
                   break;
                 }
 
                 if (!(validate.single(obj.value.cellphone_number, constraints) !== undefined)) {
-                  _context13.next = 58;
+                  _context14.next = 58;
                   break;
                 }
 
-                obj.msg = _this16.fieldsParticipant.mobile.msg;
+                obj.msg = _this17.fieldsParticipant.mobile.msg;
 
-                _this16.setErrorParticipant(key, true, index);
+                _this17.setErrorParticipant(key, true, index);
 
                 valid = false;
-                _context13.next = 76;
+                _context14.next = 76;
                 break;
 
               case 58:
@@ -5639,126 +5695,69 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 }, constraints);
 
                 if (!(validate.single(obj.value.cellphone_number, constrMobile) !== undefined)) {
-                  _context13.next = 66;
+                  _context14.next = 66;
                   break;
                 }
 
-                obj.msg = _this16.fieldsParticipant.mobile.msg_validate;
+                obj.msg = _this17.fieldsParticipant.mobile.msg_validate;
 
-                _this16.setErrorParticipant(key, true, index);
+                _this17.setErrorParticipant(key, true, index);
 
                 valid = false;
-                _context13.next = 76;
+                _context14.next = 76;
                 break;
 
               case 66:
-                if (!_this16.isCellphoneDuplicate(index)) {
-                  _context13.next = 72;
+                if (!_this17.isCellphoneDuplicate(index)) {
+                  _context14.next = 72;
                   break;
                 }
 
-                obj.msg = _this16.fieldsParticipant.mobile.msg_exist;
+                obj.msg = _this17.fieldsParticipant.mobile.msg_exist;
 
-                _this16.setErrorParticipant(key, true, index);
+                _this17.setErrorParticipant(key, true, index);
 
                 valid = false;
-                _context13.next = 76;
+                _context14.next = 76;
                 break;
 
               case 72:
-                _context13.next = 74;
-                return _this16.cellphoneExists(obj.value.cellphone_number);
+                _context14.next = 74;
+                return _this17.cellphoneExists(obj.value.cellphone_number);
 
               case 74:
-                _data = _context13.sent;
+                _data = _context14.sent;
 
                 if (_data.exists) {
-                  obj.msg = _this16.fieldsParticipant.mobile.msg_exist;
+                  obj.msg = _this17.fieldsParticipant.mobile.msg_exist;
 
-                  _this16.setErrorParticipant(key, true, index);
+                  _this17.setErrorParticipant(key, true, index);
 
                   valid = false;
                 }
 
               case 76:
-                if (key === "profile_image" && _this16.fileAvatar.size > _this16.sizeFieleUploadAllow) {
-                  _this16.setErrorParticipant(key, true);
+                if (key === "profile_image" && _this17.fileAvatar.size > _this17.sizeFieleUploadAllow) {
+                  _this17.setErrorParticipant(key, true);
 
                   valid = false;
                 }
 
-                _this16.isLoading = false;
+                _this17.isLoading = false;
 
                 if (valid) //Not errors
                   {
                     //update
-                    _this16.updateParticipant(key, index);
+                    _this17.updateParticipant(key, index);
                   }
 
-                _context13.next = 82;
+                _context14.next = 82;
                 break;
 
               case 81:
-                _this16.isLoading = false;
+                _this17.isLoading = false;
 
               case 82:
-              case "end":
-                return _context13.stop();
-            }
-          }
-        }, _callee13);
-      }))();
-    },
-    updateDBParticipant: function updateDBParticipant(key, obj, objCopy) {
-      var _this17 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee14() {
-        var params;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee14$(_context14) {
-          while (1) {
-            switch (_context14.prev = _context14.next) {
-              case 0:
-                _this17.isLoading = true;
-                params = {
-                  id: _this17.participant.id.value
-                };
-                params[key] = obj.value;
-                _context14.next = 5;
-                return axios.post(_this17.url_participant_update, params).then(function (response) {
-                  _this17.showErrors({});
-
-                  if (response.data.status === 200) {
-                    //update/restore value copy
-                    if (key === "profile_image" && response.data.data.extra) //Update avatar info
-                      {
-                        obj.value = response.data.data.extra;
-                        objCopy.value = Object.assign({}, response.data.data.extra); //Non-reactive copy
-
-                        _this17.fileAvatar = null;
-                        _this17.enabledUploadAvatar = false;
-
-                        _this17.getImg64Base(_this17.OPTIONS.PARTICIPANT, _this17.participant.profile_image.value);
-                      } else //Update copy
-                      {
-                        objCopy.value = Object.assign({}, obj.value); //Non-reactive copy
-                      }
-
-                    obj.edited = false; //restore
-
-                    obj.editing = false; //restore
-
-                    Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
-                      title: _this17.text_success,
-                      text: _this17.textsGeneralSettings.text_updated_participant
-                    });
-                  }
-                }, function (error) {
-                  _this17.showErrors(error);
-                }).then(function () {
-                  _this17.isLoading = false;
-                });
-
-              case 5:
               case "end":
                 return _context14.stop();
             }
@@ -5766,7 +5765,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }, _callee14);
       }))();
     },
-    createDBPersonEmailUsedEvents: function createDBPersonEmailUsedEvents(obj, objCopy) {
+    updateDBParticipant: function updateDBParticipant(key, obj, objCopy) {
       var _this18 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee15() {
@@ -5777,23 +5776,28 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
               case 0:
                 _this18.isLoading = true;
                 params = {
-                  email: obj.value.email,
-                  persons_id: _this18.participant.persons_id.value,
-                  used_events: 1,
-                  status_persons_emails_id: _this18.OPTIONS.STATUS_PERSONS_EMAILS.PENDING
+                  id: _this18.participant.id.value
                 };
-                _context15.next = 4;
-                return axios.post(_this18.url_persons_emails_store, params).then(function (response) {
+                params[key] = obj.value;
+                _context15.next = 5;
+                return axios.post(_this18.url_participant_update, params).then(function (response) {
                   _this18.showErrors({});
 
-                  if (response.data.status === 201) {
+                  if (response.data.status === 200) {
                     //update/restore value copy
-                    obj.value = response.data.data;
-                    objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
+                    if (key === "profile_image" && response.data.data.extra) //Update avatar info
+                      {
+                        obj.value = response.data.data.extra;
+                        objCopy.value = Object.assign({}, response.data.data.extra); //Non-reactive copy
 
-                    objCopy.edited = false; //restore
+                        _this18.fileAvatar = null;
+                        _this18.enabledUploadAvatar = false;
 
-                    objCopy.editing = false; //restore
+                        _this18.getImg64Base(_this18.OPTIONS.PARTICIPANT, _this18.participant.profile_image.value);
+                      } else //Update copy
+                      {
+                        objCopy.value = Object.assign({}, obj.value); //Non-reactive copy
+                      }
 
                     obj.edited = false; //restore
 
@@ -5810,7 +5814,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                   _this18.isLoading = false;
                 });
 
-              case 4:
+              case 5:
               case "end":
                 return _context15.stop();
             }
@@ -5818,7 +5822,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }, _callee15);
       }))();
     },
-    updateDBPersonEmailUsedEvents: function updateDBPersonEmailUsedEvents(obj, objCopy) {
+    createDBPersonEmailUsedEvents: function createDBPersonEmailUsedEvents(obj, objCopy) {
       var _this19 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee16() {
@@ -5830,15 +5834,15 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 _this19.isLoading = true;
                 params = {
                   email: obj.value.email,
-                  id: obj.value.id,
+                  persons_id: _this19.participant.persons_id.value,
                   used_events: 1,
                   status_persons_emails_id: _this19.OPTIONS.STATUS_PERSONS_EMAILS.PENDING
                 };
                 _context16.next = 4;
-                return axios.post(_this19.url_persons_emails_update, params).then(function (response) {
+                return axios.post(_this19.url_persons_emails_store, params).then(function (response) {
                   _this19.showErrors({});
 
-                  if (response.data.status === 200) {
+                  if (response.data.status === 201) {
                     //update/restore value copy
                     obj.value = response.data.data;
                     objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
@@ -5870,7 +5874,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }, _callee16);
       }))();
     },
-    createDBPersonCellhpone: function createDBPersonCellhpone(obj, objCopy) {
+    updateDBPersonEmailUsedEvents: function updateDBPersonEmailUsedEvents(obj, objCopy) {
       var _this20 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee17() {
@@ -5881,14 +5885,16 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
               case 0:
                 _this20.isLoading = true;
                 params = {
-                  mobile: obj.value.cellphone_number,
-                  persons_id: _this20.participant.persons_id.value
+                  email: obj.value.email,
+                  id: obj.value.id,
+                  used_events: 1,
+                  status_persons_emails_id: _this20.OPTIONS.STATUS_PERSONS_EMAILS.PENDING
                 };
                 _context17.next = 4;
-                return axios.post(_this20.url_persons_cellphone_store, params).then(function (response) {
+                return axios.post(_this20.url_persons_emails_update, params).then(function (response) {
                   _this20.showErrors({});
 
-                  if (response.data.status === 201) {
+                  if (response.data.status === 200) {
                     //update/restore value copy
                     obj.value = response.data.data;
                     objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
@@ -5920,7 +5926,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }, _callee17);
       }))();
     },
-    updateDBPersonCellhpone: function updateDBPersonCellhpone(obj, objCopy) {
+    createDBPersonCellhpone: function createDBPersonCellhpone(obj, objCopy) {
       var _this21 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee18() {
@@ -5932,13 +5938,13 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                 _this21.isLoading = true;
                 params = {
                   mobile: obj.value.cellphone_number,
-                  id: obj.value.id
+                  persons_id: _this21.participant.persons_id.value
                 };
                 _context18.next = 4;
-                return axios.post(_this21.url_person_cellphone_update, params).then(function (response) {
+                return axios.post(_this21.url_persons_cellphone_store, params).then(function (response) {
                   _this21.showErrors({});
 
-                  if (response.data.status === 200) {
+                  if (response.data.status === 201) {
                     //update/restore value copy
                     obj.value = response.data.data;
                     objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
@@ -5970,7 +5976,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }, _callee18);
       }))();
     },
-    updatedDBPerson: function updatedDBPerson(keyParamenter, obj, objCopy) {
+    updateDBPersonCellhpone: function updateDBPersonCellhpone(obj, objCopy) {
       var _this22 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee19() {
@@ -5981,17 +5987,18 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
               case 0:
                 _this22.isLoading = true;
                 params = {
-                  id: _this22.participant.person.id.value
+                  mobile: obj.value.cellphone_number,
+                  id: obj.value.id
                 };
-                params[keyParamenter] = obj.value;
-                _context19.next = 5;
-                return axios.post(_this22.url_person_update, params).then(function (response) {
+                _context19.next = 4;
+                return axios.post(_this22.url_person_cellphone_update, params).then(function (response) {
                   _this22.showErrors({});
 
                   if (response.data.status === 200) {
                     //update/restore value copy
-                    obj.value = response.data.data[keyParamenter];
-                    objCopy.value = response.data.data[keyParamenter];
+                    obj.value = response.data.data;
+                    objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
+
                     objCopy.edited = false; //restore
 
                     objCopy.editing = false; //restore
@@ -6011,7 +6018,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                   _this22.isLoading = false;
                 });
 
-              case 5:
+              case 4:
               case "end":
                 return _context19.stop();
             }
@@ -6019,21 +6026,70 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         }, _callee19);
       }))();
     },
-    updateParticipant: function updateParticipant(key) {
-      var _arguments3 = arguments,
-          _this23 = this;
+    updatedDBPerson: function updatedDBPerson(keyParamenter, obj, objCopy) {
+      var _this23 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee20() {
-        var index, keys, obj, objCopy;
+        var params;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee20$(_context20) {
           while (1) {
             switch (_context20.prev = _context20.next) {
               case 0:
+                _this23.isLoading = true;
+                params = {
+                  id: _this23.participant.person.id.value
+                };
+                params[keyParamenter] = obj.value;
+                _context20.next = 5;
+                return axios.post(_this23.url_person_update, params).then(function (response) {
+                  _this23.showErrors({});
+
+                  if (response.data.status === 200) {
+                    //update/restore value copy
+                    obj.value = response.data.data[keyParamenter];
+                    objCopy.value = response.data.data[keyParamenter];
+                    objCopy.edited = false; //restore
+
+                    objCopy.editing = false; //restore
+
+                    obj.edited = false; //restore
+
+                    obj.editing = false; //restore
+
+                    Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
+                      title: _this23.text_success,
+                      text: _this23.textsGeneralSettings.text_updated_participant
+                    });
+                  }
+                }, function (error) {
+                  _this23.showErrors(error);
+                }).then(function () {
+                  _this23.isLoading = false;
+                });
+
+              case 5:
+              case "end":
+                return _context20.stop();
+            }
+          }
+        }, _callee20);
+      }))();
+    },
+    updateParticipant: function updateParticipant(key) {
+      var _arguments3 = arguments,
+          _this24 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee21() {
+        var index, keys, obj, objCopy;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee21$(_context21) {
+          while (1) {
+            switch (_context21.prev = _context21.next) {
+              case 0:
                 index = _arguments3.length > 1 && _arguments3[1] !== undefined ? _arguments3[1] : null;
                 //Get keys, for exaple: person.emails
                 keys = key.split(".");
-                obj = _this23.participant;
-                objCopy = _this23.participantCopy;
+                obj = _this24.participant;
+                objCopy = _this24.participantCopy;
                 keys.forEach(function (k) {
                   obj = obj[k];
                   objCopy = objCopy[k];
@@ -6046,74 +6102,74 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
                   }
 
                 if (!obj.edited) {
-                  _context20.next = 32;
+                  _context21.next = 32;
                   break;
                 }
 
-                _context20.t0 = key;
-                _context20.next = _context20.t0 === "person.used_events_email" ? 10 : _context20.t0 === "person.cellphones" ? 18 : _context20.t0 === "person.first_name" ? 26 : 29;
+                _context21.t0 = key;
+                _context21.next = _context21.t0 === "person.used_events_email" ? 10 : _context21.t0 === "person.cellphones" ? 18 : _context21.t0 === "person.first_name" ? 26 : 29;
                 break;
 
               case 10:
                 if (objCopy.value.email) {
-                  _context20.next = 15;
+                  _context21.next = 15;
                   break;
                 }
 
-                _context20.next = 13;
-                return _this23.createDBPersonEmailUsedEvents(obj, objCopy);
+                _context21.next = 13;
+                return _this24.createDBPersonEmailUsedEvents(obj, objCopy);
 
               case 13:
-                _context20.next = 17;
+                _context21.next = 17;
                 break;
 
               case 15:
-                _context20.next = 17;
-                return _this23.updateDBPersonEmailUsedEvents(obj, objCopy);
+                _context21.next = 17;
+                return _this24.updateDBPersonEmailUsedEvents(obj, objCopy);
 
               case 17:
-                return _context20.abrupt("break", 32);
+                return _context21.abrupt("break", 32);
 
               case 18:
                 if (objCopy.value.cellphone_number) {
-                  _context20.next = 23;
+                  _context21.next = 23;
                   break;
                 }
 
-                _context20.next = 21;
-                return _this23.createDBPersonCellhpone(obj, objCopy);
+                _context21.next = 21;
+                return _this24.createDBPersonCellhpone(obj, objCopy);
 
               case 21:
-                _context20.next = 25;
+                _context21.next = 25;
                 break;
 
               case 23:
-                _context20.next = 25;
-                return _this23.updateDBPersonCellhpone(obj, objCopy);
+                _context21.next = 25;
+                return _this24.updateDBPersonCellhpone(obj, objCopy);
 
               case 25:
-                return _context20.abrupt("break", 32);
+                return _context21.abrupt("break", 32);
 
               case 26:
-                _context20.next = 28;
-                return _this23.updatedDBPerson(keys[keys.length - 1], obj, objCopy);
+                _context21.next = 28;
+                return _this24.updatedDBPerson(keys[keys.length - 1], obj, objCopy);
 
               case 28:
-                return _context20.abrupt("break", 32);
+                return _context21.abrupt("break", 32);
 
               case 29:
-                _context20.next = 31;
-                return _this23.updateDBParticipant(key, obj, objCopy);
+                _context21.next = 31;
+                return _this24.updateDBParticipant(key, obj, objCopy);
 
               case 31:
-                return _context20.abrupt("break", 32);
+                return _context21.abrupt("break", 32);
 
               case 32:
               case "end":
-                return _context20.stop();
+                return _context21.stop();
             }
           }
-        }, _callee20);
+        }, _callee21);
       }))();
     }
   }
@@ -69319,6 +69375,7 @@ var render = function() {
                     _vm.url_persons_cellphones_for_person,
                   url_persons_cellphone_store: _vm.url_persons_cellphone_store,
                   url_person_cellphone_update: _vm.url_person_cellphone_update,
+                  url_person_data: _vm.url_person_data,
                   url_person_update: _vm.url_person_update
                 },
                 on: { activeMainSection: _vm.setActiveSection }

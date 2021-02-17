@@ -500,6 +500,10 @@
                 type: String,
                 require: true
             },
+            url_person_data: {
+                type: String,
+                require: true
+            },
             url_persons_emails_store: {
                 type: String,
                 require: true
@@ -665,6 +669,7 @@
             /** ./Create/load participant data  */
         },
         async mounted(){
+            await this.getPersonData();
             await this.getIdentificationsTypes();
             await this.getImg64Base(this.OPTIONS.PROGRAMMER, this.programmer.logo.value );//Get logo programmer
             await this.getImgAvatar();
@@ -765,6 +770,34 @@
                             break;
                     }
                 }
+            },
+            async getPersonData(){
+                this.isLoading = true;
+                await axios.post(this.url_person_data,{ id : this.participant.persons_id.value })
+                    .then( response => {
+                        this.showErrors({});
+                        if( response.data.status === 200 )
+                        {
+                            Object.keys( response.data.data ).forEach( keyObj => {
+                                Vue.set( this.participant.person, keyObj, {
+                                                'value':    response.data.data[keyObj],
+                                                'edited':   false,
+                                                'editing':  false,
+                                            } );
+                                Vue.set( this.participantCopy.person, keyObj, {
+                                                'value':    response.data.data [keyObj],
+                                                'edited':   false,
+                                                'editing':  false,
+                                            } );
+                            });
+                        }
+                    },
+                    error => {
+                        this.showErrors(error);
+                    })
+                    .then( () => {
+                        this.isLoading = false;
+                    });
             },
             async getIdentificationsTypes(){
                 this.isLoading = true;
@@ -902,7 +935,7 @@
             async getEmailsAdmin(){
                 this.isLoading = true;
                 const params = {
-                    persons_id: this.participant.person.id.value,
+                    persons_id: this.participant.persons_id.value,
                 };
                 await axios.post(this.url_person_emails_admin, params)
                     .then( response => {

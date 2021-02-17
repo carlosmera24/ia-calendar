@@ -227,6 +227,7 @@
             v-bind:fields_programmer_json="'{{ json_encode($fields_programmer) }}'"
             v-bind:participant_json="'{{ json_encode($participant) }}'"
             v-bind:url_person_ui_avatar='"{{ route('participant_generate_avatar') }}"'
+            v-bind:url_person_data='"{{ route('person_data') }}"'
             v-bind:url_person_store='"{{ route('person_store') }}"'
             v-bind:url_person_update='"{{ route('person_update') }}"'
             v-bind:url_participant_store='"{{ route('participant_store') }}"'

@@ -33,6 +33,7 @@ Route::group(['middleware' => ['auth']], function(){
     //Programmers
     Route::post('/programmer/update', [ ProgrammerController::class, 'update' ])->name('programmer_update');
     //Persons
+    Route::post('/person/data', [ PersonController::class, 'data' ])->name('person_data');
     Route::post('/person/store', [ PersonController::class, 'store' ])->name('person_store');
     Route::post('/person/update', [ PersonController::class, 'update' ])->name('person_update');
     //Participants

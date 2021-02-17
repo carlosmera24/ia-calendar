@@ -8,21 +8,22 @@ use Validator;
 
 class PersonController extends Controller
 {
-    protected $rules_store = [
-                                'first_name'        =>  'required | min:3 | max:100',
-                                'last_name'         =>  'required | min:3 | max:100',
-                                'birth_date'        =>  'required | date_format:Y-m-d',
-                                'position_company'  =>  'required | min:3 | max:60',
-                                'date_join_company' =>  'required | date_format:Y-m-d',
-                            ];
-    protected $rules_update = [
-                                'id'                =>  'required|exists:persons,id',
-                                'first_name'        =>  'nullable | min:3 | max:100',
-                                'last_name'         =>  'nullable | min:3 | max:100',
-                                'birth_date'        =>  'nullable | date_format:Y-m-d',
-                                'position_company'  =>  'nullable | min:3 | max:60',
-                                'date_join_company' =>  'nullable | date_format:Y-m-d',
-                            ];
+    protected $rules_store =    [
+                                    'first_name'        =>  'required | min:3 | max:100',
+                                    'last_name'         =>  'required | min:3 | max:100',
+                                    'birth_date'        =>  'required | date_format:Y-m-d',
+                                    'position_company'  =>  'required | min:3 | max:60',
+                                    'date_join_company' =>  'required | date_format:Y-m-d',
+                                ];
+    protected $rules_update =   [
+                                    'id'                =>  'required|exists:persons,id',
+                                    'first_name'        =>  'nullable | min:3 | max:100',
+                                    'last_name'         =>  'nullable | min:3 | max:100',
+                                    'birth_date'        =>  'nullable | date_format:Y-m-d',
+                                    'position_company'  =>  'nullable | min:3 | max:60',
+                                    'date_join_company' =>  'nullable | date_format:Y-m-d',
+                                ];
+    protected $rules_id = [ 'id' => 'required|exists:persons,id' ];
 
     /**
      * Display a listing of the resource.
@@ -94,6 +95,58 @@ class PersonController extends Controller
                                             ),
                                         400
                                     );
+        }
+    }
+
+    /**
+     * Return the specified resource.
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function data( Request $request )
+    {
+        $validator = Validator::make($request->input(), $this->rules_id);
+        if( $validator->fails() )
+        {
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'error'     =>  __('messages.bad_request'),
+                                                'data'      =>  $validator->getMessageBag()->toArray()
+                                            ),
+                                        400
+                                    );
+        }else
+        {
+            //search Person
+            $person = Person::find( $request->id );
+
+            //Not found
+            if( empty($person) )
+            {
+                return response()->json(
+                                            array(
+                                                'status'    =>  204,
+                                                'error'     =>  __('messages.no_content'),
+                                                'data'      =>  array(
+                                                                        __('messages.no_found', [
+                                                                                                    'attribute' => __('validation.attributes.person'),
+                                                                                                    'id' => $request->id
+                                                                                                ]
+                                                                            )
+                                                                    )
+                                            ),
+                                            200
+                                        );
+            }else{
+                return response()->json(
+                                        array(
+                                                'status'    =>  200,
+                                                'data'      =>  $person,
+                                            ),
+                                        200
+                                    );
+            }
         }
     }
 
