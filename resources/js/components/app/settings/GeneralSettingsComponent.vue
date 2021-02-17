@@ -564,6 +564,57 @@
                                         </div>
                                     </div>
                                     <!-- /Birth date -->
+                                    <!-- Date join company -->
+                                    <div class="columns column is-12 is-row-data">
+                                        <div class="columns column is-12" v-if="participant.person.date_join_company.editing">
+                                            <div class="column is-6">
+                                                <b-field horizontal
+                                                    class="label_not-show"
+                                                    v-bind:type="{ 'is-danger' : fieldsParticipant.date_join_company.error }"
+                                                    :message="fieldsParticipant.date_join_company.error ? fieldsParticipant.date_join_company.msg : ''">
+                                                    <b-datepicker
+                                                        ref="person.date_join_company"
+                                                        name="person.date_join_company"
+                                                        v-model="date_join_company"
+                                                        :show-week-number="false"
+                                                        :open-on-focus="true"
+                                                        :locale="locale"
+                                                        :date-formatter="dateFormat"
+                                                        :inline="true"
+                                                        @input="onChangedDateJoinCompany"
+                                                        trap-focus expanded>
+                                                    </b-datepicker>
+                                                </b-field>
+
+                                            </div>
+                                            <div class="column is-6 content-buttons">
+                                                <b-button
+                                                    size="is-small"
+                                                    icon-left="save"
+                                                    v-on:click.prevent="clickUpdateParticipant( 'person.date_join_company' )"
+                                                />
+                                                <b-button
+                                                    size="is-small"
+                                                    icon-left="window-close"
+                                                    v-on:click.prevent="clickCancelParticipant('person.date_join_company')"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div class="columns column is-12" v-else>
+                                            <div class="column is-6 is-row-data">
+                                                <span>{{ participant.person.date_join_company ? participant.person.date_join_company.value : firstCapitalize(fieldsParticipant.date_join_company.label) }}</span>
+                                            </div>
+                                            <div class="column is-6">
+                                                <b-button
+                                                    class="btn-edit"
+                                                    size="is-small"
+                                                    icon-left="pen"
+                                                    v-on:click.prevent="clickEditParticipant('person.date_join_company')"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Date join company -->
                                 </div>
                             </div>
                         </div>
@@ -730,6 +781,7 @@
                 locale: undefined, //Set browser language
                 maxBirthDate: new Date(moment().subtract(18, 'years')),
                 birth_date: null,
+                date_join_company: null,
             }
         },
         computed: {
@@ -948,6 +1000,8 @@
                             });
                             //Set birth date
                             this.initBirthDate( this.participant.person.birth_date.value );
+                            //Set Date join company
+                            this.initDateJoinCompany(  this.participant.person.date_join_company.value );
                         }
                     },
                     error => {
@@ -1502,8 +1556,14 @@
             initBirthDate( stringDate ){
                 this.birth_date = moment( stringDate, "YYYY-MM-DD" ).toDate();
             },
+            initDateJoinCompany( stringDate ){
+                this.date_join_company = moment( stringDate, "YYYY-MM-DD" ).toDate();
+            },
             onChangedBirthDate(){
                 this.participant.person.birth_date.value = this.dateFormat(this.birth_date);
+            },
+            onChangedDateJoinCompany(){
+                this.participant.person.date_join_company.value = this.dateFormat(this.date_join_company);
             },
             clickEditParticipant( key, index = null ){
                 //Get keys, for exaple: person.emails
@@ -1531,13 +1591,9 @@
                         {
                             this.$refs[ keyRef ][0].focus();
 
-                        }else{
-                            if( key === "person.birth_date" )
-                            {
-                                this.$refs[ keyRef ].toggle();
-                            }else{
-                                this.$refs[ keyRef ].focus();
-                            }
+                        }else
+                        {
+                            this.$refs[ keyRef ].focus();
                         }
                     }
                 });
@@ -1573,6 +1629,9 @@
                         break;
                     case "person.birth_date":
                         this.initBirthDate( objCopy.value );
+                        break;
+                    case "person.date_join_company":
+                        this.initDateJoinCompany( objCopy.value );
                         break;
                     default:
                         break;
@@ -1972,6 +2031,7 @@
                         case "person.last_name":
                         case "person.position_company":
                         case "person.birth_date":
+                        case "person.date_join_company":
                             await this.updatedDBPerson( keys[ keys.length - 1 ], obj, objCopy );
                             break;
                         default://Participant

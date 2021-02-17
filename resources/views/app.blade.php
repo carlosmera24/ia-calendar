@@ -53,11 +53,11 @@
                                                                 'error' => false,
                                                                 'msg'   =>  __('validation.required', ['attribute' => ''])
                                                             ],
-                                        'date_join'     =>  [
-                                                                'label' =>  __('validation.attributes.date_join_company'),
-                                                                'error' => false,
-                                                                'msg'   =>  __('validation.required', ['attribute' => ''])
-                                                            ],
+                                        'date_join_company' =>  [
+                                                                    'label' =>  __('validation.attributes.date_join_company'),
+                                                                    'error' => false,
+                                                                    'msg'   =>  __('validation.required', ['attribute' => ''])
+                                                                ],
                                         'birth_date'    =>  [
                                                                 'label' =>  __('validation.attributes.birth_date'),
                                                                 'error' => false,

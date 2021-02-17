@@ -3477,7 +3477,7 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
       this.fields.first_name.error = this.fname === '';
       this.fields.last_name.error = this.lname === '';
       this.fields.position_company.error = this.position === '';
-      this.fields.date_join.error = this.date_join === null;
+      this.fields.date_join_company.error = this.date_join === null;
       this.fields.birth_date.error = this.birth_date === null;
       var is_email_duplicate = false;
       var is_mobile_duplicate = false;
@@ -3539,7 +3539,7 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
         }
       });
 
-      if (!this.fields.first_name.error && !this.fields.last_name.error && !this.fields.position_company.error && !this.fields.date_join.error && !this.birth_date.error && !isEmailError && !isMobileError && !is_email_duplicate && !is_mobile_duplicate) {
+      if (!this.fields.first_name.error && !this.fields.last_name.error && !this.fields.position_company.error && !this.fields.date_join_company.error && !this.birth_date.error && !isEmailError && !isMobileError && !is_email_duplicate && !is_mobile_duplicate) {
         //Validatate if emailss exist in database
         var emails = [];
         this.emails.forEach(function (element) {
@@ -4392,6 +4392,57 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -4550,7 +4601,8 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
       locale: undefined,
       //Set browser language
       maxBirthDate: new Date(moment().subtract(18, 'years')),
-      birth_date: null
+      birth_date: null,
+      date_join_company: null
     };
   },
   computed: {
@@ -4823,7 +4875,10 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                       });
                     }); //Set birth date
 
-                    _this3.initBirthDate(_this3.participant.person.birth_date.value);
+                    _this3.initBirthDate(_this3.participant.person.birth_date.value); //Set Date join company
+
+
+                    _this3.initDateJoinCompany(_this3.participant.person.date_join_company.value);
                   }
                 }, function (error) {
                   _this3.showErrors(error);
@@ -5626,8 +5681,14 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
     initBirthDate: function initBirthDate(stringDate) {
       this.birth_date = moment(stringDate, "YYYY-MM-DD").toDate();
     },
+    initDateJoinCompany: function initDateJoinCompany(stringDate) {
+      this.date_join_company = moment(stringDate, "YYYY-MM-DD").toDate();
+    },
     onChangedBirthDate: function onChangedBirthDate() {
       this.participant.person.birth_date.value = this.dateFormat(this.birth_date);
+    },
+    onChangedDateJoinCompany: function onChangedDateJoinCompany() {
+      this.participant.person.date_join_company.value = this.dateFormat(this.date_join_company);
     },
     clickEditParticipant: function clickEditParticipant(key) {
       var _this16 = this;
@@ -5655,11 +5716,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
           if (_.isArray(_this16.$refs[keyRef])) {
             _this16.$refs[keyRef][0].focus();
           } else {
-            if (key === "person.birth_date") {
-              _this16.$refs[keyRef].toggle();
-            } else {
-              _this16.$refs[keyRef].focus();
-            }
+            _this16.$refs[keyRef].focus();
           }
         }
       });
@@ -5696,6 +5753,10 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
 
         case "person.birth_date":
           this.initBirthDate(objCopy.value);
+          break;
+
+        case "person.date_join_company":
+          this.initDateJoinCompany(objCopy.value);
           break;
 
         default:
@@ -6285,7 +6346,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                 }
 
                 _context21.t0 = key;
-                _context21.next = _context21.t0 === "person.used_events_email" ? 10 : _context21.t0 === "person.cellphones" ? 18 : _context21.t0 === "person.first_name" ? 26 : _context21.t0 === "person.last_name" ? 26 : _context21.t0 === "person.position_company" ? 26 : _context21.t0 === "person.birth_date" ? 26 : 29;
+                _context21.next = _context21.t0 === "person.used_events_email" ? 10 : _context21.t0 === "person.cellphones" ? 18 : _context21.t0 === "person.first_name" ? 26 : _context21.t0 === "person.last_name" ? 26 : _context21.t0 === "person.position_company" ? 26 : _context21.t0 === "person.birth_date" ? 26 : _context21.t0 === "person.date_join_company" ? 26 : 29;
                 break;
 
               case 10:
@@ -70347,10 +70408,10 @@ var render = function() {
                   staticClass: "column is-4",
                   attrs: {
                     horizontal: "",
-                    label: _vm.fields.date_join.label,
-                    type: { "is-danger": _vm.fields.date_join.error },
-                    message: _vm.fields.date_join.error
-                      ? _vm.fields.date_join.msg
+                    label: _vm.fields.date_join_company.label,
+                    type: { "is-danger": _vm.fields.date_join_company.error },
+                    message: _vm.fields.date_join_company.error
+                      ? _vm.fields.date_join_company.msg
                       : ""
                   }
                 },
@@ -72597,6 +72658,166 @@ var render = function() {
                                               $event.preventDefault()
                                               return _vm.clickEditParticipant(
                                                 "person.birth_date"
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ]
+                                )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "columns column is-12 is-row-data" },
+                          [
+                            _vm.participant.person.date_join_company.editing
+                              ? _c(
+                                  "div",
+                                  { staticClass: "columns column is-12" },
+                                  [
+                                    _c(
+                                      "div",
+                                      { staticClass: "column is-6" },
+                                      [
+                                        _c(
+                                          "b-field",
+                                          {
+                                            staticClass: "label_not-show",
+                                            attrs: {
+                                              horizontal: "",
+                                              type: {
+                                                "is-danger":
+                                                  _vm.fieldsParticipant
+                                                    .date_join_company.error
+                                              },
+                                              message: _vm.fieldsParticipant
+                                                .date_join_company.error
+                                                ? _vm.fieldsParticipant
+                                                    .date_join_company.msg
+                                                : ""
+                                            }
+                                          },
+                                          [
+                                            _c("b-datepicker", {
+                                              ref: "person.date_join_company",
+                                              attrs: {
+                                                name:
+                                                  "person.date_join_company",
+                                                "show-week-number": false,
+                                                "open-on-focus": true,
+                                                locale: _vm.locale,
+                                                "date-formatter":
+                                                  _vm.dateFormat,
+                                                inline: true,
+                                                "trap-focus": "",
+                                                expanded: ""
+                                              },
+                                              on: {
+                                                input:
+                                                  _vm.onChangedDateJoinCompany
+                                              },
+                                              model: {
+                                                value: _vm.date_join_company,
+                                                callback: function($$v) {
+                                                  _vm.date_join_company = $$v
+                                                },
+                                                expression: "date_join_company"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "column is-6 content-buttons"
+                                      },
+                                      [
+                                        _c("b-button", {
+                                          attrs: {
+                                            size: "is-small",
+                                            "icon-left": "save"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.clickUpdateParticipant(
+                                                "person.date_join_company"
+                                              )
+                                            }
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _c("b-button", {
+                                          attrs: {
+                                            size: "is-small",
+                                            "icon-left": "window-close"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.clickCancelParticipant(
+                                                "person.date_join_company"
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ]
+                                )
+                              : _c(
+                                  "div",
+                                  { staticClass: "columns column is-12" },
+                                  [
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass: "column is-6 is-row-data"
+                                      },
+                                      [
+                                        _c("span", [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.participant.person
+                                                .date_join_company
+                                                ? _vm.participant.person
+                                                    .date_join_company.value
+                                                : _vm.firstCapitalize(
+                                                    _vm.fieldsParticipant
+                                                      .date_join_company.label
+                                                  )
+                                            )
+                                          )
+                                        ])
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "column is-6" },
+                                      [
+                                        _c("b-button", {
+                                          staticClass: "btn-edit",
+                                          attrs: {
+                                            size: "is-small",
+                                            "icon-left": "pen"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.clickEditParticipant(
+                                                "person.date_join_company"
                                               )
                                             }
                                           }

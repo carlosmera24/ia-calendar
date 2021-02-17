@@ -84,9 +84,9 @@
                     </b-input>
                 </b-field>
                 <b-field horizontal class="column is-4"
-                    :label="fields.date_join.label"
-                    v-bind:type="{ 'is-danger' : fields.date_join.error }"
-                    :message="fields.date_join.error ? fields.date_join.msg : ''">
+                    :label="fields.date_join_company.label"
+                    v-bind:type="{ 'is-danger' : fields.date_join_company.error }"
+                    :message="fields.date_join_company.error ? fields.date_join_company.msg : ''">
                     <b-datepicker
                         v-model="date_join"
                         :show-week-number="false"
@@ -404,7 +404,7 @@ export default{
             this.fields.first_name.error = this.fname === '';
             this.fields.last_name.error = this.lname === '';
             this.fields.position_company.error = this.position === '';
-            this.fields.date_join.error = this.date_join === null;
+            this.fields.date_join_company.error = this.date_join === null;
             this.fields.birth_date.error = this.birth_date === null;
             var is_email_duplicate = false;
             var is_mobile_duplicate = false;
@@ -464,7 +464,7 @@ export default{
             });
 
             if( !this.fields.first_name.error &&  !this.fields.last_name.error  && !this.fields.position_company.error
-                && !this.fields.date_join.error && !this.birth_date.error && !isEmailError && !isMobileError
+                && !this.fields.date_join_company.error && !this.birth_date.error && !isEmailError && !isMobileError
                 && !is_email_duplicate && !is_mobile_duplicate )
             {
                 //Validatate if emailss exist in database
