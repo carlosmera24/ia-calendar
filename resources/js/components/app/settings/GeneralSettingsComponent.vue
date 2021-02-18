@@ -615,6 +615,87 @@
                                         </div>
                                     </div>
                                     <!-- /Date join company -->
+                                    <!-- Password update -->
+                                    <div class="columns column is-12 is-row-data">
+                                        <div class="columns column is-12" v-if="participant.password.editing">
+                                            <div class="column is-6">
+                                                <b-field horizontal
+                                                    class="label_not-show"
+                                                    v-bind:type="{ 'is-danger' : participant.password.old.error }"
+                                                    :message="participant.password.old.error ? participant.password.old.msg : ''">
+                                                    <b-input
+                                                        ref="person.password.old"
+                                                        name="person.password.old"
+                                                        type="password"
+                                                        password-reveal
+                                                        v-model="participant.password.old.value"
+                                                        :placeholder="firstCapitalize(fieldsParticipant.password_current.label)"
+                                                        v-on:blur="setTrim('person.password.old', OPTIONS.PARTICIPANT)"
+                                                        maxlength="60"
+                                                        expanded>
+                                                    </b-input>
+                                                </b-field>
+                                                <b-field horizontal
+                                                    class="label_not-show"
+                                                    v-bind:type="{ 'is-danger' : participant.password.new.error }"
+                                                    :message="participant.password.new.error ? participant.password.new.msg : ''">
+                                                    <b-input
+                                                        ref="person.password.new"
+                                                        name="person.password.new"
+                                                        type="password"
+                                                        password-reveal
+                                                        v-model="participant.password.new.value"
+                                                        :placeholder="firstCapitalize(fieldsParticipant.password_new.label)"
+                                                        v-on:blur="setTrim('person.password.new', OPTIONS.PARTICIPANT)"
+                                                        maxlength="60"
+                                                        expanded>
+                                                    </b-input>
+                                                </b-field>
+                                                <b-field horizontal
+                                                    class="label_not-show"
+                                                    v-bind:type="{ 'is-danger' : participant.password.confirmation.error }"
+                                                    :message="participant.password.confirmation.error ? participant.password.confirmation.msg : ''">
+                                                    <b-input
+                                                        ref="person.password.confirmation"
+                                                        name="person.password.confirmation"
+                                                        type="password"
+                                                        password-reveal
+                                                        v-model="participant.password.confirmation.value"
+                                                        :placeholder="firstCapitalize(fieldsParticipant.password_confirmation.label)"
+                                                        v-on:blur="setTrim('person.password.confirmation', OPTIONS.PARTICIPANT)"
+                                                        maxlength="60"
+                                                        expanded>
+                                                    </b-input>
+                                                </b-field>
+                                            </div>
+                                            <div class="column is-6 content-buttons">
+                                                <b-button
+                                                    size="is-small"
+                                                    icon-left="save"
+                                                    v-on:click.prevent="clickUpdateParticipant( 'password' )"
+                                                />
+                                                <b-button
+                                                    size="is-small"
+                                                    icon-left="window-close"
+                                                    v-on:click.prevent="clickCancelParticipant('password')"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div class="columns column is-12" v-else>
+                                            <div class="column is-6 is-row-data">
+                                                <span>{{ textsGeneralSettings.password_update }}</span>
+                                            </div>
+                                            <div class="column is-6">
+                                                <b-button
+                                                    class="btn-edit"
+                                                    size="is-small"
+                                                    icon-left="pen"
+                                                    v-on:click.prevent="clickEditParticipant('password')"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Password update -->
                                 </div>
                             </div>
                         </div>
@@ -862,15 +943,54 @@
             });
             //add default value for used events with not-reactive copy
             Vue.set(this.participant.person, 'used_events_email', {
-                            'value':    { email: null },
-                            'edited':   false,
-                            'editing':  false,
-                        });
+                                                                    'value':    { email: null },
+                                                                    'edited':   false,
+                                                                    'editing':  false,
+                                                                });
             Vue.set(this.participantCopy.person, 'used_events_email', {
-                            'value':    { email: null },
-                            'edited':   false,
-                            'editing':  false,
-                        });
+                                                                        'value':    { email: null },
+                                                                        'edited':   false,
+                                                                        'editing':  false,
+                                                                    });
+            //add default value for update password
+            Vue.set(this.participant, 'password',{
+                                                    'edited':   false,
+                                                    'editing':  false,
+                                                    'old':  {
+                                                                'value':    null,
+                                                                'error':    false,
+                                                                'msg':  null
+                                                            },
+                                                    'new':  {
+                                                                'value':    null,
+                                                                'error':    false,
+                                                                'msg':  null
+                                                            },
+                                                    'confirmation':  {
+                                                                        'value':    null,
+                                                                        'error':    false,
+                                                                        'msg':  null
+                                                                    },
+                                                });
+            Vue.set(this.participantCopy, 'password',{
+                                                        'edited':   false,
+                                                        'editing':  false,
+                                                        'old':  {
+                                                                    'value':    null,
+                                                                    'error':    false,
+                                                                    'msg':  null
+                                                                },
+                                                        'new':  {
+                                                                    'value':    null,
+                                                                    'error':    false,
+                                                                    'msg':  null
+                                                                },
+                                                        'confirmation':  {
+                                                                            'value':    null,
+                                                                            'error':    false,
+                                                                            'msg':  null
+                                                                        },
+                                                });
             /** ./Create/load participant data  */
         },
         async mounted(){

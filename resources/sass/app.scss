@@ -600,6 +600,17 @@ body, h2, button, input, select, textarea {
                         display: none;
                     }
                 }
+                input::placeholder{
+                    color: #666;
+                }
+                .field{
+                    .is-clickable{
+                        .fas.fa-eye,
+                        .fas.fa-eye-slash{
+                            color: #363636;;
+                        }
+                    }
+                }
                 .content-buttons{
                     .button{
                         font-size: 1rem;

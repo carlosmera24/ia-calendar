@@ -17,6 +17,7 @@ return [
     'category'              =>  'Categoría',
     'event'                 =>  'Evento',
     'breadcrumbs_init'      =>  'Volver al inicio',
+    'password_update'       =>  'Actualizar contraseña',
 
     /**
      * DropDown Menu section

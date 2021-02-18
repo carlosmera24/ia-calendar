@@ -177,6 +177,8 @@ return [
         'month'                 => 'mes',
         'name'                  => 'nombre',
         'password'              => 'contraseña',
+        'password_current'      => 'actual contraseña',
+        'password_new'          => 'nueva contraseña',
         'password_confirmation' => 'confirmación de la contraseña',
         'phone'                 => 'teléfono',
         'price'                 => 'precio',
@@ -205,6 +207,7 @@ return [
         'reason_change_state'   =>  'motivo',
         'state'                 =>  'estado',
         'person'                =>  'persona',
+        'user'                  => 'usuario'
     ],
 
 ];

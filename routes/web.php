@@ -30,6 +30,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('/app', function(){
         return view('app');
     })->name('home');
+    //user
+    Route::post('/user/data', [ ProgrammerController::class, 'data' ])->name('user_data');
     //Programmers
     Route::post('/programmer/update', [ ProgrammerController::class, 'update' ])->name('programmer_update');
     //Persons

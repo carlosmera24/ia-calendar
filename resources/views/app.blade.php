@@ -86,6 +86,21 @@
                                                                         'error'         => false,
                                                                         'msg'           =>  __('validation.required', ['attribute' => ''])
                                                                     ],
+                                        'password_current'  =>  [
+                                                                'label'         =>  __('validation.attributes.password_current'),
+                                                                'error'         => false,
+                                                                'msg'           =>  __('validation.required', ['attribute' => ''])
+                                                            ],
+                                        'password_new'  =>  [
+                                                                'label'         =>  __('validation.attributes.password_new'),
+                                                                'error'         => false,
+                                                                'msg'           =>  __('validation.required', ['attribute' => ''])
+                                                            ],
+                                        'password_confirmation' =>  [
+                                                                    'label'         =>  __('validation.attributes.password_confirmation'),
+                                                                    'error'         => false,
+                                                                    'msg'           =>  __('validation.required', ['attribute' => ''])
+                                                                ],
                                     ];
             $fields_programmer =    [
                                         'entity_name'               =>  [
@@ -153,7 +168,8 @@
             $texts_general_settings['use_for_events'] = __('app.general_settings.use_for_events');
             $texts_general_settings['text_updated_programmer'] =__('messages.updated_programmer');
             $texts_general_settings['text_updated_participant'] =__('messages.updated_participant');
-        @endphp
+            $texts_general_settings['password_update'] = __('app.password_update');
+            @endphp
         {{-- Header --}}
         <div class="header level is-mobile has-text-white is-size-7 mb-0 px-5 py-4">
             <div class="level-left">

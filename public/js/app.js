@@ -4443,6 +4443,87 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -4700,6 +4781,45 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
       },
       'edited': false,
       'editing': false
+    }); //add default value for update password
+
+    Vue.set(this.participant, 'password', {
+      'edited': false,
+      'editing': false,
+      'old': {
+        'value': null,
+        'error': false,
+        'msg': null
+      },
+      'new': {
+        'value': null,
+        'error': false,
+        'msg': null
+      },
+      'confirmation': {
+        'value': null,
+        'error': false,
+        'msg': null
+      }
+    });
+    Vue.set(this.participantCopy, 'password', {
+      'edited': false,
+      'editing': false,
+      'old': {
+        'value': null,
+        'error': false,
+        'msg': null
+      },
+      'new': {
+        'value': null,
+        'error': false,
+        'msg': null
+      },
+      'confirmation': {
+        'value': null,
+        'error': false,
+        'msg': null
+      }
     });
     /** ./Create/load participant data  */
   },
@@ -72818,6 +72938,293 @@ var render = function() {
                                               $event.preventDefault()
                                               return _vm.clickEditParticipant(
                                                 "person.date_join_company"
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ]
+                                )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "columns column is-12 is-row-data" },
+                          [
+                            _vm.participant.password.editing
+                              ? _c(
+                                  "div",
+                                  { staticClass: "columns column is-12" },
+                                  [
+                                    _c(
+                                      "div",
+                                      { staticClass: "column is-6" },
+                                      [
+                                        _c(
+                                          "b-field",
+                                          {
+                                            staticClass: "label_not-show",
+                                            attrs: {
+                                              horizontal: "",
+                                              type: {
+                                                "is-danger":
+                                                  _vm.participant.password.old
+                                                    .error
+                                              },
+                                              message: _vm.participant.password
+                                                .old.error
+                                                ? _vm.participant.password.old
+                                                    .msg
+                                                : ""
+                                            }
+                                          },
+                                          [
+                                            _c("b-input", {
+                                              ref: "person.password.old",
+                                              attrs: {
+                                                name: "person.password.old",
+                                                type: "password",
+                                                "password-reveal": "",
+                                                placeholder: _vm.firstCapitalize(
+                                                  _vm.fieldsParticipant
+                                                    .password_current.label
+                                                ),
+                                                maxlength: "60",
+                                                expanded: ""
+                                              },
+                                              on: {
+                                                blur: function($event) {
+                                                  return _vm.setTrim(
+                                                    "person.password.old",
+                                                    _vm.OPTIONS.PARTICIPANT
+                                                  )
+                                                }
+                                              },
+                                              model: {
+                                                value:
+                                                  _vm.participant.password.old
+                                                    .value,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.participant.password
+                                                      .old,
+                                                    "value",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "participant.password.old.value"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "b-field",
+                                          {
+                                            staticClass: "label_not-show",
+                                            attrs: {
+                                              horizontal: "",
+                                              type: {
+                                                "is-danger":
+                                                  _vm.participant.password.new
+                                                    .error
+                                              },
+                                              message: _vm.participant.password
+                                                .new.error
+                                                ? _vm.participant.password.new
+                                                    .msg
+                                                : ""
+                                            }
+                                          },
+                                          [
+                                            _c("b-input", {
+                                              ref: "person.password.new",
+                                              attrs: {
+                                                name: "person.password.new",
+                                                type: "password",
+                                                "password-reveal": "",
+                                                placeholder: _vm.firstCapitalize(
+                                                  _vm.fieldsParticipant
+                                                    .password_new.label
+                                                ),
+                                                maxlength: "60",
+                                                expanded: ""
+                                              },
+                                              on: {
+                                                blur: function($event) {
+                                                  return _vm.setTrim(
+                                                    "person.password.new",
+                                                    _vm.OPTIONS.PARTICIPANT
+                                                  )
+                                                }
+                                              },
+                                              model: {
+                                                value:
+                                                  _vm.participant.password.new
+                                                    .value,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.participant.password
+                                                      .new,
+                                                    "value",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "participant.password.new.value"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "b-field",
+                                          {
+                                            staticClass: "label_not-show",
+                                            attrs: {
+                                              horizontal: "",
+                                              type: {
+                                                "is-danger":
+                                                  _vm.participant.password
+                                                    .confirmation.error
+                                              },
+                                              message: _vm.participant.password
+                                                .confirmation.error
+                                                ? _vm.participant.password
+                                                    .confirmation.msg
+                                                : ""
+                                            }
+                                          },
+                                          [
+                                            _c("b-input", {
+                                              ref:
+                                                "person.password.confirmation",
+                                              attrs: {
+                                                name:
+                                                  "person.password.confirmation",
+                                                type: "password",
+                                                "password-reveal": "",
+                                                placeholder: _vm.firstCapitalize(
+                                                  _vm.fieldsParticipant
+                                                    .password_confirmation.label
+                                                ),
+                                                maxlength: "60",
+                                                expanded: ""
+                                              },
+                                              on: {
+                                                blur: function($event) {
+                                                  return _vm.setTrim(
+                                                    "person.password.confirmation",
+                                                    _vm.OPTIONS.PARTICIPANT
+                                                  )
+                                                }
+                                              },
+                                              model: {
+                                                value:
+                                                  _vm.participant.password
+                                                    .confirmation.value,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.participant.password
+                                                      .confirmation,
+                                                    "value",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "participant.password.confirmation.value"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "column is-6 content-buttons"
+                                      },
+                                      [
+                                        _c("b-button", {
+                                          attrs: {
+                                            size: "is-small",
+                                            "icon-left": "save"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.clickUpdateParticipant(
+                                                "password"
+                                              )
+                                            }
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _c("b-button", {
+                                          attrs: {
+                                            size: "is-small",
+                                            "icon-left": "window-close"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.clickCancelParticipant(
+                                                "password"
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ]
+                                )
+                              : _c(
+                                  "div",
+                                  { staticClass: "columns column is-12" },
+                                  [
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass: "column is-6 is-row-data"
+                                      },
+                                      [
+                                        _c("span", [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.textsGeneralSettings
+                                                .password_update
+                                            )
+                                          )
+                                        ])
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "column is-6" },
+                                      [
+                                        _c("b-button", {
+                                          staticClass: "btn-edit",
+                                          attrs: {
+                                            size: "is-small",
+                                            "icon-left": "pen"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.clickEditParticipant(
+                                                "password"
                                               )
                                             }
                                           }
