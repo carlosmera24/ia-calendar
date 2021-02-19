@@ -630,7 +630,6 @@
                                                         password-reveal
                                                         v-model="participant.password.old.value"
                                                         :placeholder="firstCapitalize(fieldsParticipant.password_current.label)"
-                                                        v-on:blur="setTrim('person.password.old', OPTIONS.PARTICIPANT)"
                                                         maxlength="60"
                                                         expanded>
                                                     </b-input>
@@ -646,7 +645,6 @@
                                                         password-reveal
                                                         v-model="participant.password.new.value"
                                                         :placeholder="firstCapitalize(fieldsParticipant.password_new.label)"
-                                                        v-on:blur="setTrim('person.password.new', OPTIONS.PARTICIPANT)"
                                                         maxlength="60"
                                                         expanded>
                                                     </b-input>
@@ -662,7 +660,6 @@
                                                         password-reveal
                                                         v-model="participant.password.confirmation.value"
                                                         :placeholder="firstCapitalize(fieldsParticipant.password_confirmation.label)"
-                                                        v-on:blur="setTrim('person.password.confirmation', OPTIONS.PARTICIPANT)"
                                                         maxlength="60"
                                                         expanded>
                                                     </b-input>
@@ -672,7 +669,7 @@
                                                 <b-button
                                                     size="is-small"
                                                     icon-left="save"
-                                                    v-on:click.prevent="clickUpdateParticipant( 'password' )"
+                                                    v-on:click.prevent="clickUpdatePassword()"
                                                 />
                                                 <b-button
                                                     size="is-small"
@@ -1648,6 +1645,11 @@
                     case "person.used_events_email":
                         this.fieldsParticipant.email.error = errValue;
                         break;
+                    case "password":
+                        this.participant.password.old.error = false;
+                        this.participant.password.new.error = false;
+                        this.participant.password.confirmation.error = false;
+                        break;
                     default:
                         if( index !== null )
                         {
@@ -1735,7 +1737,9 @@
                 }
 
                 //Clean error, change "editing" and restore values
-                obj.value = _.isObject( objCopy.value ) ? Object.assign({},objCopy.value) : objCopy.value;
+                if( key !== "password"){
+                    obj.value = _.isObject( objCopy.value ) ? Object.assign({},objCopy.value) : objCopy.value;
+                }
                 obj.editing = false;
                 obj.edited = false;
                 this.setErrorParticipant( key, false, index );
@@ -1752,6 +1756,11 @@
                         break;
                     case "person.date_join_company":
                         this.initDateJoinCompany( objCopy.value );
+                        break;
+                    case "password":
+                        obj.old.value = objCopy.old.value;
+                        obj.new.value = objCopy.new.value;
+                        obj.confirmation.value = objCopy.confirmation.value;
                         break;
                     default:
                         break;
@@ -1897,6 +1906,71 @@
                 }else{
                     this.isLoading = false
                 }
+            },
+            clickUpdatePassword(){
+                this.isLoading = true;
+                //cleans errors
+                this.setErrorParticipant( "password", false );
+
+
+                //validation
+                let valid = true;
+                const constraints = {
+                    presence: {
+                        allowEmpty: false,
+                        message: "^"+this.fieldsParticipant.password_current.msg,
+                    }
+                };
+
+                let resValidation = validate.single(this.participant.password.old.value, constraints );
+                if(  resValidation !== undefined )//Current password
+                {
+                    this.participant.password.old.msg = resValidation[0];
+                    this.participant.password.old.error = true;
+                    valid = false;
+                }else{
+                    //New password
+                    const constraintsNew = Object.assign(   {
+                                                                length: {
+                                                                            minimum: 8,
+                                                                            message: this.fieldsParticipant.password_current.msg_min
+                                                                        }
+                                                            }, constraints
+                                                        );
+                    resValidation = validate.single( this.participant.password.new.value, constraintsNew );
+                    if( resValidation !== undefined )
+                    {
+                        this.participant.password.new.msg = resValidation[0];
+                        this.participant.password.new.error = true;
+                        valid = false;
+                    }else{
+                        //Confirmation password
+                        const constraintsConfirmation = {
+                                                            confirmationPassword: Object.assign(   {
+                                                                                                equality: {
+                                                                                                            attribute: "password",
+                                                                                                            message: "^"+this.fieldsParticipant.password_current.msg_not_match
+                                                                                                        }
+                                                                                            }, constraints
+                                                                                        )
+                                                        };
+                        resValidation = validate( { password: this.participant.password.new.value, confirmationPassword: this.participant.password.confirmation.value},
+                                                constraintsConfirmation );
+                        if( resValidation !== undefined )
+                        {
+                            this.participant.password.confirmation.msg = resValidation.confirmationPassword[0];
+                            this.participant.password.confirmation.error = true;
+                            valid = false;
+                        }
+                    }
+                }
+
+                if( valid )
+                {
+                    //TODO
+                    console.log("Actualizar contraseña en la BBDD");
+                }
+                this.isLoading = false;
             },
             async updateDBParticipant(key, obj, objCopy){
                 this.isLoading = true;

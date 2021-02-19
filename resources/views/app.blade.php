@@ -89,7 +89,14 @@
                                         'password_current'  =>  [
                                                                 'label'         =>  __('validation.attributes.password_current'),
                                                                 'error'         => false,
-                                                                'msg'           =>  __('validation.required', ['attribute' => ''])
+                                                                'msg'           =>  __('validation.required', ['attribute' => '']),
+                                                                'msg_min'       =>  __('validation.custom.password.min', [
+                                                                                                                        'attribute' => __('validation.attributes.password'),
+                                                                                                                        'min' => '8',
+                                                                                                                    ]),
+                                                                'msg_not_match' =>  __('validation.custom.password.not_match', [
+                                                                                                                        'attribute' => __('validation.attributes.password'),
+                                                                                                                    ])
                                                             ],
                                         'password_new'  =>  [
                                                                 'label'         =>  __('validation.attributes.password_new'),

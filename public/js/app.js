@@ -4521,9 +4521,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -5773,6 +5770,12 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
           this.fieldsParticipant.email.error = errValue;
           break;
 
+        case "password":
+          this.participant.password.old.error = false;
+          this.participant.password["new"].error = false;
+          this.participant.password.confirmation.error = false;
+          break;
+
         default:
           if (index !== null) {
             var obj = this.participant;
@@ -5859,7 +5862,10 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         } //Clean error, change "editing" and restore values
 
 
-      obj.value = _.isObject(objCopy.value) ? Object.assign({}, objCopy.value) : objCopy.value;
+      if (key !== "password") {
+        obj.value = _.isObject(objCopy.value) ? Object.assign({}, objCopy.value) : objCopy.value;
+      }
+
       obj.editing = false;
       obj.edited = false;
       this.setErrorParticipant(key, false, index);
@@ -5877,6 +5883,12 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
 
         case "person.date_join_company":
           this.initDateJoinCompany(objCopy.value);
+          break;
+
+        case "password":
+          obj.old.value = objCopy.old.value;
+          obj["new"].value = objCopy["new"].value;
+          obj.confirmation.value = objCopy.confirmation.value;
           break;
 
         default:
@@ -6123,6 +6135,69 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
           }
         }, _callee14);
       }))();
+    },
+    clickUpdatePassword: function clickUpdatePassword() {
+      this.isLoading = true; //cleans errors
+
+      this.setErrorParticipant("password", false); //validation
+
+      var valid = true;
+      var constraints = {
+        presence: {
+          allowEmpty: false,
+          message: "^" + this.fieldsParticipant.password_current.msg
+        }
+      };
+      var resValidation = validate.single(this.participant.password.old.value, constraints);
+
+      if (resValidation !== undefined) //Current password
+        {
+          this.participant.password.old.msg = resValidation[0];
+          this.participant.password.old.error = true;
+          valid = false;
+        } else {
+        //New password
+        var constraintsNew = Object.assign({
+          length: {
+            minimum: 8,
+            message: this.fieldsParticipant.password_current.msg_min
+          }
+        }, constraints);
+        resValidation = validate.single(this.participant.password["new"].value, constraintsNew);
+
+        if (resValidation !== undefined) {
+          this.participant.password["new"].msg = resValidation[0];
+          this.participant.password["new"].error = true;
+          valid = false;
+        } else {
+          //Confirmation password
+          var constraintsConfirmation = {
+            confirmationPassword: Object.assign({
+              equality: {
+                attribute: "password",
+                message: "^" + this.fieldsParticipant.password_current.msg_not_match
+              }
+            }, constraints)
+          };
+          resValidation = validate({
+            password: this.participant.password["new"].value,
+            confirmationPassword: this.participant.password.confirmation.value
+          }, constraintsConfirmation);
+
+          if (resValidation !== undefined) {
+            this.participant.password.confirmation.msg = resValidation.confirmationPassword[0];
+            this.participant.password.confirmation.error = true;
+            valid = false;
+          }
+        }
+      }
+
+      if (valid) {
+        //TODO
+        console.log("Actualizar contraseña en la BBDD");
+      }
+
+      this.isLoading = false;
     },
     updateDBParticipant: function updateDBParticipant(key, obj, objCopy) {
       var _this18 = this;
@@ -72995,14 +73070,6 @@ var render = function() {
                                                 maxlength: "60",
                                                 expanded: ""
                                               },
-                                              on: {
-                                                blur: function($event) {
-                                                  return _vm.setTrim(
-                                                    "person.password.old",
-                                                    _vm.OPTIONS.PARTICIPANT
-                                                  )
-                                                }
-                                              },
                                               model: {
                                                 value:
                                                   _vm.participant.password.old
@@ -73054,14 +73121,6 @@ var render = function() {
                                                 ),
                                                 maxlength: "60",
                                                 expanded: ""
-                                              },
-                                              on: {
-                                                blur: function($event) {
-                                                  return _vm.setTrim(
-                                                    "person.password.new",
-                                                    _vm.OPTIONS.PARTICIPANT
-                                                  )
-                                                }
                                               },
                                               model: {
                                                 value:
@@ -73117,14 +73176,6 @@ var render = function() {
                                                 maxlength: "60",
                                                 expanded: ""
                                               },
-                                              on: {
-                                                blur: function($event) {
-                                                  return _vm.setTrim(
-                                                    "person.password.confirmation",
-                                                    _vm.OPTIONS.PARTICIPANT
-                                                  )
-                                                }
-                                              },
                                               model: {
                                                 value:
                                                   _vm.participant.password
@@ -73163,9 +73214,7 @@ var render = function() {
                                           on: {
                                             click: function($event) {
                                               $event.preventDefault()
-                                              return _vm.clickUpdateParticipant(
-                                                "password"
-                                              )
+                                              return _vm.clickUpdatePassword()
                                             }
                                           }
                                         }),
