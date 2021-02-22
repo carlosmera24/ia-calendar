@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Categorie;
 use App\Models\Participant;
+use App\Models\UpdatedPassword;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -47,5 +48,10 @@ class User extends Authenticatable
     public function categories()
     {
         return $this->hasMany(Categorie::class,'users_id');
+    }
+
+    public function updatedsPasswords()
+    {
+        return $this->hasMany(UpdatedPassword::class,'users_id');
     }
 }

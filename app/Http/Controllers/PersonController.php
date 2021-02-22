@@ -244,7 +244,6 @@ class PersonController extends Controller
 
             if( $person->update() )
             {
-
                 return response()->json(
                                         array(
                                                 'status'    =>  200,

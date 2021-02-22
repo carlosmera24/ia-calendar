@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Validator;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\UpdatedPassword;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -191,6 +192,12 @@ class UserController extends Controller
                         $user->password = Hash::make( $request->new_password );
                         if( $user->update() )
                         {
+                            //Register updated password with current password
+                            $old_password = new UpdatedPassword();
+                            $old_password->old_password = Hash::make( $request->password );
+                            $old_password->created = $user->updated_at;
+                            $old_password->users_id = $user->id;
+                            $old_password->save();
                             //Logout other devices
                             Auth::logoutOtherDevices( $request->new_password );
                             return response()->json(
