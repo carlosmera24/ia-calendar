@@ -78,6 +78,9 @@
                 v-bind:url_person_cellphone_update='url_person_cellphone_update'
                 v-bind:url_person_data='url_person_data'
                 v-bind:url_person_update='url_person_update'
+                v-bind:url_user_update_password='url_user_update_password'
+                v-bind:url_logout='url_logout'
+                v-bind:url_home='url_home'
             />
         </transition-group>
     </div>
@@ -301,6 +304,18 @@ export default {
             require: true
         },
         url_person_update: {
+            type: String,
+            require: true
+        },
+        url_user_update_password: {
+            type: String,
+            require: true
+        },
+        url_logout: {
+            type: String,
+            require: true
+        },
+        url_home: {
             type: String,
             require: true
         },

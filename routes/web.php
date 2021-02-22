@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\CategorieController;
@@ -31,7 +32,8 @@ Route::group(['middleware' => ['auth']], function(){
         return view('app');
     })->name('home');
     //user
-    Route::post('/user/data', [ ProgrammerController::class, 'data' ])->name('user_data');
+    Route::post('/user/data', [ UserController::class, 'data' ])->name('user_data');
+    Route::post('/user/update-password', [ UserController::class, 'updatePassword' ])->name('user_update_password');
     //Programmers
     Route::post('/programmer/update', [ ProgrammerController::class, 'update' ])->name('programmer_update');
     //Persons

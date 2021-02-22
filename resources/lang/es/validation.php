@@ -134,8 +134,9 @@ return [
 
     'custom' => [
         'password' => [
-            'min'       => 'La :attribute debe contener más de :min caracteres',
-            'not_match' => 'La :attribute no coincide',
+            'min'           => 'La :attribute debe contener más de :min caracteres',
+            'not_match'     => 'La :attribute no coincide',
+            'equal_current' => 'La :attribute es igual a la actual.',
         ],
         'email'    => [
             'unique' => 'El :attribute ya ha sido registrado.',

@@ -99,9 +99,10 @@
                                                                                                                     ])
                                                             ],
                                         'password_new'  =>  [
-                                                                'label'         =>  __('validation.attributes.password_new'),
-                                                                'error'         => false,
-                                                                'msg'           =>  __('validation.required', ['attribute' => ''])
+                                                                'label'             =>  __('validation.attributes.password_new'),
+                                                                'error'             => false,
+                                                                'msg'               =>  __('validation.required', ['attribute' => '']),
+                                                                'equal_current'     =>  __('validation.custom.password.equal_current', ['attribute' => __('validation.attributes.password')])
                                                             ],
                                         'password_confirmation' =>  [
                                                                     'label'         =>  __('validation.attributes.password_confirmation'),
@@ -176,6 +177,8 @@
             $texts_general_settings['text_updated_programmer'] =__('messages.updated_programmer');
             $texts_general_settings['text_updated_participant'] =__('messages.updated_participant');
             $texts_general_settings['password_update'] = __('app.password_update');
+            $texts_general_settings['updated_password'] = __('messages.updated_password');
+            $texts_general_settings['updated_password_warning'] = __('messages.updated_password_warning');
             @endphp
         {{-- Header --}}
         <div class="header level is-mobile has-text-white is-size-7 mb-0 px-5 py-4">
@@ -275,6 +278,9 @@
             v-bind:url_image_base='"{{ route('image_64base') }}"'
             v-bind:url_person_emails_admin='"{{ route('persons_emails_admin') }}"'
             v-bind:url_persons_cellphones_for_person='"{{ route('persons_cellphones_for_person') }}"'
+            v-bind:url_user_update_password='"{{ route('user_update_password') }}"'
+            v-bind:url_logout="'{{ route('logout') }}'"
+            v-bind:url_home="'{{ route('home') }}'"
         />
         {{-- /Content Main --}}
     </div>

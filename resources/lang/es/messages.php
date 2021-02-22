@@ -18,6 +18,7 @@ return [
     'updated_programmer'        =>  'Programador actualizado satisfactoriamente.',
     'updated_participant'       =>  'Partícipe actualizado satisfactoriamente.',
     'size_limit_logo_upload'    =>  'El archivo no puede ser mayor a 5MB',
+    'updated_password'          =>  'Contraseña actualizada',
 
     //Emails
     'emails' => [
@@ -42,8 +43,10 @@ return [
     'no_content'                =>  'Sin contenido',
     'no_found'                  =>  'No se encontró :attribute con ID :id',
     'empty_categories_required' =>  'Actualmente no tiene categorías creadas, por favor cree una para continuar.',
+    'forbidden'                 =>  'Prohibido.',
 
     //Warnings
     'back_to_participant_confirm'   =>  '¿Desea restaurar el partícipe?, Se eliminarán todos los permisos, categorías y credenciales asociadas',
     'back_to_participant_warning'   =>  'Al presionar el botón <strong>Aplicar</strong> se eliminarán todos los permisos, categorías y credenciales asociadas',
+    'updated_password_warning'      =>  'Contraseña actualizada exitosamente. Por seguridad se han cerrado todas las sesiones asociadas al usuario en los diferentes dispositivos, deberá iniciar sesión nuevamente.',
 ];

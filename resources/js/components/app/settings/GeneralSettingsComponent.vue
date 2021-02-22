@@ -811,6 +811,18 @@
                 type: String,
                 require: true
             },
+            url_user_update_password: {
+                type: String,
+                require: true
+            },
+            url_logout: {
+                type: String,
+                require: true
+            },
+            url_home: {
+                type: String,
+                require: true
+            },
         },
         data() {
             return {
@@ -1930,17 +1942,27 @@
                     valid = false;
                 }else{
                     //New password
-                    const constraintsNew = Object.assign(   {
-                                                                length: {
-                                                                            minimum: 8,
-                                                                            message: this.fieldsParticipant.password_current.msg_min
-                                                                        }
-                                                            }, constraints
-                                                        );
-                    resValidation = validate.single( this.participant.password.new.value, constraintsNew );
+                    const constraintsNew = {
+                                                newPassword: Object.assign( {
+                                                                                length: {
+                                                                                            minimum: 8,
+                                                                                            message: "^"+this.fieldsParticipant.password_current.msg_min
+                                                                                        },
+                                                                                equality:   {
+                                                                                                attribute: "password",
+                                                                                                message: "^"+this.fieldsParticipant.password_new.equal_current,
+                                                                                                comparator: function(v1, v2) {
+                                                                                                    return JSON.stringify(v1) !== JSON.stringify(v2);
+                                                                                                }
+                                                                                            }
+                                                                            }, constraints
+                                                                        )
+                                            };
+                    resValidation = validate( { newPassword: this.participant.password.new.value, password: this.participant.password.old.value },
+                                            constraintsNew );
                     if( resValidation !== undefined )
                     {
-                        this.participant.password.new.msg = resValidation[0];
+                        this.participant.password.new.msg = resValidation.newPassword[0];
                         this.participant.password.new.error = true;
                         valid = false;
                     }else{
@@ -1967,10 +1989,65 @@
 
                 if( valid )
                 {
-                    //TODO
-                    console.log("Actualizar contraseña en la BBDD");
+                    //update password
+                    this.updatePasswordDB();
                 }
                 this.isLoading = false;
+            },
+            async updatePasswordDB(){
+                this.isLoading = true;
+                const params = {
+                    id: this.participant.users_id.value,
+                    password: this.participant.password.old.value,
+                    new_password: this.participant.password.new.value,
+                    confirmation_password: this.participant.password.confirmation.value
+                };
+
+                await axios.post(this.url_user_update_password, params)
+                        .then( response => {
+                            this.showErrors({});
+                            switch( response.data.status )
+                            {
+                                case 403://Password error
+                                    this.participant.password.old.msg = response.data.data[0];
+                                    this.participant.password.old.error = true;
+                                    break;
+                                case 200://Success
+                                    //Restore
+                                    this.participant.password.edited = false;
+                                    this.participant.password.editing = false;
+                                    //Notification
+                                    this.showNotificationSuccessUpdatePassword();
+                                default:
+                                    break;
+                            }
+                        },
+                        error => {
+                            this.showErrors(error);
+                        })
+                        .then( () => {
+                            this.isLoading = false;
+                        });
+            },
+            showNotificationSuccessUpdatePassword(){
+                this.$buefy.dialog.alert({
+                    title: this.textsGeneralSettings.updated_password,
+                    message: this.textsGeneralSettings.updated_password_warning,
+                    type: 'is-warning',
+                    hasIcon: true,
+                    onConfirm: () => {
+                                        //Logout
+                                        this.cerrarSesion();
+                                    }
+                });
+            },
+            cerrarSesion(){
+                axios.post( this.url_logout )
+                    .then( res => {
+                        if( res.data.status === 200 ){
+                            window.location.href = this.url_home;
+                        }
+                    });
             },
             async updateDBParticipant(key, obj, objCopy){
                 this.isLoading = true;

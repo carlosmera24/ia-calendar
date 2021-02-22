@@ -2319,6 +2319,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     text_breadcrumbs_init: {
@@ -2534,6 +2537,18 @@ __webpack_require__.r(__webpack_exports__);
       require: true
     },
     url_person_update: {
+      type: String,
+      require: true
+    },
+    url_user_update_password: {
+      type: String,
+      require: true
+    },
+    url_logout: {
+      type: String,
+      require: true
+    },
+    url_home: {
       type: String,
       require: true
     }
@@ -4628,6 +4643,18 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
     url_person_update: {
       type: String,
       require: true
+    },
+    url_user_update_password: {
+      type: String,
+      require: true
+    },
+    url_logout: {
+      type: String,
+      require: true
+    },
+    url_home: {
+      type: String,
+      require: true
     }
   },
   data: function data() {
@@ -6157,16 +6184,28 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
           valid = false;
         } else {
         //New password
-        var constraintsNew = Object.assign({
-          length: {
-            minimum: 8,
-            message: this.fieldsParticipant.password_current.msg_min
-          }
-        }, constraints);
-        resValidation = validate.single(this.participant.password["new"].value, constraintsNew);
+        var constraintsNew = {
+          newPassword: Object.assign({
+            length: {
+              minimum: 8,
+              message: "^" + this.fieldsParticipant.password_current.msg_min
+            },
+            equality: {
+              attribute: "password",
+              message: "^" + this.fieldsParticipant.password_new.equal_current,
+              comparator: function comparator(v1, v2) {
+                return JSON.stringify(v1) !== JSON.stringify(v2);
+              }
+            }
+          }, constraints)
+        };
+        resValidation = validate({
+          newPassword: this.participant.password["new"].value,
+          password: this.participant.password.old.value
+        }, constraintsNew);
 
         if (resValidation !== undefined) {
-          this.participant.password["new"].msg = resValidation[0];
+          this.participant.password["new"].msg = resValidation.newPassword[0];
           this.participant.password["new"].error = true;
           valid = false;
         } else {
@@ -6193,13 +6232,13 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
       }
 
       if (valid) {
-        //TODO
-        console.log("Actualizar contraseña en la BBDD");
+        //update password
+        this.updatePasswordDB();
       }
 
       this.isLoading = false;
     },
-    updateDBParticipant: function updateDBParticipant(key, obj, objCopy) {
+    updatePasswordDB: function updatePasswordDB() {
       var _this18 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee15() {
@@ -6210,12 +6249,87 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
               case 0:
                 _this18.isLoading = true;
                 params = {
-                  id: _this18.participant.id.value
+                  id: _this18.participant.users_id.value,
+                  password: _this18.participant.password.old.value,
+                  new_password: _this18.participant.password["new"].value,
+                  confirmation_password: _this18.participant.password.confirmation.value
+                };
+                _context15.next = 4;
+                return axios.post(_this18.url_user_update_password, params).then(function (response) {
+                  _this18.showErrors({});
+
+                  switch (response.data.status) {
+                    case 403:
+                      //Password error
+                      _this18.participant.password.old.msg = response.data.data[0];
+                      _this18.participant.password.old.error = true;
+                      break;
+
+                    case 200:
+                      //Success
+                      //Restore
+                      _this18.participant.password.edited = false;
+                      _this18.participant.password.editing = false; //Notification
+
+                      _this18.showNotificationSuccessUpdatePassword();
+
+                    default:
+                      break;
+                  }
+                }, function (error) {
+                  _this18.showErrors(error);
+                }).then(function () {
+                  _this18.isLoading = false;
+                });
+
+              case 4:
+              case "end":
+                return _context15.stop();
+            }
+          }
+        }, _callee15);
+      }))();
+    },
+    showNotificationSuccessUpdatePassword: function showNotificationSuccessUpdatePassword() {
+      var _this19 = this;
+
+      this.$buefy.dialog.alert({
+        title: this.textsGeneralSettings.updated_password,
+        message: this.textsGeneralSettings.updated_password_warning,
+        type: 'is-warning',
+        hasIcon: true,
+        onConfirm: function onConfirm() {
+          //Logout
+          _this19.cerrarSesion();
+        }
+      });
+    },
+    cerrarSesion: function cerrarSesion() {
+      var _this20 = this;
+
+      axios.post(this.url_logout).then(function (res) {
+        if (res.data.status === 200) {
+          window.location.href = _this20.url_home;
+        }
+      });
+    },
+    updateDBParticipant: function updateDBParticipant(key, obj, objCopy) {
+      var _this21 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee16() {
+        var params;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee16$(_context16) {
+          while (1) {
+            switch (_context16.prev = _context16.next) {
+              case 0:
+                _this21.isLoading = true;
+                params = {
+                  id: _this21.participant.id.value
                 };
                 params[key] = obj.value;
-                _context15.next = 5;
-                return axios.post(_this18.url_participant_update, params).then(function (response) {
-                  _this18.showErrors({});
+                _context16.next = 5;
+                return axios.post(_this21.url_participant_update, params).then(function (response) {
+                  _this21.showErrors({});
 
                   if (response.data.status === 200) {
                     //update/restore value copy
@@ -6224,168 +6338,14 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                         obj.value = response.data.data.extra;
                         objCopy.value = Object.assign({}, response.data.data.extra); //Non-reactive copy
 
-                        _this18.fileAvatar = null;
-                        _this18.enabledUploadAvatar = false;
+                        _this21.fileAvatar = null;
+                        _this21.enabledUploadAvatar = false;
 
-                        _this18.getImg64Base(_this18.OPTIONS.PARTICIPANT, _this18.participant.profile_image.value);
+                        _this21.getImg64Base(_this21.OPTIONS.PARTICIPANT, _this21.participant.profile_image.value);
                       } else //Update copy
                       {
                         objCopy.value = Object.assign({}, obj.value); //Non-reactive copy
                       }
-
-                    obj.edited = false; //restore
-
-                    obj.editing = false; //restore
-
-                    Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
-                      title: _this18.text_success,
-                      text: _this18.textsGeneralSettings.text_updated_participant
-                    });
-                  }
-                }, function (error) {
-                  _this18.showErrors(error);
-                }).then(function () {
-                  _this18.isLoading = false;
-                });
-
-              case 5:
-              case "end":
-                return _context15.stop();
-            }
-          }
-        }, _callee15);
-      }))();
-    },
-    createDBPersonEmailUsedEvents: function createDBPersonEmailUsedEvents(obj, objCopy) {
-      var _this19 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee16() {
-        var params;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee16$(_context16) {
-          while (1) {
-            switch (_context16.prev = _context16.next) {
-              case 0:
-                _this19.isLoading = true;
-                params = {
-                  email: obj.value.email,
-                  persons_id: _this19.participant.persons_id.value,
-                  used_events: 1,
-                  status_persons_emails_id: _this19.OPTIONS.STATUS_PERSONS_EMAILS.PENDING
-                };
-                _context16.next = 4;
-                return axios.post(_this19.url_persons_emails_store, params).then(function (response) {
-                  _this19.showErrors({});
-
-                  if (response.data.status === 201) {
-                    //update/restore value copy
-                    obj.value = response.data.data;
-                    objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
-
-                    objCopy.edited = false; //restore
-
-                    objCopy.editing = false; //restore
-
-                    obj.edited = false; //restore
-
-                    obj.editing = false; //restore
-
-                    Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
-                      title: _this19.text_success,
-                      text: _this19.textsGeneralSettings.text_updated_participant
-                    });
-                  }
-                }, function (error) {
-                  _this19.showErrors(error);
-                }).then(function () {
-                  _this19.isLoading = false;
-                });
-
-              case 4:
-              case "end":
-                return _context16.stop();
-            }
-          }
-        }, _callee16);
-      }))();
-    },
-    updateDBPersonEmailUsedEvents: function updateDBPersonEmailUsedEvents(obj, objCopy) {
-      var _this20 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee17() {
-        var params;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee17$(_context17) {
-          while (1) {
-            switch (_context17.prev = _context17.next) {
-              case 0:
-                _this20.isLoading = true;
-                params = {
-                  email: obj.value.email,
-                  id: obj.value.id,
-                  used_events: 1,
-                  status_persons_emails_id: _this20.OPTIONS.STATUS_PERSONS_EMAILS.PENDING
-                };
-                _context17.next = 4;
-                return axios.post(_this20.url_persons_emails_update, params).then(function (response) {
-                  _this20.showErrors({});
-
-                  if (response.data.status === 200) {
-                    //update/restore value copy
-                    obj.value = response.data.data;
-                    objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
-
-                    objCopy.edited = false; //restore
-
-                    objCopy.editing = false; //restore
-
-                    obj.edited = false; //restore
-
-                    obj.editing = false; //restore
-
-                    Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
-                      title: _this20.text_success,
-                      text: _this20.textsGeneralSettings.text_updated_participant
-                    });
-                  }
-                }, function (error) {
-                  _this20.showErrors(error);
-                }).then(function () {
-                  _this20.isLoading = false;
-                });
-
-              case 4:
-              case "end":
-                return _context17.stop();
-            }
-          }
-        }, _callee17);
-      }))();
-    },
-    createDBPersonCellhpone: function createDBPersonCellhpone(obj, objCopy) {
-      var _this21 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee18() {
-        var params;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee18$(_context18) {
-          while (1) {
-            switch (_context18.prev = _context18.next) {
-              case 0:
-                _this21.isLoading = true;
-                params = {
-                  mobile: obj.value.cellphone_number,
-                  persons_id: _this21.participant.persons_id.value
-                };
-                _context18.next = 4;
-                return axios.post(_this21.url_persons_cellphone_store, params).then(function (response) {
-                  _this21.showErrors({});
-
-                  if (response.data.status === 201) {
-                    //update/restore value copy
-                    obj.value = response.data.data;
-                    objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
-
-                    objCopy.edited = false; //restore
-
-                    objCopy.editing = false; //restore
 
                     obj.edited = false; //restore
 
@@ -6402,33 +6362,35 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                   _this21.isLoading = false;
                 });
 
-              case 4:
+              case 5:
               case "end":
-                return _context18.stop();
+                return _context16.stop();
             }
           }
-        }, _callee18);
+        }, _callee16);
       }))();
     },
-    updateDBPersonCellhpone: function updateDBPersonCellhpone(obj, objCopy) {
+    createDBPersonEmailUsedEvents: function createDBPersonEmailUsedEvents(obj, objCopy) {
       var _this22 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee19() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee17() {
         var params;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee19$(_context19) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee17$(_context17) {
           while (1) {
-            switch (_context19.prev = _context19.next) {
+            switch (_context17.prev = _context17.next) {
               case 0:
                 _this22.isLoading = true;
                 params = {
-                  mobile: obj.value.cellphone_number,
-                  id: obj.value.id
+                  email: obj.value.email,
+                  persons_id: _this22.participant.persons_id.value,
+                  used_events: 1,
+                  status_persons_emails_id: _this22.OPTIONS.STATUS_PERSONS_EMAILS.PENDING
                 };
-                _context19.next = 4;
-                return axios.post(_this22.url_person_cellphone_update, params).then(function (response) {
+                _context17.next = 4;
+                return axios.post(_this22.url_persons_emails_store, params).then(function (response) {
                   _this22.showErrors({});
 
-                  if (response.data.status === 200) {
+                  if (response.data.status === 201) {
                     //update/restore value copy
                     obj.value = response.data.data;
                     objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
@@ -6454,34 +6416,37 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
 
               case 4:
               case "end":
-                return _context19.stop();
+                return _context17.stop();
             }
           }
-        }, _callee19);
+        }, _callee17);
       }))();
     },
-    updatedDBPerson: function updatedDBPerson(keyParamenter, obj, objCopy) {
+    updateDBPersonEmailUsedEvents: function updateDBPersonEmailUsedEvents(obj, objCopy) {
       var _this23 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee20() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee18() {
         var params;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee20$(_context20) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee18$(_context18) {
           while (1) {
-            switch (_context20.prev = _context20.next) {
+            switch (_context18.prev = _context18.next) {
               case 0:
                 _this23.isLoading = true;
                 params = {
-                  id: _this23.participant.person.id.value
+                  email: obj.value.email,
+                  id: obj.value.id,
+                  used_events: 1,
+                  status_persons_emails_id: _this23.OPTIONS.STATUS_PERSONS_EMAILS.PENDING
                 };
-                params[keyParamenter] = obj.value;
-                _context20.next = 5;
-                return axios.post(_this23.url_person_update, params).then(function (response) {
+                _context18.next = 4;
+                return axios.post(_this23.url_persons_emails_update, params).then(function (response) {
                   _this23.showErrors({});
 
                   if (response.data.status === 200) {
                     //update/restore value copy
-                    obj.value = response.data.data[keyParamenter];
-                    objCopy.value = response.data.data[keyParamenter];
+                    obj.value = response.data.data;
+                    objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
+
                     objCopy.edited = false; //restore
 
                     objCopy.editing = false; //restore
@@ -6501,7 +6466,107 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                   _this23.isLoading = false;
                 });
 
-              case 5:
+              case 4:
+              case "end":
+                return _context18.stop();
+            }
+          }
+        }, _callee18);
+      }))();
+    },
+    createDBPersonCellhpone: function createDBPersonCellhpone(obj, objCopy) {
+      var _this24 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee19() {
+        var params;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee19$(_context19) {
+          while (1) {
+            switch (_context19.prev = _context19.next) {
+              case 0:
+                _this24.isLoading = true;
+                params = {
+                  mobile: obj.value.cellphone_number,
+                  persons_id: _this24.participant.persons_id.value
+                };
+                _context19.next = 4;
+                return axios.post(_this24.url_persons_cellphone_store, params).then(function (response) {
+                  _this24.showErrors({});
+
+                  if (response.data.status === 201) {
+                    //update/restore value copy
+                    obj.value = response.data.data;
+                    objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
+
+                    objCopy.edited = false; //restore
+
+                    objCopy.editing = false; //restore
+
+                    obj.edited = false; //restore
+
+                    obj.editing = false; //restore
+
+                    Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
+                      title: _this24.text_success,
+                      text: _this24.textsGeneralSettings.text_updated_participant
+                    });
+                  }
+                }, function (error) {
+                  _this24.showErrors(error);
+                }).then(function () {
+                  _this24.isLoading = false;
+                });
+
+              case 4:
+              case "end":
+                return _context19.stop();
+            }
+          }
+        }, _callee19);
+      }))();
+    },
+    updateDBPersonCellhpone: function updateDBPersonCellhpone(obj, objCopy) {
+      var _this25 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee20() {
+        var params;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee20$(_context20) {
+          while (1) {
+            switch (_context20.prev = _context20.next) {
+              case 0:
+                _this25.isLoading = true;
+                params = {
+                  mobile: obj.value.cellphone_number,
+                  id: obj.value.id
+                };
+                _context20.next = 4;
+                return axios.post(_this25.url_person_cellphone_update, params).then(function (response) {
+                  _this25.showErrors({});
+
+                  if (response.data.status === 200) {
+                    //update/restore value copy
+                    obj.value = response.data.data;
+                    objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
+
+                    objCopy.edited = false; //restore
+
+                    objCopy.editing = false; //restore
+
+                    obj.edited = false; //restore
+
+                    obj.editing = false; //restore
+
+                    Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
+                      title: _this25.text_success,
+                      text: _this25.textsGeneralSettings.text_updated_participant
+                    });
+                  }
+                }, function (error) {
+                  _this25.showErrors(error);
+                }).then(function () {
+                  _this25.isLoading = false;
+                });
+
+              case 4:
               case "end":
                 return _context20.stop();
             }
@@ -6509,21 +6574,70 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         }, _callee20);
       }))();
     },
-    updateParticipant: function updateParticipant(key) {
-      var _arguments3 = arguments,
-          _this24 = this;
+    updatedDBPerson: function updatedDBPerson(keyParamenter, obj, objCopy) {
+      var _this26 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee21() {
-        var index, keys, obj, objCopy;
+        var params;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee21$(_context21) {
           while (1) {
             switch (_context21.prev = _context21.next) {
               case 0:
+                _this26.isLoading = true;
+                params = {
+                  id: _this26.participant.person.id.value
+                };
+                params[keyParamenter] = obj.value;
+                _context21.next = 5;
+                return axios.post(_this26.url_person_update, params).then(function (response) {
+                  _this26.showErrors({});
+
+                  if (response.data.status === 200) {
+                    //update/restore value copy
+                    obj.value = response.data.data[keyParamenter];
+                    objCopy.value = response.data.data[keyParamenter];
+                    objCopy.edited = false; //restore
+
+                    objCopy.editing = false; //restore
+
+                    obj.edited = false; //restore
+
+                    obj.editing = false; //restore
+
+                    Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
+                      title: _this26.text_success,
+                      text: _this26.textsGeneralSettings.text_updated_participant
+                    });
+                  }
+                }, function (error) {
+                  _this26.showErrors(error);
+                }).then(function () {
+                  _this26.isLoading = false;
+                });
+
+              case 5:
+              case "end":
+                return _context21.stop();
+            }
+          }
+        }, _callee21);
+      }))();
+    },
+    updateParticipant: function updateParticipant(key) {
+      var _arguments3 = arguments,
+          _this27 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee22() {
+        var index, keys, obj, objCopy;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee22$(_context22) {
+          while (1) {
+            switch (_context22.prev = _context22.next) {
+              case 0:
                 index = _arguments3.length > 1 && _arguments3[1] !== undefined ? _arguments3[1] : null;
                 //Get keys, for exaple: person.emails
                 keys = key.split(".");
-                obj = _this24.participant;
-                objCopy = _this24.participantCopy;
+                obj = _this27.participant;
+                objCopy = _this27.participantCopy;
                 keys.forEach(function (k) {
                   obj = obj[k];
                   objCopy = objCopy[k];
@@ -6536,74 +6650,74 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                   }
 
                 if (!obj.edited) {
-                  _context21.next = 32;
+                  _context22.next = 32;
                   break;
                 }
 
-                _context21.t0 = key;
-                _context21.next = _context21.t0 === "person.used_events_email" ? 10 : _context21.t0 === "person.cellphones" ? 18 : _context21.t0 === "person.first_name" ? 26 : _context21.t0 === "person.last_name" ? 26 : _context21.t0 === "person.position_company" ? 26 : _context21.t0 === "person.birth_date" ? 26 : _context21.t0 === "person.date_join_company" ? 26 : 29;
+                _context22.t0 = key;
+                _context22.next = _context22.t0 === "person.used_events_email" ? 10 : _context22.t0 === "person.cellphones" ? 18 : _context22.t0 === "person.first_name" ? 26 : _context22.t0 === "person.last_name" ? 26 : _context22.t0 === "person.position_company" ? 26 : _context22.t0 === "person.birth_date" ? 26 : _context22.t0 === "person.date_join_company" ? 26 : 29;
                 break;
 
               case 10:
                 if (objCopy.value.email) {
-                  _context21.next = 15;
+                  _context22.next = 15;
                   break;
                 }
 
-                _context21.next = 13;
-                return _this24.createDBPersonEmailUsedEvents(obj, objCopy);
+                _context22.next = 13;
+                return _this27.createDBPersonEmailUsedEvents(obj, objCopy);
 
               case 13:
-                _context21.next = 17;
+                _context22.next = 17;
                 break;
 
               case 15:
-                _context21.next = 17;
-                return _this24.updateDBPersonEmailUsedEvents(obj, objCopy);
+                _context22.next = 17;
+                return _this27.updateDBPersonEmailUsedEvents(obj, objCopy);
 
               case 17:
-                return _context21.abrupt("break", 32);
+                return _context22.abrupt("break", 32);
 
               case 18:
                 if (objCopy.value.cellphone_number) {
-                  _context21.next = 23;
+                  _context22.next = 23;
                   break;
                 }
 
-                _context21.next = 21;
-                return _this24.createDBPersonCellhpone(obj, objCopy);
+                _context22.next = 21;
+                return _this27.createDBPersonCellhpone(obj, objCopy);
 
               case 21:
-                _context21.next = 25;
+                _context22.next = 25;
                 break;
 
               case 23:
-                _context21.next = 25;
-                return _this24.updateDBPersonCellhpone(obj, objCopy);
+                _context22.next = 25;
+                return _this27.updateDBPersonCellhpone(obj, objCopy);
 
               case 25:
-                return _context21.abrupt("break", 32);
+                return _context22.abrupt("break", 32);
 
               case 26:
-                _context21.next = 28;
-                return _this24.updatedDBPerson(keys[keys.length - 1], obj, objCopy);
+                _context22.next = 28;
+                return _this27.updatedDBPerson(keys[keys.length - 1], obj, objCopy);
 
               case 28:
-                return _context21.abrupt("break", 32);
+                return _context22.abrupt("break", 32);
 
               case 29:
-                _context21.next = 31;
-                return _this24.updateDBParticipant(key, obj, objCopy);
+                _context22.next = 31;
+                return _this27.updateDBParticipant(key, obj, objCopy);
 
               case 31:
-                return _context21.abrupt("break", 32);
+                return _context22.abrupt("break", 32);
 
               case 32:
               case "end":
-                return _context21.stop();
+                return _context22.stop();
             }
           }
-        }, _callee21);
+        }, _callee22);
       }))();
     }
   }
@@ -69810,7 +69924,10 @@ var render = function() {
                   url_persons_cellphone_store: _vm.url_persons_cellphone_store,
                   url_person_cellphone_update: _vm.url_person_cellphone_update,
                   url_person_data: _vm.url_person_data,
-                  url_person_update: _vm.url_person_update
+                  url_person_update: _vm.url_person_update,
+                  url_user_update_password: _vm.url_user_update_password,
+                  url_logout: _vm.url_logout,
+                  url_home: _vm.url_home
                 },
                 on: { activeMainSection: _vm.setActiveSection }
               })
