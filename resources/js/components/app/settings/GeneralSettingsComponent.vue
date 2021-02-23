@@ -833,6 +833,71 @@
                     <!-- /Renew membership -->
                 </div>
             </section>
+            <section class="login_leaders_suple_admins">
+                <h3 class="title-section"><span class="numerator">4</span>{{ textsGeneralSettings.leaders_login }}</h3>
+                <div class="columns is-multiline">
+                    <div class="column is-12 is-row-data">
+                        <div class="columns">
+                            <div class="column is-3">
+                                <b-button
+                                    class="btn-see-current-membership"
+                                    size="is-medium"
+                                    icon-left="people-arrows"
+                                />
+                            </div>
+                            <div class="columns is-multiline column is-9">
+                                <!-- Name -->
+                                <div class="columns column is-12 is-row-data">
+                                    <div class="column is-3">
+                                        <span>{{ firstCapitalize(fieldsParticipant.first_name.label) }}</span>
+                                    </div>
+                                    <div class="column is-9">
+                                        <span>Usuario Uno</span>
+                                    </div>
+                                </div>
+                                <!-- /Name -->
+                                <!-- Login identification number -->
+                                <div class="columns column is-12 is-row-data">
+                                    <div class="column is-3">
+                                        <span>{{ firstCapitalize(textsGeneralSettings.login_identification_number) }}</span>
+                                    </div>
+                                    <div class="column is-9">
+                                        <span>000000000</span>
+                                    </div>
+                                </div>
+                                <!-- /Login identification number -->
+                                <!-- Password -->
+                                <div class="columns column is-12 is-row-data">
+                                    <div class="column is-3">
+                                        <span>{{ firstCapitalize(fieldsParticipant.password.label) }}</span>
+                                    </div>
+                                    <div class="column is-3">
+                                        <span class="label-info">{{ firstCapitalize(textsGeneralSettings.password_description_standard) }}</span>
+                                    </div>
+                                    <div class="column is-6">
+                                        <a href="#"
+                                            class="link-generate"
+                                            v-on:click.prevent>
+                                            {{ textsGeneralSettings.generate }}
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- /Password -->
+                                <!-- Profile -->
+                                <div class="columns column is-12 is-row-data">
+                                    <div class="column is-3">
+                                        <span>{{ firstCapitalize(fieldsParticipant.profile.label) }}</span>
+                                    </div>
+                                    <div class="column is-9">
+                                        <span>{{ firstCapitalize("líder") }}</span>
+                                    </div>
+                                </div>
+                                <!-- /Profile -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </form>
     </div>
 </template>

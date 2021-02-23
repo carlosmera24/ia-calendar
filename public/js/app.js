@@ -4675,6 +4675,71 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -73799,6 +73864,158 @@ var render = function() {
                 ])
               ])
             ])
+          ]),
+          _vm._v(" "),
+          _c("section", { staticClass: "login_leaders_suple_admins" }, [
+            _c("h3", { staticClass: "title-section" }, [
+              _c("span", { staticClass: "numerator" }, [_vm._v("4")]),
+              _vm._v(_vm._s(_vm.textsGeneralSettings.leaders_login))
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "columns is-multiline" }, [
+              _c("div", { staticClass: "column is-12 is-row-data" }, [
+                _c("div", { staticClass: "columns" }, [
+                  _c(
+                    "div",
+                    { staticClass: "column is-3" },
+                    [
+                      _c("b-button", {
+                        staticClass: "btn-see-current-membership",
+                        attrs: {
+                          size: "is-medium",
+                          "icon-left": "people-arrows"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "columns is-multiline column is-9" },
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "columns column is-12 is-row-data" },
+                        [
+                          _c("div", { staticClass: "column is-3" }, [
+                            _c("span", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.firstCapitalize(
+                                    _vm.fieldsParticipant.first_name.label
+                                  )
+                                )
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _vm._m(1)
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "columns column is-12 is-row-data" },
+                        [
+                          _c("div", { staticClass: "column is-3" }, [
+                            _c("span", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.firstCapitalize(
+                                    _vm.textsGeneralSettings
+                                      .login_identification_number
+                                  )
+                                )
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _vm._m(2)
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "columns column is-12 is-row-data" },
+                        [
+                          _c("div", { staticClass: "column is-3" }, [
+                            _c("span", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.firstCapitalize(
+                                    _vm.fieldsParticipant.password.label
+                                  )
+                                )
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "column is-3" }, [
+                            _c("span", { staticClass: "label-info" }, [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.firstCapitalize(
+                                    _vm.textsGeneralSettings
+                                      .password_description_standard
+                                  )
+                                )
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "column is-6" }, [
+                            _c(
+                              "a",
+                              {
+                                staticClass: "link-generate",
+                                attrs: { href: "#" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                  }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                        " +
+                                    _vm._s(_vm.textsGeneralSettings.generate) +
+                                    "\n                                    "
+                                )
+                              ]
+                            )
+                          ])
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "columns column is-12 is-row-data" },
+                        [
+                          _c("div", { staticClass: "column is-3" }, [
+                            _c("span", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.firstCapitalize(
+                                    _vm.fieldsParticipant.profile.label
+                                  )
+                                )
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "column is-9" }, [
+                            _c("span", [
+                              _vm._v(_vm._s(_vm.firstCapitalize("líder")))
+                            ])
+                          ])
+                        ]
+                      )
+                    ]
+                  )
+                ])
+              ])
+            ])
           ])
         ]
       )
@@ -73813,6 +74030,22 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "column is-9" }, [
       _c("span", [_vm._v("Medium")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "column is-9" }, [
+      _c("span", [_vm._v("Usuario Uno")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "column is-9" }, [
+      _c("span", [_vm._v("000000000")])
     ])
   }
 ]

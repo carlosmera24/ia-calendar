@@ -616,6 +616,11 @@ body, h2, button, input, select, textarea {
                         font-size: 1rem;
                     }
                 }
+                .label-info{
+                    font-size: 14px;
+                    font-style: oblique;
+                    color: #777;
+                }
                 .programmer_data{
                     .field-identification-type.control{
                         .v-select{
@@ -722,11 +727,7 @@ body, h2, button, input, select, textarea {
                             }
                         }
                     }
-                    .label-info{
-                       font-size: 14px;
-                       font-style: oblique;
-                       color: #777;
-                    }
+
                     .row-used_events_email{
                         .columns.column.is-6.is-row-data{
                             margin: 0;
@@ -746,6 +747,16 @@ body, h2, button, input, select, textarea {
                     .btn-see-current-membership:hover{
                         border-color: #FFF;
                         color: #FFF;
+                    }
+                }
+                .login_leaders_suple_admins{
+                    .link-generate{
+                        color: $blue-dark;
+                        font-weight: bold;
+                        text-decoration: underline;
+                    }
+                    .link-generate:hover{
+                        font-size: 15px;
                     }
                 }
             }

@@ -213,6 +213,7 @@ return [
         'current_membership'    => 'membresía actual',
         'payment_method'        => 'forma de pago',
         'type_payment_gateway'  => 'tipo de pasarela de pago',
+        'profile'               => 'perfil',
     ],
 
 ];

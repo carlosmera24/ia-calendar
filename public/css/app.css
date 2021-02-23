@@ -20502,6 +20502,12 @@ textarea {
   font-size: 1rem;
 }
 
+.application .content-main .content .form_general_settings .label-info {
+  font-size: 14px;
+  font-style: oblique;
+  color: #777;
+}
+
 .application .content-main .content .form_general_settings .programmer_data .field-identification-type.control .v-select .vs__dropdown-toggle .vs__selected-options {
   padding: 0;
 }
@@ -20602,12 +20608,6 @@ textarea {
   border-color: #f14668;
 }
 
-.application .content-main .content .form_general_settings .adminitrator_data .label-info {
-  font-size: 14px;
-  font-style: oblique;
-  color: #777;
-}
-
 .application .content-main .content .form_general_settings .adminitrator_data .row-used_events_email .columns.column.is-6.is-row-data {
   margin: 0;
 }
@@ -20626,6 +20626,16 @@ textarea {
 .application .content-main .content .form_general_settings .membership_data .btn-see-current-membership:hover {
   border-color: #FFF;
   color: #FFF;
+}
+
+.application .content-main .content .form_general_settings .login_leaders_suple_admins .link-generate {
+  color: #005368;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.application .content-main .content .form_general_settings .login_leaders_suple_admins .link-generate:hover {
+  font-size: 15px;
 }
 
 .animated_delay {

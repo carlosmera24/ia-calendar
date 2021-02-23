@@ -18,6 +18,7 @@ return [
     'event'                 =>  'Evento',
     'breadcrumbs_init'      =>  'Volver al inicio',
     'password_update'       =>  'Actualizar contraseña',
+    'generate'              =>  'Generar',
 
     /**
      * DropDown Menu section
@@ -59,7 +60,7 @@ return [
         'administrator_data'                =>  'Datos del administrador',
         'administrator_data'                =>  'Datos del administrador',
         'membership_data'                   =>  'Datos membresía',
-        'leaders_login'                     =>  'Inicio de sesión para Líderes',
+        'leaders_login'                     =>  'Inicio de sesión para Líderes y suplentes',
         'filter_identification'             =>  'Filtro tipo de documento',
         'logo_placeholder'                  =>  'Insertar logo entidad',
         'upload_logo'                       =>  'Subir logo',
@@ -71,6 +72,8 @@ return [
         'delete_payment_method'             =>  'eliminar documento de pago',
         'cancel_membership'                 =>  'cancelar membresía',
         'renew_membership'                  =>  'renovar membresía',
+        'login_identification_number'       =>  'el ingreso es numero de identificación',
+        'password_description_standard'     =>  'automática estándar',
     ],
 
     /**

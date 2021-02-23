@@ -63,6 +63,11 @@
                                                                 'error' => false,
                                                                 'msg'   =>  __('validation.required', ['attribute' => ''])
                                                             ],
+                                        'profile'        =>  [
+                                                                'label' =>  __('validation.attributes.profile'),
+                                                                'error' => false,
+                                                                'msg'   =>  __('validation.required', ['attribute' => ''])
+                                                            ],
                                         'profile_image' =>  [
                                                                 'label'             =>  __('validation.attributes.profile_image'),
                                                                 'error'             => false,
@@ -106,6 +111,11 @@
                                                             ],
                                         'password_confirmation' =>  [
                                                                     'label'         =>  __('validation.attributes.password_confirmation'),
+                                                                    'error'         => false,
+                                                                    'msg'           =>  __('validation.required', ['attribute' => ''])
+                                                                ],
+                                        'password'      =>  [
+                                                                    'label'         =>  __('validation.attributes.password'),
                                                                     'error'         => false,
                                                                     'msg'           =>  __('validation.required', ['attribute' => ''])
                                                                 ],
@@ -202,6 +212,9 @@
             $texts_general_settings['delete_payment_method'] = __('app.general_settings.delete_payment_method');
             $texts_general_settings['cancel_membership'] = __('app.general_settings.cancel_membership');
             $texts_general_settings['renew_membership'] = __('app.general_settings.renew_membership');
+            $texts_general_settings['login_identification_number'] = __('app.general_settings.login_identification_number');
+            $texts_general_settings['password_description_standard'] = __('app.general_settings.password_description_standard');
+            $texts_general_settings['generate'] = __('app.generate');
             @endphp
         {{-- Header --}}
         <div class="header level is-mobile has-text-white is-size-7 mb-0 px-5 py-4">
