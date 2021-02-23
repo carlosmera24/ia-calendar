@@ -82,6 +82,7 @@
                 v-bind:url_user_update_password='url_user_update_password'
                 v-bind:url_logout='url_logout'
                 v-bind:url_home='url_home'
+                v-bind:url_participants_list_leaders_suplents_programmer='url_participants_list_leaders_suplents_programmer'
             />
         </transition-group>
     </div>
@@ -321,6 +322,10 @@ export default {
             require: true
         },
         url_home: {
+            type: String,
+            require: true
+        },
+        url_participants_list_leaders_suplents_programmer: {
             type: String,
             require: true
         },

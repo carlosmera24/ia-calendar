@@ -39,6 +39,10 @@ class ParticipantController extends Controller
                                             'page'              =>  'required|integer|min:1',
                                             'perPage'           =>  'required|integer|min:1',
                                         ];
+    protected $rules_list_participants_leaders_suplents =   [
+                                                                'programmers_id'    =>  'required|integer|exists:programmers,id',
+                                                                'users_id'          =>  'nullable|integer|exists:users,id',
+                                                            ];
     protected $rules_avatar =   [
                                     'name' => 'required|min:1'
                                 ];
@@ -179,6 +183,57 @@ class ParticipantController extends Controller
                                         array(
                                                 'status'            =>  200,
                                                 'recordsTotal'      => intval($totalData),
+                                                'participants'      =>  $participants
+                                            ),
+                                        200
+                                    );
+        }
+    }
+
+    /**
+     * Return a list of particpants leaders/admins suplent and your data from ID participant
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function listLeadersSuplentsFromProgrammer(Request $request)
+    {
+       $validator = Validator::make($request->input(), $this->rules_list_participants_leaders_suplents);
+        if( $validator->fails() )
+        {
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'error'     =>  __('messages.bad_request'),
+                                                'data'      =>  $validator->getMessageBag()->toArray()
+                                            ),
+                                        400
+                                    );
+        }else
+        {
+            $user_id = $request->users_id;
+            $participants = Participant::leftJoin('persons','persons_id','persons.id')
+                                        ->select(
+                                                    'participants.id','participants.programmers_id','participants.users_id',
+                                                    'participants.profiles_participants_id','participants.description',
+                                                    'participants.status_participants_id',
+                                                    'persons.id AS persons_id','persons.first_name','persons.last_name',
+                                                    'persons.birth_date','persons.position_company','persons.date_join_company',
+                                                )
+                                        ->where('participants.programmers_id', $request->programmers_id)
+                                        ->whereIn('participants.profiles_participants_id', [
+                                                                                                Participant::PROFILES_PARTICIPANTS_LEADER,
+                                                                                                Participant::PROFILES_PARTICIPANTS_SUPLE_ADMIN
+                                                                                            ])
+                                        ->when( $user_id, function( $query, $user_id ){
+                                            return $query->whereNull('participants.users_id')
+                                                        ->orWhere('participants.users_id','!=', $user_id);
+                                        } )
+                                        ->orderBy('persons.first_name')
+                                        ->get();
+
+            return response()->json(
+                                        array(
+                                                'status'            =>  200,
                                                 'participants'      =>  $participants
                                             ),
                                         200

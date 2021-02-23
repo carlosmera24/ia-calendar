@@ -1026,6 +1026,10 @@
                 type: String,
                 require: true
             },
+            url_participants_list_leaders_suplents_programmer: {
+                type: String,
+                require: true
+            },
         },
         data() {
             return {
@@ -1076,6 +1080,7 @@
                 birth_date: null,
                 date_join_company: null,
                 fieldsMembership: [],
+                leadersSuplents: [],
             }
         },
         computed: {
@@ -1222,6 +1227,8 @@
             {
                 await this.getCellphones();
             }
+            //Get participants leaders/Admins suplents
+            this.getParticipantsLeadersSuplents();
         },
         methods: {
             showErrors(resError){
@@ -1579,6 +1586,30 @@
                             //Set with no-reactive values
                             Vue.set(this.participant.person, 'cellphones', cellphones);
                             Vue.set(this.participantCopy.person, 'cellphones', cellphonesCopy);
+                        }
+                    },
+                    error => {
+                        this.showErrors(error);
+                    })
+                    .then( () => {
+                        this.isLoading = false;
+                    });
+            },
+            async getParticipantsLeadersSuplents(){
+                this.isLoading = true;
+                const params = {
+                    programmers_id: this.programmer.id.value,
+                    users_id: this.participant.users_id.value,
+                };
+                await axios.post(this.url_participants_list_leaders_suplents_programmer, params)
+                    .then( response => {
+                        this.showErrors({});
+                        if( response.data.status === 200 )
+                        {
+                            response.data.participants.forEach( element => {
+                                this.leadersSuplents.push( Object.assign({},element) );
+                            });
+                            console.log(this.leadersSuplents);
                         }
                     },
                     error => {

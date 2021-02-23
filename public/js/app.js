@@ -2323,6 +2323,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     text_breadcrumbs_init: {
@@ -2554,6 +2555,10 @@ __webpack_require__.r(__webpack_exports__);
       require: true
     },
     url_home: {
+      type: String,
+      require: true
+    },
+    url_participants_list_leaders_suplents_programmer: {
       type: String,
       require: true
     }
@@ -4863,6 +4868,10 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
     url_home: {
       type: String,
       require: true
+    },
+    url_participants_list_leaders_suplents_programmer: {
+      type: String,
+      require: true
     }
   },
   data: function data() {
@@ -4916,7 +4925,8 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
       maxBirthDate: new Date(moment().subtract(18, 'years')),
       birth_date: null,
       date_join_company: null,
-      fieldsMembership: []
+      fieldsMembership: [],
+      leadersSuplents: []
     };
   },
   computed: {
@@ -5099,6 +5109,10 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
               return _this2.getCellphones();
 
             case 14:
+              //Get participants leaders/Admins suplents
+              _this2.getParticipantsLeadersSuplents();
+
+            case 15:
             case "end":
               return _context.stop();
           }
@@ -5592,36 +5606,29 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         }, _callee8);
       }))();
     },
-    clickCancelToHome: function clickCancelToHome() {
-      this.$emit('activeMainSection', 'main');
-    },
-    emailsExist: function emailsExist() {
-      var _arguments = arguments,
-          _this10 = this;
+    getParticipantsLeadersSuplents: function getParticipantsLeadersSuplents() {
+      var _this10 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee9() {
-        var emails, data;
+        var params;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee9$(_context9) {
           while (1) {
             switch (_context9.prev = _context9.next) {
               case 0:
-                emails = _arguments.length > 0 && _arguments[0] !== undefined ? _arguments[0] : [];
                 _this10.isLoading = true;
-                data = null;
-
-                if (!(emails && _.isArray(emails) && !_.isEmpty(emails))) {
-                  _context9.next = 8;
-                  break;
-                }
-
-                _context9.next = 6;
-                return axios.post(_this10.url_person_email_exist, {
-                  emails: emails
-                }).then(function (response) {
+                params = {
+                  programmers_id: _this10.programmer.id.value,
+                  users_id: _this10.participant.users_id.value
+                };
+                _context9.next = 4;
+                return axios.post(_this10.url_participants_list_leaders_suplents_programmer, params).then(function (response) {
                   _this10.showErrors({});
 
                   if (response.data.status === 200) {
-                    data = response.data;
+                    response.data.participants.forEach(function (element) {
+                      _this10.leadersSuplents.push(Object.assign({}, element));
+                    });
+                    console.log(_this10.leadersSuplents);
                   }
                 }, function (error) {
                   _this10.showErrors(error);
@@ -5629,22 +5636,67 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                   _this10.isLoading = false;
                 });
 
-              case 6:
-                _context9.next = 9;
-                break;
-
-              case 8:
-                _this10.isLoading = false;
-
-              case 9:
-                return _context9.abrupt("return", data);
-
-              case 10:
+              case 4:
               case "end":
                 return _context9.stop();
             }
           }
         }, _callee9);
+      }))();
+    },
+    clickCancelToHome: function clickCancelToHome() {
+      this.$emit('activeMainSection', 'main');
+    },
+    emailsExist: function emailsExist() {
+      var _arguments = arguments,
+          _this11 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee10() {
+        var emails, data;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee10$(_context10) {
+          while (1) {
+            switch (_context10.prev = _context10.next) {
+              case 0:
+                emails = _arguments.length > 0 && _arguments[0] !== undefined ? _arguments[0] : [];
+                _this11.isLoading = true;
+                data = null;
+
+                if (!(emails && _.isArray(emails) && !_.isEmpty(emails))) {
+                  _context10.next = 8;
+                  break;
+                }
+
+                _context10.next = 6;
+                return axios.post(_this11.url_person_email_exist, {
+                  emails: emails
+                }).then(function (response) {
+                  _this11.showErrors({});
+
+                  if (response.data.status === 200) {
+                    data = response.data;
+                  }
+                }, function (error) {
+                  _this11.showErrors(error);
+                }).then(function () {
+                  _this11.isLoading = false;
+                });
+
+              case 6:
+                _context10.next = 9;
+                break;
+
+              case 8:
+                _this11.isLoading = false;
+
+              case 9:
+                return _context10.abrupt("return", data);
+
+              case 10:
+              case "end":
+                return _context10.stop();
+            }
+          }
+        }, _callee10);
       }))();
     },
     onlyNumber: function onlyNumber(event, obj) {
@@ -5677,62 +5729,62 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
       return false;
     },
     cellphoneExists: function cellphoneExists(mobile) {
-      var _this11 = this;
+      var _this12 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee10() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee11() {
         var data;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee10$(_context10) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee11$(_context11) {
           while (1) {
-            switch (_context10.prev = _context10.next) {
+            switch (_context11.prev = _context11.next) {
               case 0:
-                _this11.isLoading = true;
+                _this12.isLoading = true;
                 data = null;
 
                 if (!(mobile && !_.isEmpty(mobile))) {
-                  _context10.next = 7;
+                  _context11.next = 7;
                   break;
                 }
 
-                _context10.next = 5;
-                return axios.post(_this11.url_person_cellphone_exist, {
+                _context11.next = 5;
+                return axios.post(_this12.url_person_cellphone_exist, {
                   mobile: mobile
                 }).then(function (response) {
-                  _this11.showErrors({});
+                  _this12.showErrors({});
 
                   if (response.data.status === 200) {
                     data = response.data;
                   }
                 }, function (error) {
-                  _this11.showErrors(error);
+                  _this12.showErrors(error);
                 }).then(function () {
-                  _this11.isLoading = false;
+                  _this12.isLoading = false;
                 });
 
               case 5:
-                _context10.next = 8;
+                _context11.next = 8;
                 break;
 
               case 7:
-                _this11.isLoading = false;
+                _this12.isLoading = false;
 
               case 8:
-                return _context10.abrupt("return", data);
+                return _context11.abrupt("return", data);
 
               case 9:
               case "end":
-                return _context10.stop();
+                return _context11.stop();
             }
           }
-        }, _callee10);
+        }, _callee11);
       }))();
     },
     imageToBase64: function imageToBase64(file) {
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee11() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee11$(_context11) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee12() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee12$(_context12) {
           while (1) {
-            switch (_context11.prev = _context11.next) {
+            switch (_context12.prev = _context12.next) {
               case 0:
-                _context11.next = 2;
+                _context12.next = 2;
                 return new Promise(function (resolve, reject) {
                   var reader = new FileReader();
                   reader.readAsDataURL(file);
@@ -5747,60 +5799,9 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                 });
 
               case 2:
-                return _context11.abrupt("return", _context11.sent);
+                return _context12.abrupt("return", _context12.sent);
 
               case 3:
-              case "end":
-                return _context11.stop();
-            }
-          }
-        }, _callee11);
-      }))();
-    },
-    onFileLogoSelected: function onFileLogoSelected() {
-      var _this12 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee12() {
-        var result;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee12$(_context12) {
-          while (1) {
-            switch (_context12.prev = _context12.next) {
-              case 0:
-                if (!_this12.fileLogo) {
-                  _context12.next = 14;
-                  break;
-                }
-
-                _this12.isLoading = true;
-                _this12.fieldsProgrammer.logo.error = false;
-                _this12.enabledUploadLogo = true;
-                _context12.next = 6;
-                return _this12.imageToBase64(_this12.fileLogo)["catch"](function (e) {
-                  return Error(e);
-                });
-
-              case 6:
-                result = _context12.sent;
-
-                if (!(result instanceof Error)) {
-                  _context12.next = 10;
-                  break;
-                }
-
-                _this12.showErrors(result.message);
-
-                return _context12.abrupt("return");
-
-              case 10:
-                _this12.logoBase64 = result;
-                _this12.isLoading = false;
-                _context12.next = 15;
-                break;
-
-              case 14:
-                _this12.enabledUploadLogo = false;
-
-              case 15:
               case "end":
                 return _context12.stop();
             }
@@ -5808,7 +5809,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         }, _callee12);
       }))();
     },
-    onFileAvatarSelected: function onFileAvatarSelected() {
+    onFileLogoSelected: function onFileLogoSelected() {
       var _this13 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee13() {
@@ -5817,16 +5818,16 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
           while (1) {
             switch (_context13.prev = _context13.next) {
               case 0:
-                if (!_this13.fileAvatar) {
+                if (!_this13.fileLogo) {
                   _context13.next = 14;
                   break;
                 }
 
                 _this13.isLoading = true;
-                _this13.fieldsParticipant.profile_image.error = false;
-                _this13.enabledUploadAvatar = true;
+                _this13.fieldsProgrammer.logo.error = false;
+                _this13.enabledUploadLogo = true;
                 _context13.next = 6;
-                return _this13.imageToBase64(_this13.fileAvatar)["catch"](function (e) {
+                return _this13.imageToBase64(_this13.fileLogo)["catch"](function (e) {
                   return Error(e);
                 });
 
@@ -5843,13 +5844,13 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                 return _context13.abrupt("return");
 
               case 10:
-                _this13.avatarAdmin = result;
+                _this13.logoBase64 = result;
                 _this13.isLoading = false;
                 _context13.next = 15;
                 break;
 
               case 14:
-                _this13.enabledUploadAvatar = false;
+                _this13.enabledUploadLogo = false;
 
               case 15:
               case "end":
@@ -5859,14 +5860,65 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         }, _callee13);
       }))();
     },
-    clickEditProgrammer: function clickEditProgrammer(key) {
+    onFileAvatarSelected: function onFileAvatarSelected() {
       var _this14 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee14() {
+        var result;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee14$(_context14) {
+          while (1) {
+            switch (_context14.prev = _context14.next) {
+              case 0:
+                if (!_this14.fileAvatar) {
+                  _context14.next = 14;
+                  break;
+                }
+
+                _this14.isLoading = true;
+                _this14.fieldsParticipant.profile_image.error = false;
+                _this14.enabledUploadAvatar = true;
+                _context14.next = 6;
+                return _this14.imageToBase64(_this14.fileAvatar)["catch"](function (e) {
+                  return Error(e);
+                });
+
+              case 6:
+                result = _context14.sent;
+
+                if (!(result instanceof Error)) {
+                  _context14.next = 10;
+                  break;
+                }
+
+                _this14.showErrors(result.message);
+
+                return _context14.abrupt("return");
+
+              case 10:
+                _this14.avatarAdmin = result;
+                _this14.isLoading = false;
+                _context14.next = 15;
+                break;
+
+              case 14:
+                _this14.enabledUploadAvatar = false;
+
+              case 15:
+              case "end":
+                return _context14.stop();
+            }
+          }
+        }, _callee14);
+      }))();
+    },
+    clickEditProgrammer: function clickEditProgrammer(key) {
+      var _this15 = this;
 
       this.programmer[key].editing = !this.programmer[key].editing; //wait for the input to load
 
       this.$nextTick(function () {
-        if (_this14.$refs[key]) {
-          _this14.$refs[key].focus();
+        if (_this15.$refs[key]) {
+          _this15.$refs[key].focus();
         }
       });
     },
@@ -5944,7 +5996,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
       }
     },
     updateProgrammer: function updateProgrammer(key) {
-      var _this15 = this;
+      var _this16 = this;
 
       var obj = this.programmer[key];
 
@@ -5960,41 +6012,41 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         }
 
         axios.post(this.url_update_programmer, params).then(function (response) {
-          _this15.showErrors({});
+          _this16.showErrors({});
 
           if (response.data.status === 200) {
             //update/restore value copy
             if (key === "logo" && response.data.data.extra) //Update logo info
               {
-                _this15.programmer[key].value = response.data.data.extra;
-                _this15.programmerCopy[key].value = response.data.data.extra;
-                _this15.fileLogo = null;
-                _this15.logoBase64 = null;
-                _this15.enabledUploadLogo = false;
+                _this16.programmer[key].value = response.data.data.extra;
+                _this16.programmerCopy[key].value = response.data.data.extra;
+                _this16.fileLogo = null;
+                _this16.logoBase64 = null;
+                _this16.enabledUploadLogo = false;
 
-                _this15.getImg64Base(_this15.OPTIONS.PROGRAMMER, _this15.programmer.logo.value);
+                _this16.getImg64Base(_this16.OPTIONS.PROGRAMMER, _this16.programmer.logo.value);
               } else //Update copy
               {
-                _this15.programmerCopy[key].value = obj.value;
+                _this16.programmerCopy[key].value = obj.value;
               }
 
             obj.edited = false; //restore
 
             obj.editing = false; //restore
 
-            if (key === "identification" && _this15.identificationTypeSelected !== _this15.identificationTypeSelectedOriginal) {
-              _this15.identificationTypeSelectedOriginal = _this15.identificationTypeSelected; //restore
+            if (key === "identification" && _this16.identificationTypeSelected !== _this16.identificationTypeSelectedOriginal) {
+              _this16.identificationTypeSelectedOriginal = _this16.identificationTypeSelected; //restore
             }
 
             Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
-              title: _this15.text_success,
-              text: _this15.textsGeneralSettings.text_updated_programmer
+              title: _this16.text_success,
+              text: _this16.textsGeneralSettings.text_updated_programmer
             });
           }
         }, function (error) {
-          _this15.showErrors(error);
+          _this16.showErrors(error);
         }).then(function () {
-          _this15.isLoading = false;
+          _this16.isLoading = false;
         });
       }
     },
@@ -6051,7 +6103,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
       this.participant.person.date_join_company.value = this.dateFormat(this.date_join_company);
     },
     clickEditParticipant: function clickEditParticipant(key) {
-      var _this16 = this;
+      var _this17 = this;
 
       var index = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
       //Get keys, for exaple: person.emails
@@ -6072,11 +6124,11 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
 
 
       this.$nextTick(function () {
-        if (_this16.$refs[keyRef]) {
-          if (_.isArray(_this16.$refs[keyRef])) {
-            _this16.$refs[keyRef][0].focus();
+        if (_this17.$refs[keyRef]) {
+          if (_.isArray(_this17.$refs[keyRef])) {
+            _this17.$refs[keyRef][0].focus();
           } else {
-            _this16.$refs[keyRef].focus();
+            _this17.$refs[keyRef].focus();
           }
         }
       });
@@ -6134,29 +6186,29 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
     },
     clickUpdateParticipant: function clickUpdateParticipant(key) {
       var _arguments2 = arguments,
-          _this17 = this;
+          _this18 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee14() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee15() {
         var index, keys, obj, objCopy, different, valid, value, constraints, constrEmail, data, regex, constrMobile, _data;
 
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee14$(_context14) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee15$(_context15) {
           while (1) {
-            switch (_context14.prev = _context14.next) {
+            switch (_context15.prev = _context15.next) {
               case 0:
                 index = _arguments2.length > 1 && _arguments2[1] !== undefined ? _arguments2[1] : null;
-                _this17.isLoading = true; //cleans errors
+                _this18.isLoading = true; //cleans errors
 
-                _this17.setErrorParticipant(key, false, index);
+                _this18.setErrorParticipant(key, false, index);
 
                 if (key === "profile_image") {
                   //Value for save in DDBB
-                  _this17.participant[key].value = _this17.avatarAdmin;
+                  _this18.participant[key].value = _this18.avatarAdmin;
                 } //Get keys, for exaple: person.emails
 
 
                 keys = key.split(".");
-                obj = _this17.participant;
-                objCopy = _this17.participantCopy;
+                obj = _this18.participant;
+                objCopy = _this18.participantCopy;
                 keys.forEach(function (k) {
                   obj = obj[k];
                   objCopy = objCopy[k];
@@ -6170,29 +6222,29 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
 
 
                 different = false;
-                _context14.t0 = key;
-                _context14.next = _context14.t0 === "profile_image" ? 13 : _context14.t0 === "person.used_events_email" ? 15 : _context14.t0 === "person.cellphones" ? 17 : 19;
+                _context15.t0 = key;
+                _context15.next = _context15.t0 === "profile_image" ? 13 : _context15.t0 === "person.used_events_email" ? 15 : _context15.t0 === "person.cellphones" ? 17 : 19;
                 break;
 
               case 13:
-                different = _this17.avatarAdmin !== _this17.avatarAdminCopy;
-                return _context14.abrupt("break", 21);
+                different = _this18.avatarAdmin !== _this18.avatarAdminCopy;
+                return _context15.abrupt("break", 21);
 
               case 15:
                 different = obj.value.email !== objCopy.value.email;
-                return _context14.abrupt("break", 21);
+                return _context15.abrupt("break", 21);
 
               case 17:
                 different = obj.value.cellphone_number !== objCopy.value.cellphone_number;
-                return _context14.abrupt("break", 21);
+                return _context15.abrupt("break", 21);
 
               case 19:
                 different = obj.value !== objCopy.value;
-                return _context14.abrupt("break", 21);
+                return _context15.abrupt("break", 21);
 
               case 21:
                 if (!different) {
-                  _context14.next = 81;
+                  _context15.next = 81;
                   break;
                 }
 
@@ -6207,13 +6259,13 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                 };
 
                 if (validate.single(value, constraints) !== undefined) {
-                  _this17.setErrorParticipant(key, true);
+                  _this18.setErrorParticipant(key, true);
 
                   valid = false;
                 }
 
                 if (!(key === "person.used_events_email")) {
-                  _context14.next = 51;
+                  _context15.next = 51;
                   break;
                 }
 
@@ -6222,78 +6274,78 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                 }, constraints);
 
                 if (!(validate.single(obj.value.email, constraints) !== undefined)) {
-                  _context14.next = 35;
+                  _context15.next = 35;
                   break;
                 }
 
-                _this17.emailError = _this17.fieldsParticipant.email.msg;
+                _this18.emailError = _this18.fieldsParticipant.email.msg;
 
-                _this17.setErrorParticipant(key, true);
+                _this18.setErrorParticipant(key, true);
 
                 valid = false;
-                _context14.next = 51;
+                _context15.next = 51;
                 break;
 
               case 35:
                 if (!(validate.single(obj.value.email, constrEmail) !== undefined)) {
-                  _context14.next = 41;
+                  _context15.next = 41;
                   break;
                 }
 
-                _this17.emailError = _this17.fieldsParticipant.email.msg_validate;
+                _this18.emailError = _this18.fieldsParticipant.email.msg_validate;
 
-                _this17.setErrorParticipant(key, true);
+                _this18.setErrorParticipant(key, true);
 
                 valid = false;
-                _context14.next = 51;
+                _context15.next = 51;
                 break;
 
               case 41:
-                if (!(obj.value.email === _this17.participant.person.initial_register_email.value.email)) {
-                  _context14.next = 47;
+                if (!(obj.value.email === _this18.participant.person.initial_register_email.value.email)) {
+                  _context15.next = 47;
                   break;
                 }
 
-                _this17.emailError = _this17.fieldsParticipant.email.msg_validate;
+                _this18.emailError = _this18.fieldsParticipant.email.msg_validate;
 
-                _this17.setErrorParticipant(key, true);
+                _this18.setErrorParticipant(key, true);
 
                 valid = false;
-                _context14.next = 51;
+                _context15.next = 51;
                 break;
 
               case 47:
-                _context14.next = 49;
-                return _this17.emailsExist([obj.value.email]);
+                _context15.next = 49;
+                return _this18.emailsExist([obj.value.email]);
 
               case 49:
-                data = _context14.sent;
+                data = _context15.sent;
 
                 if (data.exists) {
-                  _this17.emailError = _this17.fieldsParticipant.email.msg_exist;
+                  _this18.emailError = _this18.fieldsParticipant.email.msg_exist;
 
-                  _this17.setErrorParticipant(key, true);
+                  _this18.setErrorParticipant(key, true);
 
                   valid = false;
                 }
 
               case 51:
                 if (!(key === "person.cellphones")) {
-                  _context14.next = 76;
+                  _context15.next = 76;
                   break;
                 }
 
                 if (!(validate.single(obj.value.cellphone_number, constraints) !== undefined)) {
-                  _context14.next = 58;
+                  _context15.next = 58;
                   break;
                 }
 
-                obj.msg = _this17.fieldsParticipant.mobile.msg;
+                obj.msg = _this18.fieldsParticipant.mobile.msg;
 
-                _this17.setErrorParticipant(key, true, index);
+                _this18.setErrorParticipant(key, true, index);
 
                 valid = false;
-                _context14.next = 76;
+                _context15.next = 76;
                 break;
 
               case 58:
@@ -6303,74 +6355,74 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                 }, constraints);
 
                 if (!(validate.single(obj.value.cellphone_number, constrMobile) !== undefined)) {
-                  _context14.next = 66;
+                  _context15.next = 66;
                   break;
                 }
 
-                obj.msg = _this17.fieldsParticipant.mobile.msg_validate;
+                obj.msg = _this18.fieldsParticipant.mobile.msg_validate;
 
-                _this17.setErrorParticipant(key, true, index);
+                _this18.setErrorParticipant(key, true, index);
 
                 valid = false;
-                _context14.next = 76;
+                _context15.next = 76;
                 break;
 
               case 66:
-                if (!_this17.isCellphoneDuplicate(index)) {
-                  _context14.next = 72;
+                if (!_this18.isCellphoneDuplicate(index)) {
+                  _context15.next = 72;
                   break;
                 }
 
-                obj.msg = _this17.fieldsParticipant.mobile.msg_exist;
+                obj.msg = _this18.fieldsParticipant.mobile.msg_exist;
 
-                _this17.setErrorParticipant(key, true, index);
+                _this18.setErrorParticipant(key, true, index);
 
                 valid = false;
-                _context14.next = 76;
+                _context15.next = 76;
                 break;
 
               case 72:
-                _context14.next = 74;
-                return _this17.cellphoneExists(obj.value.cellphone_number);
+                _context15.next = 74;
+                return _this18.cellphoneExists(obj.value.cellphone_number);
 
               case 74:
-                _data = _context14.sent;
+                _data = _context15.sent;
 
                 if (_data.exists) {
-                  obj.msg = _this17.fieldsParticipant.mobile.msg_exist;
+                  obj.msg = _this18.fieldsParticipant.mobile.msg_exist;
 
-                  _this17.setErrorParticipant(key, true, index);
+                  _this18.setErrorParticipant(key, true, index);
 
                   valid = false;
                 }
 
               case 76:
-                if (key === "profile_image" && _this17.fileAvatar.size > _this17.sizeFieleUploadAllow) {
-                  _this17.setErrorParticipant(key, true);
+                if (key === "profile_image" && _this18.fileAvatar.size > _this18.sizeFieleUploadAllow) {
+                  _this18.setErrorParticipant(key, true);
 
                   valid = false;
                 }
 
-                _this17.isLoading = false;
+                _this18.isLoading = false;
 
                 if (valid) //Not errors
                   {
                     //update
-                    _this17.updateParticipant(key, index);
+                    _this18.updateParticipant(key, index);
                   }
 
-                _context14.next = 82;
+                _context15.next = 82;
                 break;
 
               case 81:
-                _this17.isLoading = false;
+                _this18.isLoading = false;
 
               case 82:
               case "end":
-                return _context14.stop();
+                return _context15.stop();
             }
           }
-        }, _callee14);
+        }, _callee15);
       }))();
     },
     clickUpdatePassword: function clickUpdatePassword() {
@@ -6449,59 +6501,59 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
       this.isLoading = false;
     },
     updatePasswordDB: function updatePasswordDB() {
-      var _this18 = this;
+      var _this19 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee15() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee16() {
         var params;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee15$(_context15) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee16$(_context16) {
           while (1) {
-            switch (_context15.prev = _context15.next) {
+            switch (_context16.prev = _context16.next) {
               case 0:
-                _this18.isLoading = true;
+                _this19.isLoading = true;
                 params = {
-                  id: _this18.participant.users_id.value,
-                  password: _this18.participant.password.old.value,
-                  new_password: _this18.participant.password["new"].value,
-                  confirmation_password: _this18.participant.password.confirmation.value
+                  id: _this19.participant.users_id.value,
+                  password: _this19.participant.password.old.value,
+                  new_password: _this19.participant.password["new"].value,
+                  confirmation_password: _this19.participant.password.confirmation.value
                 };
-                _context15.next = 4;
-                return axios.post(_this18.url_user_update_password, params).then(function (response) {
-                  _this18.showErrors({});
+                _context16.next = 4;
+                return axios.post(_this19.url_user_update_password, params).then(function (response) {
+                  _this19.showErrors({});
 
                   switch (response.data.status) {
                     case 403:
                       //Password error
-                      _this18.participant.password.old.msg = response.data.data[0];
-                      _this18.participant.password.old.error = true;
+                      _this19.participant.password.old.msg = response.data.data[0];
+                      _this19.participant.password.old.error = true;
                       break;
 
                     case 200:
                       //Success
                       //Restore
-                      _this18.participant.password.edited = false;
-                      _this18.participant.password.editing = false; //Notification
+                      _this19.participant.password.edited = false;
+                      _this19.participant.password.editing = false; //Notification
 
-                      _this18.showNotificationSuccessUpdatePassword();
+                      _this19.showNotificationSuccessUpdatePassword();
 
                     default:
                       break;
                   }
                 }, function (error) {
-                  _this18.showErrors(error);
+                  _this19.showErrors(error);
                 }).then(function () {
-                  _this18.isLoading = false;
+                  _this19.isLoading = false;
                 });
 
               case 4:
               case "end":
-                return _context15.stop();
+                return _context16.stop();
             }
           }
-        }, _callee15);
+        }, _callee16);
       }))();
     },
     showNotificationSuccessUpdatePassword: function showNotificationSuccessUpdatePassword() {
-      var _this19 = this;
+      var _this20 = this;
 
       this.$buefy.dialog.alert({
         title: this.textsGeneralSettings.updated_password,
@@ -6510,77 +6562,20 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         hasIcon: true,
         onConfirm: function onConfirm() {
           //Logout
-          _this19.cerrarSesion();
+          _this20.cerrarSesion();
         }
       });
     },
     cerrarSesion: function cerrarSesion() {
-      var _this20 = this;
+      var _this21 = this;
 
       axios.post(this.url_logout).then(function (res) {
         if (res.data.status === 200) {
-          window.location.href = _this20.url_home;
+          window.location.href = _this21.url_home;
         }
       });
     },
     updateDBParticipant: function updateDBParticipant(key, obj, objCopy) {
-      var _this21 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee16() {
-        var params;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee16$(_context16) {
-          while (1) {
-            switch (_context16.prev = _context16.next) {
-              case 0:
-                _this21.isLoading = true;
-                params = {
-                  id: _this21.participant.id.value
-                };
-                params[key] = obj.value;
-                _context16.next = 5;
-                return axios.post(_this21.url_participant_update, params).then(function (response) {
-                  _this21.showErrors({});
-
-                  if (response.data.status === 200) {
-                    //update/restore value copy
-                    if (key === "profile_image" && response.data.data.extra) //Update avatar info
-                      {
-                        obj.value = response.data.data.extra;
-                        objCopy.value = Object.assign({}, response.data.data.extra); //Non-reactive copy
-
-                        _this21.fileAvatar = null;
-                        _this21.enabledUploadAvatar = false;
-
-                        _this21.getImg64Base(_this21.OPTIONS.PARTICIPANT, _this21.participant.profile_image.value);
-                      } else //Update copy
-                      {
-                        objCopy.value = Object.assign({}, obj.value); //Non-reactive copy
-                      }
-
-                    obj.edited = false; //restore
-
-                    obj.editing = false; //restore
-
-                    Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
-                      title: _this21.text_success,
-                      text: _this21.textsGeneralSettings.text_updated_participant
-                    });
-                  }
-                }, function (error) {
-                  _this21.showErrors(error);
-                }).then(function () {
-                  _this21.isLoading = false;
-                });
-
-              case 5:
-              case "end":
-                return _context16.stop();
-            }
-          }
-        }, _callee16);
-      }))();
-    },
-    createDBPersonEmailUsedEvents: function createDBPersonEmailUsedEvents(obj, objCopy) {
       var _this22 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee17() {
@@ -6591,23 +6586,28 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
               case 0:
                 _this22.isLoading = true;
                 params = {
-                  email: obj.value.email,
-                  persons_id: _this22.participant.persons_id.value,
-                  used_events: 1,
-                  status_persons_emails_id: _this22.OPTIONS.STATUS_PERSONS_EMAILS.PENDING
+                  id: _this22.participant.id.value
                 };
-                _context17.next = 4;
-                return axios.post(_this22.url_persons_emails_store, params).then(function (response) {
+                params[key] = obj.value;
+                _context17.next = 5;
+                return axios.post(_this22.url_participant_update, params).then(function (response) {
                   _this22.showErrors({});
 
-                  if (response.data.status === 201) {
+                  if (response.data.status === 200) {
                     //update/restore value copy
-                    obj.value = response.data.data;
-                    objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
+                    if (key === "profile_image" && response.data.data.extra) //Update avatar info
+                      {
+                        obj.value = response.data.data.extra;
+                        objCopy.value = Object.assign({}, response.data.data.extra); //Non-reactive copy
 
-                    objCopy.edited = false; //restore
+                        _this22.fileAvatar = null;
+                        _this22.enabledUploadAvatar = false;
 
-                    objCopy.editing = false; //restore
+                        _this22.getImg64Base(_this22.OPTIONS.PARTICIPANT, _this22.participant.profile_image.value);
+                      } else //Update copy
+                      {
+                        objCopy.value = Object.assign({}, obj.value); //Non-reactive copy
+                      }
 
                     obj.edited = false; //restore
 
@@ -6624,7 +6624,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                   _this22.isLoading = false;
                 });
 
-              case 4:
+              case 5:
               case "end":
                 return _context17.stop();
             }
@@ -6632,7 +6632,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         }, _callee17);
       }))();
     },
-    updateDBPersonEmailUsedEvents: function updateDBPersonEmailUsedEvents(obj, objCopy) {
+    createDBPersonEmailUsedEvents: function createDBPersonEmailUsedEvents(obj, objCopy) {
       var _this23 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee18() {
@@ -6644,15 +6644,15 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                 _this23.isLoading = true;
                 params = {
                   email: obj.value.email,
-                  id: obj.value.id,
+                  persons_id: _this23.participant.persons_id.value,
                   used_events: 1,
                   status_persons_emails_id: _this23.OPTIONS.STATUS_PERSONS_EMAILS.PENDING
                 };
                 _context18.next = 4;
-                return axios.post(_this23.url_persons_emails_update, params).then(function (response) {
+                return axios.post(_this23.url_persons_emails_store, params).then(function (response) {
                   _this23.showErrors({});
 
-                  if (response.data.status === 200) {
+                  if (response.data.status === 201) {
                     //update/restore value copy
                     obj.value = response.data.data;
                     objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
@@ -6684,7 +6684,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         }, _callee18);
       }))();
     },
-    createDBPersonCellhpone: function createDBPersonCellhpone(obj, objCopy) {
+    updateDBPersonEmailUsedEvents: function updateDBPersonEmailUsedEvents(obj, objCopy) {
       var _this24 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee19() {
@@ -6695,14 +6695,16 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
               case 0:
                 _this24.isLoading = true;
                 params = {
-                  mobile: obj.value.cellphone_number,
-                  persons_id: _this24.participant.persons_id.value
+                  email: obj.value.email,
+                  id: obj.value.id,
+                  used_events: 1,
+                  status_persons_emails_id: _this24.OPTIONS.STATUS_PERSONS_EMAILS.PENDING
                 };
                 _context19.next = 4;
-                return axios.post(_this24.url_persons_cellphone_store, params).then(function (response) {
+                return axios.post(_this24.url_persons_emails_update, params).then(function (response) {
                   _this24.showErrors({});
 
-                  if (response.data.status === 201) {
+                  if (response.data.status === 200) {
                     //update/restore value copy
                     obj.value = response.data.data;
                     objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
@@ -6734,7 +6736,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         }, _callee19);
       }))();
     },
-    updateDBPersonCellhpone: function updateDBPersonCellhpone(obj, objCopy) {
+    createDBPersonCellhpone: function createDBPersonCellhpone(obj, objCopy) {
       var _this25 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee20() {
@@ -6746,13 +6748,13 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                 _this25.isLoading = true;
                 params = {
                   mobile: obj.value.cellphone_number,
-                  id: obj.value.id
+                  persons_id: _this25.participant.persons_id.value
                 };
                 _context20.next = 4;
-                return axios.post(_this25.url_person_cellphone_update, params).then(function (response) {
+                return axios.post(_this25.url_persons_cellphone_store, params).then(function (response) {
                   _this25.showErrors({});
 
-                  if (response.data.status === 200) {
+                  if (response.data.status === 201) {
                     //update/restore value copy
                     obj.value = response.data.data;
                     objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
@@ -6784,7 +6786,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         }, _callee20);
       }))();
     },
-    updatedDBPerson: function updatedDBPerson(keyParamenter, obj, objCopy) {
+    updateDBPersonCellhpone: function updateDBPersonCellhpone(obj, objCopy) {
       var _this26 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee21() {
@@ -6795,17 +6797,18 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
               case 0:
                 _this26.isLoading = true;
                 params = {
-                  id: _this26.participant.person.id.value
+                  mobile: obj.value.cellphone_number,
+                  id: obj.value.id
                 };
-                params[keyParamenter] = obj.value;
-                _context21.next = 5;
-                return axios.post(_this26.url_person_update, params).then(function (response) {
+                _context21.next = 4;
+                return axios.post(_this26.url_person_cellphone_update, params).then(function (response) {
                   _this26.showErrors({});
 
                   if (response.data.status === 200) {
                     //update/restore value copy
-                    obj.value = response.data.data[keyParamenter];
-                    objCopy.value = response.data.data[keyParamenter];
+                    obj.value = response.data.data;
+                    objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
+
                     objCopy.edited = false; //restore
 
                     objCopy.editing = false; //restore
@@ -6825,7 +6828,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                   _this26.isLoading = false;
                 });
 
-              case 5:
+              case 4:
               case "end":
                 return _context21.stop();
             }
@@ -6833,21 +6836,70 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         }, _callee21);
       }))();
     },
-    updateParticipant: function updateParticipant(key) {
-      var _arguments3 = arguments,
-          _this27 = this;
+    updatedDBPerson: function updatedDBPerson(keyParamenter, obj, objCopy) {
+      var _this27 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee22() {
-        var index, keys, obj, objCopy;
+        var params;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee22$(_context22) {
           while (1) {
             switch (_context22.prev = _context22.next) {
               case 0:
+                _this27.isLoading = true;
+                params = {
+                  id: _this27.participant.person.id.value
+                };
+                params[keyParamenter] = obj.value;
+                _context22.next = 5;
+                return axios.post(_this27.url_person_update, params).then(function (response) {
+                  _this27.showErrors({});
+
+                  if (response.data.status === 200) {
+                    //update/restore value copy
+                    obj.value = response.data.data[keyParamenter];
+                    objCopy.value = response.data.data[keyParamenter];
+                    objCopy.edited = false; //restore
+
+                    objCopy.editing = false; //restore
+
+                    obj.edited = false; //restore
+
+                    obj.editing = false; //restore
+
+                    Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
+                      title: _this27.text_success,
+                      text: _this27.textsGeneralSettings.text_updated_participant
+                    });
+                  }
+                }, function (error) {
+                  _this27.showErrors(error);
+                }).then(function () {
+                  _this27.isLoading = false;
+                });
+
+              case 5:
+              case "end":
+                return _context22.stop();
+            }
+          }
+        }, _callee22);
+      }))();
+    },
+    updateParticipant: function updateParticipant(key) {
+      var _arguments3 = arguments,
+          _this28 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee23() {
+        var index, keys, obj, objCopy;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee23$(_context23) {
+          while (1) {
+            switch (_context23.prev = _context23.next) {
+              case 0:
                 index = _arguments3.length > 1 && _arguments3[1] !== undefined ? _arguments3[1] : null;
                 //Get keys, for exaple: person.emails
                 keys = key.split(".");
-                obj = _this27.participant;
-                objCopy = _this27.participantCopy;
+                obj = _this28.participant;
+                objCopy = _this28.participantCopy;
                 keys.forEach(function (k) {
                   obj = obj[k];
                   objCopy = objCopy[k];
@@ -6860,74 +6912,74 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                   }
 
                 if (!obj.edited) {
-                  _context22.next = 32;
+                  _context23.next = 32;
                   break;
                 }
 
-                _context22.t0 = key;
-                _context22.next = _context22.t0 === "person.used_events_email" ? 10 : _context22.t0 === "person.cellphones" ? 18 : _context22.t0 === "person.first_name" ? 26 : _context22.t0 === "person.last_name" ? 26 : _context22.t0 === "person.position_company" ? 26 : _context22.t0 === "person.birth_date" ? 26 : _context22.t0 === "person.date_join_company" ? 26 : 29;
+                _context23.t0 = key;
+                _context23.next = _context23.t0 === "person.used_events_email" ? 10 : _context23.t0 === "person.cellphones" ? 18 : _context23.t0 === "person.first_name" ? 26 : _context23.t0 === "person.last_name" ? 26 : _context23.t0 === "person.position_company" ? 26 : _context23.t0 === "person.birth_date" ? 26 : _context23.t0 === "person.date_join_company" ? 26 : 29;
                 break;
 
               case 10:
                 if (objCopy.value.email) {
-                  _context22.next = 15;
+                  _context23.next = 15;
                   break;
                 }
 
-                _context22.next = 13;
-                return _this27.createDBPersonEmailUsedEvents(obj, objCopy);
+                _context23.next = 13;
+                return _this28.createDBPersonEmailUsedEvents(obj, objCopy);
 
               case 13:
-                _context22.next = 17;
+                _context23.next = 17;
                 break;
 
               case 15:
-                _context22.next = 17;
-                return _this27.updateDBPersonEmailUsedEvents(obj, objCopy);
+                _context23.next = 17;
+                return _this28.updateDBPersonEmailUsedEvents(obj, objCopy);
 
               case 17:
-                return _context22.abrupt("break", 32);
+                return _context23.abrupt("break", 32);
 
               case 18:
                 if (objCopy.value.cellphone_number) {
-                  _context22.next = 23;
+                  _context23.next = 23;
                   break;
                 }
 
-                _context22.next = 21;
-                return _this27.createDBPersonCellhpone(obj, objCopy);
+                _context23.next = 21;
+                return _this28.createDBPersonCellhpone(obj, objCopy);
 
               case 21:
-                _context22.next = 25;
+                _context23.next = 25;
                 break;
 
               case 23:
-                _context22.next = 25;
-                return _this27.updateDBPersonCellhpone(obj, objCopy);
+                _context23.next = 25;
+                return _this28.updateDBPersonCellhpone(obj, objCopy);
 
               case 25:
-                return _context22.abrupt("break", 32);
+                return _context23.abrupt("break", 32);
 
               case 26:
-                _context22.next = 28;
-                return _this27.updatedDBPerson(keys[keys.length - 1], obj, objCopy);
+                _context23.next = 28;
+                return _this28.updatedDBPerson(keys[keys.length - 1], obj, objCopy);
 
               case 28:
-                return _context22.abrupt("break", 32);
+                return _context23.abrupt("break", 32);
 
               case 29:
-                _context22.next = 31;
-                return _this27.updateDBParticipant(key, obj, objCopy);
+                _context23.next = 31;
+                return _this28.updateDBParticipant(key, obj, objCopy);
 
               case 31:
-                return _context22.abrupt("break", 32);
+                return _context23.abrupt("break", 32);
 
               case 32:
               case "end":
-                return _context22.stop();
+                return _context23.stop();
             }
           }
-        }, _callee22);
+        }, _callee23);
       }))();
     }
   }
@@ -70138,7 +70190,9 @@ var render = function() {
                   url_person_update: _vm.url_person_update,
                   url_user_update_password: _vm.url_user_update_password,
                   url_logout: _vm.url_logout,
-                  url_home: _vm.url_home
+                  url_home: _vm.url_home,
+                  url_participants_list_leaders_suplents_programmer:
+                    _vm.url_participants_list_leaders_suplents_programmer
                 },
                 on: { activeMainSection: _vm.setActiveSection }
               })
@@ -74322,7 +74376,10 @@ var render = function() {
                 "b-field",
                 {
                   staticClass: "column is-12",
-                  attrs: { horizontal: "", label: _vm.fields.position.label }
+                  attrs: {
+                    horizontal: "",
+                    label: _vm.fields.position_company.label
+                  }
                 },
                 [
                   _c("span", { staticClass: "is-capitalized" }, [

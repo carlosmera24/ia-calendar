@@ -81,7 +81,7 @@
                     </b-field>
                     <!-- /Cellphones group -->
                     <b-field horizontal class="column is-12"
-                        :label="fields.position.label">
+                        :label="fields.position_company.label">
                         <span class="is-capitalized">{{ participantSelected ? participantSelected.meta.position_company : '' }}</span>
                     </b-field>
                     <b-field horizontal class="column is-12"

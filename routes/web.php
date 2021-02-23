@@ -43,6 +43,7 @@ Route::group(['middleware' => ['auth']], function(){
     //Participants
     Route::post('/participants/generate-avatar', [ ParticipantController::class, 'getAvatarFromString' ])->name('participant_generate_avatar');
     Route::post('/participants/list-from-programmer', [ ParticipantController::class, 'listFromProgrammer' ])->name('participants_list_programmer');
+    Route::post('/participants/list-leaders-suplents-from-programmer', [ ParticipantController::class, 'listLeadersSuplentsFromProgrammer' ])->name('participants_list_leaders_suplents_programmer');
     Route::post('/participant/store', [ ParticipantController::class, 'store' ])->name('participant_store');
     Route::post('/participant/update', [ ParticipantController::class, 'update' ])->name('participant_update');
     //Persons emails

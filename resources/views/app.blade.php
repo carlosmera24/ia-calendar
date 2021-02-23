@@ -318,6 +318,7 @@
             v-bind:url_user_update_password='"{{ route('user_update_password') }}"'
             v-bind:url_logout="'{{ route('logout') }}'"
             v-bind:url_home="'{{ route('home') }}'"
+            v-bind:url_participants_list_leaders_suplents_programmer="'{{ route('participants_list_leaders_suplents_programmer') }}'"
         />
         {{-- /Content Main --}}
     </div>

@@ -16,6 +16,11 @@ class Participant extends Model
     use HasFactory;
     protected $table = "participants";
 
+    const PROFILES_PARTICIPANTS_ADMIN = 1;
+    const PROFILES_PARTICIPANTS_LEADER = 2;
+    const PROFILES_PARTICIPANTS_GUEST = 3; //Participant default
+    const PROFILES_PARTICIPANTS_SUPLE_ADMIN = 4;
+
     public function user()
     {
         return $this->belongsTo(User::class,'users_id');
