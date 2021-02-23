@@ -21,8 +21,8 @@
                     <!-- Entity Name -->
                     <div class="column is-12 is-row-data">
                         <div class="columns">
-                            <div class="column is-2"></div>
-                            <div class="columns column is-10">
+                            <div class="column is-3"></div>
+                            <div class="columns column is-9">
                                 <div class="columns column is-12" v-if="programmer.entity_name.editing">
                                     <div class="column is-6">
                                         <b-field horizontal
@@ -62,7 +62,7 @@
                                             class="btn-edit"
                                             size="is-small"
                                             icon-left="pen"
-                                            v-on:click.prevent="clickEditProgrammer('entity_name')"
+                                            v-on:click.prevent="clickEdit('entity_name')"
                                         />
                                     </div>
                                 </div>
@@ -73,7 +73,7 @@
                     <!-- Identification -->
                     <div class="column is-12 is-row-data">
                         <div class="columns">
-                            <div class="column is-2">
+                            <div class="column is-3">
                                 <div class="field-identification-type control has-icons-left has-icons-right" v-if="programmer.identification.editing">
                                     <v-select
                                         v-model="identificationTypeSelected"
@@ -90,7 +90,7 @@
                                 </div>
                                 <span v-else>{{ programmer.identifications_types_id.value ? identificationsTypesIdName[programmer.identifications_types_id.value] : fieldsProgrammer.identifications_types_id.placeholder }}</span>
                             </div>
-                            <div class="columns column is-10">
+                            <div class="columns column is-9">
                                 <div class="columns column is-12" v-if="programmer.identification.editing">
                                     <div class="column is-6">
                                         <b-field horizontal
@@ -142,8 +142,8 @@
                     <!-- Logo company -->
                     <div class="column is-12 is-row-data">
                         <div class="columns">
-                            <div class="column is-2"></div>
-                            <div class="columns column is-10">
+                            <div class="column is-3"></div>
+                            <div class="columns column is-9">
                                 <div class="columns column is-12" v-if="programmer.logo.editing">
                                     <div class="column is-6">
                                         <b-field class="file is-primary"
@@ -210,7 +210,7 @@
                 <div class="colums is-multiline">
                     <div class="colum is-12">
                         <div class="columns">
-                            <div class="column is-2 is-row-data">
+                            <div class="column is-3 is-row-data">
                                 <!-- Profile image -->
                                 <div class="avatar">
                                     <figure v-if="avatarAdmin" class="image">
@@ -260,7 +260,7 @@
                                 </div>
                                 <!-- /Profile image -->
                             </div>
-                            <div class="column is-10">
+                            <div class="column is-9">
                                 <div class="columns is-multiline">
                                     <!-- Mail main admin-->
                                     <div class="columns column is-12 is-row-data">
@@ -699,6 +699,140 @@
                     </div>
                 </div>
             </section>
+            <section class="membership_data">
+                <h3 class="title-section"><span class="numerator">3</span>{{ textsGeneralSettings.membership_data }}</h3>
+                <div class="columns is-multiline">
+                    <!-- Current Membership -->
+                    <div class="column is-12 is-row-data">
+                        <div class="columns">
+                            <div class="column is-3">
+                                <b-button
+                                    class="btn-see-current-membership"
+                                    size="is-small"
+                                    icon-left="info-circle"
+                                />
+                            </div>
+                            <div class="columns column is-9">
+                                <div class="columns column is-12">
+                                    <div class="column is-3">
+                                        <span>{{ firstCapitalize(fieldsMembership.current_membership.label) }}</span>
+                                    </div>
+                                    <div class="column is-9">
+                                        {{ fieldsMembership.current_membership.placeholder }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Current Membership -->
+                    <!-- Payment method -->
+                    <div class="column is-12 is-row-data">
+                        <div class="columns">
+                            <div class="column is-3"></div>
+                            <div class="columns column is-9">
+                                <div class="columns column is-12">
+                                    <div class="column is-3">
+                                        <span>{{ firstCapitalize(fieldsMembership.payment_method.label) }}</span>
+                                    </div>
+                                    <div class="column is-3">
+                                        <span>{{ fieldsMembership.payment_method.placeholder }}</span>
+                                    </div>
+                                    <div class="column is-6">
+                                        <b-button
+                                            class="btn-edit"
+                                            size="is-small"
+                                            icon-left="pen"
+                                            v-on:click.prevent="clickEditMembership('membership')"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Payment method -->
+                    <!-- Type Payment Gateway -->
+                    <div class="column is-12 is-row-data">
+                        <div class="columns">
+                            <div class="column is-3"></div>
+                            <div class="columns column is-9">
+                                <div class="columns column is-12">
+                                    <div class="column is-3">
+                                        <span>{{ firstCapitalize(fieldsMembership.type_payment_gateway.label) }}</span>
+                                    </div>
+                                    <div class="column is-3">
+                                        <span>{{ fieldsMembership.type_payment_gateway.placeholder }}</span>
+                                    </div>
+                                    <div class="column is-6">
+                                        <b-button
+                                            class="btn-edit"
+                                            size="is-small"
+                                            icon-left="pen"
+                                            v-on:click.prevent="clickEditMembership('type_payment_gateway')"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Type Payment Gateway -->
+                    <!-- Delete payment method -->
+                    <div class="column is-12 is-row-data">
+                        <div class="columns">
+                            <div class="column is-3">
+                                <b-button
+                                    size="is-small"
+                                    icon-left="trash"
+                                />
+                            </div>
+                            <div class="columns column is-9">
+                                <div class="column is-12">
+                                        <span>{{ firstCapitalize(textsGeneralSettings.delete_payment_method) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Delete payment method -->
+                    <!-- Cancel membership -->
+                    <div class="column is-12 is-row-data">
+                        <div class="columns">
+                            <div class="column is-3">
+                                <b-button
+                                    size="is-small"
+                                    icon-left="ban"
+                                />
+                            </div>
+                            <div class="columns column is-9">
+                                <div class="column is-12">
+                                        <span>{{ firstCapitalize(textsGeneralSettings.cancel_membership) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Cancel membership -->
+                    <!-- Renew membership -->
+                    <div class="column is-12 is-row-data">
+                        <div class="columns">
+                            <div class="column is-3">
+                                <b-button
+                                    size="is-small"
+                                    icon-left="sort-down"
+                                />
+                            </div>
+                            <div class="columns column is-9">
+                                <div class="columns column is-12">
+                                    <div class="column is-3">
+                                        <span>{{ firstCapitalize(textsGeneralSettings.renew_membership) }}</span>
+                                    </div>
+                                    <div class="column is-9">
+                                        <span>Medium</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Renew membership -->
+                </div>
+            </section>
         </form>
     </div>
 </template>
@@ -734,6 +868,10 @@
                 require: true,
             },
             participant_fields_json: {
+                type: String,
+                require: true,
+            },
+            membership_fields_json: {
                 type: String,
                 require: true,
             },
@@ -872,6 +1010,7 @@
                 maxBirthDate: new Date(moment().subtract(18, 'years')),
                 birth_date: null,
                 date_join_company: null,
+                fieldsMembership: [],
             }
         },
         computed: {
@@ -909,6 +1048,7 @@
             this.textsGeneralSettings = JSON.parse(this.texts_general_settings_json);
             this.fieldsProgrammer = JSON.parse(this.fields_programmer_json);
             this.fieldsParticipant = JSON.parse(this.participant_fields_json);
+            this.fieldsMembership = JSON.parse(this.membership_fields_json);
 
             /**
              * Create/load participant data

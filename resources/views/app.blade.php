@@ -136,6 +136,26 @@
                                                                             'msg_limit_size'    =>  __('messages.size_limit_logo_upload')
                                                                         ],
                                     ];
+            $fields_membership  =   [
+                                        'current_membership'        =>  [
+                                                                            'label'         => __('validation.attributes.current_membership'),
+                                                                            'placeholder'   =>  __('app.general_settings.annual_payment_value'),
+                                                                            'error'         => false,
+                                                                            'msg'           =>  __('validation.required', ['attribute' => ''])
+                                                                        ],
+                                        'payment_method'            =>  [
+                                                                            'label'         =>  __('validation.attributes.payment_method'),
+                                                                            'placeholder'   =>  __('app.general_settings.placeholder_payment_method'),
+                                                                            'error'         => false,
+                                                                            'msg'           =>  __('validation.required', ['attribute' => ''])
+                                                                        ],
+                                        'type_payment_gateway'      =>  [
+                                                                            'label'         =>  __('validation.attributes.type_payment_gateway'),
+                                                                            'placeholder'   =>  __('app.general_settings.placeholder_type_payment_gateway'),
+                                                                            'error'         => false,
+                                                                            'msg'           =>  __('validation.required', ['attribute' => ''])
+                                                                        ],
+                                    ];
 
             $texts_main =  [
                                 'create_participant'    =>  __('app.create_participant'),
@@ -179,6 +199,9 @@
             $texts_general_settings['password_update'] = __('app.password_update');
             $texts_general_settings['updated_password'] = __('messages.updated_password');
             $texts_general_settings['updated_password_warning'] = __('messages.updated_password_warning');
+            $texts_general_settings['delete_payment_method'] = __('app.general_settings.delete_payment_method');
+            $texts_general_settings['cancel_membership'] = __('app.general_settings.cancel_membership');
+            $texts_general_settings['renew_membership'] = __('app.general_settings.renew_membership');
             @endphp
         {{-- Header --}}
         <div class="header level is-mobile has-text-white is-size-7 mb-0 px-5 py-4">
@@ -244,6 +267,7 @@
             v-bind:text_cancel='"{{ __('validation.attributes.cancel') }}"'
             v-bind:text_not='"{{ __('validation.attributes.not') }}"'
             v-bind:text_participant_fields_json="' {{ json_encode($fields_participant) }} '"
+            v-bind:text_fields_membership_json="' {{ json_encode($fields_membership) }} '"
             v-bind:text_admin_leaders="'{{ __('app.menu.admin_leaders') }}'"
             v-bind:user_id="'{{ $user->id }}'"
             v-bind:profile_participant="'{{ $profile_participant }}'"

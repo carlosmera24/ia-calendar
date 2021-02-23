@@ -2322,6 +2322,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     text_breadcrumbs_init: {
@@ -2405,6 +2406,10 @@ __webpack_require__.r(__webpack_exports__);
       require: true
     },
     text_participant_fields_json: {
+      type: String,
+      require: true
+    },
+    text_fields_membership_json: {
       type: String,
       require: true
     },
@@ -4536,6 +4541,140 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -4569,6 +4708,10 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
       require: true
     },
     participant_fields_json: {
+      type: String,
+      require: true
+    },
+    membership_fields_json: {
       type: String,
       require: true
     },
@@ -4707,7 +4850,8 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
       //Set browser language
       maxBirthDate: new Date(moment().subtract(18, 'years')),
       birth_date: null,
-      date_join_company: null
+      date_join_company: null,
+      fieldsMembership: []
     };
   },
   computed: {
@@ -4748,6 +4892,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
     this.textsGeneralSettings = JSON.parse(this.texts_general_settings_json);
     this.fieldsProgrammer = JSON.parse(this.fields_programmer_json);
     this.fieldsParticipant = JSON.parse(this.participant_fields_json);
+    this.fieldsMembership = JSON.parse(this.membership_fields_json);
     /**
      * Create/load participant data
      */
@@ -69906,6 +70051,7 @@ var render = function() {
                   text_success: _vm.text_success,
                   fields_programmer_json: _vm.fields_programmer_json,
                   participant_fields_json: _vm.text_participant_fields_json,
+                  membership_fields_json: _vm.text_fields_membership_json,
                   text_breadcrumbs_init: _vm.text_breadcrumbs_init,
                   text_no_options: _vm.text_no_options,
                   participant_json: _vm.participant_json,
@@ -71181,9 +71327,9 @@ var render = function() {
             _c("div", { staticClass: "columns is-multiline" }, [
               _c("div", { staticClass: "column is-12 is-row-data" }, [
                 _c("div", { staticClass: "columns" }, [
-                  _c("div", { staticClass: "column is-2" }),
+                  _c("div", { staticClass: "column is-3" }),
                   _vm._v(" "),
-                  _c("div", { staticClass: "columns column is-10" }, [
+                  _c("div", { staticClass: "columns column is-9" }, [
                     _vm.programmer.entity_name.editing
                       ? _c("div", { staticClass: "columns column is-12" }, [
                           _c(
@@ -71301,9 +71447,7 @@ var render = function() {
                                 on: {
                                   click: function($event) {
                                     $event.preventDefault()
-                                    return _vm.clickEditProgrammer(
-                                      "entity_name"
-                                    )
+                                    return _vm.clickEdit("entity_name")
                                   }
                                 }
                               })
@@ -71317,7 +71461,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "column is-12 is-row-data" }, [
                 _c("div", { staticClass: "columns" }, [
-                  _c("div", { staticClass: "column is-2" }, [
+                  _c("div", { staticClass: "column is-3" }, [
                     _vm.programmer.identification.editing
                       ? _c(
                           "div",
@@ -71406,7 +71550,7 @@ var render = function() {
                         ])
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "columns column is-10" }, [
+                  _c("div", { staticClass: "columns column is-9" }, [
                     _vm.programmer.identification.editing
                       ? _c("div", { staticClass: "columns column is-12" }, [
                           _c(
@@ -71549,9 +71693,9 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "column is-12 is-row-data" }, [
                 _c("div", { staticClass: "columns" }, [
-                  _c("div", { staticClass: "column is-2" }),
+                  _c("div", { staticClass: "column is-3" }),
                   _vm._v(" "),
-                  _c("div", { staticClass: "columns column is-10" }, [
+                  _c("div", { staticClass: "columns column is-9" }, [
                     _vm.programmer.logo.editing
                       ? _c("div", { staticClass: "columns column is-12" }, [
                           _c(
@@ -71738,7 +71882,7 @@ var render = function() {
             _c("div", { staticClass: "colums is-multiline" }, [
               _c("div", { staticClass: "colum is-12" }, [
                 _c("div", { staticClass: "columns" }, [
-                  _c("div", { staticClass: "column is-2 is-row-data" }, [
+                  _c("div", { staticClass: "column is-3 is-row-data" }, [
                     _c(
                       "div",
                       { staticClass: "avatar" },
@@ -71886,7 +72030,7 @@ var render = function() {
                     )
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "column is-10" }, [
+                  _c("div", { staticClass: "column is-9" }, [
                     _c(
                       "div",
                       { staticClass: "columns is-multiline" },
@@ -73409,6 +73553,252 @@ var render = function() {
                 ])
               ])
             ])
+          ]),
+          _vm._v(" "),
+          _c("section", { staticClass: "membership_data" }, [
+            _c("h3", { staticClass: "title-section" }, [
+              _c("span", { staticClass: "numerator" }, [_vm._v("3")]),
+              _vm._v(_vm._s(_vm.textsGeneralSettings.membership_data))
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "columns is-multiline" }, [
+              _c("div", { staticClass: "column is-12 is-row-data" }, [
+                _c("div", { staticClass: "columns" }, [
+                  _c(
+                    "div",
+                    { staticClass: "column is-3" },
+                    [
+                      _c("b-button", {
+                        staticClass: "btn-see-current-membership",
+                        attrs: { size: "is-small", "icon-left": "info-circle" }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "columns column is-9" }, [
+                    _c("div", { staticClass: "columns column is-12" }, [
+                      _c("div", { staticClass: "column is-3" }, [
+                        _c("span", [
+                          _vm._v(
+                            _vm._s(
+                              _vm.firstCapitalize(
+                                _vm.fieldsMembership.current_membership.label
+                              )
+                            )
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "column is-9" }, [
+                        _vm._v(
+                          "\n                                    " +
+                            _vm._s(
+                              _vm.fieldsMembership.current_membership
+                                .placeholder
+                            ) +
+                            "\n                                "
+                        )
+                      ])
+                    ])
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "column is-12 is-row-data" }, [
+                _c("div", { staticClass: "columns" }, [
+                  _c("div", { staticClass: "column is-3" }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "columns column is-9" }, [
+                    _c("div", { staticClass: "columns column is-12" }, [
+                      _c("div", { staticClass: "column is-3" }, [
+                        _c("span", [
+                          _vm._v(
+                            _vm._s(
+                              _vm.firstCapitalize(
+                                _vm.fieldsMembership.payment_method.label
+                              )
+                            )
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "column is-3" }, [
+                        _c("span", [
+                          _vm._v(
+                            _vm._s(
+                              _vm.fieldsMembership.payment_method.placeholder
+                            )
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "column is-6" },
+                        [
+                          _c("b-button", {
+                            staticClass: "btn-edit",
+                            attrs: { size: "is-small", "icon-left": "pen" },
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.clickEditMembership("membership")
+                              }
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ])
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "column is-12 is-row-data" }, [
+                _c("div", { staticClass: "columns" }, [
+                  _c("div", { staticClass: "column is-3" }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "columns column is-9" }, [
+                    _c("div", { staticClass: "columns column is-12" }, [
+                      _c("div", { staticClass: "column is-3" }, [
+                        _c("span", [
+                          _vm._v(
+                            _vm._s(
+                              _vm.firstCapitalize(
+                                _vm.fieldsMembership.type_payment_gateway.label
+                              )
+                            )
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "column is-3" }, [
+                        _c("span", [
+                          _vm._v(
+                            _vm._s(
+                              _vm.fieldsMembership.type_payment_gateway
+                                .placeholder
+                            )
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "column is-6" },
+                        [
+                          _c("b-button", {
+                            staticClass: "btn-edit",
+                            attrs: { size: "is-small", "icon-left": "pen" },
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.clickEditMembership(
+                                  "type_payment_gateway"
+                                )
+                              }
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ])
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "column is-12 is-row-data" }, [
+                _c("div", { staticClass: "columns" }, [
+                  _c(
+                    "div",
+                    { staticClass: "column is-3" },
+                    [
+                      _c("b-button", {
+                        attrs: { size: "is-small", "icon-left": "trash" }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "columns column is-9" }, [
+                    _c("div", { staticClass: "column is-12" }, [
+                      _c("span", [
+                        _vm._v(
+                          _vm._s(
+                            _vm.firstCapitalize(
+                              _vm.textsGeneralSettings.delete_payment_method
+                            )
+                          )
+                        )
+                      ])
+                    ])
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "column is-12 is-row-data" }, [
+                _c("div", { staticClass: "columns" }, [
+                  _c(
+                    "div",
+                    { staticClass: "column is-3" },
+                    [
+                      _c("b-button", {
+                        attrs: { size: "is-small", "icon-left": "ban" }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "columns column is-9" }, [
+                    _c("div", { staticClass: "column is-12" }, [
+                      _c("span", [
+                        _vm._v(
+                          _vm._s(
+                            _vm.firstCapitalize(
+                              _vm.textsGeneralSettings.cancel_membership
+                            )
+                          )
+                        )
+                      ])
+                    ])
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "column is-12 is-row-data" }, [
+                _c("div", { staticClass: "columns" }, [
+                  _c(
+                    "div",
+                    { staticClass: "column is-3" },
+                    [
+                      _c("b-button", {
+                        attrs: { size: "is-small", "icon-left": "sort-down" }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "columns column is-9" }, [
+                    _c("div", { staticClass: "columns column is-12" }, [
+                      _c("div", { staticClass: "column is-3" }, [
+                        _c("span", [
+                          _vm._v(
+                            _vm._s(
+                              _vm.firstCapitalize(
+                                _vm.textsGeneralSettings.renew_membership
+                              )
+                            )
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _vm._m(0)
+                    ])
+                  ])
+                ])
+              ])
+            ])
           ])
         ]
       )
@@ -73416,7 +73806,16 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "column is-9" }, [
+      _c("span", [_vm._v("Medium")])
+    ])
+  }
+]
 render._withStripped = true
 
 

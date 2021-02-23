@@ -20617,6 +20617,17 @@ textarea {
   margin-right: 8px;
 }
 
+.application .content-main .content .form_general_settings .membership_data .btn-see-current-membership {
+  background-color: #005368;
+  border-color: #005368;
+  color: #FFF;
+}
+
+.application .content-main .content .form_general_settings .membership_data .btn-see-current-membership:hover {
+  border-color: #FFF;
+  color: #FFF;
+}
+
 .animated_delay {
   -webkit-animation-delay: 0.45s;
           animation-delay: 0.45s;

@@ -209,7 +209,10 @@ return [
         'reason_change_state'   =>  'motivo',
         'state'                 =>  'estado',
         'person'                =>  'persona',
-        'user'                  => 'usuario'
+        'user'                  => 'usuario',
+        'current_membership'    => 'membresía actual',
+        'payment_method'        => 'forma de pago',
+        'type_payment_gateway'  => 'tipo de pasarela de pago',
     ],
 
 ];

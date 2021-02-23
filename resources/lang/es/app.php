@@ -55,16 +55,22 @@ return [
      * General settings
      */
     'general_settings'  =>  [
-        'programmer_data'       =>  'Datos del programador',
-        'administrator_data'    =>  'Datos del administrador',
-        'administrator_data'    =>  'Datos del administrador',
-        'membership_data'       =>  'Datos de la membresía',
-        'leaders_login'         =>  'Inicio de sesión para Líderes',
-        'filter_identification' =>  'Filtro tipo de documento',
-        'logo_placeholder'      =>  'Insertar logo entidad',
-        'upload_logo'           =>  'Subir logo',
-        'predetermined'         =>  'Predeterminado',
-        'use_for_events'        =>  'Usar para eventos',
+        'programmer_data'                   =>  'Datos del programador',
+        'administrator_data'                =>  'Datos del administrador',
+        'administrator_data'                =>  'Datos del administrador',
+        'membership_data'                   =>  'Datos membresía',
+        'leaders_login'                     =>  'Inicio de sesión para Líderes',
+        'filter_identification'             =>  'Filtro tipo de documento',
+        'logo_placeholder'                  =>  'Insertar logo entidad',
+        'upload_logo'                       =>  'Subir logo',
+        'predetermined'                     =>  'Predeterminado',
+        'use_for_events'                    =>  'Usar para eventos',
+        'annual_payment_value'              =>  '$ Valor del pago anual',
+        'placeholder_payment_method'        =>  'TC, TD, PSE',
+        'placeholder_type_payment_gateway'  =>  'Local, latina, extranjera',
+        'delete_payment_method'             =>  'eliminar documento de pago',
+        'cancel_membership'                 =>  'cancelar membresía',
+        'renew_membership'                  =>  'renovar membresía',
     ],
 
     /**

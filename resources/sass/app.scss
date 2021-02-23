@@ -737,6 +737,17 @@ body, h2, button, input, select, textarea {
                         }
                     }
                 }
+                .membership_data{
+                    .btn-see-current-membership{
+                        background-color: $blue-dark;
+                        border-color: $blue-dark;
+                        color: #FFF;
+                    }
+                    .btn-see-current-membership:hover{
+                        border-color: #FFF;
+                        color: #FFF;
+                    }
+                }
             }
         }
     }

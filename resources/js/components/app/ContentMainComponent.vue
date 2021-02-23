@@ -60,6 +60,7 @@
                 v-bind:text_success='text_success'
                 v-bind:fields_programmer_json='fields_programmer_json'
                 v-bind:participant_fields_json="text_participant_fields_json"
+                v-bind:membership_fields_json="text_fields_membership_json"
                 v-bind:text_breadcrumbs_init='text_breadcrumbs_init'
                 v-bind:text_no_options='text_no_options'
                 v-bind:participant_json='participant_json'
@@ -170,6 +171,10 @@ export default {
             require: true
         },
         text_participant_fields_json: {
+            type: String,
+            require: true
+        },
+        text_fields_membership_json: {
             type: String,
             require: true
         },
