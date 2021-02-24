@@ -215,6 +215,8 @@
             $texts_general_settings['login_identification_number'] = __('app.general_settings.login_identification_number');
             $texts_general_settings['password_description_standard'] = __('app.general_settings.password_description_standard');
             $texts_general_settings['generate'] = __('app.generate');
+            $texts_general_settings['generate_password'] = __('app.generate_password');
+            $texts_general_settings['generate_password_warning'] = __('messages.generate_password_warning');
             @endphp
         {{-- Header --}}
         <div class="header level is-mobile has-text-white is-size-7 mb-0 px-5 py-4">

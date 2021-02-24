@@ -2324,6 +2324,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     text_breadcrumbs_init: {
@@ -4793,6 +4794,10 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
       type: String,
       require: true
     },
+    text_not: {
+      type: String,
+      require: true
+    },
     participant_json: {
       type: String,
       require: true
@@ -5628,7 +5633,6 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                     response.data.participants.forEach(function (element) {
                       _this10.leadersSuplents.push(Object.assign({}, element));
                     });
-                    console.log(_this10.leadersSuplents);
                   }
                 }, function (error) {
                   _this10.showErrors(error);
@@ -6981,6 +6985,21 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
           }
         }, _callee23);
       }))();
+    },
+    generatePasswordLeaderSuple: function generatePasswordLeaderSuple(index) {
+      var leaderSuple = this.leadersSuplents[index]; //Confirme dialog
+
+      this.$buefy.dialog.confirm({
+        title: this.textsGeneralSettings.generate_password + " - " + leaderSuple.first_name,
+        message: this.textsGeneralSettings.generate_password_warning,
+        cancelText: this.text_not,
+        confirmText: this.textsGeneralSettings.generate_password,
+        type: 'is-warning',
+        hasIcon: true,
+        onConfirm: function onConfirm() {
+          console.log("Generar contraseña");
+        }
+      });
     }
   }
 });
@@ -70166,6 +70185,7 @@ var render = function() {
                   programmer_json: _vm.programmer_json,
                   texts_general_settings_json: _vm.texts_general_settings_json,
                   text_success: _vm.text_success,
+                  text_not: _vm.text_not,
                   fields_programmer_json: _vm.fields_programmer_json,
                   participant_fields_json: _vm.text_participant_fields_json,
                   membership_fields_json: _vm.text_fields_membership_json,
@@ -73926,150 +73946,184 @@ var render = function() {
               _vm._v(_vm._s(_vm.textsGeneralSettings.leaders_login))
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "columns is-multiline" }, [
-              _c("div", { staticClass: "column is-12 is-row-data" }, [
-                _c("div", { staticClass: "columns" }, [
-                  _c(
-                    "div",
-                    { staticClass: "column is-3" },
-                    [
-                      _c("b-button", {
-                        staticClass: "btn-see-current-membership",
-                        attrs: {
-                          size: "is-medium",
-                          "icon-left": "people-arrows"
-                        }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "columns is-multiline column is-9" },
-                    [
+            _c(
+              "div",
+              { staticClass: "columns is-multiline" },
+              _vm._l(_vm.leadersSuplents, function(leaderSuple, index) {
+                return _c(
+                  "div",
+                  { key: "mobile." + index, staticClass: "column is-12" },
+                  [
+                    _c("div", { staticClass: "columns" }, [
                       _c(
                         "div",
-                        { staticClass: "columns column is-12 is-row-data" },
+                        { staticClass: "column is-3" },
                         [
-                          _c("div", { staticClass: "column is-3" }, [
-                            _c("span", [
-                              _vm._v(
-                                _vm._s(
-                                  _vm.firstCapitalize(
-                                    _vm.fieldsParticipant.first_name.label
-                                  )
-                                )
-                              )
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _vm._m(1)
-                        ]
+                          _c("b-button", {
+                            attrs: {
+                              size: "is-medium",
+                              "icon-left": "people-arrows"
+                            }
+                          })
+                        ],
+                        1
                       ),
                       _vm._v(" "),
                       _c(
                         "div",
-                        { staticClass: "columns column is-12 is-row-data" },
+                        { staticClass: "columns is-multiline column is-9" },
                         [
-                          _c("div", { staticClass: "column is-3" }, [
-                            _c("span", [
-                              _vm._v(
-                                _vm._s(
-                                  _vm.firstCapitalize(
-                                    _vm.textsGeneralSettings
-                                      .login_identification_number
+                          _c(
+                            "div",
+                            { staticClass: "columns column is-12 is-row-data" },
+                            [
+                              _c("div", { staticClass: "column is-3" }, [
+                                _c("span", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.firstCapitalize(
+                                        _vm.fieldsParticipant.first_name.label
+                                      )
+                                    )
                                   )
-                                )
-                              )
-                            ])
-                          ]),
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "column is-9" }, [
+                                _c("span", [
+                                  _c("strong", [
+                                    _vm._v(
+                                      _vm._s(leaderSuple.first_name) +
+                                        " " +
+                                        _vm._s(leaderSuple.last_name)
+                                    )
+                                  ])
+                                ])
+                              ])
+                            ]
+                          ),
                           _vm._v(" "),
-                          _vm._m(2)
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "columns column is-12 is-row-data" },
-                        [
-                          _c("div", { staticClass: "column is-3" }, [
-                            _c("span", [
-                              _vm._v(
-                                _vm._s(
-                                  _vm.firstCapitalize(
-                                    _vm.fieldsParticipant.password.label
+                          _c(
+                            "div",
+                            { staticClass: "columns column is-12 is-row-data" },
+                            [
+                              _c("div", { staticClass: "column is-3" }, [
+                                _c("span", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.firstCapitalize(
+                                        _vm.textsGeneralSettings
+                                          .login_identification_number
+                                      )
+                                    )
                                   )
-                                )
-                              )
-                            ])
-                          ]),
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "column is-9" }, [
+                                _c("span", [_vm._v(_vm._s(leaderSuple.id))])
+                              ])
+                            ]
+                          ),
                           _vm._v(" "),
-                          _c("div", { staticClass: "column is-3" }, [
-                            _c("span", { staticClass: "label-info" }, [
-                              _vm._v(
-                                _vm._s(
-                                  _vm.firstCapitalize(
-                                    _vm.textsGeneralSettings
-                                      .password_description_standard
+                          _c(
+                            "div",
+                            { staticClass: "columns column is-12 is-row-data" },
+                            [
+                              _c("div", { staticClass: "column is-3" }, [
+                                _c("span", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.firstCapitalize(
+                                        _vm.fieldsParticipant.password.label
+                                      )
+                                    )
                                   )
-                                )
-                              )
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "column is-6" }, [
-                            _c(
-                              "a",
-                              {
-                                staticClass: "link-generate",
-                                attrs: { href: "#" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                  }
-                                }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                                        " +
-                                    _vm._s(_vm.textsGeneralSettings.generate) +
-                                    "\n                                    "
-                                )
-                              ]
-                            )
-                          ])
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "columns column is-12 is-row-data" },
-                        [
-                          _c("div", { staticClass: "column is-3" }, [
-                            _c("span", [
-                              _vm._v(
-                                _vm._s(
-                                  _vm.firstCapitalize(
-                                    _vm.fieldsParticipant.profile.label
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "column is-3" }, [
+                                _c("span", { staticClass: "label-info" }, [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.firstCapitalize(
+                                        _vm.textsGeneralSettings
+                                          .password_description_standard
+                                      )
+                                    )
                                   )
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "column is-6" }, [
+                                _c(
+                                  "a",
+                                  {
+                                    staticClass: "link-generate",
+                                    attrs: { href: "#" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        return _vm.generatePasswordLeaderSuple(
+                                          index
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                        " +
+                                        _vm._s(
+                                          _vm.textsGeneralSettings.generate
+                                        ) +
+                                        "\n                                    "
+                                    )
+                                  ]
                                 )
-                              )
-                            ])
-                          ]),
+                              ])
+                            ]
+                          ),
                           _vm._v(" "),
-                          _c("div", { staticClass: "column is-9" }, [
-                            _c("span", [
-                              _vm._v(_vm._s(_vm.firstCapitalize("líder")))
-                            ])
-                          ])
+                          _c(
+                            "div",
+                            { staticClass: "columns column is-12 is-row-data" },
+                            [
+                              _c("div", { staticClass: "column is-3" }, [
+                                _c("span", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.firstCapitalize(
+                                        _vm.fieldsParticipant.profile.label
+                                      )
+                                    )
+                                  )
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "column is-9" }, [
+                                _c("span", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.firstCapitalize(
+                                        _vm.textsGeneralSettings
+                                          .names_profiles_participants[
+                                          leaderSuple.profiles_participants_id
+                                        ]
+                                      )
+                                    )
+                                  )
+                                ])
+                              ])
+                            ]
+                          )
                         ]
                       )
-                    ]
-                  )
-                ])
-              ])
-            ])
+                    ])
+                  ]
+                )
+              }),
+              0
+            )
           ])
         ]
       )
@@ -74084,22 +74138,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "column is-9" }, [
       _c("span", [_vm._v("Medium")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "column is-9" }, [
-      _c("span", [_vm._v("Usuario Uno")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "column is-9" }, [
-      _c("span", [_vm._v("000000000")])
     ])
   }
 ]

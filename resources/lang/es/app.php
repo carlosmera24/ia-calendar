@@ -19,6 +19,7 @@ return [
     'breadcrumbs_init'      =>  'Volver al inicio',
     'password_update'       =>  'Actualizar contraseña',
     'generate'              =>  'Generar',
+    'generate_password'     =>  'Generar contraseña',
 
     /**
      * DropDown Menu section

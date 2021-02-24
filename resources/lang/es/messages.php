@@ -49,4 +49,5 @@ return [
     'back_to_participant_confirm'   =>  '¿Desea restaurar el partícipe?, Se eliminarán todos los permisos, categorías y credenciales asociadas',
     'back_to_participant_warning'   =>  'Al presionar el botón <strong>Aplicar</strong> se eliminarán todos los permisos, categorías y credenciales asociadas',
     'updated_password_warning'      =>  'Contraseña actualizada exitosamente. Por seguridad se han cerrado todas las sesiones asociadas al usuario en los diferentes dispositivos, deberá iniciar sesión nuevamente.',
+    'generate_password_warning'     =>  'Se enviará un enlace al correo electrónico para generar una nueva contraseña, ¿Desea continuar?',
 ];

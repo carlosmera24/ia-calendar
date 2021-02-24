@@ -58,6 +58,7 @@
                 v-bind:programmer_json="programmer_json"
                 v-bind:texts_general_settings_json='texts_general_settings_json'
                 v-bind:text_success='text_success'
+                v-bind:text_not='text_not'
                 v-bind:fields_programmer_json='fields_programmer_json'
                 v-bind:participant_fields_json="text_participant_fields_json"
                 v-bind:membership_fields_json="text_fields_membership_json"

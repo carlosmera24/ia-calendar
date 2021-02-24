@@ -836,11 +836,11 @@
             <section class="login_leaders_suple_admins">
                 <h3 class="title-section"><span class="numerator">4</span>{{ textsGeneralSettings.leaders_login }}</h3>
                 <div class="columns is-multiline">
-                    <div class="column is-12 is-row-data">
+                    <div class="column is-12"
+                        v-for="(leaderSuple, index) in leadersSuplents" :key="'mobile.'+index">
                         <div class="columns">
                             <div class="column is-3">
                                 <b-button
-                                    class="btn-see-current-membership"
                                     size="is-medium"
                                     icon-left="people-arrows"
                                 />
@@ -852,7 +852,7 @@
                                         <span>{{ firstCapitalize(fieldsParticipant.first_name.label) }}</span>
                                     </div>
                                     <div class="column is-9">
-                                        <span>Usuario Uno</span>
+                                        <span><strong>{{ leaderSuple.first_name }} {{ leaderSuple.last_name }}</strong></span>
                                     </div>
                                 </div>
                                 <!-- /Name -->
@@ -862,7 +862,7 @@
                                         <span>{{ firstCapitalize(textsGeneralSettings.login_identification_number) }}</span>
                                     </div>
                                     <div class="column is-9">
-                                        <span>000000000</span>
+                                        <span>{{ leaderSuple.id }}</span>
                                     </div>
                                 </div>
                                 <!-- /Login identification number -->
@@ -877,7 +877,7 @@
                                     <div class="column is-6">
                                         <a href="#"
                                             class="link-generate"
-                                            v-on:click.prevent>
+                                            v-on:click.prevent="generatePasswordLeaderSuple(index)">
                                             {{ textsGeneralSettings.generate }}
                                         </a>
                                     </div>
@@ -889,7 +889,7 @@
                                         <span>{{ firstCapitalize(fieldsParticipant.profile.label) }}</span>
                                     </div>
                                     <div class="column is-9">
-                                        <span>{{ firstCapitalize("líder") }}</span>
+                                        <span>{{ firstCapitalize( textsGeneralSettings.names_profiles_participants[ leaderSuple.profiles_participants_id ] ) }}</span>
                                     </div>
                                 </div>
                                 <!-- /Profile -->
@@ -945,6 +945,11 @@
                 require: true,
             },
             text_success: {
+                type: String,
+                require: true
+
+            },
+            text_not: {
                 type: String,
                 require: true
 
@@ -1609,7 +1614,6 @@
                             response.data.participants.forEach( element => {
                                 this.leadersSuplents.push( Object.assign({},element) );
                             });
-                            console.log(this.leadersSuplents);
                         }
                     },
                     error => {
@@ -2546,6 +2550,24 @@
                             break;
                     }
                 }
+            },
+            generatePasswordLeaderSuple( index )
+            {
+                const leaderSuple = this.leadersSuplents[index];
+                //Confirme dialog
+                this.$buefy.dialog.confirm(
+                                            {
+                                                title: this.textsGeneralSettings.generate_password +" - "+ leaderSuple.first_name,
+                                                message: this.textsGeneralSettings.generate_password_warning,
+                                                cancelText: this.text_not,
+                                                confirmText: this.textsGeneralSettings.generate_password,
+                                                type: 'is-warning',
+                                                hasIcon: true,
+                                                onConfirm: () => {
+                                                    console.log("Generar contraseña");
+                                                }
+                                            }
+                                        );
             }
         }
     }
