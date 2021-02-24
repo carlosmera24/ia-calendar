@@ -469,9 +469,14 @@ export default{
             {
                 //Validatate if emailss exist in database
                 const emails = [];
-                this.emails.forEach( element => {
-                    if( element.value !== "" ){
-                        emails.push( element.value );
+                this.emails.forEach( (element, index ) => {
+                    if( element.value !== "" )
+                    {
+                        let tmp = { email : element.value };
+                        if( index === 0 ){
+                            tmp["initial_register"] = 1;
+                        }
+                        emails.push( tmp );
                     }
                 });
                 this.isLoading = true;
@@ -485,9 +490,13 @@ export default{
                                 {
                                     //Validate if cellphones exists in database
                                     const mobiles = [];
-                                    this.mobiles.forEach( element => {
+                                    this.mobiles.forEach( (element, index) => {
                                         if( element.value !== "" ){
-                                            mobiles.push( element.value );
+                                            let tmp = { mobile : element.value };
+                                            if( index === 0 ){
+                                                tmp["initial_register"] = 1;
+                                            }
+                                            mobiles.push( tmp );
                                         }
                                     });
                                     this.isLoading = true;

@@ -3568,9 +3568,17 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
       if (!this.fields.first_name.error && !this.fields.last_name.error && !this.fields.position_company.error && !this.fields.date_join_company.error && !this.birth_date.error && !isEmailError && !isMobileError && !is_email_duplicate && !is_mobile_duplicate) {
         //Validatate if emailss exist in database
         var emails = [];
-        this.emails.forEach(function (element) {
+        this.emails.forEach(function (element, index) {
           if (element.value !== "") {
-            emails.push(element.value);
+            var tmp = {
+              email: element.value
+            };
+
+            if (index === 0) {
+              tmp["initial_register"] = 1;
+            }
+
+            emails.push(tmp);
           }
         });
         this.isLoading = true;
@@ -3587,9 +3595,17 @@ var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.j
                 //Validate if cellphones exists in database
                 var mobiles = [];
 
-                _this6.mobiles.forEach(function (element) {
+                _this6.mobiles.forEach(function (element, index) {
                   if (element.value !== "") {
-                    mobiles.push(element.value);
+                    var tmp = {
+                      mobile: element.value
+                    };
+
+                    if (index === 0) {
+                      tmp["initial_register"] = 1;
+                    }
+
+                    mobiles.push(tmp);
                   }
                 });
 

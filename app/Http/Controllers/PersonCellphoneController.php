@@ -23,18 +23,18 @@ class PersonCellphoneController extends Controller
                                     'persons_id'        =>  'nullable|exists:persons,id',
                                 ];
     protected $rules_store_array = [
-                                        'mobiles'                   =>  'required|array|min:1',
-                                        'mobiles.*'                 =>  'required|regex:/^\+?[1-9]{1,2}[0-9]{3,14}$/|unique:persons_cellphones,cellphone_number',
-                                        'mobiles.initial_register'  =>  'nullable|regex:/^[0-1]$/',
-                                        'persons_id'                =>  'required|exists:persons,id',
+                                        'mobiles'                       =>  'required|array|min:1',
+                                        'mobiles.*.mobile'              =>  'required|regex:/^\+?[1-9]{1,2}[0-9]{3,14}$/|unique:persons_cellphones,cellphone_number',
+                                        'mobiles.*.initial_register'    =>  'nullable|regex:/^[0-1]$/',
+                                        'persons_id'                    =>  'required|exists:persons,id',
 
                                     ];
     protected $rules_mobile_exists = [
                                         'mobile' => 'required|regex:/^\+?[1-9]{1,2}[0-9]{3,14}$/'
                                     ];
     protected $rules_mobiles_exists = [
-                                        'mobiles'   =>  'required|array|min:1',
-                                        'mobiles.*' =>  'required|regex:/^\+?[1-9]{1,2}[0-9]{3,14}$/',
+                                        'mobiles'           =>  'required|array|min:1',
+                                        'mobiles.*.mobile'  =>  'required|regex:/^\+?[1-9]{1,2}[0-9]{3,14}$/',
                                     ];
     /**
      * Display a listing of the resource.
@@ -133,11 +133,11 @@ class PersonCellphoneController extends Controller
             $exists = false;
             foreach( $request->mobiles as $key => $val )
             {
-                $mobile_exists = PersonCellphone::cellphoneExist( $val );
+                $mobile_exists = PersonCellphone::cellphoneExist( $val["mobile"] );
                 $exists = $exists ? $exists : $mobile_exists;
                 $array_validate[] = [
                                         'exists'    => $mobile_exists,
-                                        'mobile'     => $val
+                                        'mobile'     => $val["mobile"]
                                     ];
             }
 
@@ -240,11 +240,11 @@ class PersonCellphoneController extends Controller
             foreach( $request->mobiles as $key => $val )
             {
                 $mobile = new PersonCellphone();
-                $mobile->cellphone_number = $val;
+                $mobile->cellphone_number = $val["mobile"];
                 $mobile->persons_id = $request->persons_id;
-                if( $request->initial_register)
+                if( isset( $val["initial_register"] ) )
                 {
-                    $mobile->initial_register = $request->initial_register;
+                    $mobile->initial_register = $val["initial_register"];
                 }
 
                 if( $mobile->save() )

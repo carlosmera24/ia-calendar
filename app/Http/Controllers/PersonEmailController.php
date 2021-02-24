@@ -25,19 +25,19 @@ class PersonEmailController extends Controller
                                     'status_persons_emails_id'  =>  'nullable|exists:status_persons_emails,id',
                                 ];
     protected $rules_store_array =  [
-                                        'emails'                    =>  'required|array|min:1',
-                                        'emails.*'                  =>  'required|email|max:45|unique:persons_emails,email',
-                                        'emails.initial_register'   =>  'nullable|regex:/^[0-1]$/',
-                                        'emails.used_events'        =>  'nullable|regex:/^[0-1]$/',
-                                        'persons_id'                =>  'required|integer|exists:persons,id',
+                                        'emails'                        =>  'required|array|min:1',
+                                        'emails.*.email'                =>  'required|email|max:45|unique:persons_emails,email',
+                                        'emails.*.initial_register'     =>  'nullable|regex:/^[0-1]$/',
+                                        'emails.*.used_events'          =>  'nullable|regex:/^[0-1]$/',
+                                        'persons_id'                    =>  'required|integer|exists:persons,id',
 
                                     ];
     protected $rules_email_exist =  [
                                         'email' => 'required|email|max:45'
                                     ];
     protected $rules_emails_exists =    [
-                                            'emails'    =>  'required|array|min:1',
-                                            'emails.*'  =>  'required|email|max:45',
+                                            'emails'            =>  'required|array|min:1',
+                                            'emails.*.email'    =>  'required|email|max:45',
                                         ];
     protected $rules_emails_admin = [
                                         'persons_id'    =>  'required|integer|exists:persons,id',
@@ -111,11 +111,11 @@ class PersonEmailController extends Controller
             $exists = false;
             foreach( $request->emails as $key => $val )
             {
-                $email_exists = PersonEmail::emailExist( $val );
+                $email_exists = PersonEmail::emailExist( $val[ "email" ] );
                 $exists = $exists ? $exists : $email_exists;
                 $array_validate[] = [
                                         'exists'    => $email_exists,
-                                        'email'     => $val
+                                        'email'     => $val[ "email" ]
                                     ];
             }
 
@@ -275,15 +275,15 @@ class PersonEmailController extends Controller
             foreach( $request->emails as $key => $val )
             {
                 $email = new PersonEmail();
-                $email->email = $val;
+                $email->email = $val["email"];
                 $email->persons_id = $request->persons_id;
-                if( $request->initial_register)
+                if( isset( $val["initial_register"] ) )
                 {
-                    $email->initial_register = $request->initial_register;
+                    $email->initial_register = $val["initial_register"];
                 }
-                if( $request->used_events)
+                if( isset( $val["used_events"] ) )
                 {
-                    $email->used_events = $request->used_events;
+                    $email->used_events = $val["used_events"];
                 }
 
                 if( $email->save() )
