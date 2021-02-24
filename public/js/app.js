@@ -4697,71 +4697,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 var validate = __webpack_require__(/*! validate.js */ "./node_modules/validate.js/validate.js"); //Import vue-select
@@ -4946,8 +4881,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
       maxBirthDate: new Date(moment().subtract(18, 'years')),
       birth_date: null,
       date_join_company: null,
-      fieldsMembership: [],
-      leadersSuplents: []
+      fieldsMembership: []
     };
   },
   computed: {
@@ -5130,10 +5064,6 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
               return _this2.getCellphones();
 
             case 14:
-              //Get participants leaders/Admins suplents
-              _this2.getParticipantsLeadersSuplents();
-
-            case 15:
             case "end":
               return _context.stop();
           }
@@ -5627,28 +5557,36 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         }, _callee8);
       }))();
     },
-    getParticipantsLeadersSuplents: function getParticipantsLeadersSuplents() {
-      var _this10 = this;
+    clickCancelToHome: function clickCancelToHome() {
+      this.$emit('activeMainSection', 'main');
+    },
+    emailsExist: function emailsExist() {
+      var _arguments = arguments,
+          _this10 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee9() {
-        var params;
+        var emails, data;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee9$(_context9) {
           while (1) {
             switch (_context9.prev = _context9.next) {
               case 0:
+                emails = _arguments.length > 0 && _arguments[0] !== undefined ? _arguments[0] : [];
                 _this10.isLoading = true;
-                params = {
-                  programmers_id: _this10.programmer.id.value,
-                  users_id: _this10.participant.users_id.value
-                };
-                _context9.next = 4;
-                return axios.post(_this10.url_participants_list_leaders_suplents_programmer, params).then(function (response) {
+                data = null;
+
+                if (!(emails && _.isArray(emails) && !_.isEmpty(emails))) {
+                  _context9.next = 8;
+                  break;
+                }
+
+                _context9.next = 6;
+                return axios.post(_this10.url_person_email_exist, {
+                  emails: emails
+                }).then(function (response) {
                   _this10.showErrors({});
 
                   if (response.data.status === 200) {
-                    response.data.participants.forEach(function (element) {
-                      _this10.leadersSuplents.push(Object.assign({}, element));
-                    });
+                    data = response.data;
                   }
                 }, function (error) {
                   _this10.showErrors(error);
@@ -5656,67 +5594,22 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                   _this10.isLoading = false;
                 });
 
-              case 4:
+              case 6:
+                _context9.next = 9;
+                break;
+
+              case 8:
+                _this10.isLoading = false;
+
+              case 9:
+                return _context9.abrupt("return", data);
+
+              case 10:
               case "end":
                 return _context9.stop();
             }
           }
         }, _callee9);
-      }))();
-    },
-    clickCancelToHome: function clickCancelToHome() {
-      this.$emit('activeMainSection', 'main');
-    },
-    emailsExist: function emailsExist() {
-      var _arguments = arguments,
-          _this11 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee10() {
-        var emails, data;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee10$(_context10) {
-          while (1) {
-            switch (_context10.prev = _context10.next) {
-              case 0:
-                emails = _arguments.length > 0 && _arguments[0] !== undefined ? _arguments[0] : [];
-                _this11.isLoading = true;
-                data = null;
-
-                if (!(emails && _.isArray(emails) && !_.isEmpty(emails))) {
-                  _context10.next = 8;
-                  break;
-                }
-
-                _context10.next = 6;
-                return axios.post(_this11.url_person_email_exist, {
-                  emails: emails
-                }).then(function (response) {
-                  _this11.showErrors({});
-
-                  if (response.data.status === 200) {
-                    data = response.data;
-                  }
-                }, function (error) {
-                  _this11.showErrors(error);
-                }).then(function () {
-                  _this11.isLoading = false;
-                });
-
-              case 6:
-                _context10.next = 9;
-                break;
-
-              case 8:
-                _this11.isLoading = false;
-
-              case 9:
-                return _context10.abrupt("return", data);
-
-              case 10:
-              case "end":
-                return _context10.stop();
-            }
-          }
-        }, _callee10);
       }))();
     },
     onlyNumber: function onlyNumber(event, obj) {
@@ -5749,62 +5642,62 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
       return false;
     },
     cellphoneExists: function cellphoneExists(mobile) {
-      var _this12 = this;
+      var _this11 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee11() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee10() {
         var data;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee11$(_context11) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee10$(_context10) {
           while (1) {
-            switch (_context11.prev = _context11.next) {
+            switch (_context10.prev = _context10.next) {
               case 0:
-                _this12.isLoading = true;
+                _this11.isLoading = true;
                 data = null;
 
                 if (!(mobile && !_.isEmpty(mobile))) {
-                  _context11.next = 7;
+                  _context10.next = 7;
                   break;
                 }
 
-                _context11.next = 5;
-                return axios.post(_this12.url_person_cellphone_exist, {
+                _context10.next = 5;
+                return axios.post(_this11.url_person_cellphone_exist, {
                   mobile: mobile
                 }).then(function (response) {
-                  _this12.showErrors({});
+                  _this11.showErrors({});
 
                   if (response.data.status === 200) {
                     data = response.data;
                   }
                 }, function (error) {
-                  _this12.showErrors(error);
+                  _this11.showErrors(error);
                 }).then(function () {
-                  _this12.isLoading = false;
+                  _this11.isLoading = false;
                 });
 
               case 5:
-                _context11.next = 8;
+                _context10.next = 8;
                 break;
 
               case 7:
-                _this12.isLoading = false;
+                _this11.isLoading = false;
 
               case 8:
-                return _context11.abrupt("return", data);
+                return _context10.abrupt("return", data);
 
               case 9:
               case "end":
-                return _context11.stop();
+                return _context10.stop();
             }
           }
-        }, _callee11);
+        }, _callee10);
       }))();
     },
     imageToBase64: function imageToBase64(file) {
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee12() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee12$(_context12) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee11() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee11$(_context11) {
           while (1) {
-            switch (_context12.prev = _context12.next) {
+            switch (_context11.prev = _context11.next) {
               case 0:
-                _context12.next = 2;
+                _context11.next = 2;
                 return new Promise(function (resolve, reject) {
                   var reader = new FileReader();
                   reader.readAsDataURL(file);
@@ -5819,9 +5712,60 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                 });
 
               case 2:
-                return _context12.abrupt("return", _context12.sent);
+                return _context11.abrupt("return", _context11.sent);
 
               case 3:
+              case "end":
+                return _context11.stop();
+            }
+          }
+        }, _callee11);
+      }))();
+    },
+    onFileLogoSelected: function onFileLogoSelected() {
+      var _this12 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee12() {
+        var result;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee12$(_context12) {
+          while (1) {
+            switch (_context12.prev = _context12.next) {
+              case 0:
+                if (!_this12.fileLogo) {
+                  _context12.next = 14;
+                  break;
+                }
+
+                _this12.isLoading = true;
+                _this12.fieldsProgrammer.logo.error = false;
+                _this12.enabledUploadLogo = true;
+                _context12.next = 6;
+                return _this12.imageToBase64(_this12.fileLogo)["catch"](function (e) {
+                  return Error(e);
+                });
+
+              case 6:
+                result = _context12.sent;
+
+                if (!(result instanceof Error)) {
+                  _context12.next = 10;
+                  break;
+                }
+
+                _this12.showErrors(result.message);
+
+                return _context12.abrupt("return");
+
+              case 10:
+                _this12.logoBase64 = result;
+                _this12.isLoading = false;
+                _context12.next = 15;
+                break;
+
+              case 14:
+                _this12.enabledUploadLogo = false;
+
+              case 15:
               case "end":
                 return _context12.stop();
             }
@@ -5829,7 +5773,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         }, _callee12);
       }))();
     },
-    onFileLogoSelected: function onFileLogoSelected() {
+    onFileAvatarSelected: function onFileAvatarSelected() {
       var _this13 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee13() {
@@ -5838,16 +5782,16 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
           while (1) {
             switch (_context13.prev = _context13.next) {
               case 0:
-                if (!_this13.fileLogo) {
+                if (!_this13.fileAvatar) {
                   _context13.next = 14;
                   break;
                 }
 
                 _this13.isLoading = true;
-                _this13.fieldsProgrammer.logo.error = false;
-                _this13.enabledUploadLogo = true;
+                _this13.fieldsParticipant.profile_image.error = false;
+                _this13.enabledUploadAvatar = true;
                 _context13.next = 6;
-                return _this13.imageToBase64(_this13.fileLogo)["catch"](function (e) {
+                return _this13.imageToBase64(_this13.fileAvatar)["catch"](function (e) {
                   return Error(e);
                 });
 
@@ -5864,13 +5808,13 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                 return _context13.abrupt("return");
 
               case 10:
-                _this13.logoBase64 = result;
+                _this13.avatarAdmin = result;
                 _this13.isLoading = false;
                 _context13.next = 15;
                 break;
 
               case 14:
-                _this13.enabledUploadLogo = false;
+                _this13.enabledUploadAvatar = false;
 
               case 15:
               case "end":
@@ -5880,65 +5824,14 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         }, _callee13);
       }))();
     },
-    onFileAvatarSelected: function onFileAvatarSelected() {
-      var _this14 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee14() {
-        var result;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee14$(_context14) {
-          while (1) {
-            switch (_context14.prev = _context14.next) {
-              case 0:
-                if (!_this14.fileAvatar) {
-                  _context14.next = 14;
-                  break;
-                }
-
-                _this14.isLoading = true;
-                _this14.fieldsParticipant.profile_image.error = false;
-                _this14.enabledUploadAvatar = true;
-                _context14.next = 6;
-                return _this14.imageToBase64(_this14.fileAvatar)["catch"](function (e) {
-                  return Error(e);
-                });
-
-              case 6:
-                result = _context14.sent;
-
-                if (!(result instanceof Error)) {
-                  _context14.next = 10;
-                  break;
-                }
-
-                _this14.showErrors(result.message);
-
-                return _context14.abrupt("return");
-
-              case 10:
-                _this14.avatarAdmin = result;
-                _this14.isLoading = false;
-                _context14.next = 15;
-                break;
-
-              case 14:
-                _this14.enabledUploadAvatar = false;
-
-              case 15:
-              case "end":
-                return _context14.stop();
-            }
-          }
-        }, _callee14);
-      }))();
-    },
     clickEditProgrammer: function clickEditProgrammer(key) {
-      var _this15 = this;
+      var _this14 = this;
 
       this.programmer[key].editing = !this.programmer[key].editing; //wait for the input to load
 
       this.$nextTick(function () {
-        if (_this15.$refs[key]) {
-          _this15.$refs[key].focus();
+        if (_this14.$refs[key]) {
+          _this14.$refs[key].focus();
         }
       });
     },
@@ -6016,7 +5909,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
       }
     },
     updateProgrammer: function updateProgrammer(key) {
-      var _this16 = this;
+      var _this15 = this;
 
       var obj = this.programmer[key];
 
@@ -6032,41 +5925,41 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         }
 
         axios.post(this.url_update_programmer, params).then(function (response) {
-          _this16.showErrors({});
+          _this15.showErrors({});
 
           if (response.data.status === 200) {
             //update/restore value copy
             if (key === "logo" && response.data.data.extra) //Update logo info
               {
-                _this16.programmer[key].value = response.data.data.extra;
-                _this16.programmerCopy[key].value = response.data.data.extra;
-                _this16.fileLogo = null;
-                _this16.logoBase64 = null;
-                _this16.enabledUploadLogo = false;
+                _this15.programmer[key].value = response.data.data.extra;
+                _this15.programmerCopy[key].value = response.data.data.extra;
+                _this15.fileLogo = null;
+                _this15.logoBase64 = null;
+                _this15.enabledUploadLogo = false;
 
-                _this16.getImg64Base(_this16.OPTIONS.PROGRAMMER, _this16.programmer.logo.value);
+                _this15.getImg64Base(_this15.OPTIONS.PROGRAMMER, _this15.programmer.logo.value);
               } else //Update copy
               {
-                _this16.programmerCopy[key].value = obj.value;
+                _this15.programmerCopy[key].value = obj.value;
               }
 
             obj.edited = false; //restore
 
             obj.editing = false; //restore
 
-            if (key === "identification" && _this16.identificationTypeSelected !== _this16.identificationTypeSelectedOriginal) {
-              _this16.identificationTypeSelectedOriginal = _this16.identificationTypeSelected; //restore
+            if (key === "identification" && _this15.identificationTypeSelected !== _this15.identificationTypeSelectedOriginal) {
+              _this15.identificationTypeSelectedOriginal = _this15.identificationTypeSelected; //restore
             }
 
             Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
-              title: _this16.text_success,
-              text: _this16.textsGeneralSettings.text_updated_programmer
+              title: _this15.text_success,
+              text: _this15.textsGeneralSettings.text_updated_programmer
             });
           }
         }, function (error) {
-          _this16.showErrors(error);
+          _this15.showErrors(error);
         }).then(function () {
-          _this16.isLoading = false;
+          _this15.isLoading = false;
         });
       }
     },
@@ -6123,7 +6016,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
       this.participant.person.date_join_company.value = this.dateFormat(this.date_join_company);
     },
     clickEditParticipant: function clickEditParticipant(key) {
-      var _this17 = this;
+      var _this16 = this;
 
       var index = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
       //Get keys, for exaple: person.emails
@@ -6144,11 +6037,11 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
 
 
       this.$nextTick(function () {
-        if (_this17.$refs[keyRef]) {
-          if (_.isArray(_this17.$refs[keyRef])) {
-            _this17.$refs[keyRef][0].focus();
+        if (_this16.$refs[keyRef]) {
+          if (_.isArray(_this16.$refs[keyRef])) {
+            _this16.$refs[keyRef][0].focus();
           } else {
-            _this17.$refs[keyRef].focus();
+            _this16.$refs[keyRef].focus();
           }
         }
       });
@@ -6206,29 +6099,29 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
     },
     clickUpdateParticipant: function clickUpdateParticipant(key) {
       var _arguments2 = arguments,
-          _this18 = this;
+          _this17 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee15() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee14() {
         var index, keys, obj, objCopy, different, valid, value, constraints, constrEmail, data, regex, constrMobile, _data;
 
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee15$(_context15) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee14$(_context14) {
           while (1) {
-            switch (_context15.prev = _context15.next) {
+            switch (_context14.prev = _context14.next) {
               case 0:
                 index = _arguments2.length > 1 && _arguments2[1] !== undefined ? _arguments2[1] : null;
-                _this18.isLoading = true; //cleans errors
+                _this17.isLoading = true; //cleans errors
 
-                _this18.setErrorParticipant(key, false, index);
+                _this17.setErrorParticipant(key, false, index);
 
                 if (key === "profile_image") {
                   //Value for save in DDBB
-                  _this18.participant[key].value = _this18.avatarAdmin;
+                  _this17.participant[key].value = _this17.avatarAdmin;
                 } //Get keys, for exaple: person.emails
 
 
                 keys = key.split(".");
-                obj = _this18.participant;
-                objCopy = _this18.participantCopy;
+                obj = _this17.participant;
+                objCopy = _this17.participantCopy;
                 keys.forEach(function (k) {
                   obj = obj[k];
                   objCopy = objCopy[k];
@@ -6242,29 +6135,29 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
 
 
                 different = false;
-                _context15.t0 = key;
-                _context15.next = _context15.t0 === "profile_image" ? 13 : _context15.t0 === "person.used_events_email" ? 15 : _context15.t0 === "person.cellphones" ? 17 : 19;
+                _context14.t0 = key;
+                _context14.next = _context14.t0 === "profile_image" ? 13 : _context14.t0 === "person.used_events_email" ? 15 : _context14.t0 === "person.cellphones" ? 17 : 19;
                 break;
 
               case 13:
-                different = _this18.avatarAdmin !== _this18.avatarAdminCopy;
-                return _context15.abrupt("break", 21);
+                different = _this17.avatarAdmin !== _this17.avatarAdminCopy;
+                return _context14.abrupt("break", 21);
 
               case 15:
                 different = obj.value.email !== objCopy.value.email;
-                return _context15.abrupt("break", 21);
+                return _context14.abrupt("break", 21);
 
               case 17:
                 different = obj.value.cellphone_number !== objCopy.value.cellphone_number;
-                return _context15.abrupt("break", 21);
+                return _context14.abrupt("break", 21);
 
               case 19:
                 different = obj.value !== objCopy.value;
-                return _context15.abrupt("break", 21);
+                return _context14.abrupt("break", 21);
 
               case 21:
                 if (!different) {
-                  _context15.next = 81;
+                  _context14.next = 81;
                   break;
                 }
 
@@ -6279,13 +6172,13 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                 };
 
                 if (validate.single(value, constraints) !== undefined) {
-                  _this18.setErrorParticipant(key, true);
+                  _this17.setErrorParticipant(key, true);
 
                   valid = false;
                 }
 
                 if (!(key === "person.used_events_email")) {
-                  _context15.next = 51;
+                  _context14.next = 51;
                   break;
                 }
 
@@ -6294,78 +6187,78 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                 }, constraints);
 
                 if (!(validate.single(obj.value.email, constraints) !== undefined)) {
-                  _context15.next = 35;
+                  _context14.next = 35;
                   break;
                 }
 
-                _this18.emailError = _this18.fieldsParticipant.email.msg;
+                _this17.emailError = _this17.fieldsParticipant.email.msg;
 
-                _this18.setErrorParticipant(key, true);
+                _this17.setErrorParticipant(key, true);
 
                 valid = false;
-                _context15.next = 51;
+                _context14.next = 51;
                 break;
 
               case 35:
                 if (!(validate.single(obj.value.email, constrEmail) !== undefined)) {
-                  _context15.next = 41;
+                  _context14.next = 41;
                   break;
                 }
 
-                _this18.emailError = _this18.fieldsParticipant.email.msg_validate;
+                _this17.emailError = _this17.fieldsParticipant.email.msg_validate;
 
-                _this18.setErrorParticipant(key, true);
+                _this17.setErrorParticipant(key, true);
 
                 valid = false;
-                _context15.next = 51;
+                _context14.next = 51;
                 break;
 
               case 41:
-                if (!(obj.value.email === _this18.participant.person.initial_register_email.value.email)) {
-                  _context15.next = 47;
+                if (!(obj.value.email === _this17.participant.person.initial_register_email.value.email)) {
+                  _context14.next = 47;
                   break;
                 }
 
-                _this18.emailError = _this18.fieldsParticipant.email.msg_validate;
+                _this17.emailError = _this17.fieldsParticipant.email.msg_validate;
 
-                _this18.setErrorParticipant(key, true);
+                _this17.setErrorParticipant(key, true);
 
                 valid = false;
-                _context15.next = 51;
+                _context14.next = 51;
                 break;
 
               case 47:
-                _context15.next = 49;
-                return _this18.emailsExist([obj.value.email]);
+                _context14.next = 49;
+                return _this17.emailsExist([obj.value.email]);
 
               case 49:
-                data = _context15.sent;
+                data = _context14.sent;
 
                 if (data.exists) {
-                  _this18.emailError = _this18.fieldsParticipant.email.msg_exist;
+                  _this17.emailError = _this17.fieldsParticipant.email.msg_exist;
 
-                  _this18.setErrorParticipant(key, true);
+                  _this17.setErrorParticipant(key, true);
 
                   valid = false;
                 }
 
               case 51:
                 if (!(key === "person.cellphones")) {
-                  _context15.next = 76;
+                  _context14.next = 76;
                   break;
                 }
 
                 if (!(validate.single(obj.value.cellphone_number, constraints) !== undefined)) {
-                  _context15.next = 58;
+                  _context14.next = 58;
                   break;
                 }
 
-                obj.msg = _this18.fieldsParticipant.mobile.msg;
+                obj.msg = _this17.fieldsParticipant.mobile.msg;
 
-                _this18.setErrorParticipant(key, true, index);
+                _this17.setErrorParticipant(key, true, index);
 
                 valid = false;
-                _context15.next = 76;
+                _context14.next = 76;
                 break;
 
               case 58:
@@ -6375,74 +6268,74 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                 }, constraints);
 
                 if (!(validate.single(obj.value.cellphone_number, constrMobile) !== undefined)) {
-                  _context15.next = 66;
+                  _context14.next = 66;
                   break;
                 }
 
-                obj.msg = _this18.fieldsParticipant.mobile.msg_validate;
+                obj.msg = _this17.fieldsParticipant.mobile.msg_validate;
 
-                _this18.setErrorParticipant(key, true, index);
+                _this17.setErrorParticipant(key, true, index);
 
                 valid = false;
-                _context15.next = 76;
+                _context14.next = 76;
                 break;
 
               case 66:
-                if (!_this18.isCellphoneDuplicate(index)) {
-                  _context15.next = 72;
+                if (!_this17.isCellphoneDuplicate(index)) {
+                  _context14.next = 72;
                   break;
                 }
 
-                obj.msg = _this18.fieldsParticipant.mobile.msg_exist;
+                obj.msg = _this17.fieldsParticipant.mobile.msg_exist;
 
-                _this18.setErrorParticipant(key, true, index);
+                _this17.setErrorParticipant(key, true, index);
 
                 valid = false;
-                _context15.next = 76;
+                _context14.next = 76;
                 break;
 
               case 72:
-                _context15.next = 74;
-                return _this18.cellphoneExists(obj.value.cellphone_number);
+                _context14.next = 74;
+                return _this17.cellphoneExists(obj.value.cellphone_number);
 
               case 74:
-                _data = _context15.sent;
+                _data = _context14.sent;
 
                 if (_data.exists) {
-                  obj.msg = _this18.fieldsParticipant.mobile.msg_exist;
+                  obj.msg = _this17.fieldsParticipant.mobile.msg_exist;
 
-                  _this18.setErrorParticipant(key, true, index);
+                  _this17.setErrorParticipant(key, true, index);
 
                   valid = false;
                 }
 
               case 76:
-                if (key === "profile_image" && _this18.fileAvatar.size > _this18.sizeFieleUploadAllow) {
-                  _this18.setErrorParticipant(key, true);
+                if (key === "profile_image" && _this17.fileAvatar.size > _this17.sizeFieleUploadAllow) {
+                  _this17.setErrorParticipant(key, true);
 
                   valid = false;
                 }
 
-                _this18.isLoading = false;
+                _this17.isLoading = false;
 
                 if (valid) //Not errors
                   {
                     //update
-                    _this18.updateParticipant(key, index);
+                    _this17.updateParticipant(key, index);
                   }
 
-                _context15.next = 82;
+                _context14.next = 82;
                 break;
 
               case 81:
-                _this18.isLoading = false;
+                _this17.isLoading = false;
 
               case 82:
               case "end":
-                return _context15.stop();
+                return _context14.stop();
             }
           }
-        }, _callee15);
+        }, _callee14);
       }))();
     },
     clickUpdatePassword: function clickUpdatePassword() {
@@ -6521,59 +6414,59 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
       this.isLoading = false;
     },
     updatePasswordDB: function updatePasswordDB() {
-      var _this19 = this;
+      var _this18 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee16() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee15() {
         var params;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee16$(_context16) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee15$(_context15) {
           while (1) {
-            switch (_context16.prev = _context16.next) {
+            switch (_context15.prev = _context15.next) {
               case 0:
-                _this19.isLoading = true;
+                _this18.isLoading = true;
                 params = {
-                  id: _this19.participant.users_id.value,
-                  password: _this19.participant.password.old.value,
-                  new_password: _this19.participant.password["new"].value,
-                  confirmation_password: _this19.participant.password.confirmation.value
+                  id: _this18.participant.users_id.value,
+                  password: _this18.participant.password.old.value,
+                  new_password: _this18.participant.password["new"].value,
+                  confirmation_password: _this18.participant.password.confirmation.value
                 };
-                _context16.next = 4;
-                return axios.post(_this19.url_user_update_password, params).then(function (response) {
-                  _this19.showErrors({});
+                _context15.next = 4;
+                return axios.post(_this18.url_user_update_password, params).then(function (response) {
+                  _this18.showErrors({});
 
                   switch (response.data.status) {
                     case 403:
                       //Password error
-                      _this19.participant.password.old.msg = response.data.data[0];
-                      _this19.participant.password.old.error = true;
+                      _this18.participant.password.old.msg = response.data.data[0];
+                      _this18.participant.password.old.error = true;
                       break;
 
                     case 200:
                       //Success
                       //Restore
-                      _this19.participant.password.edited = false;
-                      _this19.participant.password.editing = false; //Notification
+                      _this18.participant.password.edited = false;
+                      _this18.participant.password.editing = false; //Notification
 
-                      _this19.showNotificationSuccessUpdatePassword();
+                      _this18.showNotificationSuccessUpdatePassword();
 
                     default:
                       break;
                   }
                 }, function (error) {
-                  _this19.showErrors(error);
+                  _this18.showErrors(error);
                 }).then(function () {
-                  _this19.isLoading = false;
+                  _this18.isLoading = false;
                 });
 
               case 4:
               case "end":
-                return _context16.stop();
+                return _context15.stop();
             }
           }
-        }, _callee16);
+        }, _callee15);
       }))();
     },
     showNotificationSuccessUpdatePassword: function showNotificationSuccessUpdatePassword() {
-      var _this20 = this;
+      var _this19 = this;
 
       this.$buefy.dialog.alert({
         title: this.textsGeneralSettings.updated_password,
@@ -6582,20 +6475,77 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         hasIcon: true,
         onConfirm: function onConfirm() {
           //Logout
-          _this20.cerrarSesion();
+          _this19.cerrarSesion();
         }
       });
     },
     cerrarSesion: function cerrarSesion() {
-      var _this21 = this;
+      var _this20 = this;
 
       axios.post(this.url_logout).then(function (res) {
         if (res.data.status === 200) {
-          window.location.href = _this21.url_home;
+          window.location.href = _this20.url_home;
         }
       });
     },
     updateDBParticipant: function updateDBParticipant(key, obj, objCopy) {
+      var _this21 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee16() {
+        var params;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee16$(_context16) {
+          while (1) {
+            switch (_context16.prev = _context16.next) {
+              case 0:
+                _this21.isLoading = true;
+                params = {
+                  id: _this21.participant.id.value
+                };
+                params[key] = obj.value;
+                _context16.next = 5;
+                return axios.post(_this21.url_participant_update, params).then(function (response) {
+                  _this21.showErrors({});
+
+                  if (response.data.status === 200) {
+                    //update/restore value copy
+                    if (key === "profile_image" && response.data.data.extra) //Update avatar info
+                      {
+                        obj.value = response.data.data.extra;
+                        objCopy.value = Object.assign({}, response.data.data.extra); //Non-reactive copy
+
+                        _this21.fileAvatar = null;
+                        _this21.enabledUploadAvatar = false;
+
+                        _this21.getImg64Base(_this21.OPTIONS.PARTICIPANT, _this21.participant.profile_image.value);
+                      } else //Update copy
+                      {
+                        objCopy.value = Object.assign({}, obj.value); //Non-reactive copy
+                      }
+
+                    obj.edited = false; //restore
+
+                    obj.editing = false; //restore
+
+                    Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
+                      title: _this21.text_success,
+                      text: _this21.textsGeneralSettings.text_updated_participant
+                    });
+                  }
+                }, function (error) {
+                  _this21.showErrors(error);
+                }).then(function () {
+                  _this21.isLoading = false;
+                });
+
+              case 5:
+              case "end":
+                return _context16.stop();
+            }
+          }
+        }, _callee16);
+      }))();
+    },
+    createDBPersonEmailUsedEvents: function createDBPersonEmailUsedEvents(obj, objCopy) {
       var _this22 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee17() {
@@ -6606,28 +6556,23 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
               case 0:
                 _this22.isLoading = true;
                 params = {
-                  id: _this22.participant.id.value
+                  email: obj.value.email,
+                  persons_id: _this22.participant.persons_id.value,
+                  used_events: 1,
+                  status_persons_emails_id: _this22.OPTIONS.STATUS_PERSONS_EMAILS.PENDING
                 };
-                params[key] = obj.value;
-                _context17.next = 5;
-                return axios.post(_this22.url_participant_update, params).then(function (response) {
+                _context17.next = 4;
+                return axios.post(_this22.url_persons_emails_store, params).then(function (response) {
                   _this22.showErrors({});
 
-                  if (response.data.status === 200) {
+                  if (response.data.status === 201) {
                     //update/restore value copy
-                    if (key === "profile_image" && response.data.data.extra) //Update avatar info
-                      {
-                        obj.value = response.data.data.extra;
-                        objCopy.value = Object.assign({}, response.data.data.extra); //Non-reactive copy
+                    obj.value = response.data.data;
+                    objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
 
-                        _this22.fileAvatar = null;
-                        _this22.enabledUploadAvatar = false;
+                    objCopy.edited = false; //restore
 
-                        _this22.getImg64Base(_this22.OPTIONS.PARTICIPANT, _this22.participant.profile_image.value);
-                      } else //Update copy
-                      {
-                        objCopy.value = Object.assign({}, obj.value); //Non-reactive copy
-                      }
+                    objCopy.editing = false; //restore
 
                     obj.edited = false; //restore
 
@@ -6644,7 +6589,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                   _this22.isLoading = false;
                 });
 
-              case 5:
+              case 4:
               case "end":
                 return _context17.stop();
             }
@@ -6652,7 +6597,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         }, _callee17);
       }))();
     },
-    createDBPersonEmailUsedEvents: function createDBPersonEmailUsedEvents(obj, objCopy) {
+    updateDBPersonEmailUsedEvents: function updateDBPersonEmailUsedEvents(obj, objCopy) {
       var _this23 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee18() {
@@ -6664,15 +6609,15 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                 _this23.isLoading = true;
                 params = {
                   email: obj.value.email,
-                  persons_id: _this23.participant.persons_id.value,
+                  id: obj.value.id,
                   used_events: 1,
                   status_persons_emails_id: _this23.OPTIONS.STATUS_PERSONS_EMAILS.PENDING
                 };
                 _context18.next = 4;
-                return axios.post(_this23.url_persons_emails_store, params).then(function (response) {
+                return axios.post(_this23.url_persons_emails_update, params).then(function (response) {
                   _this23.showErrors({});
 
-                  if (response.data.status === 201) {
+                  if (response.data.status === 200) {
                     //update/restore value copy
                     obj.value = response.data.data;
                     objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
@@ -6704,7 +6649,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         }, _callee18);
       }))();
     },
-    updateDBPersonEmailUsedEvents: function updateDBPersonEmailUsedEvents(obj, objCopy) {
+    createDBPersonCellhpone: function createDBPersonCellhpone(obj, objCopy) {
       var _this24 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee19() {
@@ -6715,16 +6660,14 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
               case 0:
                 _this24.isLoading = true;
                 params = {
-                  email: obj.value.email,
-                  id: obj.value.id,
-                  used_events: 1,
-                  status_persons_emails_id: _this24.OPTIONS.STATUS_PERSONS_EMAILS.PENDING
+                  mobile: obj.value.cellphone_number,
+                  persons_id: _this24.participant.persons_id.value
                 };
                 _context19.next = 4;
-                return axios.post(_this24.url_persons_emails_update, params).then(function (response) {
+                return axios.post(_this24.url_persons_cellphone_store, params).then(function (response) {
                   _this24.showErrors({});
 
-                  if (response.data.status === 200) {
+                  if (response.data.status === 201) {
                     //update/restore value copy
                     obj.value = response.data.data;
                     objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
@@ -6756,7 +6699,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         }, _callee19);
       }))();
     },
-    createDBPersonCellhpone: function createDBPersonCellhpone(obj, objCopy) {
+    updateDBPersonCellhpone: function updateDBPersonCellhpone(obj, objCopy) {
       var _this25 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee20() {
@@ -6768,13 +6711,13 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                 _this25.isLoading = true;
                 params = {
                   mobile: obj.value.cellphone_number,
-                  persons_id: _this25.participant.persons_id.value
+                  id: obj.value.id
                 };
                 _context20.next = 4;
-                return axios.post(_this25.url_persons_cellphone_store, params).then(function (response) {
+                return axios.post(_this25.url_person_cellphone_update, params).then(function (response) {
                   _this25.showErrors({});
 
-                  if (response.data.status === 201) {
+                  if (response.data.status === 200) {
                     //update/restore value copy
                     obj.value = response.data.data;
                     objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
@@ -6806,7 +6749,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         }, _callee20);
       }))();
     },
-    updateDBPersonCellhpone: function updateDBPersonCellhpone(obj, objCopy) {
+    updatedDBPerson: function updatedDBPerson(keyParamenter, obj, objCopy) {
       var _this26 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee21() {
@@ -6817,18 +6760,17 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
               case 0:
                 _this26.isLoading = true;
                 params = {
-                  mobile: obj.value.cellphone_number,
-                  id: obj.value.id
+                  id: _this26.participant.person.id.value
                 };
-                _context21.next = 4;
-                return axios.post(_this26.url_person_cellphone_update, params).then(function (response) {
+                params[keyParamenter] = obj.value;
+                _context21.next = 5;
+                return axios.post(_this26.url_person_update, params).then(function (response) {
                   _this26.showErrors({});
 
                   if (response.data.status === 200) {
                     //update/restore value copy
-                    obj.value = response.data.data;
-                    objCopy.value = Object.assign({}, response.data.data); //Non-reactive copy
-
+                    obj.value = response.data.data[keyParamenter];
+                    objCopy.value = response.data.data[keyParamenter];
                     objCopy.edited = false; //restore
 
                     objCopy.editing = false; //restore
@@ -6848,7 +6790,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                   _this26.isLoading = false;
                 });
 
-              case 4:
+              case 5:
               case "end":
                 return _context21.stop();
             }
@@ -6856,70 +6798,21 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         }, _callee21);
       }))();
     },
-    updatedDBPerson: function updatedDBPerson(keyParamenter, obj, objCopy) {
-      var _this27 = this;
+    updateParticipant: function updateParticipant(key) {
+      var _arguments3 = arguments,
+          _this27 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee22() {
-        var params;
+        var index, keys, obj, objCopy;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee22$(_context22) {
           while (1) {
             switch (_context22.prev = _context22.next) {
               case 0:
-                _this27.isLoading = true;
-                params = {
-                  id: _this27.participant.person.id.value
-                };
-                params[keyParamenter] = obj.value;
-                _context22.next = 5;
-                return axios.post(_this27.url_person_update, params).then(function (response) {
-                  _this27.showErrors({});
-
-                  if (response.data.status === 200) {
-                    //update/restore value copy
-                    obj.value = response.data.data[keyParamenter];
-                    objCopy.value = response.data.data[keyParamenter];
-                    objCopy.edited = false; //restore
-
-                    objCopy.editing = false; //restore
-
-                    obj.edited = false; //restore
-
-                    obj.editing = false; //restore
-
-                    Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
-                      title: _this27.text_success,
-                      text: _this27.textsGeneralSettings.text_updated_participant
-                    });
-                  }
-                }, function (error) {
-                  _this27.showErrors(error);
-                }).then(function () {
-                  _this27.isLoading = false;
-                });
-
-              case 5:
-              case "end":
-                return _context22.stop();
-            }
-          }
-        }, _callee22);
-      }))();
-    },
-    updateParticipant: function updateParticipant(key) {
-      var _arguments3 = arguments,
-          _this28 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee23() {
-        var index, keys, obj, objCopy;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee23$(_context23) {
-          while (1) {
-            switch (_context23.prev = _context23.next) {
-              case 0:
                 index = _arguments3.length > 1 && _arguments3[1] !== undefined ? _arguments3[1] : null;
                 //Get keys, for exaple: person.emails
                 keys = key.split(".");
-                obj = _this28.participant;
-                objCopy = _this28.participantCopy;
+                obj = _this27.participant;
+                objCopy = _this27.participantCopy;
                 keys.forEach(function (k) {
                   obj = obj[k];
                   objCopy = objCopy[k];
@@ -6932,90 +6825,75 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
                   }
 
                 if (!obj.edited) {
-                  _context23.next = 32;
+                  _context22.next = 32;
                   break;
                 }
 
-                _context23.t0 = key;
-                _context23.next = _context23.t0 === "person.used_events_email" ? 10 : _context23.t0 === "person.cellphones" ? 18 : _context23.t0 === "person.first_name" ? 26 : _context23.t0 === "person.last_name" ? 26 : _context23.t0 === "person.position_company" ? 26 : _context23.t0 === "person.birth_date" ? 26 : _context23.t0 === "person.date_join_company" ? 26 : 29;
+                _context22.t0 = key;
+                _context22.next = _context22.t0 === "person.used_events_email" ? 10 : _context22.t0 === "person.cellphones" ? 18 : _context22.t0 === "person.first_name" ? 26 : _context22.t0 === "person.last_name" ? 26 : _context22.t0 === "person.position_company" ? 26 : _context22.t0 === "person.birth_date" ? 26 : _context22.t0 === "person.date_join_company" ? 26 : 29;
                 break;
 
               case 10:
                 if (objCopy.value.email) {
-                  _context23.next = 15;
+                  _context22.next = 15;
                   break;
                 }
 
-                _context23.next = 13;
-                return _this28.createDBPersonEmailUsedEvents(obj, objCopy);
+                _context22.next = 13;
+                return _this27.createDBPersonEmailUsedEvents(obj, objCopy);
 
               case 13:
-                _context23.next = 17;
+                _context22.next = 17;
                 break;
 
               case 15:
-                _context23.next = 17;
-                return _this28.updateDBPersonEmailUsedEvents(obj, objCopy);
+                _context22.next = 17;
+                return _this27.updateDBPersonEmailUsedEvents(obj, objCopy);
 
               case 17:
-                return _context23.abrupt("break", 32);
+                return _context22.abrupt("break", 32);
 
               case 18:
                 if (objCopy.value.cellphone_number) {
-                  _context23.next = 23;
+                  _context22.next = 23;
                   break;
                 }
 
-                _context23.next = 21;
-                return _this28.createDBPersonCellhpone(obj, objCopy);
+                _context22.next = 21;
+                return _this27.createDBPersonCellhpone(obj, objCopy);
 
               case 21:
-                _context23.next = 25;
+                _context22.next = 25;
                 break;
 
               case 23:
-                _context23.next = 25;
-                return _this28.updateDBPersonCellhpone(obj, objCopy);
+                _context22.next = 25;
+                return _this27.updateDBPersonCellhpone(obj, objCopy);
 
               case 25:
-                return _context23.abrupt("break", 32);
+                return _context22.abrupt("break", 32);
 
               case 26:
-                _context23.next = 28;
-                return _this28.updatedDBPerson(keys[keys.length - 1], obj, objCopy);
+                _context22.next = 28;
+                return _this27.updatedDBPerson(keys[keys.length - 1], obj, objCopy);
 
               case 28:
-                return _context23.abrupt("break", 32);
+                return _context22.abrupt("break", 32);
 
               case 29:
-                _context23.next = 31;
-                return _this28.updateDBParticipant(key, obj, objCopy);
+                _context22.next = 31;
+                return _this27.updateDBParticipant(key, obj, objCopy);
 
               case 31:
-                return _context23.abrupt("break", 32);
+                return _context22.abrupt("break", 32);
 
               case 32:
               case "end":
-                return _context23.stop();
+                return _context22.stop();
             }
           }
-        }, _callee23);
+        }, _callee22);
       }))();
-    },
-    generatePasswordLeaderSuple: function generatePasswordLeaderSuple(index) {
-      var leaderSuple = this.leadersSuplents[index]; //Confirme dialog
-
-      this.$buefy.dialog.confirm({
-        title: this.textsGeneralSettings.generate_password + " - " + leaderSuple.first_name,
-        message: this.textsGeneralSettings.generate_password_warning,
-        cancelText: this.text_not,
-        confirmText: this.textsGeneralSettings.generate_password,
-        type: 'is-warning',
-        hasIcon: true,
-        onConfirm: function onConfirm() {
-          console.log("Generar contraseña");
-        }
-      });
     }
   }
 });
@@ -7048,6 +6926,49 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -7401,6 +7322,9 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
     },
     hasNextPageParticipant: function hasNextPageParticipant() {
       return this.participants.length < this.totalParticipants;
+    },
+    showLogin: function showLogin() {
+      return this.participantSelected && (this.participantSelected.meta.profiles_participants_id === this.OPTIONS.PROFILE_LEADER || this.participantSelected.meta.profiles_participants_id === this.OPTIONS.PROFILE_SUPLE_ADMIN);
     }
   },
   created: function created() {
@@ -8011,7 +7935,8 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
 
           if (response.data.status === 200) {
             //change profile local for the selected participant
-            _this15.participantSelected.meta.profiles_participants_id = _this15.newProfile;
+            _this15.participantSelected.meta.profiles_participants_id = _this15.newProfile; //TODO Create user for Leader/AdminSuple
+
             Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
               title: _this15.text_success,
               text: _this15.text_updated_participant
@@ -8028,6 +7953,20 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
           text: this.text_updated_participant
         });
       }
+    },
+    generatePassword: function generatePassword() {
+      //Confirme dialog
+      this.$buefy.dialog.confirm({
+        title: this.textsManageLeader.generate_password,
+        message: this.textsManageLeader.generate_password_warning,
+        cancelText: this.text_not,
+        confirmText: this.textsManageLeader.generate_password,
+        type: 'is-warning',
+        hasIcon: true,
+        onConfirm: function onConfirm() {
+          console.log("Generar contraseña");
+        }
+      });
     }
   }
 });
@@ -73954,192 +73893,6 @@ var render = function() {
                 ])
               ])
             ])
-          ]),
-          _vm._v(" "),
-          _c("section", { staticClass: "login_leaders_suple_admins" }, [
-            _c("h3", { staticClass: "title-section" }, [
-              _c("span", { staticClass: "numerator" }, [_vm._v("4")]),
-              _vm._v(_vm._s(_vm.textsGeneralSettings.leaders_login))
-            ]),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "columns is-multiline" },
-              _vm._l(_vm.leadersSuplents, function(leaderSuple, index) {
-                return _c(
-                  "div",
-                  { key: "mobile." + index, staticClass: "column is-12" },
-                  [
-                    _c("div", { staticClass: "columns" }, [
-                      _c(
-                        "div",
-                        { staticClass: "column is-3" },
-                        [
-                          _c("b-button", {
-                            attrs: {
-                              size: "is-medium",
-                              "icon-left": "people-arrows"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "columns is-multiline column is-9" },
-                        [
-                          _c(
-                            "div",
-                            { staticClass: "columns column is-12 is-row-data" },
-                            [
-                              _c("div", { staticClass: "column is-3" }, [
-                                _c("span", [
-                                  _vm._v(
-                                    _vm._s(
-                                      _vm.firstCapitalize(
-                                        _vm.fieldsParticipant.first_name.label
-                                      )
-                                    )
-                                  )
-                                ])
-                              ]),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "column is-9" }, [
-                                _c("span", [
-                                  _c("strong", [
-                                    _vm._v(
-                                      _vm._s(leaderSuple.first_name) +
-                                        " " +
-                                        _vm._s(leaderSuple.last_name)
-                                    )
-                                  ])
-                                ])
-                              ])
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            { staticClass: "columns column is-12 is-row-data" },
-                            [
-                              _c("div", { staticClass: "column is-3" }, [
-                                _c("span", [
-                                  _vm._v(
-                                    _vm._s(
-                                      _vm.firstCapitalize(
-                                        _vm.textsGeneralSettings
-                                          .login_identification_number
-                                      )
-                                    )
-                                  )
-                                ])
-                              ]),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "column is-9" }, [
-                                _c("span", [_vm._v(_vm._s(leaderSuple.id))])
-                              ])
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            { staticClass: "columns column is-12 is-row-data" },
-                            [
-                              _c("div", { staticClass: "column is-3" }, [
-                                _c("span", [
-                                  _vm._v(
-                                    _vm._s(
-                                      _vm.firstCapitalize(
-                                        _vm.fieldsParticipant.password.label
-                                      )
-                                    )
-                                  )
-                                ])
-                              ]),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "column is-3" }, [
-                                _c("span", { staticClass: "label-info" }, [
-                                  _vm._v(
-                                    _vm._s(
-                                      _vm.firstCapitalize(
-                                        _vm.textsGeneralSettings
-                                          .password_description_standard
-                                      )
-                                    )
-                                  )
-                                ])
-                              ]),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "column is-6" }, [
-                                _c(
-                                  "a",
-                                  {
-                                    staticClass: "link-generate",
-                                    attrs: { href: "#" },
-                                    on: {
-                                      click: function($event) {
-                                        $event.preventDefault()
-                                        return _vm.generatePasswordLeaderSuple(
-                                          index
-                                        )
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                        " +
-                                        _vm._s(
-                                          _vm.textsGeneralSettings.generate
-                                        ) +
-                                        "\n                                    "
-                                    )
-                                  ]
-                                )
-                              ])
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            { staticClass: "columns column is-12 is-row-data" },
-                            [
-                              _c("div", { staticClass: "column is-3" }, [
-                                _c("span", [
-                                  _vm._v(
-                                    _vm._s(
-                                      _vm.firstCapitalize(
-                                        _vm.fieldsParticipant.profile.label
-                                      )
-                                    )
-                                  )
-                                ])
-                              ]),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "column is-9" }, [
-                                _c("span", [
-                                  _vm._v(
-                                    _vm._s(
-                                      _vm.firstCapitalize(
-                                        _vm.textsGeneralSettings
-                                          .names_profiles_participants[
-                                          leaderSuple.profiles_participants_id
-                                        ]
-                                      )
-                                    )
-                                  )
-                                ])
-                              ])
-                            ]
-                          )
-                        ]
-                      )
-                    ])
-                  ]
-                )
-              }),
-              0
-            )
           ])
         ]
       )
@@ -74235,564 +73988,709 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("form", { staticClass: "form_manage_leader", attrs: { action: "" } }, [
-        _c("div", { staticClass: "field field-select-participant" }, [
-          _c(
-            "div",
-            { staticClass: "control has-icons-left" },
-            [
-              _c(
-                "v-select",
-                {
-                  attrs: {
-                    options: _vm.participants,
-                    placeholder: _vm.textsManageLeader.search_participant,
-                    filterable: false,
-                    label: "participant"
-                  },
-                  on: {
-                    open: _vm.onOpenParticipant,
-                    close: _vm.onCloseParticipant,
-                    input: _vm.onSelectParticipantChanged,
-                    search: _vm.onSearchParticipants
-                  },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "list-footer",
-                      fn: function() {
-                        return [
-                          _c(
-                            "li",
-                            {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: _vm.hasNextPageParticipant,
-                                  expression: "hasNextPageParticipant"
-                                }
-                              ],
-                              ref: "load",
-                              staticClass: "v-secelet-loading"
-                            },
-                            [
-                              _c("span", [
-                                _c("i", {
-                                  staticClass: "fas fa-spinner fa-pulse"
-                                }),
-                                _vm._v(_vm._s(_vm.text_loading))
-                              ])
-                            ]
-                          )
-                        ]
-                      },
-                      proxy: true
-                    }
-                  ]),
-                  model: {
-                    value: _vm.participantSelected,
-                    callback: function($$v) {
-                      _vm.participantSelected = $$v
-                    },
-                    expression: "participantSelected"
-                  }
-                },
-                [
-                  _c(
-                    "div",
-                    { attrs: { slot: "no-options" }, slot: "no-options" },
-                    [_vm._v(_vm._s(_vm.text_no_options))]
-                  )
-                ]
-              ),
-              _vm._v(" "),
-              _vm._m(0)
-            ],
-            1
-          )
-        ]),
-        _vm._v(" "),
-        _c("section", { staticClass: "data_participant" }, [
-          _c(
-            "div",
-            { staticClass: "columns is-multiline" },
-            [
-              _c(
-                "b-field",
-                {
-                  staticClass: "column is-12",
-                  attrs: { horizontal: "", label: _vm.fields.first_name.label }
-                },
-                [
-                  _c("span", { staticClass: "is-capitalized" }, [
-                    _vm._v(
-                      _vm._s(
-                        _vm.participantSelected
-                          ? _vm.participantSelected.meta.first_name
-                          : ""
-                      )
-                    )
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "b-field",
-                {
-                  staticClass: "column is-12",
-                  attrs: { horizontal: "", label: _vm.fields.last_name.label }
-                },
-                [
-                  _c("span", { staticClass: "is-capitalized" }, [
-                    _vm._v(
-                      _vm._s(
-                        _vm.participantSelected
-                          ? _vm.participantSelected.meta.last_name
-                          : ""
-                      )
-                    )
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _vm.participantSelected !== null
-                ? _c("div", { staticClass: "column is-12" }, [
-                    _c(
-                      "div",
-                      { staticClass: "columns is-multiline" },
-                      _vm._l(_vm.participantSelected.meta.emails, function(
-                        email,
-                        index
-                      ) {
-                        return _c(
-                          "b-field",
-                          {
-                            key: "email." + index,
-                            staticClass: "column is-12",
-                            attrs: {
-                              horizontal: "",
-                              label: _vm.fields.email.label
-                            }
-                          },
-                          [_c("span", [_vm._v(_vm._s(email.email))])]
-                        )
-                      }),
-                      1
-                    )
-                  ])
-                : _c(
-                    "b-field",
-                    {
-                      staticClass: "column is-12",
-                      attrs: { horizontal: "", label: _vm.fields.email.label }
-                    },
-                    [_c("span")]
-                  ),
-              _vm._v(" "),
-              _vm.participantSelected !== null
-                ? _c("div", { staticClass: "column is-12" }, [
-                    _c(
-                      "div",
-                      { staticClass: "columns is-multiline" },
-                      _vm._l(_vm.participantSelected.meta.cellphones, function(
-                        mobile,
-                        index
-                      ) {
-                        return _c(
-                          "b-field",
-                          {
-                            key: "mobile." + index,
-                            staticClass: "column is-12",
-                            attrs: {
-                              horizontal: "",
-                              label: _vm.fields.mobile.label
-                            }
-                          },
-                          [
-                            _c("span", [
-                              _vm._v(_vm._s(mobile.cellphone_number))
-                            ])
-                          ]
-                        )
-                      }),
-                      1
-                    )
-                  ])
-                : _c(
-                    "b-field",
-                    {
-                      staticClass: "column is-12",
-                      attrs: { horizontal: "", label: _vm.fields.mobile.label }
-                    },
-                    [_c("span")]
-                  ),
-              _vm._v(" "),
-              _c(
-                "b-field",
-                {
-                  staticClass: "column is-12",
-                  attrs: {
-                    horizontal: "",
-                    label: _vm.fields.position_company.label
-                  }
-                },
-                [
-                  _c("span", { staticClass: "is-capitalized" }, [
-                    _vm._v(
-                      _vm._s(
-                        _vm.participantSelected
-                          ? _vm.participantSelected.meta.position_company
-                          : ""
-                      )
-                    )
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "b-field",
-                {
-                  staticClass: "column is-12",
-                  attrs: { horizontal: "", label: _vm.fields.state.label }
-                },
-                [
-                  _c("span", { staticClass: "is-capitalized" }, [
-                    _vm._v(
-                      _vm._s(
-                        _vm.participantSelected
-                          ? _vm.textsManageLeader.names_status_participants[
-                              _vm.participantSelected.meta
-                                .status_participants_id
-                            ]
-                          : ""
-                      )
-                    )
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _vm.participantSelected &&
-              _vm.participantSelected.meta.status_participants_id !== 1
-                ? _c(
-                    "b-field",
-                    {
-                      staticClass: "column is-12",
-                      attrs: {
-                        horizontal: "",
-                        label: _vm.fields.reason_change_state.label
-                      }
-                    },
-                    [
-                      _c("span", { staticClass: "is-capitalized" }, [
-                        _vm._v(
-                          _vm._s(
-                            _vm.participantSelected
-                              ? _vm.participantSelected.meta.log_status
-                                ? _vm.participantSelected.meta.log_status
-                                    .description
-                                : ""
-                              : ""
-                          )
-                        )
-                      ])
-                    ]
-                  )
-                : _vm._e()
-            ],
-            1
-          )
-        ]),
-        _vm._v(" "),
-        _c("section", { staticClass: "data_permissions" }, [
-          _c("div", { staticClass: "is-grouped" }, [
-            _c(
-              "div",
-              { staticClass: "button btn-main" },
-              [
-                _c(
-                  "b-checkbox-button",
-                  {
-                    attrs: {
-                      disabled: _vm.isEnabledAssociateLeader ? false : true,
-                      "native-value": "true",
-                      type: "is-success"
-                    },
-                    on: { input: _vm.clickAssociateLeader },
-                    model: {
-                      value: _vm.permissionsAssociateLeader,
-                      callback: function($$v) {
-                        _vm.permissionsAssociateLeader = $$v
-                      },
-                      expression: "permissionsAssociateLeader"
-                    }
-                  },
-                  [_c("span", { staticClass: "is-size-5" }, [_vm._v("◘")])]
-                )
-              ],
-              1
-            )
+        _c("section", { staticClass: "credentials" }, [
+          _c("h3", { staticClass: "title-section" }, [
+            _c("span", { staticClass: "numerator" }, [_vm._v("1")]),
+            _vm._v(_vm._s(_vm.textsManageLeader.credentials))
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "columns is-multiline" }, [
-            _c("div", { staticClass: "field column is-12 mb-3" }, [
-              _c("div", { staticClass: "field-label" }, [
-                _c("label", { staticClass: "label label_associate_lader" }, [
-                  _vm._v(
-                    "\n                            " +
-                      _vm._s(_vm.textsManageLeader.associate_leader) +
-                      "\n                        "
-                  )
-                ])
-              ])
-            ]),
-            _vm._v(" "),
+          _c("div", { staticClass: "field field-select-participant" }, [
             _c(
               "div",
-              { staticClass: "content_permissions column is-12" },
-              _vm._l(_vm.permissionsEvents, function(permission, index) {
-                return _c(
-                  "div",
-                  {
-                    key: "permission." + index,
-                    staticClass: "field column is-12 is-horizontal"
-                  },
-                  [
-                    _c(
-                      "b-switch",
-                      {
-                        attrs: {
-                          disabled: _vm.isEnabledAssociateLeader ? false : true,
-                          type: "is-success"
-                        },
-                        model: {
-                          value: permission.value,
-                          callback: function($$v) {
-                            _vm.$set(permission, "value", $$v)
-                          },
-                          expression: "permission.value"
-                        }
-                      },
-                      [
-                        _vm._v(
-                          "\n                            " +
-                            _vm._s(permission.label) +
-                            "\n                        "
-                        )
-                      ]
-                    )
-                  ],
-                  1
-                )
-              }),
-              0
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "content_categories" }, [
-            _c(
-              "div",
-              {
-                staticClass:
-                  "field-categories control has-icons-left has-icons-right"
-              },
+              { staticClass: "control has-icons-left" },
               [
                 _c(
                   "v-select",
                   {
-                    class: { "is-danger": _vm.isCategoriesError },
                     attrs: {
-                      multiple: "",
-                      disabled: _vm.participantSelected ? false : true,
-                      options: _vm.categories,
-                      reduce: function(categorie) {
-                        return categorie.meta
-                      },
-                      placeholder: _vm.textsManageLeader.filter_categories,
-                      label: "categorie"
+                      options: _vm.participants,
+                      placeholder: _vm.textsManageLeader.search_participant,
+                      filterable: false,
+                      label: "participant"
                     },
+                    on: {
+                      open: _vm.onOpenParticipant,
+                      close: _vm.onCloseParticipant,
+                      input: _vm.onSelectParticipantChanged,
+                      search: _vm.onSearchParticipants
+                    },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "list-footer",
+                        fn: function() {
+                          return [
+                            _c(
+                              "li",
+                              {
+                                directives: [
+                                  {
+                                    name: "show",
+                                    rawName: "v-show",
+                                    value: _vm.hasNextPageParticipant,
+                                    expression: "hasNextPageParticipant"
+                                  }
+                                ],
+                                ref: "load",
+                                staticClass: "v-secelet-loading"
+                              },
+                              [
+                                _c("span", [
+                                  _c("i", {
+                                    staticClass: "fas fa-spinner fa-pulse"
+                                  }),
+                                  _vm._v(_vm._s(_vm.text_loading))
+                                ])
+                              ]
+                            )
+                          ]
+                        },
+                        proxy: true
+                      }
+                    ]),
                     model: {
-                      value: _vm.categoriesSelected,
+                      value: _vm.participantSelected,
                       callback: function($$v) {
-                        _vm.categoriesSelected = $$v
+                        _vm.participantSelected = $$v
                       },
-                      expression: "categoriesSelected"
+                      expression: "participantSelected"
                     }
                   },
                   [
-                    [
-                      _c(
-                        "div",
-                        { attrs: { slot: "no-options" }, slot: "no-options" },
-                        [_vm._v(_vm._s(_vm.text_no_options))]
-                      )
-                    ]
-                  ],
-                  2
+                    _c(
+                      "div",
+                      { attrs: { slot: "no-options" }, slot: "no-options" },
+                      [_vm._v(_vm._s(_vm.text_no_options))]
+                    )
+                  ]
                 ),
                 _vm._v(" "),
-                _vm.isCategoriesError
-                  ? _c(
-                      "span",
-                      { staticClass: "icon is-right has-text-danger" },
-                      [_c("i", { staticClass: "fas fa-exclamation-circle" })]
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.isCategoriesError
-                  ? _c("p", { staticClass: "help is-danger" }, [
-                      _vm._v(_vm._s(_vm.text_field_required))
-                    ])
-                  : _vm._e()
+                _vm._m(0)
               ],
               1
             )
-          ])
-        ]),
-        _vm._v(" "),
-        _c("section", { staticClass: "content_given_admin_permissions" }, [
-          _c("div", { staticClass: "is-grouped" }, [
-            _c(
-              "div",
-              { staticClass: "button btn-main" },
-              [
-                _c(
-                  "b-checkbox-button",
-                  {
-                    attrs: {
-                      disabled: _vm.participantSelected ? false : true,
-                      "native-value": "true",
-                      type: "is-success"
-                    },
-                    on: { input: _vm.clickPermissionsAdmin },
-                    model: {
-                      value: _vm.permissionsAdmin,
-                      callback: function($$v) {
-                        _vm.permissionsAdmin = $$v
-                      },
-                      expression: "permissionsAdmin"
-                    }
-                  },
-                  [_c("span", { staticClass: "is-size-5" }, [_vm._v("◘")])]
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c("span", { staticClass: "control-label" }, [
-              _vm._v(_vm._s(_vm.textsManageLeader.give_admin_categories_events))
-            ])
           ]),
           _vm._v(" "),
-          _vm.isPermissionsAdmin
-            ? _c("div", { staticClass: "columns is-multiline" }, [
-                _c(
-                  "div",
-                  { staticClass: "content_permissions column is-12" },
-                  _vm._l(_vm.permissionsCategories, function(
-                    permission,
-                    index
-                  ) {
-                    return _c(
-                      "div",
-                      {
-                        key: "permission_categorie." + index,
-                        staticClass: "field column is-12 is-horizontal"
-                      },
-                      [
-                        _c(
-                          "b-switch",
-                          {
-                            attrs: {
-                              disabled: _vm.participantSelected ? false : true,
-                              type: "is-success"
-                            },
-                            model: {
-                              value: permission.value,
-                              callback: function($$v) {
-                                _vm.$set(permission, "value", $$v)
-                              },
-                              expression: "permission.value"
-                            }
-                          },
-                          [
-                            _vm._v(
-                              "\n                            " +
-                                _vm._s(permission.label) +
-                                "\n                        "
-                            )
-                          ]
-                        )
-                      ],
-                      1
-                    )
-                  }),
-                  0
-                )
-              ])
-            : _vm._e()
-        ]),
-        _vm._v(" "),
-        _c("section", { staticClass: "content_back_participant" }, [
-          _c("div", { staticClass: "is-grouped" }, [
+          _c("section", { staticClass: "data_participant" }, [
             _c(
               "div",
-              { staticClass: "button btn-main" },
+              { staticClass: "columns is-multiline" },
               [
                 _c(
-                  "b-checkbox-button",
+                  "b-field",
                   {
+                    staticClass: "column is-12",
                     attrs: {
-                      disabled: _vm.participantSelected ? false : true,
-                      "native-value": "true",
-                      type: "is-warning"
-                    },
-                    on: { input: _vm.clickBackToParticipant },
-                    model: {
-                      value: _vm.backParticipant,
-                      callback: function($$v) {
-                        _vm.backParticipant = $$v
-                      },
-                      expression: "backParticipant"
+                      horizontal: "",
+                      label: _vm.fields.first_name.label
                     }
                   },
                   [
-                    _c("span", { staticClass: "icon" }, [
-                      _c("i", { staticClass: "fas fa-retweet" })
+                    _c("span", { staticClass: "is-capitalized" }, [
+                      _vm._v(
+                        _vm._s(
+                          _vm.participantSelected
+                            ? _vm.participantSelected.meta.first_name
+                            : ""
+                        )
+                      )
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "b-field",
+                  {
+                    staticClass: "column is-12",
+                    attrs: { horizontal: "", label: _vm.fields.last_name.label }
+                  },
+                  [
+                    _c("span", { staticClass: "is-capitalized" }, [
+                      _vm._v(
+                        _vm._s(
+                          _vm.participantSelected
+                            ? _vm.participantSelected.meta.last_name
+                            : ""
+                        )
+                      )
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _vm.participantSelected !== null
+                  ? _c("div", { staticClass: "column is-12" }, [
+                      _c(
+                        "div",
+                        { staticClass: "columns is-multiline" },
+                        _vm._l(_vm.participantSelected.meta.emails, function(
+                          email,
+                          index
+                        ) {
+                          return _c(
+                            "b-field",
+                            {
+                              key: "email." + index,
+                              staticClass: "column is-12",
+                              attrs: {
+                                horizontal: "",
+                                label: _vm.fields.email.label
+                              }
+                            },
+                            [_c("span", [_vm._v(_vm._s(email.email))])]
+                          )
+                        }),
+                        1
+                      )
+                    ])
+                  : _c(
+                      "b-field",
+                      {
+                        staticClass: "column is-12",
+                        attrs: { horizontal: "", label: _vm.fields.email.label }
+                      },
+                      [_c("span")]
+                    ),
+                _vm._v(" "),
+                _vm.participantSelected !== null
+                  ? _c("div", { staticClass: "column is-12" }, [
+                      _c(
+                        "div",
+                        { staticClass: "columns is-multiline" },
+                        _vm._l(
+                          _vm.participantSelected.meta.cellphones,
+                          function(mobile, index) {
+                            return _c(
+                              "b-field",
+                              {
+                                key: "mobile." + index,
+                                staticClass: "column is-12",
+                                attrs: {
+                                  horizontal: "",
+                                  label: _vm.fields.mobile.label
+                                }
+                              },
+                              [
+                                _c("span", [
+                                  _vm._v(_vm._s(mobile.cellphone_number))
+                                ])
+                              ]
+                            )
+                          }
+                        ),
+                        1
+                      )
+                    ])
+                  : _c(
+                      "b-field",
+                      {
+                        staticClass: "column is-12",
+                        attrs: {
+                          horizontal: "",
+                          label: _vm.fields.mobile.label
+                        }
+                      },
+                      [_c("span")]
+                    ),
+                _vm._v(" "),
+                _c(
+                  "b-field",
+                  {
+                    staticClass: "column is-12",
+                    attrs: {
+                      horizontal: "",
+                      label: _vm.fields.position_company.label
+                    }
+                  },
+                  [
+                    _c("span", { staticClass: "is-capitalized" }, [
+                      _vm._v(
+                        _vm._s(
+                          _vm.participantSelected
+                            ? _vm.participantSelected.meta.position_company
+                            : ""
+                        )
+                      )
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "b-field",
+                  {
+                    staticClass: "column is-12",
+                    attrs: { horizontal: "", label: _vm.fields.state.label }
+                  },
+                  [
+                    _c("span", { staticClass: "is-capitalized" }, [
+                      _vm._v(
+                        _vm._s(
+                          _vm.participantSelected
+                            ? _vm.textsManageLeader.names_status_participants[
+                                _vm.participantSelected.meta
+                                  .status_participants_id
+                              ]
+                            : ""
+                        )
+                      )
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _vm.participantSelected &&
+                _vm.participantSelected.meta.status_participants_id !== 1
+                  ? _c(
+                      "b-field",
+                      {
+                        staticClass: "column is-12",
+                        attrs: {
+                          horizontal: "",
+                          label: _vm.fields.reason_change_state.label
+                        }
+                      },
+                      [
+                        _c("span", { staticClass: "is-capitalized" }, [
+                          _vm._v(
+                            _vm._s(
+                              _vm.participantSelected
+                                ? _vm.participantSelected.meta.log_status
+                                  ? _vm.participantSelected.meta.log_status
+                                      .description
+                                  : ""
+                                : ""
+                            )
+                          )
+                        ])
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.showLogin
+                  ? _c(
+                      "b-field",
+                      {
+                        staticClass: "column is-12",
+                        attrs: {
+                          horizontal: "",
+                          label: _vm.fields.password.label
+                        }
+                      },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "columns column is-12 content-password"
+                          },
+                          [
+                            _c("span", { staticClass: "column is-3" }, [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.textsManageLeader
+                                    .password_description_standard
+                                )
+                              ),
+                              _c("br"),
+                              _vm._v(
+                                _vm._s(_vm.textsManageLeader.password_default)
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "column is-9" }, [
+                              _c(
+                                "a",
+                                {
+                                  staticClass: "link-generate",
+                                  attrs: { href: "#" },
+                                  on: {
+                                    click: function($event) {
+                                      $event.preventDefault()
+                                      return _vm.generatePassword()
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                    " +
+                                      _vm._s(_vm.textsManageLeader.generate) +
+                                      "\n                                "
+                                  )
+                                ]
+                              )
+                            ])
+                          ]
+                        )
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _c(
+                  "b-field",
+                  {
+                    staticClass: "column is-12",
+                    attrs: { horizontal: "", label: _vm.fields.profile.label }
+                  },
+                  [
+                    _c("span", { staticClass: "is-capitalized" }, [
+                      _vm._v(
+                        _vm._s(
+                          _vm.participantSelected
+                            ? _vm.participantSelected.meta
+                                .profiles_participants_id
+                              ? _vm.textsManageLeader
+                                  .names_profiles_participants[
+                                  _vm.participantSelected.meta
+                                    .profiles_participants_id
+                                ]
+                              : ""
+                            : ""
+                        )
+                      )
                     ])
                   ]
                 )
               ],
               1
-            ),
+            )
+          ]),
+          _vm._v(" "),
+          _c("section", { staticClass: "data_permissions" }, [
+            _c("div", { staticClass: "is-grouped" }, [
+              _c(
+                "div",
+                { staticClass: "button btn-main" },
+                [
+                  _c(
+                    "b-checkbox-button",
+                    {
+                      attrs: {
+                        disabled: _vm.isEnabledAssociateLeader ? false : true,
+                        "native-value": "true",
+                        type: "is-success"
+                      },
+                      on: { input: _vm.clickAssociateLeader },
+                      model: {
+                        value: _vm.permissionsAssociateLeader,
+                        callback: function($$v) {
+                          _vm.permissionsAssociateLeader = $$v
+                        },
+                        expression: "permissionsAssociateLeader"
+                      }
+                    },
+                    [_c("span", { staticClass: "is-size-5" }, [_vm._v("◘")])]
+                  )
+                ],
+                1
+              )
+            ]),
             _vm._v(" "),
-            _c("span", { staticClass: "control-label" }, [
-              _vm._v(_vm._s(_vm.textsManageLeader.back_to_participant))
+            _c("div", { staticClass: "columns is-multiline" }, [
+              _c("div", { staticClass: "field column is-12 mb-3" }, [
+                _c("div", { staticClass: "field-label" }, [
+                  _c("label", { staticClass: "label label_associate_lader" }, [
+                    _vm._v(
+                      "\n                                " +
+                        _vm._s(_vm.textsManageLeader.associate_leader) +
+                        "\n                            "
+                    )
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "content_permissions column is-12" },
+                _vm._l(_vm.permissionsEvents, function(permission, index) {
+                  return _c(
+                    "div",
+                    {
+                      key: "permission." + index,
+                      staticClass: "field column is-12 is-horizontal"
+                    },
+                    [
+                      _c(
+                        "b-switch",
+                        {
+                          attrs: {
+                            disabled: _vm.isEnabledAssociateLeader
+                              ? false
+                              : true,
+                            type: "is-success"
+                          },
+                          model: {
+                            value: permission.value,
+                            callback: function($$v) {
+                              _vm.$set(permission, "value", $$v)
+                            },
+                            expression: "permission.value"
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                " +
+                              _vm._s(permission.label) +
+                              "\n                            "
+                          )
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                }),
+                0
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "content_categories" }, [
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "field-categories control has-icons-left has-icons-right"
+                },
+                [
+                  _c(
+                    "v-select",
+                    {
+                      class: { "is-danger": _vm.isCategoriesError },
+                      attrs: {
+                        multiple: "",
+                        disabled: _vm.participantSelected ? false : true,
+                        options: _vm.categories,
+                        reduce: function(categorie) {
+                          return categorie.meta
+                        },
+                        placeholder: _vm.textsManageLeader.filter_categories,
+                        label: "categorie"
+                      },
+                      model: {
+                        value: _vm.categoriesSelected,
+                        callback: function($$v) {
+                          _vm.categoriesSelected = $$v
+                        },
+                        expression: "categoriesSelected"
+                      }
+                    },
+                    [
+                      [
+                        _c(
+                          "div",
+                          { attrs: { slot: "no-options" }, slot: "no-options" },
+                          [_vm._v(_vm._s(_vm.text_no_options))]
+                        )
+                      ]
+                    ],
+                    2
+                  ),
+                  _vm._v(" "),
+                  _vm.isCategoriesError
+                    ? _c(
+                        "span",
+                        { staticClass: "icon is-right has-text-danger" },
+                        [_c("i", { staticClass: "fas fa-exclamation-circle" })]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.isCategoriesError
+                    ? _c("p", { staticClass: "help is-danger" }, [
+                        _vm._v(_vm._s(_vm.text_field_required))
+                      ])
+                    : _vm._e()
+                ],
+                1
+              )
             ])
           ]),
           _vm._v(" "),
+          _c("section", { staticClass: "content_given_admin_permissions" }, [
+            _c("div", { staticClass: "is-grouped" }, [
+              _c(
+                "div",
+                { staticClass: "button btn-main" },
+                [
+                  _c(
+                    "b-checkbox-button",
+                    {
+                      attrs: {
+                        disabled: _vm.participantSelected ? false : true,
+                        "native-value": "true",
+                        type: "is-success"
+                      },
+                      on: { input: _vm.clickPermissionsAdmin },
+                      model: {
+                        value: _vm.permissionsAdmin,
+                        callback: function($$v) {
+                          _vm.permissionsAdmin = $$v
+                        },
+                        expression: "permissionsAdmin"
+                      }
+                    },
+                    [_c("span", { staticClass: "is-size-5" }, [_vm._v("◘")])]
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("span", { staticClass: "control-label" }, [
+                _vm._v(
+                  _vm._s(_vm.textsManageLeader.give_admin_categories_events)
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _vm.isPermissionsAdmin
+              ? _c("div", { staticClass: "columns is-multiline" }, [
+                  _c(
+                    "div",
+                    { staticClass: "content_permissions column is-12" },
+                    _vm._l(_vm.permissionsCategories, function(
+                      permission,
+                      index
+                    ) {
+                      return _c(
+                        "div",
+                        {
+                          key: "permission_categorie." + index,
+                          staticClass: "field column is-12 is-horizontal"
+                        },
+                        [
+                          _c(
+                            "b-switch",
+                            {
+                              attrs: {
+                                disabled: _vm.participantSelected
+                                  ? false
+                                  : true,
+                                type: "is-success"
+                              },
+                              model: {
+                                value: permission.value,
+                                callback: function($$v) {
+                                  _vm.$set(permission, "value", $$v)
+                                },
+                                expression: "permission.value"
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                " +
+                                  _vm._s(permission.label) +
+                                  "\n                            "
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    }),
+                    0
+                  )
+                ])
+              : _vm._e()
+          ]),
+          _vm._v(" "),
+          _c("section", { staticClass: "content_back_participant" }, [
+            _c("div", { staticClass: "is-grouped" }, [
+              _c(
+                "div",
+                { staticClass: "button btn-main" },
+                [
+                  _c(
+                    "b-checkbox-button",
+                    {
+                      attrs: {
+                        disabled: _vm.participantSelected ? false : true,
+                        "native-value": "true",
+                        type: "is-warning"
+                      },
+                      on: { input: _vm.clickBackToParticipant },
+                      model: {
+                        value: _vm.backParticipant,
+                        callback: function($$v) {
+                          _vm.backParticipant = $$v
+                        },
+                        expression: "backParticipant"
+                      }
+                    },
+                    [
+                      _c("span", { staticClass: "icon" }, [
+                        _c("i", { staticClass: "fas fa-retweet" })
+                      ])
+                    ]
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("span", { staticClass: "control-label" }, [
+                _vm._v(_vm._s(_vm.textsManageLeader.back_to_participant))
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "section",
+              { staticClass: "alert-section" },
+              [
+                _c(
+                  "b-notification",
+                  {
+                    attrs: { type: "is-warning", hasIcon: "", role: "alert" },
+                    model: {
+                      value: _vm.isBackParticipant,
+                      callback: function($$v) {
+                        _vm.isBackParticipant = $$v
+                      },
+                      expression: "isBackParticipant"
+                    }
+                  },
+                  [
+                    _c("p", {
+                      domProps: {
+                        innerHTML: _vm._s(
+                          _vm.textsManageLeader.back_to_participant_warning
+                        )
+                      }
+                    })
+                  ]
+                )
+              ],
+              1
+            )
+          ]),
+          _vm._v(" "),
           _c(
-            "section",
-            { staticClass: "alert-section" },
+            "div",
+            { staticClass: "btn-actions has-text-centered" },
             [
               _c(
-                "b-notification",
+                "b-button",
                 {
-                  attrs: { type: "is-warning", hasIcon: "", role: "alert" },
-                  model: {
-                    value: _vm.isBackParticipant,
-                    callback: function($$v) {
-                      _vm.isBackParticipant = $$v
-                    },
-                    expression: "isBackParticipant"
+                  staticClass: "btn-cancel is-capitalized",
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.onSelectParticipantChanged($event)
+                    }
+                  }
+                },
+                [_vm._v(_vm._s(_vm.text_cancel))]
+              ),
+              _vm._v(" "),
+              _c(
+                "b-button",
+                {
+                  staticClass: "btn-accept is-capitalized",
+                  attrs: { disabled: _vm.participantSelected ? false : true },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.clickApply($event)
+                    }
                   }
                 },
                 [
-                  _c("p", {
-                    domProps: {
-                      innerHTML: _vm._s(
-                        _vm.textsManageLeader.back_to_participant_warning
-                      )
-                    }
-                  })
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(_vm.text_apply) +
+                      "\n                "
+                  )
                 ]
               )
             ],
@@ -74800,47 +74698,12 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "btn-actions has-text-centered" },
-          [
-            _c(
-              "b-button",
-              {
-                staticClass: "btn-cancel is-capitalized",
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    return _vm.onSelectParticipantChanged($event)
-                  }
-                }
-              },
-              [_vm._v(_vm._s(_vm.text_cancel))]
-            ),
-            _vm._v(" "),
-            _c(
-              "b-button",
-              {
-                staticClass: "btn-accept is-capitalized",
-                attrs: { disabled: _vm.participantSelected ? false : true },
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    return _vm.clickApply($event)
-                  }
-                }
-              },
-              [
-                _vm._v(
-                  "\n                " +
-                    _vm._s(_vm.text_apply) +
-                    "\n            "
-                )
-              ]
-            )
-          ],
-          1
-        )
+        _c("section", { staticClass: "participant_status" }, [
+          _c("h3", { staticClass: "title-section" }, [
+            _c("span", { staticClass: "numerator" }, [_vm._v("2")]),
+            _vm._v(_vm._s(_vm.textsManageLeader.participants_status))
+          ])
+        ])
       ])
     ],
     1

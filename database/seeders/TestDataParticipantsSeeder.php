@@ -24,12 +24,14 @@ class TestDataParticipantsSeeder extends Seeder
             ->each( function( $person){
                 PersonEmail::factory()
                         ->create([
-                            'persons_id'    =>  $person->id
+                            'persons_id'        =>  $person->id,
+                            'initial_register'  =>  1
                         ]);
 
                 PersonCellphone::factory()
                         ->create([
-                            'persons_id'    =>  $person->id
+                            'persons_id'        =>  $person->id,
+                            'initial_register'  =>  1
                         ]);
 
                 Participant::factory()

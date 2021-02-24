@@ -20330,6 +20330,49 @@ textarea {
   margin: 23px 0;
 }
 
+.application .content-main .content .form_manage_leader section h3.title-section {
+  font-size: 1.25em;
+  margin-bottom: 24px;
+}
+
+.application .content-main .content .form_manage_leader section h3.title-section .numerator {
+  font-weight: 400;
+  margin-right: 10px;
+  font-size: 14px;
+  background-color: #666;
+  border-radius: 50%;
+  color: #FFF;
+  display: inline-grid;
+  width: 28px;
+  height: 28px;
+  text-align: center;
+  align-items: center;
+}
+
+.application .content-main .content .form_manage_leader section section,
+.application .content-main .content .form_manage_leader section .field-select-participant {
+  margin-left: 30px;
+}
+
+.application .content-main .content .form_manage_leader .data_participant .content-password {
+  margin: 0px;
+  padding: 0px;
+}
+
+.application .content-main .content .form_manage_leader .data_participant .content-password .column {
+  padding: 0px;
+}
+
+.application .content-main .content .form_manage_leader .data_participant .content-password .link-generate {
+  color: #005368;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.application .content-main .content .form_manage_leader .data_participant .content-password .link-generate:hover {
+  font-size: 15px;
+}
+
 .application .content-main .content .form_manage_leader .field-select-participant {
   width: 70%;
 }
@@ -20626,16 +20669,6 @@ textarea {
 .application .content-main .content .form_general_settings .membership_data .btn-see-current-membership:hover {
   border-color: #FFF;
   color: #FFF;
-}
-
-.application .content-main .content .form_general_settings .login_leaders_suple_admins .link-generate {
-  color: #005368;
-  font-weight: bold;
-  text-decoration: underline;
-}
-
-.application .content-main .content .form_general_settings .login_leaders_suple_admins .link-generate:hover {
-  font-size: 15px;
 }
 
 .animated_delay {

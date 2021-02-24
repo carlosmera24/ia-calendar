@@ -14,196 +14,239 @@
             </b-notification>
         </section>
         <form class="form_manage_leader" action="">
-            <div class="field field-select-participant">
-                <div class="control has-icons-left">
-                    <v-select v-model="participantSelected"
-                        :options="participants"
-                        :placeholder="textsManageLeader.search_participant"
-                        :filterable="false"
-                        label="participant"
-                        @open="onOpenParticipant"
-                        @close="onCloseParticipant"
-                        @input="onSelectParticipantChanged"
-                        @search="onSearchParticipants"
-                    >
-                        <div slot="no-options">{{ text_no_options }}</div>
-                        <template #list-footer>
-                            <li ref="load" class="v-secelet-loading" v-show="hasNextPageParticipant">
-                                <span><i class="fas fa-spinner fa-pulse"></i>{{ text_loading }}</span>
-                            </li>
-                        </template>
-                    </v-select>
-                    <div class="icon is-small is-left">
-                        <i class="fas fa-search"></i>
-                    </div>
-                </div>
-            </div>
-            <section class="data_participant">
-                <div class="columns is-multiline">
-                    <b-field horizontal class="column is-12"
-                        :label="fields.first_name.label">
-                        <span class="is-capitalized">{{ participantSelected ? participantSelected.meta.first_name : '' }}</span>
-                    </b-field>
-                    <b-field horizontal class="column is-12"
-                        :label="fields.last_name.label">
-                        <span class="is-capitalized">{{ participantSelected ? participantSelected.meta.last_name : '' }}</span>
-                    </b-field>
-                    <!-- Emails group -->
-                    <div class="column is-12" v-if="participantSelected !== null">
-                        <div class="columns is-multiline" >
-                            <b-field horizontal class="column is-12"
-                                v-for="(email, index) in participantSelected.meta.emails" :key="'email.'+index"
-                                :label="fields.email.label">
-                                <span>{{ email.email }}</span>
-                            </b-field>
-                        </div>
-                    </div>
-                    <b-field horizontal class="column is-12"
-                        v-else
-                        :label="fields.email.label">
-                        <span></span>
-                    </b-field>
-                    <!-- /Emails group -->
-                    <!-- Cellphones group -->
-                    <div class="column is-12" v-if="participantSelected !== null">
-                        <div class="columns is-multiline" >
-                            <b-field horizontal class="column is-12"
-                                v-for="(mobile, index) in participantSelected.meta.cellphones" :key="'mobile.'+index"
-                                :label="fields.mobile.label">
-                                <span>{{ mobile.cellphone_number }}</span>
-                            </b-field>
-                        </div>
-                    </div>
-                    <b-field horizontal class="column is-12"
-                        v-else
-                        :label="fields.mobile.label">
-                        <span></span>
-                    </b-field>
-                    <!-- /Cellphones group -->
-                    <b-field horizontal class="column is-12"
-                        :label="fields.position_company.label">
-                        <span class="is-capitalized">{{ participantSelected ? participantSelected.meta.position_company : '' }}</span>
-                    </b-field>
-                    <b-field horizontal class="column is-12"
-                        :label="fields.state.label">
-                        <span class="is-capitalized">{{ participantSelected ? textsManageLeader.names_status_participants[participantSelected.meta.status_participants_id] : '' }}</span>
-                    </b-field>
-                    <b-field v-if="participantSelected && participantSelected.meta.status_participants_id !== 1" horizontal class="column is-12"
-                        :label="fields.reason_change_state.label">
-                        <span class="is-capitalized">{{ participantSelected ? ( participantSelected.meta.log_status ? participantSelected.meta.log_status.description : '' ) : '' }}</span>
-                    </b-field>
-                </div>
-            </section>
-            <section class="data_permissions">
-                <div class="is-grouped">
-                    <div class="button btn-main">
-                        <b-checkbox-button
-                            v-model="permissionsAssociateLeader"
-                            :disabled="isEnabledAssociateLeader ? false : true"
-                            native-value="true"
-                            @input="clickAssociateLeader"
-                            type="is-success">
-                            <span class="is-size-5">&#9688;</span>
-                        </b-checkbox-button>
-                    </div>
-                </div>
-                <div class="columns is-multiline" >
-                    <div class="field column is-12 mb-3">
-                        <div class="field-label">
-                            <label class="label label_associate_lader">
-                                {{ textsManageLeader.associate_leader }}
-                            </label>
-                        </div>
-                    </div>
-                    <div class="content_permissions column is-12">
-                        <div class="field column is-12 is-horizontal"
-                            v-for="(permission, index) in permissionsEvents" :key="'permission.'+ index">
-                            <b-switch v-model="permission.value"
-                                :disabled="isEnabledAssociateLeader ? false : true"
-                                type="is-success">
-                                {{ permission.label }}
-                            </b-switch>
-                        </div>
-                    </div>
-                </div>
-                <div class="content_categories">
-                    <div class="field-categories control has-icons-left has-icons-right">
-                        <v-select v-model="categoriesSelected"
-                            multiple
-                            :disabled="participantSelected ? false : true"
-                            :options="categories"
-                            :reduce="categorie => categorie.meta"
-                            :placeholder="textsManageLeader.filter_categories"
-                            label="categorie"
-                            :class="{ 'is-danger' : isCategoriesError }"
+            <!-- Credentials -->
+            <section class="credentials">
+                <h3 class="title-section"><span class="numerator">1</span>{{ textsManageLeader.credentials }}</h3>
+                <div class="field field-select-participant">
+                    <div class="control has-icons-left">
+                        <v-select v-model="participantSelected"
+                            :options="participants"
+                            :placeholder="textsManageLeader.search_participant"
+                            :filterable="false"
+                            label="participant"
+                            @open="onOpenParticipant"
+                            @close="onCloseParticipant"
+                            @input="onSelectParticipantChanged"
+                            @search="onSearchParticipants"
                             >
-                            <template >
-                                <div slot="no-options">{{ text_no_options }}</div>
+                            <div slot="no-options">{{ text_no_options }}</div>
+                            <template #list-footer>
+                                <li ref="load" class="v-secelet-loading" v-show="hasNextPageParticipant">
+                                    <span><i class="fas fa-spinner fa-pulse"></i>{{ text_loading }}</span>
+                                </li>
                             </template>
                         </v-select>
-                        <span v-if="isCategoriesError" class="icon is-right has-text-danger"><i class="fas fa-exclamation-circle"></i></span>
-                        <p v-if="isCategoriesError" class="help is-danger">{{ text_field_required }}</p>
-                    </div>
-                </div>
-            </section>
-            <section class="content_given_admin_permissions">
-                <div class="is-grouped">
-                    <div class="button btn-main">
-                        <b-checkbox-button
-                            v-model="permissionsAdmin"
-                            :disabled="participantSelected ? false : true"
-                            native-value="true"
-                            @input="clickPermissionsAdmin"
-                            type="is-success">
-                            <span class="is-size-5">&#9688;</span>
-                        </b-checkbox-button>
-                    </div>
-                    <span class="control-label">{{ textsManageLeader.give_admin_categories_events }}</span>
-                </div>
-                <div v-if="isPermissionsAdmin" class="columns is-multiline">
-                    <div class="content_permissions column is-12">
-                        <div class="field column is-12 is-horizontal"
-                            v-for="(permission, index) in permissionsCategories" :key="'permission_categorie.'+ index">
-                            <b-switch v-model="permission.value"
-                                :disabled="participantSelected ? false : true"
-                                type="is-success">
-                                {{ permission.label }}
-                            </b-switch>
+                        <div class="icon is-small is-left">
+                            <i class="fas fa-search"></i>
                         </div>
                     </div>
                 </div>
-            </section>
-            <section class="content_back_participant">
-                <div class="is-grouped">
-                    <div class="button btn-main">
-                        <b-checkbox-button
-                            v-model="backParticipant"
-                            :disabled="participantSelected ? false : true"
-                            native-value="true"
-                            @input="clickBackToParticipant"
-                            type="is-warning">
-                            <span class="icon">
-                                <i class="fas fa-retweet"></i>
-                            </span>
-                        </b-checkbox-button>
+                <section class="data_participant">
+                    <div class="columns is-multiline">
+                        <!-- First Name -->
+                        <b-field horizontal class="column is-12"
+                            :label="fields.first_name.label">
+                            <span class="is-capitalized">{{ participantSelected ? participantSelected.meta.first_name : '' }}</span>
+                        </b-field>
+                        <!-- /First Name -->
+                        <!-- Last Name -->
+                        <b-field horizontal class="column is-12"
+                            :label="fields.last_name.label">
+                            <span class="is-capitalized">{{ participantSelected ? participantSelected.meta.last_name : '' }}</span>
+                        </b-field>
+                        <!-- /Last Name -->
+                        <!-- Emails group -->
+                        <div class="column is-12" v-if="participantSelected !== null">
+                            <div class="columns is-multiline" >
+                                <b-field horizontal class="column is-12"
+                                    v-for="(email, index) in participantSelected.meta.emails" :key="'email.'+index"
+                                    :label="fields.email.label">
+                                    <span>{{ email.email }}</span>
+                                </b-field>
+                            </div>
+                        </div>
+                        <b-field horizontal class="column is-12"
+                            v-else
+                            :label="fields.email.label">
+                            <span></span>
+                        </b-field>
+                        <!-- /Emails group -->
+                        <!-- Cellphones group -->
+                        <div class="column is-12" v-if="participantSelected !== null">
+                            <div class="columns is-multiline" >
+                                <b-field horizontal class="column is-12"
+                                    v-for="(mobile, index) in participantSelected.meta.cellphones" :key="'mobile.'+index"
+                                    :label="fields.mobile.label">
+                                    <span>{{ mobile.cellphone_number }}</span>
+                                </b-field>
+                            </div>
+                        </div>
+                        <b-field horizontal class="column is-12"
+                            v-else
+                            :label="fields.mobile.label">
+                            <span></span>
+                        </b-field>
+                        <!-- /Cellphones group -->
+                        <!-- Position company -->
+                        <b-field horizontal class="column is-12"
+                            :label="fields.position_company.label">
+                            <span class="is-capitalized">{{ participantSelected ? participantSelected.meta.position_company : '' }}</span>
+                        </b-field>
+                        <!-- /Position company -->
+                        <!-- State -->
+                        <b-field horizontal class="column is-12"
+                            :label="fields.state.label">
+                            <span class="is-capitalized">{{ participantSelected ? textsManageLeader.names_status_participants[participantSelected.meta.status_participants_id] : '' }}</span>
+                        </b-field>
+                        <!-- /State -->
+                        <!-- Reason Change State -->
+                        <b-field v-if="participantSelected && participantSelected.meta.status_participants_id !== 1" horizontal class="column is-12"
+                            :label="fields.reason_change_state.label">
+                            <span class="is-capitalized">{{ participantSelected ? ( participantSelected.meta.log_status ? participantSelected.meta.log_status.description : '' ) : '' }}</span>
+                        </b-field>
+                        <!-- /Reason Change State -->
+                        <!-- Password -->
+                        <b-field v-if="showLogin"
+                            horizontal
+                            class="column is-12"
+                            :label="fields.password.label">
+                            <div class="columns column is-12 content-password">
+                                <span class="column is-3">{{ textsManageLeader.password_description_standard }}<br>{{ textsManageLeader.password_default }}</span>
+                                <div class="column is-9">
+                                    <a href="#"
+                                        class="link-generate"
+                                        v-on:click.prevent="generatePassword()">
+                                        {{ textsManageLeader.generate }}
+                                    </a>
+                                </div>
+                            </div>
+                        </b-field>
+                        <!-- /Password -->
+                        <!-- Profile -->
+                        <b-field horizontal class="column is-12"
+                            :label="fields.profile.label">
+                            <span class="is-capitalized">{{ participantSelected ? ( participantSelected.meta.profiles_participants_id ? textsManageLeader.names_profiles_participants[participantSelected.meta.profiles_participants_id] : '' ) : '' }}</span>
+                        </b-field>
+                        <!-- /Profile -->
                     </div>
-                    <span class="control-label">{{ textsManageLeader.back_to_participant }}</span>
-                </div>
-                 <section class="alert-section">
-                    <b-notification v-model="isBackParticipant" type="is-warning" hasIcon role="alert">
-                        <p v-html="textsManageLeader.back_to_participant_warning"></p>
-                    </b-notification>
                 </section>
+                <section class="data_permissions">
+                    <div class="is-grouped">
+                        <div class="button btn-main">
+                            <b-checkbox-button
+                                v-model="permissionsAssociateLeader"
+                                :disabled="isEnabledAssociateLeader ? false : true"
+                                native-value="true"
+                                @input="clickAssociateLeader"
+                                type="is-success">
+                                <span class="is-size-5">&#9688;</span>
+                            </b-checkbox-button>
+                        </div>
+                    </div>
+                    <div class="columns is-multiline" >
+                        <div class="field column is-12 mb-3">
+                            <div class="field-label">
+                                <label class="label label_associate_lader">
+                                    {{ textsManageLeader.associate_leader }}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="content_permissions column is-12">
+                            <div class="field column is-12 is-horizontal"
+                                v-for="(permission, index) in permissionsEvents" :key="'permission.'+ index">
+                                <b-switch v-model="permission.value"
+                                    :disabled="isEnabledAssociateLeader ? false : true"
+                                    type="is-success">
+                                    {{ permission.label }}
+                                </b-switch>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content_categories">
+                        <div class="field-categories control has-icons-left has-icons-right">
+                            <v-select v-model="categoriesSelected"
+                                multiple
+                                :disabled="participantSelected ? false : true"
+                                :options="categories"
+                                :reduce="categorie => categorie.meta"
+                                :placeholder="textsManageLeader.filter_categories"
+                                label="categorie"
+                                :class="{ 'is-danger' : isCategoriesError }"
+                                >
+                                <template >
+                                    <div slot="no-options">{{ text_no_options }}</div>
+                                </template>
+                            </v-select>
+                            <span v-if="isCategoriesError" class="icon is-right has-text-danger"><i class="fas fa-exclamation-circle"></i></span>
+                            <p v-if="isCategoriesError" class="help is-danger">{{ text_field_required }}</p>
+                        </div>
+                    </div>
+                </section>
+                <section class="content_given_admin_permissions">
+                    <div class="is-grouped">
+                        <div class="button btn-main">
+                            <b-checkbox-button
+                                v-model="permissionsAdmin"
+                                :disabled="participantSelected ? false : true"
+                                native-value="true"
+                                @input="clickPermissionsAdmin"
+                                type="is-success">
+                                <span class="is-size-5">&#9688;</span>
+                            </b-checkbox-button>
+                        </div>
+                        <span class="control-label">{{ textsManageLeader.give_admin_categories_events }}</span>
+                    </div>
+                    <div v-if="isPermissionsAdmin" class="columns is-multiline">
+                        <div class="content_permissions column is-12">
+                            <div class="field column is-12 is-horizontal"
+                                v-for="(permission, index) in permissionsCategories" :key="'permission_categorie.'+ index">
+                                <b-switch v-model="permission.value"
+                                    :disabled="participantSelected ? false : true"
+                                    type="is-success">
+                                    {{ permission.label }}
+                                </b-switch>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="content_back_participant">
+                    <div class="is-grouped">
+                        <div class="button btn-main">
+                            <b-checkbox-button
+                                v-model="backParticipant"
+                                :disabled="participantSelected ? false : true"
+                                native-value="true"
+                                @input="clickBackToParticipant"
+                                type="is-warning">
+                                <span class="icon">
+                                    <i class="fas fa-retweet"></i>
+                                </span>
+                            </b-checkbox-button>
+                        </div>
+                        <span class="control-label">{{ textsManageLeader.back_to_participant }}</span>
+                    </div>
+                    <section class="alert-section">
+                        <b-notification v-model="isBackParticipant" type="is-warning" hasIcon role="alert">
+                            <p v-html="textsManageLeader.back_to_participant_warning"></p>
+                        </b-notification>
+                    </section>
+                </section>
+                <div class="btn-actions has-text-centered">
+                    <b-button  class="btn-cancel is-capitalized" v-on:click.prevent="onSelectParticipantChanged">{{ text_cancel }}</b-button>
+                    <b-button
+                        class="btn-accept is-capitalized"
+                        v-on:click.prevent="clickApply"
+                        :disabled="participantSelected ? false : true">
+                        {{ text_apply }}
+                    </b-button>
+                </div>
             </section>
-            <div class="btn-actions has-text-centered">
-                <b-button  class="btn-cancel is-capitalized" v-on:click.prevent="onSelectParticipantChanged">{{ text_cancel }}</b-button>
-                <b-button
-                    class="btn-accept is-capitalized"
-                    v-on:click.prevent="clickApply"
-                    :disabled="participantSelected ? false : true">
-                    {{ text_apply }}
-                </b-button>
-            </div>
+            <!-- /Credentials -->
+            <!-- Participants Status -->
+            <section class="participant_status">
+                <h3 class="title-section"><span class="numerator">2</span>{{ textsManageLeader.participants_status }}</h3>
+            </section>
+            <!-- /Participants Status -->
         </form>
     </div>
 </template>
@@ -372,6 +415,9 @@ export default {
         },
         hasNextPageParticipant(){
             return this.participants.length < this.totalParticipants;
+        },
+        showLogin(){
+            return this.participantSelected && (this.participantSelected.meta.profiles_participants_id === this.OPTIONS.PROFILE_LEADER || this.participantSelected.meta.profiles_participants_id === this.OPTIONS.PROFILE_SUPLE_ADMIN);
         }
     },
     created(){
@@ -874,6 +920,8 @@ export default {
                             //change profile local for the selected participant
                             this.participantSelected.meta.profiles_participants_id = this.newProfile;
 
+                            //TODO Create user for Leader/AdminSuple
+
                             success({
                                 title: this.text_success,
                                 text: this.text_updated_participant
@@ -893,7 +941,24 @@ export default {
                     text: this.text_updated_participant
                 });
             }
-        }
+        },
+            generatePassword()
+            {
+                //Confirme dialog
+                this.$buefy.dialog.confirm(
+                                            {
+                                                title: this.textsManageLeader.generate_password,
+                                                message: this.textsManageLeader.generate_password_warning,
+                                                cancelText: this.text_not,
+                                                confirmText: this.textsManageLeader.generate_password,
+                                                type: 'is-warning',
+                                                hasIcon: true,
+                                                onConfirm: () => {
+                                                    console.log("Generar contraseña");
+                                                }
+                                            }
+                                        );
+            }
     }
 }
 </script>

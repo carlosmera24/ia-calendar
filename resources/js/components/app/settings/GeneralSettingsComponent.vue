@@ -833,71 +833,6 @@
                     <!-- /Renew membership -->
                 </div>
             </section>
-            <section class="login_leaders_suple_admins">
-                <h3 class="title-section"><span class="numerator">4</span>{{ textsGeneralSettings.leaders_login }}</h3>
-                <div class="columns is-multiline">
-                    <div class="column is-12"
-                        v-for="(leaderSuple, index) in leadersSuplents" :key="'mobile.'+index">
-                        <div class="columns">
-                            <div class="column is-3">
-                                <b-button
-                                    size="is-medium"
-                                    icon-left="people-arrows"
-                                />
-                            </div>
-                            <div class="columns is-multiline column is-9">
-                                <!-- Name -->
-                                <div class="columns column is-12 is-row-data">
-                                    <div class="column is-3">
-                                        <span>{{ firstCapitalize(fieldsParticipant.first_name.label) }}</span>
-                                    </div>
-                                    <div class="column is-9">
-                                        <span><strong>{{ leaderSuple.first_name }} {{ leaderSuple.last_name }}</strong></span>
-                                    </div>
-                                </div>
-                                <!-- /Name -->
-                                <!-- Login identification number -->
-                                <div class="columns column is-12 is-row-data">
-                                    <div class="column is-3">
-                                        <span>{{ firstCapitalize(textsGeneralSettings.login_identification_number) }}</span>
-                                    </div>
-                                    <div class="column is-9">
-                                        <span>{{ leaderSuple.id }}</span>
-                                    </div>
-                                </div>
-                                <!-- /Login identification number -->
-                                <!-- Password -->
-                                <div class="columns column is-12 is-row-data">
-                                    <div class="column is-3">
-                                        <span>{{ firstCapitalize(fieldsParticipant.password.label) }}</span>
-                                    </div>
-                                    <div class="column is-3">
-                                        <span class="label-info">{{ firstCapitalize(textsGeneralSettings.password_description_standard) }}</span>
-                                    </div>
-                                    <div class="column is-6">
-                                        <a href="#"
-                                            class="link-generate"
-                                            v-on:click.prevent="generatePasswordLeaderSuple(index)">
-                                            {{ textsGeneralSettings.generate }}
-                                        </a>
-                                    </div>
-                                </div>
-                                <!-- /Password -->
-                                <!-- Profile -->
-                                <div class="columns column is-12 is-row-data">
-                                    <div class="column is-3">
-                                        <span>{{ firstCapitalize(fieldsParticipant.profile.label) }}</span>
-                                    </div>
-                                    <div class="column is-9">
-                                        <span>{{ firstCapitalize( textsGeneralSettings.names_profiles_participants[ leaderSuple.profiles_participants_id ] ) }}</span>
-                                    </div>
-                                </div>
-                                <!-- /Profile -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
         </form>
     </div>
 </template>
@@ -1085,7 +1020,6 @@
                 birth_date: null,
                 date_join_company: null,
                 fieldsMembership: [],
-                leadersSuplents: [],
             }
         },
         computed: {
@@ -1232,8 +1166,6 @@
             {
                 await this.getCellphones();
             }
-            //Get participants leaders/Admins suplents
-            this.getParticipantsLeadersSuplents();
         },
         methods: {
             showErrors(resError){
@@ -1591,29 +1523,6 @@
                             //Set with no-reactive values
                             Vue.set(this.participant.person, 'cellphones', cellphones);
                             Vue.set(this.participantCopy.person, 'cellphones', cellphonesCopy);
-                        }
-                    },
-                    error => {
-                        this.showErrors(error);
-                    })
-                    .then( () => {
-                        this.isLoading = false;
-                    });
-            },
-            async getParticipantsLeadersSuplents(){
-                this.isLoading = true;
-                const params = {
-                    programmers_id: this.programmer.id.value,
-                    users_id: this.participant.users_id.value,
-                };
-                await axios.post(this.url_participants_list_leaders_suplents_programmer, params)
-                    .then( response => {
-                        this.showErrors({});
-                        if( response.data.status === 200 )
-                        {
-                            response.data.participants.forEach( element => {
-                                this.leadersSuplents.push( Object.assign({},element) );
-                            });
                         }
                     },
                     error => {
@@ -2550,24 +2459,6 @@
                             break;
                     }
                 }
-            },
-            generatePasswordLeaderSuple( index )
-            {
-                const leaderSuple = this.leadersSuplents[index];
-                //Confirme dialog
-                this.$buefy.dialog.confirm(
-                                            {
-                                                title: this.textsGeneralSettings.generate_password +" - "+ leaderSuple.first_name,
-                                                message: this.textsGeneralSettings.generate_password_warning,
-                                                cancelText: this.text_not,
-                                                confirmText: this.textsGeneralSettings.generate_password,
-                                                type: 'is-warning',
-                                                hasIcon: true,
-                                                onConfirm: () => {
-                                                    console.log("Generar contraseña");
-                                                }
-                                            }
-                                        );
             }
         }
     }

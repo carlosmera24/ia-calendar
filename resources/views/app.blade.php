@@ -198,6 +198,11 @@
             $texts_manage_leader['back_to_participant_confirm'] = __('messages.back_to_participant_confirm');
             $texts_manage_leader['back_to_participant_warning'] = __('messages.back_to_participant_warning');
             $texts_manage_leader['names_status_participants'] = $names_status_participants;
+            $texts_manage_leader['names_profiles_participants'] = $names_profiles_participants;
+            $texts_manage_leader['password_default'] = __('app.password_default');
+            $texts_manage_leader['generate'] = __('app.generate');
+            $texts_manage_leader['generate_password'] = __('app.generate_password');
+            $texts_manage_leader['generate_password_warning'] = __('messages.generate_password_warning');
             //Texts for general settings
             $texts_general_settings = __('app.general_settings');
             $texts_general_settings['text_general_setting'] = $text_general_setting;
@@ -212,11 +217,6 @@
             $texts_general_settings['delete_payment_method'] = __('app.general_settings.delete_payment_method');
             $texts_general_settings['cancel_membership'] = __('app.general_settings.cancel_membership');
             $texts_general_settings['renew_membership'] = __('app.general_settings.renew_membership');
-            $texts_general_settings['login_identification_number'] = __('app.general_settings.login_identification_number');
-            $texts_general_settings['password_description_standard'] = __('app.general_settings.password_description_standard');
-            $texts_general_settings['generate'] = __('app.generate');
-            $texts_general_settings['generate_password'] = __('app.generate_password');
-            $texts_general_settings['generate_password_warning'] = __('messages.generate_password_warning');
             @endphp
         {{-- Header --}}
         <div class="header level is-mobile has-text-white is-size-7 mb-0 px-5 py-4">

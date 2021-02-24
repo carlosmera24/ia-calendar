@@ -20,6 +20,7 @@ return [
     'password_update'       =>  'Actualizar contraseña',
     'generate'              =>  'Generar',
     'generate_password'     =>  'Generar contraseña',
+    'password_default'      =>  'IACALENDARS',
 
     /**
      * DropDown Menu section
@@ -51,6 +52,9 @@ return [
         'filter_categories'             =>  'Filtrar categoría(s) para asociar',
         'give_admin_categories_events'  =>  'Convertir Líder como Administrador suplente, dar credenciales',
         'back_to_participant'           =>  'Volver a ser únicamente participe',
+        'credentials'                   =>  'Credenciales',
+        'participants_status'           =>  'Estado de partícipes',
+        'password_description_standard' =>  'automática estándar',
     ],
 
     /**
@@ -73,8 +77,6 @@ return [
         'delete_payment_method'             =>  'eliminar documento de pago',
         'cancel_membership'                 =>  'cancelar membresía',
         'renew_membership'                  =>  'renovar membresía',
-        'login_identification_number'       =>  'el ingreso es numero de identificación',
-        'password_description_standard'     =>  'automática estándar',
     ],
 
     /**
