@@ -2325,6 +2325,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     text_breadcrumbs_init: {
@@ -2544,6 +2545,10 @@ __webpack_require__.r(__webpack_exports__);
       require: true
     },
     url_person_update: {
+      type: String,
+      require: true
+    },
+    url_user_store: {
       type: String,
       require: true
     },
@@ -5074,7 +5079,21 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
   methods: {
     showErrors: function showErrors(resError) {
       this.errors = Object(_functions_js__WEBPACK_IMPORTED_MODULE_1__["procesarErroresRequest"])(resError);
-      this.hasErrors = this.errors.errors.length > 0;
+      this.hasErrors = this.errors.errors.length > 0; //Alert Errors
+
+      if (this.hasErrors) {
+        var msgErrors = "<ul>";
+        this.errors.errors.forEach(function (error) {
+          msgErrors = msgErrors.concat('<li>', error);
+          msgErrors = msgErrors.concat('', '</li>');
+        });
+        msgErrors = msgErrors.concat('', '</ul>');
+        Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["error"])({
+          title: this.errors.text,
+          textTrusted: true,
+          text: msgErrors
+        });
+      }
     },
     firstCapitalize: function firstCapitalize(word) {
       return _.capitalize(word);
@@ -7274,6 +7293,10 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
     url_participant_update: {
       type: String,
       require: true
+    },
+    url_user_store: {
+      type: String,
+      require: true
     }
   },
   data: function data() {
@@ -7324,7 +7347,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       return this.participants.length < this.totalParticipants;
     },
     showLogin: function showLogin() {
-      return this.participantSelected && (this.participantSelected.meta.profiles_participants_id === this.OPTIONS.PROFILE_LEADER || this.participantSelected.meta.profiles_participants_id === this.OPTIONS.PROFILE_SUPLE_ADMIN);
+      return this.participantSelected && (this.participantSelected.meta.profiles_participants_id === this.OPTIONS.PROFILE_LEADER || this.participantSelected.meta.profiles_participants_id === this.OPTIONS.PROFILE_SUPLE_ADMIN) && this.participantSelected.meta.users_id;
     }
   },
   created: function created() {
@@ -7406,8 +7429,23 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       this.$emit('activeMainSection', 'main');
     },
     showErrors: function showErrors(resError) {
+      //Header errors
       this.errors = Object(_functions_js__WEBPACK_IMPORTED_MODULE_1__["procesarErroresRequest"])(resError);
-      this.hasErrors = this.errors.errors.length > 0;
+      this.hasErrors = this.errors.errors.length > 0; //Alert Errors
+
+      if (this.hasErrors) {
+        var msgErrors = "<ul>";
+        this.errors.errors.forEach(function (error) {
+          msgErrors = msgErrors.concat('<li>', error);
+          msgErrors = msgErrors.concat('', '</li>');
+        });
+        msgErrors = msgErrors.concat('', '</ul>');
+        Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["error"])({
+          title: this.errors.text,
+          textTrusted: true,
+          text: msgErrors
+        });
+      }
     },
     clickAssociateLeader: function clickAssociateLeader() {
       var _this2 = this;
@@ -7853,6 +7891,12 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         _this12.isLoading = false;
       });
     },
+    showNotifUpdatedParticipant: function showNotifUpdatedParticipant() {
+      Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
+        title: this.text_success,
+        text: this.text_updated_participant
+      });
+    },
     clickApply: function clickApply() {
       var _this13 = this;
 
@@ -7926,33 +7970,150 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
 
       //Update the profile if there is a change or is different from the current one
       if (this.newProfile && this.participantSelected.meta.profiles_participants_id !== this.newProfile) {
+        this.isLoading = true;
         var param = {
           profiles_participants_id: this.newProfile,
           id: this.participantSelected.meta.id
         };
-        axios.post(this.url_participant_update, param).then(function (response) {
+        this.updateParticipantDB(param).then(function (response) {
           _this15.showErrors({});
 
-          if (response.data.status === 200) {
-            //change profile local for the selected participant
-            _this15.participantSelected.meta.profiles_participants_id = _this15.newProfile; //TODO Create user for Leader/AdminSuple
+          if (response.errorRequest) //Error in request
+            {
+              _this15.showErrors(response.errorRequest);
+            } else {
+            if (response.data.status === 200) {
+              var oldProfile = Object.assign("", _this15.participantSelected.meta.profiles_participants_id); //change profile local for the selected participant
 
-            Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
-              title: _this15.text_success,
-              text: _this15.text_updated_participant
-            });
-          } else if (response.data.status === 204) {
-            _this15.showErrors(response.data.data);
+              _this15.participantSelected.meta.profiles_participants_id = _this15.newProfile; //Define user
+
+              _this15.setUserLeaderAdminSuple(oldProfile);
+            } else if (response.data.status === 204) {
+              _this15.showErrors(response.data.data);
+            }
           }
-        }, function (error) {
-          _this15.showErrors(error);
+        }).then(function () {
+          _this15.isLoading = false;
         });
       } else {
-        Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
-          title: this.text_success,
-          text: this.text_updated_participant
-        });
+        this.showNotifUpdatedParticipant();
       }
+    },
+    setUserLeaderAdminSuple: function setUserLeaderAdminSuple(oldProfile) {
+      var currentProfile = this.participantSelected.meta.profiles_participants_id;
+      console.log("OldProfile", oldProfile); //Set user for leader or Admin suple
+
+      switch (currentProfile) {
+        case this.OPTIONS.PROFILE_LEADER:
+        case this.OPTIONS.PROFILE_SUPLE_ADMIN:
+          this.createUserDB();
+          break;
+
+        case this.OPTIONS.PROFILE_PARTICIPANT:
+          //Delete user TODO
+          break;
+
+        default:
+          break;
+      }
+    },
+    createUserDB: function createUserDB() {
+      var _this16 = this;
+
+      if (this.participantSelected.meta.users_id === null) //create user
+        {
+          this.isLoading = true;
+          var userMobile = null;
+
+          for (var i = 0; i < this.participantSelected.meta.cellphones.length; i++) {
+            var mobile = this.participantSelected.meta.cellphones[i];
+
+            if (mobile.initial_register === 1) //Yes
+              {
+                userMobile = mobile.cellphone_number;
+                break;
+              }
+          }
+
+          var param = {
+            name: this.participantSelected.meta.first_name + " " + this.participantSelected.meta.last_name,
+            user: userMobile,
+            password: this.textsManageLeader.password_default,
+            roles_id: 2,
+            //Participant Role
+            status_users_id: 1 //Acvite status user
+
+          };
+          axios.post(this.url_user_store, param).then(function (response) {
+            _this16.showErrors({});
+
+            if (response.data.status === 201) {
+              //Update participant with users_id
+              var user_id = response.data.data.id;
+              var paramParticipant = {
+                id: _this16.participantSelected.meta.id,
+                profiles_participants_id: _this16.newProfile,
+                users_id: user_id
+              };
+
+              _this16.updateParticipantDB(paramParticipant).then(function (response) {
+                _this16.showErrors({});
+
+                if (response.errorRequest) //Error in request
+                  {
+                    _this16.showErrors(response.errorRequest);
+                  } else {
+                  if (response.data.status === 200) {
+                    //change users_id local for the selected participant
+                    _this16.participantSelected.meta.users_id = user_id;
+
+                    _this16.showNotifUpdatedParticipant();
+                  } else if (response.data.status === 204) {
+                    _this16.showErrors(response.data.data);
+                  }
+                }
+              }).then(function () {
+                _this16.isLoading = false;
+              });
+            } else if (response.data.status === 204) {
+              _this16.showErrors(response.data.data);
+            }
+          }, function (error) {
+            _this16.showErrors(error);
+          }).then(function () {
+            _this16.isLoading = false;
+          });
+        } else {
+        this.showNotifUpdatedParticipant();
+      }
+    },
+    updateParticipantDB: function updateParticipantDB(params) {
+      var _this17 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.next = 2;
+                return axios.post(_this17.url_participant_update, params).then(function (res) {
+                  return res;
+                }, function (error) {
+                  return {
+                    errorRequest: error
+                  };
+                });
+
+              case 2:
+                return _context5.abrupt("return", _context5.sent);
+
+              case 3:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
+      }))();
     },
     generatePassword: function generatePassword() {
       //Confirme dialog
@@ -70129,7 +70290,8 @@ var render = function() {
                     _vm.url_store_permissions_participant,
                   url_store_participants_categories:
                     _vm.url_store_participants_categories,
-                  url_participant_update: _vm.url_participant_update
+                  url_participant_update: _vm.url_participant_update,
+                  url_user_store: _vm.url_user_store
                 },
                 on: { activeMainSection: _vm.setActiveSection }
               })

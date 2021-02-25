@@ -51,6 +51,7 @@
                 v-bind:url_store_permissions_participant="url_store_permissions_participant"
                 v-bind:url_store_participants_categories="url_store_participants_categories"
                 v-bind:url_participant_update="url_participant_update"
+                v-bind:url_user_store="url_user_store"
             />
             <general-settings v-else-if="contentActive.settingAdmin"
                 v-bind:key="3"
@@ -311,6 +312,10 @@ export default {
             require: true
         },
         url_person_update: {
+            type: String,
+            require: true
+        },
+        url_user_store: {
             type: String,
             require: true
         },

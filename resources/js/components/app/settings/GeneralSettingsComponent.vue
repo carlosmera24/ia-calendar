@@ -843,7 +843,7 @@
     import vSelect from 'vue-select';
     Vue.component('v-select', vSelect);
     //Import PNotify
-    import { success } from '@pnotify/core';
+    import { success,error } from '@pnotify/core';
     import '@pnotify/core/dist/PNotify.css';
     import '@pnotify/core/dist/BrightTheme.css';
     //Import moment
@@ -1171,6 +1171,21 @@
             showErrors(resError){
                 this.errors = procesarErroresRequest( resError );
                 this.hasErrors = this.errors.errors.length > 0;
+                //Alert Errors
+                if( this.hasErrors )
+                {
+                    let msgErrors = "<ul>";
+                    this.errors.errors.forEach( error => {
+                        msgErrors = msgErrors.concat('<li>', error);
+                        msgErrors = msgErrors.concat('', '</li>');
+                    });
+                    msgErrors = msgErrors.concat('', '</ul>');
+                    error({
+                                title: this.errors.text,
+                                textTrusted: true,
+                                text: msgErrors
+                            });
+                }
             },
             firstCapitalize( word ){
                 return _.capitalize( word );

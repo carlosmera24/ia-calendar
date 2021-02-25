@@ -12,6 +12,13 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     protected $rules_id = [ 'id' => 'required|exists:users,id' ];
+    protected $rules_store =    [
+                                    'name'              =>  'required|max:200',
+                                    'user'              =>  'required|max:45|unique:users,user',
+                                    'password'          =>  'required|min:8',
+                                    'roles_id'          =>  'required|exists:roles,id',
+                                    'status_users_id'   =>  'required|exists:status_users,id',
+    ];
     protected $rules_update_password =  [
                                             'id'                    =>  'required|exists:users,id',
                                             'password'              =>  'required',
@@ -46,13 +53,55 @@ class UserController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->input(), $this->rules_store);
+        if( $validator->fails() )
+        {
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'error'     =>  __('messages.bad_request'),
+                                                'data'      =>  $validator->getMessageBag()->toArray()
+                                            ),
+                                        400
+                                    );
+        }else
+        {
+            $user = new User();
+            $user->name = $request->name;
+            $user->user = $request->user;
+            $user->password = Hash::make( $request->password );
+            $user->roles_id = $request->roles_id;
+            $user->status_users_id = $request->status_users_id;
+
+            //save new user
+            if( $user->save() )
+            {
+              return response()->json(
+                                        array(
+                                                'status'    =>  201,
+                                                'data'      =>  array(
+                                                                        "id"    => $user->id
+                                                                    )
+                                            ),
+                                        201
+                                    );
+            }
+
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'data'      =>  array(
+                                                                        "msg"    => __('messages.error_saving', [ 'attribute' => __('validation.attributes.user') ])
+                                                                    )
+                                            ),
+                                        400
+                                    );
+        }
     }
 
     /**

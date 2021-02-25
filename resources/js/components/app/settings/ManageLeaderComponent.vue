@@ -257,7 +257,7 @@ var validate = require('validate.js');
 import vSelect from 'vue-select';
 Vue.component('v-select', vSelect);
 //Import PNotify
-import { success } from '@pnotify/core';
+import { success,error } from '@pnotify/core';
 import '@pnotify/core/dist/PNotify.css';
 import '@pnotify/core/dist/BrightTheme.css';
 
@@ -367,6 +367,11 @@ export default {
             type: String,
             require: true
 
+        },
+        url_user_store: {
+            type: String,
+            require: true
+
         }
     },
     data() {
@@ -417,7 +422,9 @@ export default {
             return this.participants.length < this.totalParticipants;
         },
         showLogin(){
-            return this.participantSelected && (this.participantSelected.meta.profiles_participants_id === this.OPTIONS.PROFILE_LEADER || this.participantSelected.meta.profiles_participants_id === this.OPTIONS.PROFILE_SUPLE_ADMIN);
+            return this.participantSelected
+                    && (this.participantSelected.meta.profiles_participants_id === this.OPTIONS.PROFILE_LEADER || this.participantSelected.meta.profiles_participants_id === this.OPTIONS.PROFILE_SUPLE_ADMIN)
+                    && this.participantSelected.meta.users_id;
         }
     },
     created(){
@@ -499,8 +506,24 @@ export default {
             this.$emit('activeMainSection','main')
         },
         showErrors(resError){
+            //Header errors
             this.errors = procesarErroresRequest( resError );
             this.hasErrors = this.errors.errors.length > 0;
+            //Alert Errors
+            if( this.hasErrors )
+            {
+                let msgErrors = "<ul>";
+                this.errors.errors.forEach( error => {
+                    msgErrors = msgErrors.concat('<li>', error);
+                    msgErrors = msgErrors.concat('', '</li>');
+                });
+                msgErrors = msgErrors.concat('', '</ul>');
+                error({
+                            title: this.errors.text,
+                            textTrusted: true,
+                            text: msgErrors
+                        });
+            }
         },
         clickAssociateLeader(){
             this.isAssociatedLeader = !this.isAssociatedLeader;//Change associated with leader
@@ -839,6 +862,12 @@ export default {
                     this.isLoading = false;
                 });
         },
+        showNotifUpdatedParticipant(){
+            success({
+                        title: this.text_success,
+                        text: this.text_updated_participant
+                    });
+        },
         clickApply(){
             this.isCategoriesError = false;
             //empty categories
@@ -908,57 +937,153 @@ export default {
             //Update the profile if there is a change or is different from the current one
             if( this.newProfile && this.participantSelected.meta.profiles_participants_id !== this.newProfile )
             {
+                this.isLoading = true;
                 const param = {
                     profiles_participants_id: this.newProfile,
                     id: this.participantSelected.meta.id
                 };
-                axios.post( this.url_participant_update, param )
+                this.updateParticipantDB(param)
                     .then( response => {
                         this.showErrors({});
-                        if( response.data.status === 200 )
+                        if( response.errorRequest ) //Error in request
                         {
-                            //change profile local for the selected participant
-                            this.participantSelected.meta.profiles_participants_id = this.newProfile;
-
-                            //TODO Create user for Leader/AdminSuple
-
-                            success({
-                                title: this.text_success,
-                                text: this.text_updated_participant
-                            });
-
-                        }else if( response.data.status === 204 )
+                            this.showErrors(response.errorRequest);
+                        }else
                         {
-                            this.showErrors( response.data.data );
+                            if( response.data.status === 200 )
+                            {
+                                const oldProfile = Object.assign("", this.participantSelected.meta.profiles_participants_id);
+                                //change profile local for the selected participant
+                                this.participantSelected.meta.profiles_participants_id = this.newProfile;
+
+                                //Define user
+                                this.setUserLeaderAdminSuple(oldProfile);
+                            }else if( response.data.status === 204 )
+                            {
+                                this.showErrors( response.data.data );
+                            }
                         }
-                    },
-                    error => {
-                        this.showErrors(error);
-                    } );
+                    })
+                    .then( () => {
+                            this.isLoading = false;
+                    });
             }else{
-                success({
-                    title: this.text_success,
-                    text: this.text_updated_participant
-                });
+                this.showNotifUpdatedParticipant();
             }
         },
-            generatePassword()
+        setUserLeaderAdminSuple(oldProfile){
+            const currentProfile = this.participantSelected.meta.profiles_participants_id;
+            console.log("OldProfile", oldProfile );
+            //Set user for leader or Admin suple
+            switch(currentProfile)
             {
-                //Confirme dialog
-                this.$buefy.dialog.confirm(
-                                            {
-                                                title: this.textsManageLeader.generate_password,
-                                                message: this.textsManageLeader.generate_password_warning,
-                                                cancelText: this.text_not,
-                                                confirmText: this.textsManageLeader.generate_password,
-                                                type: 'is-warning',
-                                                hasIcon: true,
-                                                onConfirm: () => {
-                                                    console.log("Generar contraseña");
-                                                }
-                                            }
-                                        );
+                case this.OPTIONS.PROFILE_LEADER:
+                case this.OPTIONS.PROFILE_SUPLE_ADMIN:
+                    this.createUserDB();
+                    break;
+                case this.OPTIONS.PROFILE_PARTICIPANT:
+                    //Delete user TODO
+                    break;
+                default:
+                    break;
             }
+        },
+        createUserDB()
+        {
+            if( this.participantSelected.meta.users_id === null )//create user
+            {
+                this.isLoading = true;
+                let userMobile = null;
+                for( let i=0; i < this.participantSelected.meta.cellphones.length; i++){
+                    const mobile = this.participantSelected.meta.cellphones[i];
+                    if( mobile.initial_register === 1 )//Yes
+                    {
+                        userMobile = mobile.cellphone_number;
+                        break;
+                    }
+                }
+                const param = {
+                    name: this.participantSelected.meta.first_name +" "+ this.participantSelected.meta.last_name,
+                    user: userMobile,
+                    password: this.textsManageLeader.password_default,
+                    roles_id: 2, //Participant Role
+                    status_users_id: 1 //Acvite status user
+                };
+                axios.post( this.url_user_store, param )
+                    .then( response => {
+                            this.showErrors({});
+                            if( response.data.status === 201 )
+                            {
+                                //Update participant with users_id
+                                const user_id = response.data.data.id;
+                                const paramParticipant = {
+                                    id: this.participantSelected.meta.id,
+                                    profiles_participants_id: this.newProfile,
+                                    users_id: user_id
+                                };
+                                this.updateParticipantDB(paramParticipant)
+                                    .then( response => {
+                                        this.showErrors({});
+                                        if( response.errorRequest ) //Error in request
+                                        {
+                                            this.showErrors(response.errorRequest);
+                                        }else
+                                        {
+                                            if( response.data.status === 200 )
+                                            {
+                                                //change users_id local for the selected participant
+                                                this.participantSelected.meta.users_id = user_id;
+                                                this.showNotifUpdatedParticipant();
+                                            }else if( response.data.status === 204 )
+                                            {
+                                                this.showErrors( response.data.data );
+                                            }
+                                        }
+                                    })
+                                    .then( () => {
+                                            this.isLoading = false;
+                                    });
+                            }else if( response.data.status === 204 )
+                            {
+                                this.showErrors( response.data.data );
+                            }
+                        },
+                        error => {
+                            this.showErrors(error);
+                        } )
+                    .then( () => {
+                        this.isLoading = false;
+                    });
+            }else{
+                this.showNotifUpdatedParticipant();
+            }
+        },
+        async updateParticipantDB( params ){
+            return await axios.post( this.url_participant_update, params )
+                                .then(  res => res,
+                                    error => {
+                                        return { errorRequest: error };
+                                    }
+                                )
+                                // .catch( error => error );
+        },
+        generatePassword()
+        {
+            //Confirme dialog
+            this.$buefy.dialog.confirm(
+                                        {
+                                            title: this.textsManageLeader.generate_password,
+                                            message: this.textsManageLeader.generate_password_warning,
+                                            cancelText: this.text_not,
+                                            confirmText: this.textsManageLeader.generate_password,
+                                            type: 'is-warning',
+                                            hasIcon: true,
+                                            onConfirm: () => {
+                                                console.log("Generar contraseña");
+                                            }
+                                        }
+                                    );
+        }
     }
 }
 </script>
