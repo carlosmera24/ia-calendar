@@ -318,6 +318,7 @@
             v-bind:url_person_emails_admin='"{{ route('persons_emails_admin') }}"'
             v-bind:url_persons_cellphones_for_person='"{{ route('persons_cellphones_for_person') }}"'
             v-bind:url_user_store='"{{ route('user_store') }}"'
+            v-bind:url_user_update='"{{ route('user_update') }}"'
             v-bind:url_user_update_password='"{{ route('user_update_password') }}"'
             v-bind:url_logout="'{{ route('logout') }}'"
             v-bind:url_home="'{{ route('home') }}'"

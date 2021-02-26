@@ -34,6 +34,7 @@ Route::group(['middleware' => ['auth']], function(){
     //user
     Route::post('/user/data', [ UserController::class, 'data' ])->name('user_data');
     Route::post('/user/store', [ UserController::class, 'store' ])->name('user_store');
+    Route::post('/user/update', [ UserController::class, 'update' ])->name('user_update');
     Route::post('/user/update-password', [ UserController::class, 'updatePassword' ])->name('user_update_password');
     //Programmers
     Route::post('/programmer/update', [ ProgrammerController::class, 'update' ])->name('programmer_update');

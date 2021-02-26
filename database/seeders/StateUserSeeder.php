@@ -31,5 +31,14 @@ class StateUserSeeder extends Seeder
             'id' => 4,
             'name' => 'Bloqueado',
         ]);
+        DB::table('status_users')->insert([
+            'id' => 5,
+            'name' => 'Sin credenciales',
+            'description' => 'Usuario con cambio de perfil a Invitado/Partícipe y no tiene acceso al sistema',
+        ]);
+        DB::table('status_users')->insert([
+            'id' => 6,
+            'name' => 'Eliminado',
+        ]);
     }
 }

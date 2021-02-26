@@ -372,6 +372,11 @@ export default {
             type: String,
             require: true
 
+        },
+        url_user_update: {
+            type: String,
+            require: true
+
         }
     },
     data() {
@@ -411,6 +416,8 @@ export default {
                         PROFILE_LEADER: 2,
                         PROFILE_PARTICIPANT: 3,
                         PROFILE_SUPLE_ADMIN: 4,
+                        STATUS_USER_ACTIVE: 1,
+                        STATUS_USER_NOT_CREDENCIALS: 5,
                     }
         }
     },
@@ -952,10 +959,12 @@ export default {
                         {
                             if( response.data.status === 200 )
                             {
-                                const oldProfile = Object.assign("", this.participantSelected.meta.profiles_participants_id);
+                                const oldProfile = this.participantSelected.meta.profiles_participants_id;
                                 //change profile local for the selected participant
                                 this.participantSelected.meta.profiles_participants_id = this.newProfile;
-
+                                //Restore back participant controller
+                                this.backParticipant= [],
+                                this.isBackParticipant= false,
                                 //Define user
                                 this.setUserLeaderAdminSuple(oldProfile);
                             }else if( response.data.status === 204 )
@@ -973,86 +982,151 @@ export default {
         },
         setUserLeaderAdminSuple(oldProfile){
             const currentProfile = this.participantSelected.meta.profiles_participants_id;
-            console.log("OldProfile", oldProfile );
             //Set user for leader or Admin suple
             switch(currentProfile)
             {
                 case this.OPTIONS.PROFILE_LEADER:
                 case this.OPTIONS.PROFILE_SUPLE_ADMIN:
-                    this.createUserDB();
+                    this.createUser();
                     break;
                 case this.OPTIONS.PROFILE_PARTICIPANT:
-                    //Delete user TODO
+                    //Delete if old profile is Leader or Suple Admin
+                    if( oldProfile === this.OPTIONS.PROFILE_LEADER || oldProfile === this.OPTIONS.PROFILE_SUPLE_ADMIN ){
+                        this.deleteUser();
+                    }else{
+                        this.showNotifUpdatedParticipant();
+                    }
                     break;
                 default:
+                    this.showNotifUpdatedParticipant();
                     break;
             }
         },
-        createUserDB()
-        {
+        createUser(){
             if( this.participantSelected.meta.users_id === null )//create user
             {
-                this.isLoading = true;
-                let userMobile = null;
-                for( let i=0; i < this.participantSelected.meta.cellphones.length; i++){
-                    const mobile = this.participantSelected.meta.cellphones[i];
-                    if( mobile.initial_register === 1 )//Yes
-                    {
-                        userMobile = mobile.cellphone_number;
-                        break;
-                    }
-                }
+                this.createUserDB();
+            }else if( this.participantSelected.meta.users_id ) //Active user (Update status)
+            {
                 const param = {
-                    name: this.participantSelected.meta.first_name +" "+ this.participantSelected.meta.last_name,
-                    user: userMobile,
-                    password: this.textsManageLeader.password_default,
-                    roles_id: 2, //Participant Role
-                    status_users_id: 1 //Acvite status user
+                    id: this.participantSelected.meta.users_id,
+                    status_users_id: this.OPTIONS.STATUS_USER_ACTIVE
                 };
-                axios.post( this.url_user_store, param )
+                this.updateUserDB(param)
                     .then( response => {
-                            this.showErrors({});
-                            if( response.data.status === 201 )
+                        this.showErrors({});
+                        if( response.errorRequest ) //Error in request
+                        {
+                            this.showErrors(response.errorRequest);
+                        }else
+                        {
+                            if( response.data.status === 200 )
                             {
-                                //Update participant with users_id
-                                const user_id = response.data.data.id;
-                                const paramParticipant = {
-                                    id: this.participantSelected.meta.id,
-                                    profiles_participants_id: this.newProfile,
-                                    users_id: user_id
-                                };
-                                this.updateParticipantDB(paramParticipant)
-                                    .then( response => {
-                                        this.showErrors({});
-                                        if( response.errorRequest ) //Error in request
-                                        {
-                                            this.showErrors(response.errorRequest);
-                                        }else
-                                        {
-                                            if( response.data.status === 200 )
-                                            {
-                                                //change users_id local for the selected participant
-                                                this.participantSelected.meta.users_id = user_id;
-                                                this.showNotifUpdatedParticipant();
-                                            }else if( response.data.status === 204 )
-                                            {
-                                                this.showErrors( response.data.data );
-                                            }
-                                        }
-                                    })
-                                    .then( () => {
-                                            this.isLoading = false;
-                                    });
+                                this.showNotifUpdatedParticipant();
                             }else if( response.data.status === 204 )
                             {
                                 this.showErrors( response.data.data );
                             }
-                        },
-                        error => {
-                            this.showErrors(error);
-                        } )
+                        }
+                    })
                     .then( () => {
-                        this.isLoading = false;
+                            this.isLoading = false;
+                    });
+            }else{
+                this.showNotifUpdatedParticipant();
+            }
+        },
+        createUserDB()
+        {
+            this.isLoading = true;
+            let userMobile = null;
+            for( let i=0; i < this.participantSelected.meta.cellphones.length; i++){
+                const mobile = this.participantSelected.meta.cellphones[i];
+                if( mobile.initial_register === 1 )//Yes
+                {
+                    userMobile = mobile.cellphone_number;
+                    break;
+                }
+            }
+            const param = {
+                name: this.participantSelected.meta.first_name +" "+ this.participantSelected.meta.last_name,
+                user: userMobile,
+                password: this.textsManageLeader.password_default,
+                roles_id: 2, //Participant Role
+                status_users_id: this.OPTIONS.STATUS_USER_ACTIVE //Acvite status user
+            };
+            axios.post( this.url_user_store, param )
+                .then( response => {
+                        this.showErrors({});
+                        if( response.data.status === 201 )
+                        {
+                            //Update participant with users_id
+                            const user_id = response.data.data.id;
+                            const paramParticipant = {
+                                id: this.participantSelected.meta.id,
+                                profiles_participants_id: this.newProfile,
+                                users_id: user_id
+                            };
+                            this.updateParticipantDB(paramParticipant)
+                                .then( response => {
+                                    this.showErrors({});
+                                    if( response.errorRequest ) //Error in request
+                                    {
+                                        this.showErrors(response.errorRequest);
+                                    }else
+                                    {
+                                        if( response.data.status === 200 )
+                                        {
+                                            //change users_id local for the selected participant
+                                            this.participantSelected.meta.users_id = user_id;
+                                            this.showNotifUpdatedParticipant();
+                                        }else if( response.data.status === 204 )
+                                        {
+                                            this.showErrors( response.data.data );
+                                        }
+                                    }
+                                })
+                                .then( () => {
+                                        this.isLoading = false;
+                                });
+                        }else if( response.data.status === 204 )
+                        {
+                            this.showErrors( response.data.data );
+                        }
+                    },
+                    error => {
+                        this.showErrors(error);
+                    } )
+                .then( () => {
+                    this.isLoading = false;
+                });
+        },
+        deleteUser(){
+            if( this.participantSelected.meta.users_id )
+            {
+                const param = {
+                    id: this.participantSelected.meta.users_id,
+                    status_users_id: this.OPTIONS.STATUS_USER_NOT_CREDENCIALS
+                };
+                this.updateUserDB(param)
+                    .then( response => {
+                        this.showErrors({});
+                        if( response.errorRequest ) //Error in request
+                        {
+                            this.showErrors(response.errorRequest);
+                        }else
+                        {
+                            if( response.data.status === 200 )
+                            {
+                                this.showNotifUpdatedParticipant();
+                            }else if( response.data.status === 204 )
+                            {
+                                this.showErrors( response.data.data );
+                            }
+                        }
+                    })
+                    .then( () => {
+                            this.isLoading = false;
                     });
             }else{
                 this.showNotifUpdatedParticipant();
@@ -1065,7 +1139,14 @@ export default {
                                         return { errorRequest: error };
                                     }
                                 )
-                                // .catch( error => error );
+        },
+        async updateUserDB( params ){
+            return await axios.post( this.url_user_update, params )
+                                .then(  res => res,
+                                    error => {
+                                        return { errorRequest: error };
+                                    }
+                                )
         },
         generatePassword()
         {

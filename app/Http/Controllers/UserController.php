@@ -18,7 +18,15 @@ class UserController extends Controller
                                     'password'          =>  'required|min:8',
                                     'roles_id'          =>  'required|exists:roles,id',
                                     'status_users_id'   =>  'required|exists:status_users,id',
-    ];
+                                ];
+    protected $rules_update =    [
+                                    'id'                =>  'required|exists:users,id',
+                                    'name'              =>  'nullable|max:200',
+                                    'user'              =>  'nullable|max:45|unique:users,user',
+                                    'password'          =>  'nullable|min:8',
+                                    'roles_id'          =>  'nullable|exists:roles,id',
+                                    'status_users_id'   =>  'nullable|exists:status_users,id',
+                                ];
     protected $rules_update_password =  [
                                             'id'                    =>  'required|exists:users,id',
                                             'password'              =>  'required',
@@ -180,14 +188,90 @@ class UserController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $user)
     {
-        //
+        $validator = Validator::make($request->input(), $this->rules_update);
+        if( $validator->fails() )
+        {
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'error'     =>  __('messages.bad_request'),
+                                                'data'      =>  $validator->getMessageBag()->toArray()
+                                            ),
+                                        400
+                                    );
+        }else
+        {
+            //search user
+            $user = User::find( $request->id );
+
+            //Not found
+            if( empty($user) )
+            {
+                return response()->json(
+                                            array(
+                                                'status'    =>  204,
+                                                'error'     =>  __('messages.no_content'),
+                                                'data'      =>  array(
+                                                                        __('messages.no_found', [
+                                                                                                    'attribute' => __('validation.attributes.user'),
+                                                                                                    'id' => $request->id
+                                                                                                ]
+                                                                            )
+                                                                    )
+                                            ),
+                                            200
+                                        );
+            }
+
+            //update
+            if( isset( $request->name ) )
+            {
+                $user->name = $request->name;
+            }
+            if( isset( $request->user ) )
+            {
+                $user->user = $request->user;
+            }
+            if( isset( $request->password ) )
+            {
+                $user->password = Hash::make( $request->password );
+            }
+            if( isset( $request->roles_id ) )
+            {
+                $user->roles_id = $request->roles_id;
+            }
+            if( isset( $request->status_users_id ) )
+            {
+                $user->status_users_id = $request->status_users_id;
+            }
+
+            if( $user->update() )
+            {
+                return response()->json(
+                                        array(
+                                                'status'    =>  200,
+                                                'data'      => $user
+                                            ),
+                                        200
+                                    );
+            }
+
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'data'      =>  array(
+                                                                        "msg"    => __('messages.error_updating', [ 'attribute' => __('validation.attributes.user') ])
+                                                                    )
+                                            ),
+                                        400
+                                    );
+        }
     }
 
     /**
