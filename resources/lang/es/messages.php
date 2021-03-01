@@ -42,7 +42,7 @@ return [
                                                 'click_confirm' =>  'Click para restablecer contraseña.',
                                                 'copy_link'     =>  'o copia el siguiente enlace en la barra de direcciones de tu navegador',
                                                 'footer'        =>  "Mensaje de prueba enviado desde el servidor de IA-Calendar's",
-
+                                                'not_found'     =>  "Lo sentimos no se encontró la solicitud para restablecimiento de la contraseña.",
                                             ],
                 ],
 

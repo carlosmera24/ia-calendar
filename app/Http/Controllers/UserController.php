@@ -11,6 +11,7 @@ use App\Models\UpdatedPassword;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\PasswordChangeRequest;
+use Illuminate\Support\Facades\Crypt;
 
 class UserController extends Controller
 {
@@ -39,7 +40,8 @@ class UserController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')
+            ->except('passwordReset');
     }
 
     /**
@@ -52,9 +54,39 @@ class UserController extends Controller
         //
     }
 
-    public function passwordReset()
+    /**
+     * Password reset from link
+     * @param  \Illuminate\Http\Request  $request
+     */
+    public function passwordReset( Request $request )
     {
-        return "Pendiente generar vista para crear nueva contraseña.";
+        $data = null;
+        $code = 200;
+
+        if( isset($request->data ) )
+        {
+            //Decrypt params
+            $params = Crypt::decrypt( $request->data ); // id => value
+            //Get password change requests
+            $pcr = PasswordChangeRequest::find( $params['id'] );
+            if( isset( $pcr ) )
+            {
+                $data = [ 'exists' => true ];
+                $data['password_change_request'] = $pcr;
+            }else{
+                $data = [ 'exists' => false ];
+            }
+        }else{
+            $data = [
+                        'fails' => [
+                                        'error' => __('messages.bad_request'),
+                                        'data'  => __('validation.required', ['attribute' => 'data']),
+                                    ]
+                    ];
+            $code = 400;
+        }
+        // dd($data);
+        return response()->view( 'users.password-reset', $data, $code );
     }
 
     /**

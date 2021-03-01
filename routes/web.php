@@ -86,5 +86,5 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/persons-emails-confirmation/{data}', [PersonEmailController::class, 'confirmEmail'])->name('persons_emails_confirmation');
 
 //Password reset
-Route::get('/user-password-reset/{data}', [UserController::class, 'passwordReset'])->name('user_password_reset');
+Route::get('/user-password-reset/{data}', [UserController::class, 'passwordReset'])->name('user_password_reset')->middleware('guest');
 
