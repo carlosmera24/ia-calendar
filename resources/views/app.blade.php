@@ -203,6 +203,7 @@
             $texts_manage_leader['generate'] = __('app.generate');
             $texts_manage_leader['generate_password'] = __('app.generate_password');
             $texts_manage_leader['generate_password_warning'] = __('messages.generate_password_warning');
+            $texts_manage_leader['success_generated_password'] = __('messages.success_generated_password');
             //Texts for general settings
             $texts_general_settings = __('app.general_settings');
             $texts_general_settings['text_general_setting'] = $text_general_setting;
@@ -320,6 +321,7 @@
             v-bind:url_user_store='"{{ route('user_store') }}"'
             v-bind:url_user_update='"{{ route('user_update') }}"'
             v-bind:url_user_update_password='"{{ route('user_update_password') }}"'
+            v-bind:url_user_send_email_password_generate='"{{ route('user_send_email_password_generate') }}"'
             v-bind:url_logout="'{{ route('logout') }}'"
             v-bind:url_home="'{{ route('home') }}'"
             v-bind:url_participants_list_leaders_suplents_programmer="'{{ route('participants_list_leaders_suplents_programmer') }}'"

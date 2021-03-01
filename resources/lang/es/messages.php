@@ -10,15 +10,16 @@ return [
     | The following language lines contain the default  messages for notification/info
     |
     */
-    'success'                   =>  'Éxito!',
-    'created_participant'       =>  'Partícipe creado satisfactoriamente.',
-    'updated_participant'       =>  'Partícipe actualizado satisfactoriamente.',
-    'no_options'                =>  'No hay opciones disponibles.',
-    'loading'                   =>  'Cargando...',
-    'updated_programmer'        =>  'Programador actualizado satisfactoriamente.',
-    'updated_participant'       =>  'Partícipe actualizado satisfactoriamente.',
-    'size_limit_logo_upload'    =>  'El archivo no puede ser mayor a 5MB',
-    'updated_password'          =>  'Contraseña actualizada',
+    'success'                       =>  'Éxito!',
+    'created_participant'           =>  'Partícipe creado satisfactoriamente.',
+    'updated_participant'           =>  'Partícipe actualizado satisfactoriamente.',
+    'no_options'                    =>  'No hay opciones disponibles.',
+    'loading'                       =>  'Cargando...',
+    'updated_programmer'            =>  'Programador actualizado satisfactoriamente.',
+    'updated_participant'           =>  'Partícipe actualizado satisfactoriamente.',
+    'size_limit_logo_upload'        =>  'El archivo no puede ser mayor a 5MB',
+    'updated_password'              =>  'Contraseña actualizada',
+    'success_generated_password'    =>  'Contraseña generada',
 
     //Emails
     'emails' => [
@@ -34,6 +35,15 @@ return [
                                             'success'               =>  "Gracias por confirmar tu email <i>:email</i>.",
                                             'success_subtitle'      =>  "Confirmación realizada con éxito!!!.",
                                         ],
+                    'password_reset'    =>  [
+                                                'subject'       =>  'Restablecimiento de contraseña',
+                                                'greeting'      =>  'Hola :name,',
+                                                'description'   =>  'Se ha realizado la solicitud de restablecimento para su contraseña, si desconoces esta solicitud por favor omite este correo electrónico. Si quieres continuar con el proceso haz click en el siguiente enlace:',
+                                                'click_confirm' =>  'Click para restablecer contraseña.',
+                                                'copy_link'     =>  'o copia el siguiente enlace en la barra de direcciones de tu navegador',
+                                                'footer'        =>  "Mensaje de prueba enviado desde el servidor de IA-Calendar's",
+
+                                            ],
                 ],
 
     //Errors

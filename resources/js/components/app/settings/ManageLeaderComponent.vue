@@ -377,6 +377,11 @@ export default {
             type: String,
             require: true
 
+        },
+        url_user_send_email_password_generate: {
+            type: String,
+            require: true
+
         }
     },
     data() {
@@ -1160,10 +1165,37 @@ export default {
                                             type: 'is-warning',
                                             hasIcon: true,
                                             onConfirm: () => {
-                                                console.log("Generar contraseña");
+                                                this.passwordGenerateDB();
                                             }
                                         }
                                     );
+        },
+        passwordGenerateDB()
+        {
+            this.isLoading = true;
+            const param = {
+                id: this.participantSelected.meta.users_id,
+            };
+            axios.post( this.url_user_send_email_password_generate, param )
+                .then( response => {
+                        this.showErrors({});
+                        if( response.data.status === 200 )
+                        {
+                            success({
+                                    title: this.text_success,
+                                    text: this.textsManageLeader.success_generated_password
+                                });
+                        }else if( response.data.status === 204 )
+                        {
+                            this.showErrors( response.data.data );
+                        }
+                    },
+                    error => {
+                        this.showErrors(error);
+                    } )
+                .then( () => {
+                    this.isLoading = false;
+                });
         }
     }
 }

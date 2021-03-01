@@ -4,7 +4,11 @@ namespace App\Models;
 
 use App\Models\Categorie;
 use App\Models\Participant;
+use App\Mail\UserResetPassword;
 use App\Models\UpdatedPassword;
+use Illuminate\Support\Facades\Mail;
+use App\Models\PasswordChangeRequest;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -60,5 +64,29 @@ class User extends Authenticatable
     public function updatedsPasswords()
     {
         return $this->hasMany(UpdatedPassword::class,'users_id');
+    }
+
+    public function passwordChangeRequests()
+    {
+        return $this->hasMany(PasswordChangeRequest::class,'users_id');
+    }
+
+    /**
+     * Send email for password reset
+     * @param int $password_change_requests_id
+     * @param array $emails for send link
+     * @param participant $participant for send link
+     */
+    public static function sendEmailPasswordReset( int $password_change_requests_id, array $emails, Participant $participant)
+    {
+        //generate URL with data Encrypt
+        $params = [ 'id' => $password_change_requests_id ];
+        $link = route('user_password_reset', [ 'data' => Crypt::encrypt($params) ] );
+        //Send email
+        foreach( $emails as $email )
+        {
+            Mail::to( $email )
+                    ->send( new UserResetPassword($participant, $link) );
+        }
     }
 }

@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use Validator;
 use App\Models\User;
+use App\Models\Participant;
+use App\Models\PersonEmail;
 use Illuminate\Http\Request;
 use App\Models\UpdatedPassword;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\PasswordChangeRequest;
 
 class UserController extends Controller
 {
@@ -47,6 +50,11 @@ class UserController extends Controller
     public function index()
     {
         //
+    }
+
+    public function passwordReset()
+    {
+        return "Pendiente generar vista para crear nueva contraseña.";
     }
 
     /**
@@ -160,6 +168,135 @@ class UserController extends Controller
                                             ),
                                         200
                                     );
+            }
+        }
+    }
+
+    /**
+     * Send email with link for password reset.
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function sendPasswordReset( Request $request )
+    {
+        $validator = Validator::make($request->input(), $this->rules_id);
+        if( $validator->fails() )
+        {
+            return response()->json(
+                                        array(
+                                                'status'    =>  400,
+                                                'error'     =>  __('messages.bad_request'),
+                                                'data'      =>  $validator->getMessageBag()->toArray()
+                                            ),
+                                        400
+                                    );
+        }else
+        {
+            //search Usuario
+            $user = User::find( $request->id );
+
+            //Not found
+            if( empty($user) )
+            {
+                return response()->json(
+                                            array(
+                                                'status'    =>  204,
+                                                'error'     =>  __('messages.no_content'),
+                                                'data'      =>  array(
+                                                                        __('messages.no_found', [
+                                                                                                    'attribute' => __('validation.attributes.user'),
+                                                                                                    'id' => $request->id
+                                                                                                ]
+                                                                            )
+                                                                    )
+                                            ),
+                                            200
+                                        );
+            }else
+            {
+                //Search participant from user id
+                $participant = Participant::where('users_id', $user->id)
+                                            ->first();
+                if( empty( $participant ) )
+                {
+                    return response()->json(
+                                            array(
+                                                'status'    =>  204,
+                                                'error'     =>  __('messages.no_content'),
+                                                'data'      =>  array(
+                                                                        __('messages.no_found', [
+                                                                                                    'attribute' => __('validation.attributes.participant'),
+                                                                                                    'id' => 'users_id->'. $user->id
+                                                                                                ]
+                                                                            )
+                                                                    )
+                                            ),
+                                            200
+                                        );
+                }else
+                {
+                    //Search Emails for participant
+                    $emails = PersonEmail::where('persons_id', $participant->person->id )
+                                            ->get();
+                    if( empty( $emails ) )
+                    {
+                        return response()->json(
+                                                array(
+                                                    'status'    =>  204,
+                                                    'error'     =>  __('messages.no_content'),
+                                                    'data'      =>  array(
+                                                                            __('messages.no_found', [
+                                                                                                        'attribute' => __('validation.attributes.email'),
+                                                                                                        'id' => 'persons_id'. $participant->person()->id
+                                                                                                    ]
+                                                                                )
+                                                                        )
+                                                ),
+                                                200
+                                            );
+                    }else
+                    {
+                        //Array emails
+                        $array_emails = array();
+                        foreach( $emails as $email )
+                        {
+                            $array_emails[] = $email->email;
+                        }
+
+                        //Create password reset request
+                        $pass_reset = new PasswordChangeRequest();
+                        $pass_reset->users_id = $request->id;
+                        $pass_reset->users_id_record = Auth::user()->id;
+                        $pass_reset->status_password_change_requests_id = PasswordChangeRequest::STATE_PASSWORD_CHANGE_REQUEST_ACTIVE;
+
+                        if( $pass_reset->save() ) //Save password reset request
+                        {
+                            //Send email
+                            User::sendEmailPasswordReset( $pass_reset->id, $array_emails, $participant );
+
+                            return response()->json(
+                                                    array(
+                                                            'status'    =>  200,
+                                                            'data'      =>  [
+                                                                                'password_change_request'   =>  $pass_reset,
+                                                                                'emails'                    =>  $array_emails
+                                                                            ],
+                                                        ),
+                                                    200
+                                                );
+                        }
+
+                        return response()->json(
+                                                array(
+                                                        'status'    =>  400,
+                                                        'data'      =>  array(
+                                                                                "msg"    => __('messages.error_saving', [ 'attribute' => __('validation.attributes.user') ])
+                                                                            )
+                                                    ),
+                                                400
+                                            );
+                    }
+                }
             }
         }
     }

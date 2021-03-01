@@ -53,6 +53,7 @@
                 v-bind:url_participant_update="url_participant_update"
                 v-bind:url_user_store="url_user_store"
                 v-bind:url_user_update="url_user_update"
+                v-bind:url_user_send_email_password_generate="url_user_send_email_password_generate"
             />
             <general-settings v-else-if="contentActive.settingAdmin"
                 v-bind:key="3"
@@ -325,6 +326,10 @@ export default {
             require: true
         },
         url_user_update_password: {
+            type: String,
+            require: true
+        },
+        url_user_send_email_password_generate: {
             type: String,
             require: true
         },

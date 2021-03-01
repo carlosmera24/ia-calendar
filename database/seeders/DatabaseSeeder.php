@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
                         IdentificationTypeTranslationSeeder::class,
                         IconSeeder::class,
                         FontSeeder::class,
+                        StatePasswordChangeRequestSeeder::class,
                     ]);
     }
 }

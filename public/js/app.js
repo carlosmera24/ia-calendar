@@ -2327,6 +2327,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     text_breadcrumbs_init: {
@@ -2558,6 +2559,10 @@ __webpack_require__.r(__webpack_exports__);
       require: true
     },
     url_user_update_password: {
+      type: String,
+      require: true
+    },
+    url_user_send_email_password_generate: {
       type: String,
       require: true
     },
@@ -7306,6 +7311,10 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
     url_user_update: {
       type: String,
       require: true
+    },
+    url_user_send_email_password_generate: {
+      type: String,
+      require: true
     }
   },
   data: function data() {
@@ -8217,6 +8226,8 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
       }))();
     },
     generatePassword: function generatePassword() {
+      var _this21 = this;
+
       //Confirme dialog
       this.$buefy.dialog.confirm({
         title: this.textsManageLeader.generate_password,
@@ -8226,8 +8237,32 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a); //
         type: 'is-warning',
         hasIcon: true,
         onConfirm: function onConfirm() {
-          console.log("Generar contraseña");
+          _this21.passwordGenerateDB();
         }
+      });
+    },
+    passwordGenerateDB: function passwordGenerateDB() {
+      var _this22 = this;
+
+      this.isLoading = true;
+      var param = {
+        id: this.participantSelected.meta.users_id
+      };
+      axios.post(this.url_user_send_email_password_generate, param).then(function (response) {
+        _this22.showErrors({});
+
+        if (response.data.status === 200) {
+          Object(_pnotify_core__WEBPACK_IMPORTED_MODULE_3__["success"])({
+            title: _this22.text_success,
+            text: _this22.textsManageLeader.success_generated_password
+          });
+        } else if (response.data.status === 204) {
+          _this22.showErrors(response.data.data);
+        }
+      }, function (error) {
+        _this22.showErrors(error);
+      }).then(function () {
+        _this22.isLoading = false;
       });
     }
   }
@@ -70393,7 +70428,9 @@ var render = function() {
                     _vm.url_store_participants_categories,
                   url_participant_update: _vm.url_participant_update,
                   url_user_store: _vm.url_user_store,
-                  url_user_update: _vm.url_user_update
+                  url_user_update: _vm.url_user_update,
+                  url_user_send_email_password_generate:
+                    _vm.url_user_send_email_password_generate
                 },
                 on: { activeMainSection: _vm.setActiveSection }
               })

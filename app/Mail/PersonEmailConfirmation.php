@@ -19,7 +19,7 @@ class PersonEmailConfirmation extends Mailable
     public $person_email;
 
     /**
-     * The PersonEmail instance
+     * The URL
      * @param String url
      */
     public $link;
@@ -38,7 +38,6 @@ class PersonEmailConfirmation extends Mailable
 
     /**
      * Build the message.
-     *
      * @return $this
      */
     public function build()

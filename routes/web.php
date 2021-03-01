@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/user/store', [ UserController::class, 'store' ])->name('user_store');
     Route::post('/user/update', [ UserController::class, 'update' ])->name('user_update');
     Route::post('/user/update-password', [ UserController::class, 'updatePassword' ])->name('user_update_password');
+    Route::post('/user/send_email_password_generate', [ UserController::class, 'sendPasswordReset' ])->name('user_send_email_password_generate');
     //Programmers
     Route::post('/programmer/update', [ ProgrammerController::class, 'update' ])->name('programmer_update');
     //Persons
@@ -83,3 +84,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 //Email confirmation
 Route::get('/persons-emails-confirmation/{data}', [PersonEmailController::class, 'confirmEmail'])->name('persons_emails_confirmation');
+
+//Password reset
+Route::get('/user-password-reset/{data}', [UserController::class, 'passwordReset'])->name('user_password_reset');
+
