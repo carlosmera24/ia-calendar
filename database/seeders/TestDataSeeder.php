@@ -90,7 +90,6 @@ class TestDataSeeder extends Seeder
             'cellphone_number' => '+57123456789',
             'initial_register' => 1,
             'persons_id' => 1,
-            'status_persons_emails_id' => 1,
         ]);
 
         //Participant

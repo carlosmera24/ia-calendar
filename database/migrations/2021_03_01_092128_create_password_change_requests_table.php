@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Query\Expression;
 
 class CreatePasswordChangeRequestsTable extends Migration
 {
@@ -38,7 +39,8 @@ class CreatePasswordChangeRequestsTable extends Migration
             $table->foreign('users_id_record')->references('id')->on('users')
                 ->onUpdate('NO ACTION')
                 ->onDelete('NO ACTION');
-            $table->foreign('status_password_change_requests_id')->references('id')->on('status_password_change_requests_id')
+            $table->foreign('status_password_change_requests_id','fk_password_change_requests_status_password_change_requests1')
+                ->references('id')->on('status_password_change_requests')
                 ->onUpdate('NO ACTION')
                 ->onDelete('NO ACTION');
 
