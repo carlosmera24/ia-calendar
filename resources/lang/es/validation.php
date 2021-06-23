@@ -201,6 +201,7 @@ return [
         'yes'                   => 'Sí',
         'not'                   => 'No',
         'cancel'                => 'cancelar',
+        'programmer'            => 'programador',
         'participant'           => 'partícipe',
         'entity_name'           => 'nombre de la entidad',
         'identification_type'   => 'tipo de identificación',

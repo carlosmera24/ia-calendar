@@ -62,7 +62,7 @@
                                             class="btn-edit"
                                             size="is-small"
                                             icon-left="pen"
-                                            v-on:click.prevent="clickEdit('entity_name')"
+                                            v-on:click.prevent="clickEditProgrammer('entity_name')"
                                         />
                                     </div>
                                 </div>

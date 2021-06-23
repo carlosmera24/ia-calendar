@@ -71842,7 +71842,9 @@ var render = function() {
                                 on: {
                                   click: function($event) {
                                     $event.preventDefault()
-                                    return _vm.clickEdit("entity_name")
+                                    return _vm.clickEditProgrammer(
+                                      "entity_name"
+                                    )
                                   }
                                 }
                               })

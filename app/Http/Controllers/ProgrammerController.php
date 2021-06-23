@@ -106,7 +106,7 @@ class ProgrammerController extends Controller
                                                 'error'     =>  __('messages.no_content'),
                                                 'data'      =>  array(
                                                                         __('messages.no_found', [
-                                                                                                    'attribute' => __('validation.attributes.participant'),
+                                                                                                    'attribute' => __('validation.attributes.programmer'),
                                                                                                     'id' => $request->id
                                                                                                 ]
                                                                             )
@@ -179,7 +179,7 @@ class ProgrammerController extends Controller
                                         array(
                                                 'status'    =>  400,
                                                 'data'      =>  array(
-                                                                        "msg"    => __('messages.error_updating', [ 'attribute' => __('validation.attributes.participant') ])
+                                                                        "msg"    => __('messages.error_updating', [ 'attribute' => __('validation.attributes.programmer') ])
                                                                     )
                                             ),
                                         400
